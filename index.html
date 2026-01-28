@@ -3,404 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jules Frémondière | Sound Engineer</title>
+    <title>Portfolio Frémondière Jules</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CORE VARS & RESET --- */
+        /* --- CORE VARS --- */
         :root {
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-surface: rgba(10, 10, 10, 0.6);
-            --glass-highlight: rgba(255, 255, 255, 0.03);
+            --glass-surface: rgba(10, 10, 10, 0.65);
+            --glass-text: #ffffff;
+            --accent-color: #22c55e;
             --accent-glow: 0 0 20px rgba(255, 255, 255, 0.1);
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* FONTS MAPPING */
-        .font-fl { font-family: 'Inter', sans-serif; letter-spacing: -0.02em; }
-        .font-ableton { font-family: 'Jost', sans-serif; letter-spacing: 0.01em; }
-        .font-protools { font-family: 'Inter', sans-serif; }
-        .font-rx { font-family: 'Inter', sans-serif; font-weight: 500; }
+        /* --- THEME FONTS --- */
+        .font-fl { font-family: 'Arial', sans-serif; letter-spacing: normal; }
+        .font-ableton { font-family: 'Jost', 'Futura', sans-serif; letter-spacing: 0.02em; }
+        .font-protools { font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', sans-serif; font-weight: 500; }
+        .font-rx { font-family: 'Montserrat', sans-serif; }
         .font-tech { font-family: 'Share Tech Mono', monospace; }
 
+        /* --- GLOBAL STYLES --- */
         body { 
             background-color: #050505; 
-            color: #ffffff; 
+            color: var(--glass-text);
             overflow-x: hidden; 
-            transition: background-color 0.8s var(--ease-ios), color 0.5s ease;
+            transition: background-color 0.6s ease, color 0.4s ease;
         }
 
-        /* --- IOS 26 GLASSMORPHISM CARDS --- */
+        /* LIGHT MODE (Ableton Style) */
+        body.light-mode {
+            --glass-surface: rgba(220, 220, 220, 0.6); /* Light Grey Glass */
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --glass-text: #1a1a1a; /* Dark Text */
+            --accent-glow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #dcdcdc; /* Classic Ableton Grey */
+        }
+        body.light-mode .scanlines { opacity: 0.05; }
+        body.light-mode .win-header { border-bottom: 1px solid rgba(0,0,0,0.1); }
+        body.light-mode .win-title { color: #000; opacity: 0.6; }
+        body.light-mode .project-info { background: linear-gradient(to top, rgba(220,220,220,0.95), rgba(220,220,220,0.8), transparent); color: black; }
+        body.light-mode .project-card { border-color: rgba(0,0,0,0.2); }
+        body.light-mode .dock-container { background: rgba(200, 200, 200, 0.8); border-color: rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        body.light-mode .dock-icon { color: #444; }
+        body.light-mode .dock-icon:hover { color: #000; background: rgba(0,0,0,0.05); }
+
+        /* --- GLASS PANELS --- */
         .glass-panel {
             background: var(--glass-surface);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--glass-border);
-            border-top: 1px solid rgba(255,255,255,0.15);
+            border-top: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
             border-radius: 24px;
             overflow: hidden;
-            transition: transform 0.4s var(--ease-ios), box-shadow 0.4s ease, border-color 0.4s ease;
+            transition: transform 0.4s var(--ease-ios), box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.6s ease;
         }
-        
         .glass-panel:hover {
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.6), var(--accent-glow);
+            border-color: var(--accent-color);
             transform: translateY(-4px) scale(1.005);
         }
 
-        /* --- IMMERSIVE BOOT --- */
-        #start-screen {
-            position: fixed; inset: 0; z-index: 100;
-            background: #000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease, visibility 0.8s;
-        }
-        #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
-        
-        .power-btn {
-            width: 100px; height: 100px; border-radius: 50%;
-            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.4s var(--ease-ios);
-            position: relative;
-        }
-        .power-btn::after {
-            content: ''; position: absolute; inset: -4px; border-radius: 50%;
-            background: conic-gradient(from 0deg, transparent, var(--accent-color, #fff), transparent);
-            opacity: 0; transition: opacity 0.5s; animation: spin 4s linear infinite;
-        }
-        .power-btn:hover { transform: scale(0.95); box-shadow: 0 0 40px var(--accent-color, rgba(255,255,255,0.2)); }
-        .power-btn:hover::after { opacity: 0.5; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- BACKGROUNDS & SCANLINES --- */
-        #theme-bg {
-            position: fixed; inset: 0; z-index: -2;
-            background-size: cover; background-position: center;
-            opacity: 0.2; filter: blur(40px) saturate(1.2);
-            transition: background-image 0.8s ease-in-out, opacity 0.5s ease;
-            transform: scale(1.1);
-        }
-        .scanlines {
-            position: fixed; inset: 0; z-index: -1; pointer-events: none;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-            background-size: 100% 4px; opacity: 0.15;
-        }
-
-        /* --- DYNAMIC ISLAND (THEME BAR) --- */
-        .theme-island {
-            position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
-            z-index: 90;
-            background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 100px;
-            padding: 6px;
-            display: flex; gap: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            transition: all 0.3s var(--ease-ios);
-        }
-        .theme-island:hover { padding: 8px 12px; gap: 12px; background: rgba(30, 30, 30, 0.8); }
-        
-        .theme-pill {
-            width: 36px; height: 36px; border-radius: 50%;
-            display: grid; place-items: center; cursor: pointer;
-            border: 1px solid transparent; opacity: 0.6;
-            transition: all 0.3s;
-            position: relative; overflow: hidden;
-        }
-        .theme-pill:hover { opacity: 1; transform: scale(1.1); background: rgba(255,255,255,0.1); }
-        .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); }
-        .theme-pill img { width: 20px; height: 20px; object-fit: contain; }
-
-        /* --- BENTO GRID LAYOUT --- */
+        /* --- BENTO GRID --- */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
             grid-auto-rows: minmax(100px, auto);
             gap: 24px;
             padding: 120px 24px 140px;
-            max-width: 1600px; margin: 0 auto; /* Increased max-width */
+            max-width: 1600px; margin: 0 auto;
         }
-        
-        /* --- WINDOW HEADERS --- */
-        .win-header {
-            height: 40px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
-            background: linear-gradient(to bottom, rgba(255,255,255,0.03), transparent);
-        }
-        .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
-        .win-controls { display: flex; gap: 6px; }
-        .win-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.1); cursor: pointer; transition: 0.2s; }
-        .win-dot:hover { background: var(--accent-color); filter: brightness(1.2); }
 
-        /* --- TYPOGRAPHY --- */
+        /* --- TYPOGRAPHY HERO --- */
         h1.hero-name {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800; letter-spacing: -0.04em;
-            background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.7) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 800; letter-spacing: -0.02em;
             line-height: 1; margin-bottom: 1rem;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
         }
+        /* Gradient Text only in Dark Mode */
+        body:not(.light-mode) h1.hero-name {
+            background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        body.light-mode h1.hero-name { color: #1a1a1a; }
 
-        /* --- PIE CHART --- */
+        /* --- PIE CHART (Skills) --- */
         .pie-chart {
-            width: 70px; height: 70px; border-radius: 50%;
+            width: 90px; height: 90px; border-radius: 50%;
             background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0);
-            position: relative; display: grid; place-items: center;
-            flex-shrink: 0;
+            position: relative; display: grid; place-items: center; flex-shrink: 0;
+            transition: all 0.5s ease;
         }
-        .pie-chart::after { content: ''; position: absolute; inset: 6px; background: #111; border-radius: 50%; }
-        .pie-chart span { position: relative; z-index: 10; font-family: 'Share Tech Mono'; font-size: 14px; color: #fff; }
+        .pie-chart::after { 
+            content: ''; position: absolute; inset: 8px; 
+            background: #111; border-radius: 50%; 
+            transition: background 0.6s;
+        }
+        body.light-mode .pie-chart::after { background: #dcdcdc; }
+        body.light-mode .pie-chart { background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(0,0,0,0.1) 0); }
+        .pie-chart span { position: relative; z-index: 10; font-family: 'Share Tech Mono'; font-size: 16px; font-weight: bold; }
+        
+        /* --- SEQUENCER --- */
+        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; }
+        .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
+        body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
+        .playing-col { filter: brightness(1.4); transform: scale(0.95); }
+        
+        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent;}
+        .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
+        body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
 
-        /* --- PROJECT CARDS (MASSIVE) --- */
-        .project-card {
-            position: relative; border-radius: 16px; overflow: hidden;
-            aspect-ratio: 16/10; /* Taller ratio */
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        /* --- UTILS & ANIMATIONS --- */
+        .win-header { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
         .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
-        .project-info {
-            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6) 40%, transparent);
-            display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
-            opacity: 1; transition: 0.4s ease; /* Always visible but enhanced on hover */
-        }
+        body.light-mode .project-card img { filter: brightness(1); }
         .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
-        .project-card:hover .project-info { opacity: 1; }
+        .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+        
+        .dock-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; padding: 10px 20px; background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90; }
+        .theme-island { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 90; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 6px; display: flex; gap: 8px; transition: 0.3s; }
+        .theme-pill { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.6; transition: 0.3s; }
+        .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); }
 
-        /* --- FUTURE DOCK --- */
-        .dock-container {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 12px; padding: 10px 20px;
-            background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            z-index: 90;
-        }
-        .dock-icon {
-            padding: 10px 16px; border-radius: 14px;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: rgba(255,255,255,0.6); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            cursor: pointer; position: relative;
-        }
-        .dock-icon:hover { 
-            background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-5px) scale(1.1); 
-        }
-        .dock-icon svg { width: 20px; height: 20px; }
-        .dock-icon span { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0; transition: 0.2s; position: absolute; bottom: -15px; width: max-content; }
-        .dock-icon:hover span { opacity: 1; bottom: -20px; }
-
-        /* UTILS */
-        .text-accent { color: var(--accent-color); transition: color 0.3s; }
-        .border-accent { border-color: var(--accent-color); }
+        #start-screen { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
+        #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
         .scroll-float { opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-ios); }
         .scroll-float.visible { opacity: 1; transform: translateY(0); }
-        
-        /* SEQUENCER STYLES */
-        .step-btn { height: 32px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; }
-        .step-btn.active { background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); border-color: #fff; }
-        .playing-col { filter: brightness(1.5); }
-        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; }
-        .piano-cell.active { background: var(--accent-color); opacity: 0.8; }
+
+        /* BACKGROUND */
+        #theme-bg { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; opacity: 0.2; filter: blur(40px) saturate(1.2); transition: 0.8s; transform: scale(1.1); }
+        .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.15; }
 
         @media (max-width: 1024px) {
             .bento-grid { grid-template-columns: 1fr; padding-top: 100px; }
             .col-span-12, .col-span-8, .col-span-5, .col-span-7 { grid-column: span 1 !important; }
-            .dock-container { width: 90%; justify-content: space-around; padding: 10px; }
-            .dock-icon span { display: none !important; }
+            .dock-icon span { display: none; }
         }
     </style>
 </head>
 <body class="font-fl selection:bg-white selection:text-black">
 
     <div id="start-screen">
-        <button onclick="startExperience()" class="power-btn group click-sound">
-            <svg class="w-8 h-8 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <button onclick="startExperience()" class="w-24 h-24 rounded-full bg-[#111] border border-white/10 flex items-center justify-center hover:scale-95 hover:border-white/40 transition shadow-[0_0_50px_rgba(0,0,0,0.5)] click-sound group">
+            <svg class="w-8 h-8 text-white opacity-80 group-hover:text-[var(--accent-color)] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </button>
-        <div id="boot-sequence" class="mt-6 font-tech text-green-400 text-sm tracking-[0.2em] h-6"></div>
+        <div id="boot-sequence" class="mt-6 font-tech text-green-400 text-sm tracking-[0.2em]">INITIALISATION...</div>
     </div>
 
     <div id="theme-bg"></div>
     <div class="scanlines"></div>
 
-    <div class="theme-island" id="theme-widget">
-        <button class="theme-pill click-sound" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL"></button>
-        <button class="theme-pill click-sound" onclick="setTheme('ableton')" title="Ableton"><img src="logo_ableton.png" alt="Live"></button>
-        <button class="theme-pill click-sound" onclick="setTheme('protools')" title="ProTools"><img src="logo_protools.png" alt="PT"></button>
-        <button class="theme-pill click-sound" onclick="setTheme('rx')" title="RX"><img src="logo_rx10.png" alt="RX"></button>
+    <div class="theme-island">
+        <button class="theme-pill click-sound" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL" class="w-5 h-5 object-contain"></button>
+        <button class="theme-pill click-sound" onclick="setTheme('ableton')" title="Ableton"><img src="logo_ableton.png" alt="Live" class="w-5 h-5 object-contain"></button>
+        <button class="theme-pill click-sound" onclick="setTheme('protools')" title="ProTools"><img src="logo_protools.png" alt="PT" class="w-5 h-5 object-contain"></button>
+        <button class="theme-pill click-sound" onclick="setTheme('rx')" title="RX"><img src="logo_rx10.png" alt="RX" class="w-5 h-5 object-contain"></button>
     </div>
 
     <main class="bento-grid">
         
-        <section id="hero" class="col-span-12 glass-panel p-10 flex flex-col justify-center items-center text-center min-h-[50vh] scroll-float relative overflow-hidden group">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 pointer-events-none"></div>
+        <section id="hero" class="col-span-12 glass-panel p-10 flex flex-col justify-center items-center text-center min-h-[50vh] scroll-float relative group">
             <div class="relative z-10">
-                <span class="inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
+                <span class="inline-block px-3 py-1 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
                 <h1 class="hero-name">Jules Frémondière</h1>
                 <p class="text-xl md:text-2xl opacity-70 font-light tracking-wide max-w-2xl mx-auto">Étudiant Ingénieur du son & Sound Designer</p>
+                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-2 text-sm text-[var(--accent-color)] hover:underline font-mono">jules.fremondiere@3is.fr</a>
+                
                 <div class="mt-8 flex gap-4 justify-center">
-                    <a href="#contact" class="px-6 py-3 rounded-full bg-white text-black font-bold text-sm hover:scale-105 transition transform click-sound">Me Contacter</a>
-                    <a href="CV_FREMONDIEREJULES.pdf" download class="px-6 py-3 rounded-full border border-white/20 hover:bg-white/10 font-medium text-sm transition click-sound flex items-center gap-2">
+                    <a href="#contact" class="px-8 py-3 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/20">Me Contacter</a>
+                    <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> CV
                     </a>
                 </div>
             </div>
-            <div class="absolute -top-20 -left-20 w-64 h-64 bg-[var(--accent-color)] rounded-full blur-[100px] opacity-20"></div>
-            <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-500 rounded-full blur-[100px] opacity-10"></div>
         </section>
 
         <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float">
             <div class="win-header">
                 <span class="win-title">Stats & Skills.sys</span>
-                <div class="win-controls"><div class="win-dot"></div><div class="win-dot"></div></div>
+                <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-8 flex flex-col justify-center h-full space-y-8">
+            <div class="p-10 flex flex-col justify-center h-full space-y-10">
                 
-                <div class="flex items-center gap-6 group">
+                <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 66"><span>66%</span></div>
                     <div>
-                        <h4 class="text-sm font-bold uppercase tracking-widest text-accent mb-1">Mixage</h4>
-                        <p class="text-xs opacity-60 leading-relaxed max-w-[250px]">Écoute active, prise de décision, sound design, Pro Tools (3 ans).</p>
+                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Mixage</h4>
+                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Écoute active, prise de décision, sound design, Pro Tools (3 ans).</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-6 group">
+                <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 70"><span>70%</span></div>
                     <div>
-                        <h4 class="text-sm font-bold uppercase tracking-widest text-accent mb-1">Composition</h4>
-                        <p class="text-xs opacity-60 leading-relaxed max-w-[250px]">Réflexion Artistique, Créativité, Imagination, Organisation.</p>
+                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Composition</h4>
+                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Réflexion Artistique, Créativité, Imagination, Organisation.</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-6 group">
+                <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 40"><span>40%</span></div>
                     <div>
-                        <h4 class="text-sm font-bold uppercase tracking-widest text-accent mb-1">Master/Repair</h4>
-                        <p class="text-xs opacity-60 leading-relaxed max-w-[250px]">Nettoyage Audio, Prise de recul, (Izotope RX, Ozone).</p>
+                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Master/Repair</h4>
+                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Nettoyage Audio, Prise de recul, (Izotope RX, Ozone).</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-6 group">
+                <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 70"><span>70%</span></div>
                     <div>
-                        <h4 class="text-sm font-bold uppercase tracking-widest text-accent mb-1">Recording</h4>
-                        <p class="text-xs opacity-60 leading-relaxed max-w-[250px]">Utilisation Mixette (SoundDevice), Prise de son Couple micro.</p>
+                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Recording</h4>
+                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Utilisation Mixette (SoundDevice), Prise de son Couple micro.</p>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <section id="parcours" class="col-span-12 lg:col-span-7 glass-panel scroll-float">
             <div class="win-header">
                 <span class="win-title">Timeline.log</span>
-                <div class="win-controls"><div class="win-dot"></div><div class="win-dot"></div></div>
+                <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
             <div class="p-8 h-full overflow-y-auto custom-scrollbar">
-                <div class="relative pl-8 border-l border-white/10 space-y-12">
-                    
+                <div class="relative pl-8 border-l border-[var(--glass-border)] space-y-12">
                     <div class="relative group">
                         <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--accent-color)] bg-[#111] group-hover:scale-125 transition"></div>
-                        <span class="text-xs font-mono text-accent mb-1 block">2023 – 2026</span>
-                        <h3 class="text-lg font-bold">3iS - Institut International</h3>
-                        <p class="text-xs uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p>
-                        <p class="text-sm opacity-60 italic pl-3 border-l-2 border-white/10">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p>
+                        <span class="text-xs font-mono text-[var(--accent-color)] mb-1 block">2023 – 2026</span>
+                        <h3 class="text-xl font-bold">3iS - Institut International</h3>
+                        <p class="text-sm uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p>
+                        <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--accent-color)]">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p>
                     </div>
 
                     <div class="relative group flex flex-col md:flex-row gap-6 items-start">
                         <div class="flex-1">
-                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-white/20 bg-[#111] group-hover:border-white transition"></div>
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                             <span class="text-xs font-mono opacity-50 mb-1 block">2023</span>
-                            <h3 class="text-lg font-bold">Service Civique / Césure</h3>
-                            <p class="text-sm opacity-60 italic pl-3 border-l-2 border-white/10 mb-2">Projet Court Métrage grâce a l’association Thermogène Média (Home Studio, Direction d’acteur).</p>
-                            <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-xs border border-white/20 px-3 py-1 rounded hover:bg-white/10 inline-block transition click-sound">▶ Voir le projet vidéo</a>
+                            <h3 class="text-xl font-bold">Service Civique / Césure</h3>
+                            <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)] mb-2">Projet Court Métrage grâce a l’association Thermogène Média (Home Studio, Direction d’acteur).</p>
+                            <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-xs border border-[var(--glass-border)] px-3 py-1 rounded hover:bg-white/10 inline-block transition click-sound">▶ Voir le projet vidéo</a>
                         </div>
-                        <div class="w-32 h-24 shrink-0 rounded overflow-hidden border border-white/20">
+                        <div class="w-32 h-24 shrink-0 rounded overflow-hidden border border-[var(--glass-border)]">
                             <img src="peace3.jpg" alt="Asso" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
                         </div>
                     </div>
 
                     <div class="relative group">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-white/20 bg-[#111] group-hover:border-white transition"></div>
+                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                         <span class="text-xs font-mono opacity-50 mb-1 block">2022</span>
-                        <h3 class="text-lg font-bold">BAC STI2D ITEC</h3>
-                        <p class="text-sm opacity-60 italic pl-3 border-l-2 border-white/10">Esprit d’équipe, Informatique, Sens de la réflexion technique.</p>
+                        <h3 class="text-xl font-bold">BAC STI2D ITEC</h3>
+                        <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Esprit d’équipe, Informatique, Sens de la réflexion technique.</p>
                     </div>
 
                     <div class="relative group flex flex-col md:flex-row gap-6 items-start">
                         <div class="flex-1">
-                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-white/20 bg-[#111] group-hover:border-white transition"></div>
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                             <span class="text-xs font-mono opacity-50 mb-1 block">2018 – 2022</span>
-                            <h3 class="text-lg font-bold">Autodidacte & Exploration AV</h3>
+                            <h3 class="text-xl font-bold">Autodidacte & Exploration AV</h3>
                             <div class="mt-2 p-3 bg-white/5 rounded border-l-2 border-[var(--accent-color)]">
                                 <ul class="list-disc list-inside text-sm opacity-70"><li>Composition musicale</li><li>Montage vidéo</li></ul>
                             </div>
                         </div>
-                        <div class="w-32 h-24 shrink-0 rounded overflow-hidden border border-white/20">
+                        <div class="w-32 h-24 shrink-0 rounded overflow-hidden border border-[var(--glass-border)]">
                             <img src="peace2.jpg" alt="Work" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
                         </div>
                     </div>
 
                     <div class="relative group">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-white/20 bg-[#111] group-hover:border-white transition"></div>
+                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                         <span class="text-xs font-mono opacity-50 mb-1 block">2010 – 2014</span>
-                        <h3 class="text-lg font-bold">Danseur Hip-Hop & Interprète</h3>
-                        <p class="text-sm opacity-60 italic pl-3 border-l-2 border-white/10">Tournée Européenne avec le chorégraphe Boris Charmatz.</p>
+                        <h3 class="text-xl font-bold">Danseur Hip-Hop & Interprète</h3>
+                        <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Tournée Européenne avec le chorégraphe Boris Charmatz.</p>
                     </div>
-
                 </div>
             </div>
         </section>
 
-        <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-accent">
-            <div class="bg-black/40 rounded-[20px] p-6 h-full border border-white/5">
+        <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-[var(--accent-color)]/30">
+            <div class="bg-black/20 rounded-[20px] p-6 h-full border border-[var(--glass-border)]">
                 <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                        <h3 class="font-tech text-lg text-accent tracking-widest">SEQ_V2.0 // LOOP_STATION</h3>
+                        <div id="seq-led" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
+                        <h3 class="font-tech text-lg text-[var(--accent-color)] tracking-widest">MINI_SEQUENCER_8_STEPS</h3>
                     </div>
                     <div class="flex gap-4 font-mono text-[10px] items-end">
-                        <div class="flex flex-col"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-accent"><option value="808">TR-808</option><option value="909">TR-909</option></select></div>
-                        <div class="flex flex-col"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-20 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"><span id="bpm-display">120</span></div>
-                        <button id="play-btn" onclick="togglePlay()" class="px-4 py-1 h-7 border border-[var(--accent-color)] text-accent rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase">Play</button>
-                        <button onclick="clearSequencer()" class="px-4 py-1 h-7 border border-white/20 rounded hover:bg-white/10 transition uppercase">Clr</button>
+                        <div class="flex flex-col"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"><span id="bpm-display" class="mt-1">120</span></div>
+                        <button id="play-btn" onclick="togglePlay()" class="px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase">PLAY LOOP</button>
+                        <button onclick="clearSequencer()" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase">Clear</button>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     <div class="lg:col-span-3 space-y-3">
-                        <div class="flex items-center gap-3"><span class="font-mono text-[10px] w-6 opacity-50">BD</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
-                        <div class="flex items-center gap-3"><span class="font-mono text-[10px] w-6 opacity-50">SD</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
-                        <div class="flex items-center gap-3"><span class="font-mono text-[10px] w-6 opacity-50">CH</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
-                        <div class="pt-4 border-t border-white/5 mt-4">
+                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
+                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
+                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
+                        <div class="pt-4 border-t border-[var(--glass-border)] mt-4">
                             <div class="flex items-center gap-3">
-                                <span class="font-mono text-[10px] w-6 opacity-50">SYN</span>
+                                <span class="font-mono text-xs w-8 opacity-60 font-bold">SYN</span>
                                 <div id="piano-roll" class="flex-1 grid grid-template-columns-8 gap-1" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="lg:col-span-1 bg-black/50 rounded-lg border border-white/10 relative overflow-hidden flex items-center justify-center min-h-[100px]">
+                    <div class="lg:col-span-1 bg-black/30 rounded-lg border border-[var(--glass-border)] relative overflow-hidden flex items-center justify-center min-h-[100px]">
                         <canvas id="scope-canvas" class="w-full h-full absolute inset-0"></canvas>
-                        <div class="absolute bottom-2 left-2 right-2 h-1 bg-white/10 rounded overflow-hidden">
-                            <div id="peak-meter-bar" class="h-full bg-[var(--accent-color)] transition-all duration-75 w-0"></div>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="projets" class="col-span-12 space-y-8 scroll-float mt-8">
-            <h2 class="text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-accent">///</span> Projets et Collaborations</h2>
+            <h2 class="text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
                 <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group click-sound">
                     <img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg" alt="Capharnaüm">
                     <div class="project-info">
@@ -412,7 +332,6 @@
                         <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Sound Design - Bruitage - Mix (ProTools, S1 Controller, MixPre 6, MKH-416)</p>
                     </div>
                 </a>
-
                 <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" class="project-card group click-sound">
                     <img src="https://img.youtube.com/vi/w_9xYrwzKNs/maxresdefault.jpg" alt="Long Day">
                     <div class="project-info">
@@ -424,7 +343,6 @@
                         <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Direction Artistique - Montage - Composition - Mix (Live 12, Premiere Pro)</p>
                     </div>
                 </a>
-
                 <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="project-card group click-sound">
                     <img src="https://img.youtube.com/vi/llGoiisrlu8/maxresdefault.jpg" alt="Ouragan">
                     <div class="project-info">
@@ -436,7 +354,6 @@
                         <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Routing Console, Patch, Spatialisation, Communication</p>
                     </div>
                 </a>
-
                 <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="project-card group click-sound">
                     <img src="https://img.youtube.com/vi/U3lwDA_INOQ/maxresdefault.jpg" alt="Instable">
                     <div class="project-info">
@@ -448,12 +365,11 @@
                         <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Supervision sonore de A à Z, Prise de son, Post Production</p>
                     </div>
                 </a>
-
             </div>
             
-            <div class="glass-panel p-3 overflow-hidden mt-6">
-                <div class="whitespace-nowrap animate-[marquee_20s_linear_infinite] text-xs font-mono opacity-60">
-                     +++ PROCHAINEMENT : NOUVEAUX DOCUS +++ CLIPS EN PREPA +++ STAY TUNED +++ PROCHAINEMENT : NOUVEAUX DOCUS +++ CLIPS EN PREPA +++ STAY TUNED +++
+            <div class="glass-panel p-3 overflow-hidden mt-6 bg-[var(--accent-color)]/10 border-[var(--accent-color)]/20">
+                <div class="whitespace-nowrap animate-[marquee_20s_linear_infinite] text-sm font-mono font-bold tracking-widest text-[var(--accent-color)]">
+                     +++ PROCHAINEMENT : NOUVEAUX DOCUS +++ CLIPS EN PREPA +++ PROCHAINEMENT : NOUVEAUX DOCUS +++ CLIPS EN PREPA +++ PROCHAINEMENT : NOUVEAUX DOCUS +++ CLIPS EN PREPA +++
                 </div>
             </div>
         </section>
@@ -465,8 +381,9 @@
             <div>
                 <h3 class="text-2xl font-bold">Travaillons ensemble</h3>
                 <p class="opacity-60 mt-2">Disponible pour projets créatifs et techniques.</p>
+                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-2 text-xl font-bold text-[var(--accent-color)] hover:underline">jules.fremondiere@3is.fr</a>
             </div>
-            <a href="https://linktr.ee/jlo.flp" target="_blank" class="inline-flex items-center gap-2 text-accent border-b border-transparent hover:border-[var(--accent-color)] transition pb-1">
+            <a href="https://linktr.ee/jlo.flp" target="_blank" class="inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1">
                 Linktree & Réseaux <span>↗</span>
             </a>
             <p class="font-mono text-[10px] opacity-30 mt-8">© 2026 SYSTEM JULES F.</p>
@@ -476,36 +393,31 @@
 
     <nav class="dock-container">
         <a href="#hero" class="dock-icon click-sound">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            <span>Home</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
         </a>
         <a href="#skills" class="dock-icon click-sound">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            <span>Stats</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Stats</span>
         </a>
         <a href="#sequencer" class="dock-icon click-sound">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-            <span>Lab</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg><span>Lab</span>
         </a>
         <a href="#projets" class="dock-icon click-sound">
-             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span>Work</span>
+             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Work</span>
         </a>
         <div class="w-px h-full bg-white/10 mx-2"></div>
         <div id="time-display" class="font-mono text-xs flex items-center text-[var(--accent-color)] opacity-80">00:00:00</div>
     </nav>
 
     <script>
-        // --- AUDIO ENGINE PRESERVED ---
+        // --- AUDIO ENGINE ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const masterGain = audioCtx.createGain();
         const analyser = audioCtx.createAnalyser();
         masterGain.connect(analyser); analyser.connect(audioCtx.destination);
-        analyser.fftSize = 256; masterGain.gain.value = 0.5;
+        analyser.fftSize = 256; masterGain.gain.value = 0.6;
 
-        // CLICK SOUND
         function playClickSound() {
-            if (audioCtx.state === 'suspended') return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.type = 'triangle'; osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
@@ -520,13 +432,12 @@
         // SEQUENCER VARS
         let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120;
         const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
-        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; 
+        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; // Bb pentatonic
         const melodyGrid = Array(5).fill().map(() => Array(8).fill(false));
 
         // VISUALIZER
         const scopeCanvas = document.getElementById('scope-canvas');
         const scopeCtx = scopeCanvas.getContext('2d');
-        const peakBar = document.getElementById('peak-meter-bar');
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
         function drawVisualizer() {
@@ -545,50 +456,50 @@
                 x += sliceWidth;
             }
             scopeCtx.stroke();
-            
-            // Peak Meter
-            let sum = 0; for(let i=0; i<dataArray.length; i++) { let val = (dataArray[i]-128)/128; sum += val*val; }
-            let rms = Math.sqrt(sum/dataArray.length);
-            peakBar.style.width = Math.min(100, rms * 400) + '%';
         }
 
-        // BOOT
         function startExperience() {
-            document.querySelector('.power-btn').classList.add('scale-90', 'brightness-150');
-            document.getElementById('boot-sequence').textContent = "SYSTEM_READY...";
+            document.querySelector('#start-screen button').classList.add('scale-0');
+            document.getElementById('boot-sequence').textContent = "SYSTEM_LOADED";
             if(audioCtx.state === 'suspended') audioCtx.resume();
             setTimeout(() => {
                 document.getElementById('start-screen').classList.add('hidden-screen');
                 drawVisualizer();
-            }, 600);
+            }, 500);
         }
 
-        // CLOCK
         setInterval(() => {
             const now = new Date();
             document.getElementById('time-display').textContent = now.toLocaleTimeString('fr-FR', {hour12:false}) + ':' + Math.floor(now.getMilliseconds()/10);
         }, 40);
 
-        // THEMES CONFIG
+        // THEMES LOGIC
         const themes = {
-            fl: { bg: 'flstudio.png', accent: '#22c55e', font: 'font-fl' },
-            ableton: { bg: 'ableton.png', accent: '#eab308', font: 'font-ableton' },
-            protools: { bg: 'protools.png', accent: '#a855f7', font: 'font-protools' },
-            rx: { bg: 'rx10.png', accent: '#3b82f6', font: 'font-rx' }
+            fl: { bg: 'flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' },
+            ableton: { bg: 'ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' }, /* Orange Ableton */
+            protools: { bg: 'protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' },
+            rx: { bg: 'rx10.png', accent: '#3b82f6', font: 'font-rx', mode: 'dark' }
         };
 
         function setTheme(name) {
             const t = themes[name];
             document.body.className = `${t.font} selection:bg-white selection:text-black`;
+            
+            // Handle Light/Dark Mode
+            if(t.mode === 'light') {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+
             document.documentElement.style.setProperty('--accent-color', t.accent);
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`;
             
-            // Update active pill
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active'));
             document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active');
         }
 
-        // SEQUENCER UI BUILDER
+        // SEQUENCER UI
         function createStepBtn(track, index) {
             const btn = document.createElement('button');
             btn.className = `step-btn click-sound`;
@@ -602,36 +513,76 @@
         const pCont = document.getElementById('piano-roll');
         for(let r=0; r<5; r++) {
             for(let c=0; c<8; c++) {
-                const cell = document.createElement('div'); cell.className='piano-cell h-4 click-sound'; cell.id=`note-${r}-${c}`;
+                const cell = document.createElement('div'); cell.className='piano-cell h-5 click-sound'; cell.id=`note-${r}-${c}`;
                 cell.onclick=()=>{ melodyGrid[r][c]=!melodyGrid[r][c]; cell.classList.toggle('active'); }; pCont.appendChild(cell);
             }
         }
 
-        // SYNTH LOGIC (Basic)
+        // AUDIO GENERATORS (IMPROVED)
         function playSound(type) {
             const now = audioCtx.currentTime;
-            const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-            osc.connect(g); g.connect(masterGain);
-            if(type=='kick') { osc.freq(150, now); g.env(1, now, 0.5); }
-            else if(type=='snare') { osc.type='triangle'; osc.freq(250, now); g.env(0.6, now, 0.2); }
-            else if(type=='hat') { osc.type='square'; osc.frequency.value=800; g.env(0.1, now, 0.05); }
-            osc.start(now); osc.stop(now+0.5);
+            
+            if(type === 'kick') {
+                const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                osc.connect(g); g.connect(masterGain);
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(0.01, now + 0.5);
+                g.gain.setValueAtTime(1, now);
+                g.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now); osc.stop(now + 0.5);
+            } else if (type === 'snare') {
+                const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                osc.connect(g); g.connect(masterGain);
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(200, now);
+                g.gain.setValueAtTime(0.5, now); g.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+                
+                // Noise burst
+                const bSize = audioCtx.sampleRate * 0.2;
+                const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
+                const d = b.getChannelData(0);
+                for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
+                const noise = audioCtx.createBufferSource(); noise.buffer = b;
+                const ng = audioCtx.createGain(); noise.connect(ng); ng.connect(masterGain);
+                ng.gain.setValueAtTime(0.4, now); ng.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                noise.start(now);
+            } else if (type === 'hat') {
+                const bSize = audioCtx.sampleRate * 0.05;
+                const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
+                const d = b.getChannelData(0);
+                for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
+                const noise = audioCtx.createBufferSource(); noise.buffer = b;
+                const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 5000;
+                const ng = audioCtx.createGain();
+                noise.connect(filter); filter.connect(ng); ng.connect(masterGain);
+                ng.gain.setValueAtTime(0.3, now); ng.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                noise.start(now);
+            }
         }
-        AudioParam.prototype.env = function(v,t,d){ this.setValueAtTime(v,t); this.exponentialRampToValueAtTime(0.01,t+d); };
-        OscillatorNode.prototype.freq = function(v,t){ this.frequency.setValueAtTime(v,t); this.frequency.exponentialRampToValueAtTime(0.01,t+0.5); };
         
         function playSynth(f,t) {
             const o=audioCtx.createOscillator(), g=audioCtx.createGain();
             o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(masterGain); 
-            g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
-            o.start(t); o.stop(t+0.3);
+            g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.3,t+0.05); g.gain.exponentialRampToValueAtTime(0.001,t+0.4);
+            o.start(t); o.stop(t+0.4);
         }
 
         function togglePlay() {
-            isPlaying = !isPlaying; document.getElementById('play-btn').innerText = isPlaying ? "STOP" : "PLAY";
-            if(isPlaying) { if(audioCtx.state === 'suspended') audioCtx.resume(); intervalId = setInterval(nextStep, (60/bpm)*1000/2); }
-            else { clearInterval(intervalId); resetVisuals(); }
+            isPlaying = !isPlaying; 
+            const btn = document.getElementById('play-btn');
+            btn.innerText = isPlaying ? "STOP LOOP" : "PLAY LOOP";
+            const led = document.getElementById('seq-led');
+            
+            if(isPlaying) { 
+                led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse');
+                if(audioCtx.state === 'suspended') audioCtx.resume(); 
+                intervalId = setInterval(nextStep, (60/bpm)*1000/2); 
+            } else { 
+                led.classList.add('bg-red-900'); led.classList.remove('bg-red-500', 'animate-pulse');
+                clearInterval(intervalId); resetVisuals(); 
+            }
         }
+
         function nextStep() {
             resetVisuals();
             const cols = document.querySelectorAll(`#track-kick button:nth-child(${currentStep+1}), #track-snare button:nth-child(${currentStep+1}), #track-hat button:nth-child(${currentStep+1})`);
@@ -644,9 +595,7 @@
             for(let r=0; r<5; r++) if(melodyGrid[r][currentStep]) playSynth(notes[r], now);
             currentStep = (currentStep + 1) % 8;
         }
-        function resetVisuals() { 
-            document.querySelectorAll('.step-btn, .piano-cell').forEach(b => b.classList.remove('playing-col')); 
-        }
+        function resetVisuals() { document.querySelectorAll('.step-btn, .piano-cell').forEach(b => b.classList.remove('playing-col')); }
         function clearSequencer() {
             sequence.kick.fill(0); sequence.snare.fill(0); sequence.hat.fill(0); melodyGrid.forEach(r=>r.fill(false));
             document.querySelectorAll('.step-btn, .piano-cell').forEach(c => { c.classList.remove('active'); c.classList.remove('playing-col'); });
