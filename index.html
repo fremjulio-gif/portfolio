@@ -3,330 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jules Frémondière | Sound Engineer Portfolio</title>
+    <title>Jules Frémondière | Sound Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700&family=Space+Mono&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --accent: #ffffff;
-            --bg-window: rgba(20, 20, 20, 0.7);
-            --border-ui: rgba(255, 255, 255, 0.08);
-            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --bg: #080808;
+            --text: #ffffff;
+            --panel: rgba(255, 255, 255, 0.03);
         }
+
+        /* Thèmes plus subtils */
+        .theme-fl { --accent: #ff8235; }
+        .theme-ableton { --accent: #00ffca; }
+        .theme-protools { --accent: #9b6dff; }
+        .theme-rx { --accent: #3ba0e6; }
 
         body {
-            background-color: #0a0a0a;
-            color: #e5e5e5;
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background 0.8s ease, color 0.8s ease;
             overflow-x: hidden;
-            letter-spacing: -0.01em;
         }
 
-        /* --- THEME DEFINITIONS --- */
-        body.theme-fl { --accent: #ff8a00; --bg-window: rgba(28, 31, 34, 0.85); }
-        body.theme-ableton { --accent: #00ffca; --bg-window: rgba(40, 40, 40, 0.9); }
-        body.theme-protools { --accent: #9d50ff; --bg-window: rgba(22, 22, 28, 0.85); }
-        body.theme-rx { --accent: #2db8ff; --bg-window: rgba(10, 18, 24, 0.9); }
+        .mono { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; }
 
-        /* --- UI COMPONENTS --- */
-        .glass {
-            background: var(--bg-window);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid var(--border-ui);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            transition: var(--transition);
-        }
-
-        .window-header {
-            height: 38px;
-            padding: 0 15px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--border-ui);
-        }
-
-        .ctrl { width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; opacity: 0.5; }
-        .ctrl-close { background: #ff5f56; }
-        .ctrl-min { background: #ffbd2e; }
-        .ctrl-max { background: #27c93f; }
-
-        /* --- MINIMALIST SEQUENCER --- */
-        .step {
-            height: 12px;
-            border-radius: 2px;
-            background: rgba(255,255,255,0.05);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .step.active { background: var(--accent); box-shadow: 0 0 15px var(--accent); }
-        .step.playing { filter: brightness(1.8); transform: scaleY(1.2); }
-
-        /* --- ANIMATIONS --- */
-        .fade-in { animation: fadeIn 1s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        #theme-bg {
+        /* Effet de grain "Studio" sur toute la page */
+        body::before {
+            content: "";
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; opacity: 0.3; transition: var(--transition);
-            background-size: cover; background-position: center; filter: grayscale(100%) contrast(120%);
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05; pointer-events: none; z-index: 50;
         }
 
-        .nav-dock {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 8px; padding: 8px;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(15px);
-            border-radius: 18px; border: 1px solid rgba(255,255,255,0.1);
-            z-index: 100;
-        }
+        /* Sections Immersives */
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 5vw; }
 
-        .dock-item {
-            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
-            border-radius: 12px; color: rgba(255,255,255,0.5);
-            transition: var(--transition);
-        }
-        .dock-item:hover { background: rgba(255,255,255,0.1); color: white; transform: translateY(-5px); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* --- TYPOGRAPHY --- */
-        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
-        .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        /* Bouton Thème Minimal */
+        .theme-trigger {
+            width: 12px; height: 12px; border-radius: 50%;
+            cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .theme-trigger:hover { transform: scale(1.5); border-color: white; }
+
+        /* Le Séquenceur devient une "Ligne de Temps" */
+        .step {
+            height: 40px; background: rgba(255,255,255,0.05);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer; transition: 0.2s;
+        }
+        .step.active { background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+        .step.playing { border-top: 2px solid white; }
+
+        /* Images en noir et blanc artistique */
+        .art-img { filter: grayscale(1) contrast(1.1); transition: 0.5s; opacity: 0.7; }
+        .art-img:hover { filter: grayscale(0); opacity: 1; }
     </style>
 </head>
 <body class="theme-fl">
 
-    <!-- Start Overlay -->
-    <div id="boot" class="fixed inset-0 z-[200] bg-black flex items-center justify-center transition-opacity duration-1000">
-        <button onclick="bootSystem()" class="group relative flex flex-col items-center gap-4">
-            <div class="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white/100 transition-all duration-700">
-                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-            </div>
-            <span class="mono opacity-40 group-hover:opacity-100 transition-opacity">Initialize Session</span>
-        </button>
-    </div>
-
-    <div id="theme-bg" style="background-image: url('peace.jpg');"></div>
-
-    <!-- Interface -->
-    <main class="container mx-auto px-6 pt-32 pb-40 max-w-6xl">
-        
-        <!-- Header -->
-        <header class="mb-20 fade-in">
-            <h1 class="text-6xl font-bold tracking-tighter mb-4">Jules Frémondière</h1>
-            <div class="flex items-center gap-4">
-                <span class="px-3 py-1 border border-white/10 rounded-full mono text-[10px]">Ingénieur du Son</span>
-                <span class="px-3 py-1 border border-white/10 rounded-full mono text-[10px]">Sound Designer</span>
-                <span id="clock" class="mono text-[10px] ml-auto opacity-40">00:00:00:00</span>
-            </div>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-            
-            <!-- Left Panel: Skill Graph -->
-            <div class="md:col-span-4 fade-in" style="animation-delay: 0.2s;">
-                <div class="glass rounded-2xl overflow-hidden">
-                    <div class="window-header">
-                        <div class="ctrl ctrl-close"></div>
-                        <div class="ctrl ctrl-min"></div>
-                        <div class="ctrl ctrl-max"></div>
-                        <span class="mono text-[9px] opacity-40 ml-2">Analytics.vst</span>
-                    </div>
-                    <div class="p-8 space-y-8">
-                        <div>
-                            <div class="flex justify-between mono text-[10px] mb-4"><span>Mixage</span><span class="text-current" style="color:var(--accent)">66%</span></div>
-                            <div class="h-[1px] w-full bg-white/10 relative">
-                                <div class="absolute inset-0 bg-current transition-all duration-1000" style="width: 66%; background-color: var(--accent);"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between mono text-[10px] mb-4"><span>Sound Design</span><span class="text-current" style="color:var(--accent)">80%</span></div>
-                            <div class="h-[1px] w-full bg-white/10 relative">
-                                <div class="absolute inset-0 bg-current transition-all duration-1000" style="width: 80%; background-color: var(--accent);"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between mono text-[10px] mb-4"><span>Field Recording</span><span class="text-current" style="color:var(--accent)">70%</span></div>
-                            <div class="h-[1px] w-full bg-white/10 relative">
-                                <div class="absolute inset-0 bg-current transition-all duration-1000" style="width: 70%; background-color: var(--accent);"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Panel: Workspace -->
-            <div class="md:col-span-8 space-y-8 fade-in" style="animation-delay: 0.4s;">
-                
-                <!-- Timeline / Parcours -->
-                <div class="glass rounded-2xl overflow-hidden">
-                    <div class="window-header">
-                        <span class="mono text-[9px] opacity-40">Timeline.wav</span>
-                    </div>
-                    <div class="p-8">
-                        <div class="space-y-10 border-l border-white/5 ml-4 pl-8">
-                            <div class="relative">
-                                <div class="absolute -left-[37px] top-1.5 w-2 h-2 rounded-full bg-white"></div>
-                                <span class="mono text-[9px] opacity-30">2023 - 2026</span>
-                                <h3 class="text-lg font-medium mt-1">3iS Paris — Bachelor Son</h3>
-                                <p class="text-sm opacity-50 font-light mt-2 leading-relaxed">Spécialisation Image & Sound Design. Détermination technique et artistique.</p>
-                            </div>
-                            <div class="relative">
-                                <div class="absolute -left-[37px] top-1.5 w-2 h-2 rounded-full bg-white/20"></div>
-                                <span class="mono text-[9px] opacity-30">2022</span>
-                                <h3 class="text-lg font-medium mt-1">Service Civique — Thermogène Média</h3>
-                                <p class="text-sm opacity-50 font-light mt-2 leading-relaxed">Direction d'acteurs et post-production sur courts-métrages.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mini Lab / Sequencer -->
-                <div class="glass rounded-2xl overflow-hidden">
-                    <div class="window-header flex justify-between">
-                        <span class="mono text-[9px] opacity-40">Mini_Lab.vst</span>
-                        <div class="flex gap-4">
-                            <button onclick="togglePlay()" id="play-btn" class="mono text-[9px] hover:text-white transition">Play</button>
-                            <button onclick="clearSteps()" class="mono text-[9px] hover:text-white transition">Clear</button>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <div class="grid grid-cols-8 gap-2" id="sequencer-grid">
-                            <!-- JS Generated -->
-                        </div>
-                        <div class="mt-8 flex items-center justify-between">
-                            <canvas id="mini-viz" class="h-12 w-32 opacity-50"></canvas>
-                            <div class="flex gap-6">
-                                <div class="flex flex-col gap-2">
-                                    <span class="mono text-[8px] opacity-30">BPM</span>
-                                    <input type="range" class="w-24 accent-white" min="60" max="180" value="120" oninput="updateBPM(this.value)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+    <!-- STARTUP SCREEN -->
+    <div id="loader" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-1000">
+        <div onclick="init()" class="cursor-pointer group text-center">
+            <p class="mono opacity-20 group-hover:opacity-100 transition-opacity mb-4">Click to engage signal</p>
+            <div class="h-[1px] w-24 bg-white/10 mx-auto overflow-hidden">
+                <div class="h-full bg-white w-full -translate-x-full group-hover:translate-x-0 transition-transform duration-1000"></div>
             </div>
         </div>
-    </main>
-
-    <!-- Theme Switcher -->
-    <div class="fixed top-8 left-1/2 -translate-x-1/2 flex gap-3 p-2 rounded-full glass z-[110]">
-        <button onclick="setTheme('fl')" class="w-8 h-8 rounded-full bg-[#ff8a00] scale-90 hover:scale-110 transition border border-white/20"></button>
-        <button onclick="setTheme('ableton')" class="w-8 h-8 rounded-full bg-[#00ffca] scale-90 hover:scale-110 transition border border-white/20"></button>
-        <button onclick="setTheme('protools')" class="w-8 h-8 rounded-full bg-[#9d50ff] scale-90 hover:scale-110 transition border border-white/20"></button>
-        <button onclick="setTheme('rx')" class="w-8 h-8 rounded-full bg-[#2db8ff] scale-90 hover:scale-110 transition border border-white/20"></button>
     </div>
 
-    <!-- Navigation Dock -->
-    <nav class="nav-dock">
-        <a href="#" class="dock-item" title="Home"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
-        <a href="#projets" class="dock-item" title="Projets"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/></svg></a>
-        <a href="CV_FREMONDIEREJULES.pdf" class="dock-item" title="Download CV"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></a>
+    <!-- NAVIGATION MINIMALE -->
+    <nav class="fixed top-0 left-0 w-full p-8 flex justify-between items-center z-40">
+        <div class="mono text-[10px] tracking-[0.5em]">J. Frémondière / 2026</div>
+        <div class="flex gap-4">
+            <div onclick="setTheme('fl')" class="theme-trigger bg-[#ff8235]"></div>
+            <div onclick="setTheme('ableton')" class="theme-trigger bg-[#00ffca]"></div>
+            <div onclick="setTheme('protools')" class="theme-trigger bg-[#9b6dff]"></div>
+            <div onclick="setTheme('rx')" class="theme-trigger bg-[#3ba0e6]"></div>
+        </div>
     </nav>
+
+    <!-- SECTION 01 : HERO -->
+    <section id="hero">
+        <div class="reveal">
+            <h1 class="text-[12vw] font-bold leading-[0.8] tracking-tighter">ENGINEER<br><span class="opacity-20">OF SOUND.</span></h1>
+            <div class="flex items-center gap-12 mt-12">
+                <div class="mono opacity-40">Based in Paris / 3iS</div>
+                <div class="h-[1px] flex-1 bg-white/10"></div>
+                <a href="#parcours" class="mono hover:opacity-100 opacity-40 transition">Scroll to explore</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 02 : PARCOURS -->
+    <section id="parcours" class="bg-white/[0.01]">
+        <div class="grid md:grid-cols-2 gap-20 items-center">
+            <div class="reveal">
+                <p class="mono mb-8 text-current" style="color:var(--accent)">01. Background</p>
+                <h2 class="text-5xl font-light mb-12 leading-tight">Une approche technique nourrie par le <span class="italic">mouvement</span>.</h2>
+                <div class="space-y-12 opacity-60">
+                    <div>
+                        <p class="mono text-[9px] mb-2">2023 - 2026</p>
+                        <h4 class="text-xl">Institut International de l'Image et du Son</h4>
+                        <p class="text-sm mt-2">Spécialisation ingénierie sonore et mixage image.</p>
+                    </div>
+                    <div>
+                        <p class="mono text-[9px] mb-2">2010 - 2014</p>
+                        <h4 class="text-xl">Danseur Interprète</h4>
+                        <p class="text-sm mt-2">Tournée Européenne / Boris Charmatz. Comprendre l'espace par le corps.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="reveal relative aspect-[3/4] bg-neutral-900 overflow-hidden rounded-sm shadow-2xl">
+                <img src="peace2.jpg" class="art-img w-full h-full object-cover" alt="Jules">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 03 : PROJETS -->
+    <section id="projets">
+        <p class="mono mb-12 opacity-40">02. Selected Works</p>
+        <div class="grid md:grid-cols-3 gap-1">
+            <a href="#" class="group block bg-white/5 p-12 aspect-square flex flex-col justify-between hover:bg-current transition-colors duration-700" style="--tw-bg-opacity: 0.1; color: var(--accent);">
+                <span class="mono text-white">Project_01</span>
+                <div>
+                    <h3 class="text-3xl font-bold text-white">Capharnaüm</h3>
+                    <p class="mono text-[9px] mt-4 text-white/50">Sound Design / Mix</p>
+                </div>
+            </a>
+            <a href="#" class="group block bg-white/5 p-12 aspect-square flex flex-col justify-between hover:bg-current transition-colors duration-700" style="--tw-bg-opacity: 0.1; color: var(--accent);">
+                <span class="mono text-white">Project_02</span>
+                <div>
+                    <h3 class="text-3xl font-bold text-white">Long Day</h3>
+                    <p class="mono text-[9px] mt-4 text-white/50">Production / Editing</p>
+                </div>
+            </a>
+            <a href="#" class="group block bg-white/5 p-12 aspect-square flex flex-col justify-between hover:bg-current transition-colors duration-700" style="--tw-bg-opacity: 0.1; color: var(--accent);">
+                <span class="mono text-white">Project_03</span>
+                <div>
+                    <h3 class="text-3xl font-bold text-white">Ouragan</h3>
+                    <p class="mono text-[9px] mt-4 text-white/50">Spatial Audio</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- SECTION 04 : LAB / SEQUENCER -->
+    <section id="sequencer" class="items-start">
+        <div class="w-full reveal">
+            <div class="flex justify-between items-end mb-12">
+                <h2 class="text-6xl font-bold">LAB<span class="text-current" style="color:var(--accent)">.</span></h2>
+                <div class="flex gap-8">
+                    <button onclick="togglePlay()" id="play-btn" class="mono text-[10px] border-b border-white/20 pb-1">Play Signal</button>
+                    <button onclick="clearGrid()" class="mono text-[10px] border-b border-white/20 pb-1 opacity-40">Reset</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-16 h-24 w-full border-y border-white/10" id="grid-container">
+                <!-- Généré par JS -->
+            </div>
+            <div class="mt-8 flex justify-between items-center">
+                <div class="mono opacity-20">Current BPM: <span id="bpm-val">120</span></div>
+                <canvas id="scope" class="w-64 h-12 opacity-40"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CONTACT -->
+    <footer class="p-20 text-center">
+        <h3 class="text-[8vw] font-bold tracking-tighter mb-12">Collaborate?</h3>
+        <div class="flex flex-wrap justify-center gap-12">
+            <a href="mailto:contact@jules.com" class="mono border border-white/10 px-8 py-4 rounded-full hover:bg-white hover:text-black transition">Email</a>
+            <a href="#" class="mono border border-white/10 px-8 py-4 rounded-full hover:bg-white hover:text-black transition">Linktree</a>
+            <a href="CV_FREMONDIEREJULES.pdf" class="mono border border-white/10 px-8 py-4 rounded-full hover:bg-white hover:text-black transition">Résumé</a>
+        </div>
+        <p class="mono mt-32 opacity-10">© 2026 / JULES FREMONDIERE</p>
+    </footer>
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let isPlaying = false;
         let currentStep = 0;
         let bpm = 120;
-        let interval;
-        const steps = Array(8).fill(false);
+        let timer;
+        const steps = Array(16).fill(false);
 
-        // --- UI SOUNDS (Minimalist Clicks) ---
-        function playUIClick() {
+        // --- NOUVEAU SOUND DESIGN UI (Micro-Clicks feutrés) ---
+        function softClick() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.02);
-            gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.02);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // --- SYSTEM BOOT ---
-        function bootSystem() {
-            audioCtx.resume();
-            playUIClick();
-            document.getElementById('boot').classList.add('opacity-0', 'pointer-events-none');
+        function init() {
+            softClick();
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
         }
 
-        // --- THEME ENGINE ---
-        function setTheme(theme) {
-            playUIClick();
-            document.body.className = 'theme-' + theme;
-            const bg = document.getElementById('theme-bg');
-            if(theme === 'fl') bg.style.backgroundImage = "url('peace.jpg')";
-            if(theme === 'ableton') bg.style.backgroundImage = "url('console.jpg')";
-            // ... add others
+        function setTheme(t) {
+            softClick();
+            document.body.className = 'theme-' + t;
         }
 
-        // --- SEQUENCER ---
-        const grid = document.getElementById('sequencer-grid');
-        for(let i=0; i<8; i++) {
-            const el = document.createElement('div');
-            el.className = 'step';
-            el.onclick = () => {
-                playUIClick();
+        // --- GRID GENERATION ---
+        const gridContainer = document.getElementById('grid-container');
+        gridContainer.style.display = 'grid';
+        gridContainer.style.gridTemplateColumns = 'repeat(16, 1fr)';
+        
+        for(let i=0; i<16; i++) {
+            const div = document.createElement('div');
+            div.className = 'step';
+            div.onclick = () => {
+                softClick();
                 steps[i] = !steps[i];
-                el.classList.toggle('active');
+                div.classList.toggle('active');
             };
-            grid.appendChild(el);
+            gridContainer.appendChild(div);
         }
 
         function togglePlay() {
-            playUIClick();
+            softClick();
             isPlaying = !isPlaying;
-            document.getElementById('play-btn').innerText = isPlaying ? 'Stop' : 'Play';
-            if(isPlaying) {
-                interval = setInterval(tick, (60000 / bpm) / 4);
-            } else {
-                clearInterval(interval);
-            }
+            document.getElementById('play-btn').innerText = isPlaying ? 'Stop Signal' : 'Play Signal';
+            if(isPlaying) playLoop();
+            else clearTimeout(timer);
         }
 
-        function tick() {
-            const prev = (currentStep + 7) % 8;
-            grid.children[prev].classList.remove('playing');
-            grid.children[currentStep].classList.add('playing');
-            
+        function playLoop() {
+            const prev = (currentStep + 15) % 16;
+            gridContainer.children[prev].classList.remove('playing');
+            gridContainer.children[currentStep].classList.add('playing');
+
             if(steps[currentStep]) {
-                const osc = audioCtx.createOscillator();
+                const o = audioCtx.createOscillator();
                 const g = audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
-                g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                o.type = 'sine';
+                o.frequency.setValueAtTime(60, audioCtx.currentTime);
+                g.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-                osc.connect(g); g.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                o.connect(g); g.connect(audioCtx.destination);
+                o.start(); o.stop(audioCtx.currentTime + 0.1);
             }
-            currentStep = (currentStep + 1) % 8;
+
+            currentStep = (currentStep + 1) % 16;
+            timer = setTimeout(playLoop, (60000 / bpm) / 4);
         }
 
-        // --- CLOCK SMPTE ---
-        function updateClock() {
-            const now = new Date();
-            const f = (n) => String(n).padStart(2, '0');
-            const frames = f(Math.floor(now.getMilliseconds() / 40));
-            document.getElementById('clock').innerText = `${f(now.getHours())}:${f(now.getMinutes())}:${f(now.getSeconds())}:${frames}`;
-            requestAnimationFrame(updateClock);
+        function clearGrid() {
+            softClick();
+            steps.fill(false);
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         }
-        updateClock();
 
-        // Adding subtle hover to all interactive elements
-        document.querySelectorAll('button, .dock-item, .step').forEach(el => {
+        // --- REVEAL ANIMATION ON SCROLL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+        // Hover sounds on links
+        document.querySelectorAll('a, .theme-trigger, button').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                // Very subtle high-freq click for hover
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.frequency.value = 3000;
-                gain.gain.value = 0.005;
+                osc.frequency.value = 800;
+                gain.gain.value = 0.002;
                 osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.005);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.01);
             });
         });
-
     </script>
 </body>
 </html>
