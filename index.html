@@ -21,7 +21,7 @@
 
         html { scroll-behavior: smooth; }
         body { transition: background-color 0.5s ease, color 0.3s ease; }
-        body.lock-scroll { overflow: hidden; } /* Prevents body scroll when window is maximized */
+        body.lock-scroll { overflow: hidden; }
         .theme-element { transition: all 0.4s ease; }
 
         /* --- IMMERSIVE BOOT SCREEN --- */
@@ -78,15 +78,15 @@
             opacity: 0.15; z-index: -1;
         }
         
-        /* --- SCROLL REVEAL ANIMATION (FLOTTEMENT) --- */
+        /* --- SCROLL REVEAL ANIMATION --- */
         .scroll-float {
             opacity: 0;
-            transform: translateY(40px); /* Start lower */
+            transform: translateY(40px);
             transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .scroll-float.visible {
             opacity: 1;
-            transform: translateY(0); /* Float up to position */
+            transform: translateY(0);
         }
 
         /* --- WINDOW CONTROLS --- */
@@ -118,15 +118,7 @@
 
         .minimized .window-content { display: none; }
         .minimized { height: 28px !important; min-height: 0 !important; padding-bottom: 0 !important; overflow: hidden; }
-        /* Maximized: Fixed, high z-index, scrollable content */
-        .maximized { 
-            position: fixed !important; 
-            top: 80px; left: 5%; right: 5%; bottom: 100px; 
-            z-index: 60; 
-            height: auto; 
-            overflow-y: auto; /* Scrollable inside */
-            background-color: rgba(15, 15, 15, 0.98) !important; /* Less transparent for reading */
-        }
+        .maximized { position: fixed !important; top: 80px; left: 5%; right: 5%; bottom: 100px; z-index: 60; height: auto; overflow-y: auto; background-color: rgba(15, 15, 15, 0.98) !important; }
         .closed { display: none !important; }
         
         /* --- HYBRID VU METER --- */
@@ -542,7 +534,7 @@
             lfoGain.connect(droneFilter.frequency);
             lfo.start();
 
-            droneGain.gain.value = 0.05; // Very quiet background
+            droneGain.gain.value = 0.02; // REDUCED DRONE VOLUME
 
             droneOsc1.connect(droneFilter);
             droneOsc2.connect(droneFilter);
@@ -554,8 +546,13 @@
         }
 
         // HOVER SOUND (Blip)
+        let lastHoverTime = 0;
         function playHoverSound() {
             if (audioCtx.state === 'suspended') return;
+            const now = Date.now();
+            if (now - lastHoverTime < 100) return; // Cooldown 100ms
+            lastHoverTime = now;
+
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
@@ -565,7 +562,7 @@
             osc.frequency.setValueAtTime(800, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
             
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.01, audioCtx.currentTime); // REDUCED HOVER VOLUME
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             
             osc.start();
@@ -717,24 +714,28 @@
                 fontClass: 'font-fl', bgImage: 'flstudio.png', fallbackBg: '#2d3033', text: 'text-[#d4d4d4]',
                 accent: '#2f5e38', meterColor: '#f08c35', 
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #22c55e 130deg, #eab308 160deg, #ef4444 180deg)',
+                cardBg: 'rgba(35, 45, 40, 0.95)', cardBorder: '#f08c35',
                 scanlines: false, os: 'win'
             },
             ableton: {
                 fontClass: 'font-ableton', bgImage: 'ableton.png', fallbackBg: '#999999', text: 'text-[#333]',
                 accent: '#ffbf00', meterColor: '#27c93f',
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #86efac 130deg, #fde047 160deg, #fca5a5 180deg)',
+                cardBg: 'rgba(230, 230, 230, 0.95)', cardBorder: '#888',
                 scanlines: false, os: 'mac'
             },
             protools: {
                 fontClass: 'font-protools', bgImage: 'protools.png', fallbackBg: '#1a1a1a', text: 'text-[#e0e0e0]',
                 accent: '#6232a8', meterColor: '#40b535',
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #15803d 130deg, #ca8a04 165deg, #b91c1c 180deg)',
+                cardBg: 'rgba(25, 25, 35, 0.95)', cardBorder: '#6232a8',
                 scanlines: false, os: 'lin'
             },
             rx: {
                 fontClass: 'font-rx', bgImage: 'rx10.png', fallbackBg: '#0b0f14', text: 'text-[#e6f1f7]',
                 accent: '#3ba0e6', meterColor: '#3ba0e6',
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #fef08a 130deg, #fdba74 160deg, #fca5a5 180deg)',
+                cardBg: 'rgba(10, 15, 20, 0.95)', cardBorder: '#3ba0e6',
                 scanlines: true, os: 'win'
             }
         };
@@ -751,6 +752,7 @@
             else if (themeName === 'protools') body.style.color = '#e0e0e0';
             else if (themeName === 'rx') body.style.color = '#e6f1f7';
 
+            // Universal Card Colors logic
             document.querySelectorAll('.theme-card').forEach(card => {
                 if (themeName === 'ableton') {
                     card.style.backgroundColor = 'rgba(230, 230, 230, 0.9)';
@@ -761,6 +763,15 @@
                     card.style.borderColor = ''; card.style.color = '';
                 }
             });
+
+            // Specific Skills Window override based on request
+            const skillsCard = document.querySelector('#skills-window .theme-card');
+            if(skillsCard) {
+                skillsCard.style.backgroundColor = theme.cardBg;
+                skillsCard.style.borderColor = theme.cardBorder;
+                // Add a slight tint to borders if needed to pop
+                skillsCard.style.borderWidth = '2px';
+            }
 
             document.documentElement.style.setProperty('--accent-color', theme.accent);
             document.documentElement.style.setProperty('--meter-color', theme.meterColor);
