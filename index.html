@@ -98,12 +98,12 @@
             background: rgba(0,0,0,0.3);
             border-radius: 10px 10px 0 0;
             z-index: 20;
-            cursor: grab;
+            cursor: pointer; /* Changed to pointer to imply clickable area */
         }
         .ctrl-left { justify-content: flex-start; flex-direction: row; }
         .ctrl-right { justify-content: flex-end; flex-direction: row; }
 
-        /* OS Styles (Mac/Win/Lin) */
+        /* OS Styles */
         .win-ctrl-mac { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.1s;}
         .win-ctrl-mac:hover { transform: scale(1.1); filter: brightness(1.2); }
         .mac-red { background: #ff5f56; } .mac-yel { background: #ffbd2e; } .mac-grn { background: #27c93f; }
@@ -130,7 +130,38 @@
         @keyframes needleFloat { 0% { transform: rotate(var(--target-deg)); } 25% { transform: rotate(calc(var(--target-deg) + 2deg)); } 50% { transform: rotate(calc(var(--target-deg) - 1deg)); } 75% { transform: rotate(calc(var(--target-deg) + 1deg)); } 100% { transform: rotate(var(--target-deg)); } }
         .group:hover .analog-needle { animation: needleFloat 0.8s ease-in-out infinite alternate; }
 
-        /* --- TOP THEME BAR (New) --- */
+        /* --- VISUALIZER (Scope + Peak) --- */
+        .viz-container {
+            display: flex; gap: 8px; align-items: stretch;
+            height: 80px; 
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 4px;
+        }
+        #scope-canvas {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.2);
+        }
+        .peak-meter-container {
+            width: 12px;
+            height: 100%;
+            background: #111;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .peak-meter-bar {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, #22c55e, #eab308 70%, #ef4444 90%);
+            height: 0%;
+            transition: height 0.05s linear;
+        }
+
+        /* --- TOP THEME BAR --- */
         .theme-bar {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             display: flex; gap: 15px;
@@ -151,11 +182,11 @@
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: rgba(255,255,255,0.5);
-            overflow: hidden; /* For images */
+            overflow: hidden;
         }
         .theme-btn:hover { transform: scale(1.15); background: rgba(255,255,255,0.15); color: #fff; }
         .theme-btn.active { transform: scale(1.1); box-shadow: 0 0 15px currentColor; border-color: currentColor; color: #fff !important; }
-        .theme-btn img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+        .theme-btn img { width: 100%; height: 100%; object-fit: contain; padding: 2px; } /* Zoomed Logos: Padding 2px */
 
         /* --- BOTTOM CONTROL DOCK --- */
         .control-dock {
@@ -197,7 +228,7 @@
         .thumb-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             overflow: hidden;
         }
         .thumb-container img {
@@ -206,10 +237,7 @@
             transition: transform 0.5s ease;
             opacity: 0.7;
         }
-        .video-card:hover .thumb-container img {
-            transform: scale(1.05);
-            opacity: 1;
-        }
+        .video-card:hover .thumb-container img { transform: scale(1.05); opacity: 1; }
         .play-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             display: flex; align-items: center; justify-content: center;
@@ -218,15 +246,29 @@
         }
         .video-card:hover .play-overlay { opacity: 1; }
         .play-icon {
-            width: 50px; height: 50px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: #000;
+            width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: #000;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        /* --- TECH FRAME & OTHERS --- */
+        /* --- MARQUEE (News Ticker) --- */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* --- TECH FRAME --- */
         .tech-frame { border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); padding: 4px; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.3s; }
         .tech-frame:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
         .tech-frame img { border-radius: 2px; }
@@ -241,6 +283,7 @@
         .hero-title { font-family: 'Montserrat', sans-serif !important; text-shadow: 0 5px 5px rgba(0,0,0,0.8); }
         .scanlines { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1)); background-size: 100% 4px; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10; opacity: 0.3; }
         ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); } ::-webkit-scrollbar-thumb { background: rgba(100,100,100,0.5); border-radius: 4px; }
+        
         input[type=range] { -webkit-appearance: none; background: transparent; cursor: pointer; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: currentColor; margin-top: -5px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 1px solid white; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
@@ -274,22 +317,10 @@
 
     <!-- THEME SELECTION BAR (TOP) -->
     <div class="theme-bar">
-        <!-- FL Studio -->
-        <button class="theme-btn text-[#f08c35]" onclick="setTheme('fl')" title="FL Studio">
-            <img src="logo_flstudio.png" alt="FL Studio">
-        </button>
-        <!-- Ableton -->
-        <button class="theme-btn text-black bg-[#E6E6E6]" onclick="setTheme('ableton')" title="Ableton Live">
-            <img src="logo_ableton.png" alt="Ableton Live">
-        </button>
-        <!-- Pro Tools -->
-        <button class="theme-btn text-[#40b535]" onclick="setTheme('protools')" title="Pro Tools">
-            <img src="logo_protools.png" alt="Pro Tools">
-        </button>
-        <!-- RX -->
-        <button class="theme-btn text-[#3ba0e6]" onclick="setTheme('rx')" title="RX Repair">
-            <img src="logo_rx10.png" alt="RX 10">
-        </button>
+        <button class="theme-btn text-[#f08c35]" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL Studio"></button>
+        <button class="theme-btn text-black bg-[#E6E6E6]" onclick="setTheme('ableton')" title="Ableton Live"><img src="logo_ableton.png" alt="Ableton Live"></button>
+        <button class="theme-btn text-[#40b535]" onclick="setTheme('protools')" title="Pro Tools"><img src="logo_protools.png" alt="Pro Tools"></button>
+        <button class="theme-btn text-[#3ba0e6]" onclick="setTheme('rx')" title="RX Repair"><img src="logo_rx10.png" alt="RX 10"></button>
     </div>
 
     <!-- HERO SECTION -->
@@ -322,6 +353,7 @@
                                 <div class="analog-vu-container"><div class="analog-vu-bg"></div><div class="analog-glare"></div><div class="analog-needle" style="transform: rotate(28.8deg); --target-deg: 28.8deg;"></div></div>
                                 <p class="text-sm opacity-70 leading-relaxed mt-2 px-2 text-left border-l-2 border-white border-opacity-20">Écoute active, prise de décision, sound design, Pro Tools (3 ans)</p>
                             </div>
+                            <!-- ... Other skills ... -->
                             <div class="group cursor-default text-center">
                                 <div class="flex justify-between items-end mb-2 px-2"><span class="text-sm font-bold tracking-widest uppercase opacity-90">Composition</span><span class="text-base font-tech font-bold" style="color:var(--meter-color)">70%</span></div>
                                 <div class="analog-vu-container"><div class="analog-vu-bg"></div><div class="analog-glare"></div><div class="analog-needle" style="transform: rotate(36deg); --target-deg: 36deg;"></div></div>
@@ -355,64 +387,17 @@
                         </h2>
                         
                         <div class="relative border-l-2 border-white border-opacity-20 ml-3 pl-8 space-y-12">
-                            <!-- Step 1 -->
-                            <div class="relative">
-                                <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-current theme-icon-color"></div>
-                                <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎭</span>
-                                <p class="text-sm opacity-60 mb-1 font-mono font-bold">2010 – 2014</p>
-                                <h4 class="text-lg font-bold">Danseur Hip-Hop & Interprète</h4>
-                                <p class="opacity-80 text-sm mt-1">Expériences scéniques, travail du rythme.</p>
-                            </div>
-                            <!-- Step 2 + Photo Tech Frame -->
-                            <div class="relative flex flex-col md:flex-row gap-4 items-start">
-                                <div class="flex-1">
-                                    <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div>
-                                    <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🧊</span>
-                                    <p class="text-sm opacity-60 mb-1 font-mono font-bold">2018 – 2022</p>
-                                    <h4 class="text-lg font-bold">Modélisation 3D & Exploration AV</h4>
-                                    <div class="mt-2 p-3 bg-white bg-opacity-5 rounded-lg border-l-4 theme-border-color">
-                                        <h5 class="font-bold flex items-center gap-2 text-sm uppercase tracking-wide mb-1"><span class="text-xl">🚀</span> Autodidacte</h5>
-                                        <ul class="list-disc list-inside text-sm opacity-80"><li>Composition musicale</li><li>Montage vidéo</li></ul>
-                                    </div>
-                                </div>
-                                <div class="tech-frame md:mt-2 w-32 shrink-0">
-                                    <img src="peace2.jpg" alt="Work" class="w-full h-32 object-cover grayscale hover:grayscale-0 transition duration-500">
-                                </div>
-                            </div>
-                            <!-- Step 3 -->
-                            <div class="relative">
-                                <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div>
-                                <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎓</span>
-                                <p class="text-sm opacity-60 mb-1 font-mono font-bold">2022</p>
-                                <h4 class="text-lg font-bold">BAC STI2D ITEC</h4>
-                                <p class="text-xs uppercase tracking-wider opacity-60">Lycée Livet</p>
-                            </div>
-                            <!-- Step 4 + Photo Tech Frame -->
-                            <div class="relative flex flex-col md:flex-row gap-4 items-start">
-                                <div class="flex-1">
-                                    <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div>
-                                    <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🤝</span>
-                                    <p class="text-sm opacity-60 mb-1 font-mono font-bold">2023</p>
-                                    <h4 class="text-lg font-bold">Année de césure / Service Civique</h4>
-                                    <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="inline-flex items-center gap-2 mt-2 text-xs border border-white border-opacity-30 px-3 py-1 rounded hover:bg-white hover:bg-opacity-10 transition"><span>▶</span> Voir le projet vidéo</a>
-                                </div>
-                                <div class="tech-frame md:mt-2 w-32 shrink-0">
-                                    <img src="peace3.jpg" alt="Asso" class="w-full h-32 object-cover grayscale hover:grayscale-0 transition duration-500">
-                                </div>
-                            </div>
-                            <!-- Step 5 -->
-                            <div class="relative">
-                                <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-white animate-pulse"></div>
-                                <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎧</span>
-                                <p class="text-sm opacity-60 mb-1 font-mono font-bold text-current">2023 – 2026</p>
-                                <h4 class="text-lg font-bold">3iS - Institut International de l'Image et du Son</h4>
-                                <p class="text-xs uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p>
-                            </div>
+                            <!-- Timeline Content -->
+                            <div class="relative"><div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-current theme-icon-color"></div><span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎭</span><p class="text-sm opacity-60 mb-1 font-mono font-bold">2010 – 2014</p><h4 class="text-lg font-bold">Danseur Hip-Hop & Interprète</h4><p class="opacity-80 text-sm mt-1">Expériences scéniques, travail du rythme.</p></div>
+                            <div class="relative flex flex-col md:flex-row gap-4 items-start"><div class="flex-1"><div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div><span class="text-2xl absolute -left-[80px] top-0 opacity-50">🧊</span><p class="text-sm opacity-60 mb-1 font-mono font-bold">2018 – 2022</p><h4 class="text-lg font-bold">Modélisation 3D & Exploration AV</h4><div class="mt-2 p-3 bg-white bg-opacity-5 rounded-lg border-l-4 theme-border-color"><h5 class="font-bold flex items-center gap-2 text-sm uppercase tracking-wide mb-1"><span class="text-xl">🚀</span> Autodidacte</h5><ul class="list-disc list-inside text-sm opacity-80"><li>Composition musicale</li><li>Montage vidéo</li></ul></div></div><div class="tech-frame md:mt-2 w-32 shrink-0"><img src="peace2.jpg" alt="Work" class="w-full h-32 object-cover grayscale hover:grayscale-0 transition duration-500"></div></div>
+                            <div class="relative"><div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div><span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎓</span><p class="text-sm opacity-60 mb-1 font-mono font-bold">2022</p><h4 class="text-lg font-bold">BAC STI2D ITEC</h4><p class="text-xs uppercase tracking-wider opacity-60">Lycée Livet</p></div>
+                            <div class="relative flex flex-col md:flex-row gap-4 items-start"><div class="flex-1"><div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div><span class="text-2xl absolute -left-[80px] top-0 opacity-50">🤝</span><p class="text-sm opacity-60 mb-1 font-mono font-bold">2023</p><h4 class="text-lg font-bold">Année de césure / Service Civique</h4><a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="inline-flex items-center gap-2 mt-2 text-xs border border-white border-opacity-30 px-3 py-1 rounded hover:bg-white hover:bg-opacity-10 transition"><span>▶</span> Voir le projet vidéo</a></div><div class="tech-frame md:mt-2 w-32 shrink-0"><img src="peace3.jpg" alt="Asso" class="w-full h-32 object-cover grayscale hover:grayscale-0 transition duration-500"></div></div>
+                            <div class="relative"><div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-white animate-pulse"></div><span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎧</span><p class="text-sm opacity-60 mb-1 font-mono font-bold text-current">2023 – 2026</p><h4 class="text-lg font-bold">3iS - Institut International de l'Image et du Son</h4><p class="text-xs uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- PROJETS & COLLABORATIONS (VIDEO THUMBNAILS) -->
+                <!-- PROJETS & COLLABORATIONS -->
                 <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="projects-os-header" class="window-header"></div>
                     <div class="window-content pt-6">
@@ -421,83 +406,29 @@
                             Projets & Collaborations
                         </h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            
-                            <!-- Capharnaüm -->
-                            <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA&list=RDD-x6BQSPRuA&start_radio=1" target="_blank" class="video-card block group">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <h4 class="text-lg font-bold group-hover:text-current transition-colors">Capharnaüm</h4>
-                                        <span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Court-métrage</span>
-                                    </div>
-                                    <p class="text-xs opacity-70">Sound Design & Mix</p>
-                                </div>
-                            </a>
-
-                            <!-- Long Day -->
-                            <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs&list=RDw_9xYrwzKNs&start_radio=1" target="_blank" class="video-card block group">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <h4 class="text-lg font-bold group-hover:text-current transition-colors">Long Day</h4>
-                                        <span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Clip Musical</span>
-                                    </div>
-                                    <p class="text-xs opacity-70">Montage // Prise de vue</p>
-                                </div>
-                            </a>
-
-                            <!-- Ouragan -->
-                            <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="video-card block group">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/llGoiisrlu8/hqdefault.jpg" alt="Ouragan">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <h4 class="text-lg font-bold group-hover:text-current transition-colors">Ouragan</h4>
-                                        <span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Résidence</span>
-                                    </div>
-                                    <p class="text-xs opacity-70">Spatialisation Sonore</p>
-                                </div>
-                            </a>
-
-                            <!-- Instable -->
-                            <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="video-card block group">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <h4 class="text-lg font-bold group-hover:text-current transition-colors">Instable</h4>
-                                        <span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Websérie</span>
-                                    </div>
-                                    <p class="text-xs opacity-70">Post-production Audio</p>
-                                </div>
-                            </a>
-
+                            <!-- Projects with Thumbnails -->
+                            <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA&list=RDD-x6BQSPRuA&start_radio=1" target="_blank" class="video-card block group"><div class="thumb-container"><img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm"><div class="play-overlay"><div class="play-icon">▶</div></div></div><div class="p-4"><div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Capharnaüm</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Court-métrage</span></div><p class="text-xs opacity-70">Sound Design & Mix</p></div></a>
+                            <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs&list=RDw_9xYrwzKNs&start_radio=1" target="_blank" class="video-card block group"><div class="thumb-container"><img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day"><div class="play-overlay"><div class="play-icon">▶</div></div></div><div class="p-4"><div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Long Day</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Clip Musical</span></div><p class="text-xs opacity-70">Montage // Prise de vue</p></div></a>
+                            <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="video-card block group"><div class="thumb-container"><img src="https://img.youtube.com/vi/llGoiisrlu8/hqdefault.jpg" alt="Ouragan"><div class="play-overlay"><div class="play-icon">▶</div></div></div><div class="p-4"><div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Ouragan</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Résidence</span></div><p class="text-xs opacity-70">Spatialisation Sonore</p></div></a>
+                            <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="video-card block group"><div class="thumb-container"><img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable"><div class="play-overlay"><div class="play-icon">▶</div></div></div><div class="p-4"><div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Instable</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Websérie</span></div><p class="text-xs opacity-70">Post-production Audio</p></div></a>
                         </div>
                     </div>
                 </div>
 
-                <!-- COMING SOON SECTION -->
+                <!-- COMING SOON SECTION (Marquee) -->
                 <div class="theme-card bg-opacity-40 bg-black border border-white border-opacity-5 rounded-xl p-4 backdrop-blur-sm scroll-float overflow-hidden relative">
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 w-full">
                         <span class="text-xs font-bold uppercase tracking-widest theme-icon-color animate-pulse shrink-0">Prochainement</span>
-                        <div class="h-4 w-[1px] bg-white opacity-20"></div>
-                        <p class="text-xs md:text-sm font-mono opacity-70 whitespace-nowrap overflow-hidden text-ellipsis">
-                            De nouveaux projets arrivent très prochainement : Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres !
-                        </p>
+                        <div class="h-4 w-[1px] bg-white opacity-20 shrink-0"></div>
+                        <div class="marquee-container">
+                            <div class="marquee-content text-xs md:text-sm font-mono opacity-80">
+                                De nouveaux projets arrivent très prochainement : Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres ! &nbsp;&nbsp;&nbsp; /// &nbsp;&nbsp;&nbsp; De nouveaux projets arrivent très prochainement : Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres !
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- SECTION: MINI LOOPER & SYNTH -->
+                <!-- SECTION: MINI LOOPER & SYNTH + VIZ -->
                 <div id="sequencer" class="theme-card sequencer-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="sequencer-os-header" class="window-header"></div>
                     <div class="window-content pt-6">
@@ -506,21 +437,35 @@
                             <div class="flex items-center gap-4 flex-wrap text-xs font-mono">
                                 <div class="flex flex-col"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black bg-opacity-50 border border-white border-opacity-20 rounded px-2 py-1 focus:outline-none theme-icon-color cursor-pointer" onchange="changeKit(this.value)"><option value="808">TR-808</option><option value="909">TR-909</option><option value="lofi">LO-FI</option></select></div>
                                 <div class="flex flex-col w-20"><label class="opacity-50 mb-1">BPM</label><span id="bpm-display" class="opacity-80">120</span><input type="range" min="60" max="180" value="120" class="theme-icon-color" oninput="changeBpm(this.value)"></div>
-                                <!-- Volume Slider Added -->
                                 <div class="flex flex-col w-20"><label class="opacity-50 mb-1">VOL</label><input type="range" min="0" max="100" value="50" class="theme-icon-color" oninput="changeMasterVolume(this.value)"></div>
                                 <div class="flex gap-2 items-end h-full mt-auto"><button id="play-btn" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20" onclick="togglePlay()">PLAY</button><button class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20" onclick="clearSequencer()">CLEAR</button></div>
                             </div>
                         </div>
 
-                        <div class="bg-black bg-opacity-30 p-4 rounded-lg border border-white border-opacity-5 relative z-10 space-y-4">
-                            <div class="space-y-2">
-                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
-                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
-                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
+                        <!-- Main Sequencer + Visualizer Layout -->
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 relative z-10">
+                            <!-- Step Sequencer (3 cols) -->
+                            <div class="lg:col-span-3 bg-black bg-opacity-30 p-4 rounded-lg border border-white border-opacity-5 space-y-4">
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
+                                    <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
+                                    <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
+                                </div>
+                                <div class="pt-2 border-t border-white border-opacity-10">
+                                    <div class="text-[10px] opacity-50 font-mono mb-2">SYNTH (PENTATONIC)</div>
+                                    <div id="piano-roll" class="piano-roll-grid gap-1"></div>
+                                </div>
                             </div>
-                            <div class="pt-2 border-t border-white border-opacity-10">
-                                <div class="text-[10px] opacity-50 font-mono mb-2">SYNTH (PENTATONIC)</div>
-                                <div id="piano-roll" class="piano-roll-grid gap-1"></div>
+                            
+                            <!-- Visualizer (1 col) -->
+                            <div class="lg:col-span-1 flex flex-col justify-end">
+                                <div class="viz-container">
+                                    <canvas id="scope-canvas"></canvas>
+                                    <div class="peak-meter-container">
+                                        <div id="peak-meter-bar" class="peak-meter-bar"></div>
+                                    </div>
+                                </div>
+                                <p class="text-[9px] font-mono opacity-40 text-center mt-2">OUTPUT MONITOR</p>
                             </div>
                         </div>
                     </div>
@@ -561,7 +506,64 @@
     </nav>
 
     <script>
-        // --- 0. IMMERSIVE START ---
+        // --- AUDIO ENGINE ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const masterGain = audioCtx.createGain();
+        const analyser = audioCtx.createAnalyser();
+        masterGain.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        analyser.fftSize = 256;
+        masterGain.gain.value = 0.5;
+
+        let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120, currentKit = '808';
+        const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
+        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; 
+        const melodyGrid = Array(5).fill().map(() => Array(8).fill(false));
+
+        // --- VISUALIZER LOOP ---
+        const scopeCanvas = document.getElementById('scope-canvas');
+        const scopeCtx = scopeCanvas.getContext('2d');
+        const peakBar = document.getElementById('peak-meter-bar');
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        function drawVisualizer() {
+            requestAnimationFrame(drawVisualizer);
+            analyser.getByteTimeDomainData(dataArray);
+
+            // Scope
+            scopeCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            scopeCtx.fillRect(0, 0, scopeCanvas.width, scopeCanvas.height);
+            scopeCtx.lineWidth = 2;
+            // Use current theme accent for line color
+            scopeCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#fff';
+            scopeCtx.beginPath();
+
+            let sliceWidth = scopeCanvas.width * 1.0 / bufferLength;
+            let x = 0;
+
+            for(let i = 0; i < bufferLength; i++) {
+                let v = dataArray[i] / 128.0;
+                let y = v * scopeCanvas.height / 2;
+                if(i === 0) scopeCtx.moveTo(x, y);
+                else scopeCtx.lineTo(x, y);
+                x += sliceWidth;
+            }
+            scopeCtx.lineTo(scopeCanvas.width, scopeCanvas.height/2);
+            scopeCtx.stroke();
+
+            // Peak Meter (Approx)
+            let sum = 0;
+            for(let i = 0; i < bufferLength; i++) {
+                let val = (dataArray[i] - 128) / 128.0;
+                sum += val * val;
+            }
+            let rms = Math.sqrt(sum / bufferLength);
+            let peakHeight = Math.min(100, rms * 400); // Scale up for visual
+            peakBar.style.height = `${peakHeight}%`;
+        }
+        
+        // --- BOOT ---
         function startExperience() {
             const btn = document.querySelector('.power-btn');
             const txt = document.getElementById('boot-sequence');
@@ -569,106 +571,79 @@
             txt.style.opacity = 1;
             txt.textContent = "INITIALIZING AUDIO ENGINE...";
             
-            // Audio Context Resume + Simple Beep
             if(audioCtx.state === 'suspended') audioCtx.resume();
             
-            // Simple Boot Sound
             const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
+            const g = audioCtx.createGain();
+            osc.connect(g); g.connect(analyser); // Connect to main bus for viz
             osc.frequency.setValueAtTime(100, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.3);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
             osc.start(); osc.stop(audioCtx.currentTime + 0.4);
 
             setTimeout(() => {
                 document.getElementById('start-screen').classList.add('hidden-screen');
+                drawVisualizer(); // Start Viz Loop
             }, 600);
         }
 
-        // --- 1. CLOCK FUNCTION (SMPTE) ---
+        // --- CLOCK ---
         function updateTime() {
             const now = new Date();
-            const ms = Math.floor(now.getMilliseconds() / 10); // 2 digit ms
+            const ms = Math.floor(now.getMilliseconds() / 10);
             const pad = (num) => String(num).padStart(2, '0');
             document.getElementById('time-display').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}:${pad(ms)}`;
         }
-        setInterval(updateTime, 40); // Faster update for MS
+        setInterval(updateTime, 40);
         updateTime();
 
-        // --- 2. SCROLL REVEAL OBSERVER ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.scroll-float').forEach(el => observer.observe(el));
-
-        // --- 3. WINDOW MANAGEMENT ---
+        // --- WINDOW MANAGEMENT ---
         function handleWindowControl(action, windowId) {
-            // Find window container correctly
             const section = document.getElementById(windowId);
             const card = section.classList.contains('window-container') ? section : section.querySelector('.window-container');
-            
             if (!card) return;
 
-            if (action === 'close') {
-                card.classList.add('closed');
-            } else if (action === 'min') {
-                card.classList.toggle('minimized');
-            } else if (action === 'max') {
-                card.classList.toggle('maximized');
-            }
+            if (action === 'close') card.classList.add('closed');
+            else if (action === 'min') card.classList.toggle('minimized');
+            else if (action === 'max') card.classList.toggle('maximized');
         }
 
         function restoreWindow(sectionId) {
             const section = document.getElementById(sectionId);
             section.scrollIntoView({ behavior: 'smooth' });
-            
             let card = section;
-            if(!section.classList.contains('window-container')) {
-               card = section.querySelector('.window-container'); 
-            }
-            if(card) {
-                card.classList.remove('closed', 'minimized');
-            }
+            if(!section.classList.contains('window-container')) card = section.querySelector('.window-container');
+            if(card) card.classList.remove('closed', 'minimized');
         }
 
-        // --- 4. THEME MANAGER ---
+        // --- THEME MANAGER ---
         const body = document.body;
         const themeBg = document.getElementById('theme-bg');
 
         const themes = {
             fl: {
                 fontClass: 'font-fl', bgImage: 'flstudio.png', fallbackBg: '#2d3033', text: 'text-[#d4d4d4]',
-                accent: '#2f5e38', // Vert Foncé
-                meterColor: '#f08c35', 
-                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #22c55e 130deg, #eab308 160deg, #ef4444 180deg)', // Saturation
+                accent: '#2f5e38', meterColor: '#f08c35', 
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #22c55e 130deg, #eab308 160deg, #ef4444 180deg)',
                 scanlines: false, os: 'win'
             },
             ableton: {
-                fontClass: 'font-ableton', bgImage: 'ableton.png', fallbackBg: '#999999', text: 'text-[#333]', // Gris moyen
-                accent: '#ffbf00', // Orange
-                meterColor: '#27c93f',
-                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #86efac 130deg, #fde047 160deg, #fca5a5 180deg)', // Pastel
+                fontClass: 'font-ableton', bgImage: 'ableton.png', fallbackBg: '#999999', text: 'text-[#333]',
+                accent: '#ffbf00', meterColor: '#27c93f',
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #86efac 130deg, #fde047 160deg, #fca5a5 180deg)',
                 scanlines: false, os: 'mac'
             },
             protools: {
                 fontClass: 'font-protools', bgImage: 'protools.png', fallbackBg: '#1a1a1a', text: 'text-[#e0e0e0]',
                 accent: '#6232a8', meterColor: '#40b535',
-                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #15803d 130deg, #ca8a04 165deg, #b91c1c 180deg)', // Real
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #15803d 130deg, #ca8a04 165deg, #b91c1c 180deg)',
                 scanlines: false, os: 'lin'
             },
             rx: {
                 fontClass: 'font-rx', bgImage: 'rx10.png', fallbackBg: '#0b0f14', text: 'text-[#e6f1f7]',
                 accent: '#3ba0e6', meterColor: '#3ba0e6',
-                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #fef08a 130deg, #fdba74 160deg, #fca5a5 180deg)', // Pastel Yellow-Orange
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #fef08a 130deg, #fdba74 160deg, #fca5a5 180deg)',
                 scanlines: true, os: 'win'
             }
         };
@@ -678,17 +653,13 @@
             body.className = `min-h-screen overflow-x-hidden selection:bg-opacity-30 pb-32 ${theme.fontClass}`;
             body.style.backgroundColor = theme.fallbackBg;
             themeBg.style.backgroundImage = `url('${theme.bgImage}')`;
-            
-            // Ableton Pop Fix: increase opacity of background image slightly
-            if(themeName === 'ableton') themeBg.style.opacity = '0.3';
-            else themeBg.style.opacity = '0.15';
+            themeBg.style.opacity = themeName === 'ableton' ? '0.3' : '0.15';
 
             if (themeName === 'ableton') body.style.color = '#333';
             else if (themeName === 'fl') body.style.color = '#d4d4d4';
             else if (themeName === 'protools') body.style.color = '#e0e0e0';
             else if (themeName === 'rx') body.style.color = '#e6f1f7';
 
-            // Card Colors
             document.querySelectorAll('.theme-card').forEach(card => {
                 if (themeName === 'ableton') {
                     card.style.backgroundColor = 'rgba(230, 230, 230, 0.9)';
@@ -700,70 +671,46 @@
                 }
             });
 
-            // CSS Variables Update
             document.documentElement.style.setProperty('--accent-color', theme.accent);
             document.documentElement.style.setProperty('--meter-color', theme.meterColor);
             document.documentElement.style.setProperty('--vu-gradient', theme.vuGradient);
 
-            // Accents
             document.querySelectorAll('.theme-icon-color').forEach(i => i.style.color = theme.accent);
             document.querySelectorAll('.theme-border-color').forEach(b => b.style.borderColor = theme.accent);
-            
             const timeDisplay = document.getElementById('time-display');
             timeDisplay.style.color = (themeName === 'ableton') ? '#333' : theme.accent;
             timeDisplay.style.borderColor = (themeName === 'ableton') ? '#666' : 'rgba(255,255,255,0.1)';
 
-            // OS Controls
             updateWindowControls(theme.os);
-            
-            // Highlight active button
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.theme-btn[onclick*="'${themeName}'"]`).classList.add('active');
         }
 
         function updateWindowControls(osType) {
             const headers = document.querySelectorAll('.window-header');
-            
             headers.forEach(h => {
-                // Determine ID based on context
                 let section = h.closest('section');
                 if(!section) section = h.closest('#skills-window');
-                
+                // Ensure we get the ID of the section that contains the window-container
                 const winId = section ? section.id : 'unknown';
 
                 h.className = 'window-header';
                 let btns = '';
-
                 if (osType === 'mac') {
                     h.classList.add('ctrl-left');
-                    btns = `
-                        <div class="win-ctrl-mac mac-red" onclick="handleWindowControl('close', '${winId}')"></div>
-                        <div class="win-ctrl-mac mac-yel" onclick="handleWindowControl('min', '${winId}')"></div>
-                        <div class="win-ctrl-mac mac-grn" onclick="handleWindowControl('max', '${winId}')"></div>`;
+                    btns = `<div class="win-ctrl-mac mac-red" onclick="handleWindowControl('close', '${winId}')"></div><div class="win-ctrl-mac mac-yel" onclick="handleWindowControl('min', '${winId}')"></div><div class="win-ctrl-mac mac-grn" onclick="handleWindowControl('max', '${winId}')"></div>`;
                 } else if (osType === 'win') {
                     h.classList.add('ctrl-right');
-                    btns = `
-                        <div class="win-ctrl-win" onclick="handleWindowControl('min', '${winId}')">_</div>
-                        <div class="win-ctrl-win" onclick="handleWindowControl('max', '${winId}')">□</div>
-                        <div class="win-ctrl-win win-close" onclick="handleWindowControl('close', '${winId}')">✕</div>`;
+                    btns = `<div class="win-ctrl-win" onclick="handleWindowControl('min', '${winId}')">_</div><div class="win-ctrl-win" onclick="handleWindowControl('max', '${winId}')">□</div><div class="win-ctrl-win win-close" onclick="handleWindowControl('close', '${winId}')">✕</div>`;
                 } else if (osType === 'lin') {
                     h.classList.add('ctrl-right');
-                    btns = `
-                        <div class="win-ctrl-lin" style="border-radius:50%" onclick="handleWindowControl('min', '${winId}')"></div>
-                        <div class="win-ctrl-lin" onclick="handleWindowControl('max', '${winId}')"></div>
-                        <div class="win-ctrl-lin" style="background:rgba(255,255,255,0.2)" onclick="handleWindowControl('close', '${winId}')"></div>`;
+                    btns = `<div class="win-ctrl-lin" style="border-radius:50%" onclick="handleWindowControl('min', '${winId}')"></div><div class="win-ctrl-lin" onclick="handleWindowControl('max', '${winId}')"></div><div class="win-ctrl-lin" style="background:rgba(255,255,255,0.2)" onclick="handleWindowControl('close', '${winId}')"></div>`;
                 }
                 h.innerHTML = btns;
             });
         }
 
-        // --- 5. SEQUENCER LOGIC ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120, masterVolume = 0.5, currentKit = '808';
-        const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
-        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; 
-        const melodyGrid = Array(5).fill().map(() => Array(8).fill(false));
-
+        // --- SEQUENCER LOGIC ---
         function createStepBtn(track, index) {
             const btn = document.createElement('button');
             btn.className = `h-6 w-full rounded border border-white border-opacity-20 hover:bg-white hover:bg-opacity-20 transition step-btn bg-white bg-opacity-5`;
@@ -785,21 +732,19 @@
             }
         }
 
+        // Audio Generators using MasterGain
         function playSound(type) {
             const osc=audioCtx.createOscillator(), gain=audioCtx.createGain(), now=audioCtx.currentTime;
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            if(type==='kick'){ osc.freq(150,now); gain.env(masterVolume,now,0.5); }
-            else if(type==='snare'){ osc.type='triangle'; osc.freq(200,now); gain.env(masterVolume*0.8,now,0.2); }
-            else { osc.type='square'; osc.freq(1000,now); gain.env(masterVolume*0.2,now,0.05); }
+            osc.connect(gain); gain.connect(masterGain); // Route to Master
+            if(type==='kick'){ osc.frequency.setValueAtTime(150,now); osc.frequency.exponentialRampToValueAtTime(0.01,now+0.5); gain.gain.setValueAtTime(1,now); gain.gain.exponentialRampToValueAtTime(0.01,now+0.5); }
+            else if(type==='snare'){ osc.type='triangle'; osc.frequency.setValueAtTime(200,now); gain.gain.setValueAtTime(0.8,now); gain.gain.exponentialRampToValueAtTime(0.01,now+0.2); }
+            else { osc.type='square'; osc.frequency.setValueAtTime(1000,now); gain.gain.setValueAtTime(0.2,now); gain.gain.exponentialRampToValueAtTime(0.01,now+0.05); }
             osc.start(now); osc.stop(now+0.5);
         }
-        AudioParam.prototype.env = function(v,t,d){ this.setValueAtTime(v,t); this.exponentialRampToValueAtTime(0.01,t+d); };
-        OscillatorNode.prototype.freq = function(v,t){ this.frequency.setValueAtTime(v,t); this.frequency.exponentialRampToValueAtTime(0.01,t+0.5); };
-
         function playSynth(f,t) {
             const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-            o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination);
-            g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(masterVolume*0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+            o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(masterGain); // Route to Master
+            g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
             o.start(t); o.stop(t+0.3);
         }
 
@@ -831,7 +776,13 @@
         }
         function changeBpm(v) { bpm=v; document.getElementById('bpm-display').textContent=v; if(isPlaying){clearInterval(intervalId); intervalId=setInterval(nextStep,(60/bpm)*1000/2);} }
         function changeKit(v) { currentKit=v; }
-        function changeMasterVolume(v) { masterVolume = v / 100; }
+        function changeMasterVolume(v) { masterVolume.gain.value = v / 100; }
+
+        // SCROLL REVEAL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-float').forEach(el => observer.observe(el));
 
         setTheme('fl');
     </script>
