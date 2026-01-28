@@ -48,6 +48,7 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
             border-radius: 24px; overflow: hidden;
             transition: transform 0.4s var(--ease-ios), border-color 0.4s ease;
+            position: relative; /* Base positioning */
         }
         .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-4px) scale(1.005); }
 
@@ -68,11 +69,12 @@
             display: grid; place-items: center; flex-shrink: 0; margin: 0 auto;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             transition: transform 0.3s;
+            position: relative; z-index: 10; /* Text priority */
         }
         .pie-chart:hover { transform: scale(1.05); }
-        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; }
+        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; z-index: 1; }
         body.light-mode .pie-chart::after { background: #dcdcdc; }
-        .pie-chart span { position: relative; z-index: 10; font-family: 'Share Tech Mono'; font-size: 18px; font-weight: bold; }
+        .pie-chart span { position: relative; z-index: 20; font-family: 'Share Tech Mono'; font-size: 18px; font-weight: bold; }
 
         /* --- PROJECT CARDS --- */
         .project-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 16/10; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
@@ -81,7 +83,7 @@
         .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
 
-        /* --- DOCK (ALIGNED) --- */
+        /* --- DOCK (FIXED ALIGNMENT) --- */
         .dock-container {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             display: flex; align-items: center; justify-content: center;
@@ -128,7 +130,6 @@
             mix-blend-mode: soft-light;
             filter: grayscale(100%) contrast(1.2);
         }
-        
         .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
@@ -189,36 +190,41 @@
             </div>
         </section>
 
-        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float flex flex-col">
+        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float flex flex-col z-50 relative border-l-4 border-l-[var(--accent-color)]">
             <div class="win-header shrink-0">
                 <span class="win-title">Stats & Skills.sys</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-8 grid grid-cols-2 gap-8 items-center justify-items-center grow">
+            <div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8 items-center justify-items-center grow">
+                
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Mixage</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Écoute active, prise de décision, Pro Tools.</p>
                 </div>
+
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Composition</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Créativité, Organisation, Live 12.</p>
                 </div>
+
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Repair</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Nettoyage Audio, RX 10, Ozone.</p>
                 </div>
+
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Recording</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">SoundDevice, Couple micro.</p>
                 </div>
+
             </div>
         </section>
 
-        <section id="parcours" class="col-span-12 lg:col-span-7 glass-panel scroll-float">
+        <section id="parcours" class="col-span-12 lg:col-span-7 glass-panel scroll-float z-10 relative">
             <div class="win-header">
                 <span class="win-title">Timeline.log</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
