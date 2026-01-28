@@ -77,23 +77,6 @@
             background-image: url('console.jpg'); background-size: cover; background-position: center;
             opacity: 0.15; z-index: -1;
         }
-
-        /* --- TOP TOOLBAR DAW (DISCRET & RECADRÉ) --- */
-        #top-toolbar {
-            position: fixed; top: 0; left: 0; width: 100%; height: 45px; /* Hauteur unifiée */
-            z-index: 80; 
-            pointer-events: none;
-            user-select: none;
-            background-color: rgba(0,0,0,0.4); /* Fond sombre discret */
-            backdrop-filter: blur(4px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        #toolbar-img {
-            width: 100%; height: 100%;
-            object-fit: contain; /* Affiche toute l'image sans couper */
-            object-position: center; /* Centre l'image */
-            opacity: 0.5; /* Discrétion demandée */
-        }
         
         /* --- SCROLL REVEAL ANIMATION --- */
         .scroll-float {
@@ -138,7 +121,7 @@
         .maximized { position: fixed !important; top: 80px; left: 5%; right: 5%; bottom: 100px; z-index: 60; height: auto; overflow-y: auto; background-color: rgba(15, 15, 15, 0.98) !important; }
         .closed { display: none !important; }
         
-        /* --- PIE CHART --- */
+        /* --- PIE CHART (Camembert) --- */
         .pie-chart {
             width: 90px; height: 90px;
             border-radius: 50%;
@@ -175,23 +158,34 @@
         .peak-meter-container { width: 12px; height: 100%; background: #111; border-radius: 2px; position: relative; overflow: hidden; }
         .peak-meter-bar { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #22c55e, #eab308 70%, #ef4444 90%); height: 0%; transition: height 0.05s linear; }
 
-        /* --- THEME BAR & LABEL --- */
+        /* --- THEME BAR (WIDGET INTEGRATION) --- */
         .theme-container {
-            position: fixed; top: 60px; /* Moved down */
-            left: 50%; transform: translateX(-50%);
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             display: flex; flex-direction: column; align-items: center;
             z-index: 90;
+            width: 90%; max-width: 500px;
         }
         .theme-bar { 
-            display: flex; gap: 15px; padding: 8px 16px; 
-            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5); 
+            display: flex; gap: 20px; padding: 10px 25px; 
+            /* Background Image injected via JS */
+            background-color: rgba(15, 15, 15, 0.8); 
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; /* More rectangular like a toolbar window */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            justify-content: center;
+            transition: all 0.3s ease;
         }
-        .theme-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: rgba(255,255,255,0.5); overflow: hidden; }
-        .theme-btn:hover { transform: scale(1.15); background: rgba(255,255,255,0.15); color: #fff; }
-        .theme-btn.active { transform: scale(1.1); box-shadow: 0 0 15px currentColor; border-color: currentColor; color: #fff !important; }
-        .theme-btn img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
+        .theme-btn { 
+            display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; 
+            border-radius: 50%; background: rgba(0,0,0,0.4); /* Darker backing for visibility over image */
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            overflow: hidden; 
+            backdrop-filter: blur(2px);
+        }
+        .theme-btn:hover { transform: scale(1.15); background: rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.5); }
+        .theme-btn.active { transform: scale(1.1); box-shadow: 0 0 15px currentColor; border-color: currentColor; background: rgba(0,0,0,0.8); }
+        .theme-btn img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
 
         /* --- DOCK --- */
         .control-dock { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 10px 15px; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.7); z-index: 90; transition: all 0.3s ease; flex-wrap: nowrap; justify-content: center; max-width: 95vw; }
@@ -274,8 +268,7 @@
         }
 
         @media (max-width: 640px) {
-            #top-toolbar { height: 40px; }
-            .theme-container { top: 50px; }
+            .theme-container { top: 20px; }
             .control-dock { padding: 8px 10px; bottom: 10px; width: auto; max-width: 98vw; gap: 4px; }
             .dock-btn { padding: 6px; }
             .dock-btn span { display: none; }
@@ -287,11 +280,6 @@
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen font-fl overflow-x-hidden selection:bg-opacity-30 pb-32">
-
-    <!-- 0. TOP DAW TOOLBAR -->
-    <div id="top-toolbar">
-        <img id="toolbar-img" src="bar_flstudio.png" alt="DAW Toolbar">
-    </div>
 
     <!-- 1. IMMERSIVE BOOT SCREEN -->
     <div id="start-screen">
@@ -307,10 +295,10 @@
     <div id="theme-bg"></div>
     <div id="scanlines" class="scanlines hidden"></div>
 
-    <!-- THEME SELECTION CONTAINER -->
+    <!-- THEME SELECTION CONTAINER (WIDGET STYLE) -->
     <div class="theme-container">
         <span class="font-tech text-[10px] text-white opacity-60 tracking-[0.2em] mb-2 uppercase drop-shadow-md">Pick your DAW theme</span>
-        <div class="theme-bar">
+        <div class="theme-bar" id="theme-widget">
             <button class="theme-btn text-[#f08c35] click-sound" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL Studio"></button>
             <button class="theme-btn text-black bg-[#E6E6E6] click-sound" onclick="setTheme('ableton')" title="Ableton Live"><img src="logo_ableton.png" alt="Ableton Live"></button>
             <button class="theme-btn text-[#40b535] click-sound" onclick="setTheme('protools')" title="Pro Tools"><img src="logo_protools.png" alt="Pro Tools"></button>
@@ -759,21 +747,21 @@
         // --- THEME MANAGER ---
         const body = document.body;
         const themeBg = document.getElementById('theme-bg');
-        const toolbarImg = document.getElementById('toolbar-img');
+        //const toolbarImg = document.getElementById('toolbar-img'); // REMOVED
 
         const themes = {
             fl: {
                 fontClass: 'font-fl', bgImage: 'flstudio.png', toolbarImage: 'bar_flstudio.png', fallbackBg: '#2d3033', text: 'text-[#d4d4d4]',
                 accent: '#2f5e38', meterColor: '#f08c35', 
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #22c55e 130deg, #eab308 160deg, #ef4444 180deg)',
-                cardBg: '#355e3b', cardBorder: '#2f5e38', skillsTextColor: '#fff', // Green for FL
+                cardBg: '#355e3b', cardBorder: '#2f5e38', skillsTextColor: '#fff', 
                 scanlines: false, os: 'win'
             },
             ableton: {
                 fontClass: 'font-ableton', bgImage: 'ableton.png', toolbarImage: 'bar_ableton.png', fallbackBg: '#999999', text: 'text-[#333]',
-                accent: '#ffbf00', meterColor: '#ffbf00', // Orange meter
+                accent: '#ffbf00', meterColor: '#ffbf00', 
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #86efac 130deg, #fde047 160deg, #fca5a5 180deg)',
-                cardBg: '#ffbf00', cardBorder: '#fff', skillsTextColor: '#000', // Orange BG, Black Text
+                cardBg: '#ffbf00', cardBorder: '#fff', skillsTextColor: '#000', 
                 scanlines: false, os: 'mac'
             },
             protools: {
@@ -799,8 +787,9 @@
             themeBg.style.backgroundImage = `url('${theme.bgImage}')`;
             themeBg.style.opacity = themeName === 'ableton' ? '0.3' : '0.15';
 
-            // Toolbar Update
-            if (toolbarImg) toolbarImg.src = theme.toolbarImage;
+            // Toolbar Update: Inject into .theme-bar background
+            const themeWidget = document.getElementById('theme-widget');
+            themeWidget.style.backgroundImage = `url('${theme.toolbarImage}')`;
 
             if (themeName === 'ableton') body.style.color = '#333';
             else if (themeName === 'fl') body.style.color = '#d4d4d4';
