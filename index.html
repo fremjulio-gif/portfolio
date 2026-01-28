@@ -17,7 +17,6 @@
             --glass-text: #ffffff;
             --accent-color: #22c55e;
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-            /* Fix for mobile viewport height issues */
             --vh: 1vh; 
         }
 
@@ -32,11 +31,9 @@
         body { 
             background-color: #050505; color: var(--glass-text); overflow-x: hidden; 
             transition: background-color 0.6s ease, color 0.4s ease;
-            /* Prevent text inflation on mobile rotate */
             -webkit-text-size-adjust: 100%;
         }
         
-        /* Light Mode (Ableton) */
         body.light-mode {
             --glass-surface: rgba(220, 220, 220, 0.6); 
             --glass-border: rgba(0, 0, 0, 0.1);
@@ -46,12 +43,11 @@
         body.light-mode .scanlines { opacity: 0.05; }
         body.light-mode .project-info { background: linear-gradient(to top, rgba(220,220,220,0.95), rgba(220,220,220,0.8), transparent); color: black; }
 
-        /* ProTools Specific (Grey Background) */
         body[data-theme='protools'] {
             background-color: #262626; 
         }
 
-        /* --- GLASS PANELS & INTERACTIONS --- */
+        /* --- GLASS PANELS --- */
         .glass-panel {
             background: var(--glass-surface);
             backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
@@ -62,7 +58,6 @@
             position: relative;
         }
         
-        /* ONLY apply hover effects on devices that have a mouse pointer */
         @media (hover: hover) {
             .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-4px) scale(1.005); }
             .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
@@ -75,7 +70,7 @@
         .bento-grid {
             display: grid; grid-template-columns: repeat(12, 1fr);
             gap: 24px; 
-            padding: 100px 24px 140px; /* Default desktop padding */
+            padding: 100px 24px 140px;
             max-width: 1600px; margin: 0 auto;
         }
 
@@ -84,7 +79,7 @@
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
         
         .pie-chart {
-            width: 80px; height: 80px; /* Slightly smaller on mobile base */
+            width: 80px; height: 80px;
             border-radius: 50%;
             background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0);
             display: grid; place-items: center; flex-shrink: 0; margin: 0 auto;
@@ -103,10 +98,10 @@
         /* --- PROJECT CARDS --- */
         .project-card { 
             position: relative; border-radius: 16px; overflow: hidden; 
-            aspect-ratio: 4/3; /* Taller on mobile */
+            aspect-ratio: 4/3; 
             cursor: pointer; border: 1px solid rgba(255,255,255,0.1); 
         }
-        @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } } /* Wider on desktop */
+        @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
 
         .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
         body.light-mode .project-card img { filter: brightness(1); }
@@ -114,14 +109,14 @@
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
         @media (min-width: 768px) { .project-info { padding: 24px; } }
 
-        /* --- DOCK & NAVBAR --- */
+        /* --- DOCK --- */
         .dock-container {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             display: flex; align-items: center; justify-content: center;
-            gap: 16px; padding: 10px 24px; /* Compact on mobile */
+            gap: 16px; padding: 10px 24px;
             background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90;
-            height: 60px; /* Compact height */
+            height: 60px;
         }
         @media (min-width: 768px) { .dock-container { bottom: 30px; gap: 20px; padding: 12px 30px; height: 70px; } }
 
@@ -160,7 +155,7 @@
         @media (min-width: 768px) { .theme-pill { width: 36px; height: 36px; } }
         .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: rgba(0,0,0,0.6); }
 
-        /* --- SEQUENCER BG & MOBILE --- */
+        /* --- SEQUENCER --- */
         #sequencer-inner { position: relative; overflow: hidden; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
@@ -171,16 +166,14 @@
             filter: grayscale(100%) contrast(1.2);
         }
         
-        /* Mobile Sequencer: Horizontal Scroll container */
         .sequencer-scroll-container {
             overflow-x: auto;
             padding-bottom: 16px;
-            /* Hide scrollbar for neatness */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE 10+ */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
         }
-        .sequencer-scroll-container::-webkit-scrollbar { display: none; /* Chrome/Safari/Webkit */ }
-        .sequencer-track-row { min-width: 500px; /* Ensure it's wide enough to scroll on mobile */ }
+        .sequencer-scroll-container::-webkit-scrollbar { display: none; }
+        .sequencer-track-row { min-width: 500px; }
 
         .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: manipulation;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
@@ -199,15 +192,12 @@
         #theme-bg { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; opacity: 0.2; filter: blur(40px) saturate(1.2); transition: 0.8s; transform: scale(1.1); }
         .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.15; }
 
-        /* --- MOBILE BREAKPOINT OVERRIDES --- */
         @media (max-width: 1024px) {
             .bento-grid { 
                 grid-template-columns: 1fr; 
-                padding: 80px 16px 110px; /* Less padding on mobile */
+                padding: 80px 16px 110px; 
             }
             .col-span-12, .col-span-8, .col-span-5, .col-span-7 { grid-column: span 1 !important; }
-            
-            /* Hero adjustments for mobile */
             .hero-name { font-size: 3.5rem; line-height: 1; }
         }
     </style>
@@ -233,7 +223,7 @@
 
     <main class="bento-grid">
         
-        <section id="hero" class="col-span-12 glass-panel p-6 md:p-10 flex flex-col justify-center items-center text-center min-h-[40vh] md:min-h-[50vh] scroll-float relative group">
+        <section id="hero" class="col-span-12 glass-panel p-6 md:p-10 flex flex-col justify-center items-center text-center min-h-[80vh] md:min-h-[50vh] scroll-float relative group">
             <div class="relative z-10">
                 <span class="inline-block px-3 py-1 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
                 <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)] leading-none md:leading-tight">Jules Frémondière</h1>
@@ -248,7 +238,7 @@
             </div>
         </section>
 
-        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float flex flex-col z-50 relative border-l-4 border-l-[var(--accent-color)]">
+        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float flex flex-col z-50 relative border-l-4 border-l-[var(--accent-color)] min-h-[50vh] md:min-h-0">
             <div class="win-header shrink-0">
                 <span class="win-title">Stats & Skills.sys</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
@@ -277,7 +267,7 @@
             </div>
         </section>
 
-        <section id="parcours" class="col-span-12 lg:col-span-7 glass-panel scroll-float z-10 relative">
+        <section id="parcours" class="col-span-12 lg:col-span-7 glass-panel scroll-float z-10 relative min-h-[60vh] md:min-h-0">
             <div class="win-header">
                 <span class="win-title">Timeline.log</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
@@ -322,11 +312,17 @@
                             <img src="peace2.jpg" alt="Work" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
                         </div>
                     </div>
+                     <div class="relative group">
+                        <div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
+                        <span class="text-xs font-mono opacity-50 mb-1 block">2010 – 2014</span>
+                        <h3 class="text-lg md:text-xl font-bold">Danseur Hip-Hop & Interprète</h3>
+                        <p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Tournée Européenne avec le chorégraphe Boris Charmatz.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-[var(--accent-color)]/30">
+        <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-[var(--accent-color)]/30 min-h-[40vh] md:min-h-0">
             <div id="sequencer-inner" class="bg-black/20 rounded-[20px] p-4 md:p-6 h-full border border-[var(--glass-border)] relative">
                 <div class="relative z-10">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -367,7 +363,7 @@
         </section>
 
         <section id="projets" class="col-span-12 space-y-8 scroll-float mt-8">
-            <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collabs</h2>
+            <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group click-sound touch-manipulation">
@@ -468,7 +464,7 @@
 
     <nav class="dock-container">
         <a href="#hero" class="dock-icon click-sound touch-manipulation">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
         </a>
         <a href="#skills" class="dock-icon click-sound touch-manipulation">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Stats</span>
@@ -485,7 +481,6 @@
 
     <script>
         // --- MOBILE VIEWPORT FIX ---
-        // Corrects 100vh issues on mobile browsers where address bar hides/shows
         function setVh() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -500,38 +495,24 @@
         masterGain.connect(analyser); analyser.connect(audioCtx.destination);
         analyser.fftSize = 256; masterGain.gain.value = 0.5;
 
-        // CLICK SOUND
         function playClickSound() {
-            // Check if context exists and is readable
             if (!audioCtx || audioCtx.state === 'closed') return;
-            
-            // Resume context if suspended (common browser requirement for audio)
             if (audioCtx.state === 'suspended') {
-                audioCtx.resume().then(() => {
-                    triggerClickOsc();
-                }).catch(e => console.error("Audio resume failed:", e));
-            } else {
-                triggerClickOsc();
-            }
+                audioCtx.resume().then(() => { triggerClickOsc(); }).catch(e => console.error(e));
+            } else { triggerClickOsc(); }
         }
 
         function triggerClickOsc() {
-            const osc = audioCtx.createOscillator(); 
-            const gain = audioCtx.createGain();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'triangle'; 
-            osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             osc.start(); osc.stop(audioCtx.currentTime + 0.05);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.click-sound, a, button').forEach(el => {
-                // Use both click and touchstart for responsiveness, throttle touch
-                el.addEventListener('click', playClickSound);
-            });
+            document.querySelectorAll('.click-sound, a, button').forEach(el => { el.addEventListener('click', playClickSound); });
         });
 
         // SEQUENCER VARS
@@ -566,7 +547,6 @@
         function startExperience() {
             document.querySelector('#start-screen button').classList.add('scale-0');
             document.getElementById('boot-sequence').textContent = "SYSTEM_LOADED";
-            // Important for mobile: resume audio on first user interaction
             if(audioCtx.state === 'suspended') audioCtx.resume();
             setTimeout(() => {
                 document.getElementById('start-screen').classList.add('hidden-screen');
@@ -591,16 +571,13 @@
             const t = themes[name];
             document.body.className = `${t.font} selection:bg-white selection:text-black`;
             
-            // Handle specific modes
             if(t.mode === 'light') document.body.classList.add('light-mode');
             else document.body.classList.remove('light-mode');
             
-            // Set Data Attribute for CSS targeting (ProTools Grey Fix)
-            document.body.setAttribute('data-theme', name);
+            document.body.setAttribute('data-theme', name); // For ProTools specific CSS
 
             document.documentElement.style.setProperty('--accent-color', t.accent);
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`;
-            
             const widget = document.getElementById('theme-widget');
             widget.style.backgroundImage = `url('${t.bar}')`;
             
@@ -611,7 +588,6 @@
         // SEQUENCER UI
         function createStepBtn(track, index) {
             const btn = document.createElement('button');
-            // Added touch-manipulation for better mobile response
             btn.className = `step-btn click-sound touch-manipulation`;
             btn.onclick = () => { sequence[track][index] = !sequence[track][index]; btn.classList.toggle('active'); }; 
             return btn;
@@ -622,7 +598,6 @@
         for(let r=0; r<5; r++) {
             for(let c=0; c<8; c++) {
                 const cell = document.createElement('div'); 
-                // Added touch-manipulation
                 cell.className='piano-cell h-6 md:h-5 click-sound touch-manipulation'; cell.id=`note-${r}-${c}`;
                 cell.onclick=()=>{ melodyGrid[r][c]=!melodyGrid[r][c]; cell.classList.toggle('active'); }; pCont.appendChild(cell);
             }
