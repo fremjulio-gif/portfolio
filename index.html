@@ -134,7 +134,7 @@
         @media (min-width: 768px) { .theme-pill { width: 36px; height: 36px; } }
         .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: rgba(0,0,0,0.6); }
 
-        /* --- SEQUENCER --- */
+        /* --- SEQUENCER & MIXER --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
@@ -154,6 +154,32 @@
         .seq-tab-btn.active-tab {
             background: var(--accent-color); color: #000; font-weight: bold; border-color: transparent;
             box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .transport-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 32px; height: 32px; border-radius: 6px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--accent-color); cursor: pointer; transition: 0.2s;
+        }
+        .transport-btn:hover { background: var(--accent-color); color: #000; }
+        .transport-btn.playing { background: var(--accent-color); color: #000; box-shadow: 0 0 10px var(--accent-color); }
+
+        /* MIXER STYLES */
+        .mixer-panel {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out;
+            background: rgba(0,0,0,0.4); border-radius: 12px; margin-top: 10px;
+        }
+        .mixer-panel.open { max-height: 200px; padding: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .fader-group { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .fader-track { 
+            appearance: none; width: 6px; height: 80px; writing-mode: bt-lr; /* Firefox */
+            -webkit-appearance: slider-vertical; /* Webkit */
+            background: rgba(255,255,255,0.1); border-radius: 4px;
+        }
+        input[type=range][orient=vertical] {
+            writing-mode: bt-lr; -webkit-appearance: slider-vertical; width: 8px; height: 80px; padding: 0 5px;
         }
 
         .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
@@ -322,9 +348,24 @@
             <div id="sequencer-inner" class="bg-black/20 rounded-[20px] p-4 md:p-6 h-full border border-[var(--glass-border)] relative">
                 <div class="relative z-10">
                     
-                    <div class="flex justify-center gap-4 mb-4">
-                        <button id="btn-mini" onclick="switchSequencer('mini')" class="seq-tab-btn active-tab touch-manipulation">MINI (8 Steps)</button>
-                        <button id="btn-large" onclick="switchSequencer('large')" class="seq-tab-btn touch-manipulation">LARGE (16 Steps)</button>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex gap-2">
+                            <button id="btn-mini" onclick="switchSequencer('mini')" class="seq-tab-btn active-tab touch-manipulation">MINI</button>
+                            <button id="btn-large" onclick="switchSequencer('large')" class="seq-tab-btn touch-manipulation">LARGE</button>
+                        </div>
+                        <button onclick="document.getElementById('mixer-panel').classList.toggle('open')" class="seq-tab-btn flex items-center gap-2 border-[var(--accent-color)] text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:text-black">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="21" x2="8" y2="3"></line><line x1="16" y1="21" x2="16" y2="3"></line><line x1="12" y1="21" x2="12" y2="3"></line><line x1="4" y1="21" x2="4" y2="3"></line><line x1="20" y1="21" x2="20" y2="3"></line></svg> MIXER
+                        </button>
+                    </div>
+
+                    <div id="mixer-panel" class="mixer-panel mb-4">
+                        <div class="flex justify-between px-2 font-mono text-[9px] text-center text-gray-400">
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="90" oninput="setVol('kick', this.value)" class="fader-track"><label>KICK</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="80" oninput="setVol('snare', this.value)" class="fader-track"><label>SNAR</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="70" oninput="setVol('hat', this.value)" class="fader-track"><label>HATS</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="60" oninput="setVol('perc', this.value)" class="fader-track"><label>PERC</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="75" oninput="setVol('synth', this.value)" class="fader-track"><label>SYN</label></div>
+                        </div>
                     </div>
 
                     <div id="seq-mini-ui">
@@ -333,11 +374,16 @@
                                 <div id="seq-led-mini" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
                                 <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">MINI_LOOP_8</h3>
                             </div>
-                            <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-end w-full md:w-auto">
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-mini" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch/Lofi</option></select></div>
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"></div>
-                                <button id="play-btn-mini" onclick="togglePlay('mini')" class="px-4 md:px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">PLAY</button>
-                                <button onclick="clearSequencer('mini')" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">Clear</button>
+                            <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-center w-full md:w-auto">
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-mini" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full h-8"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch</option></select></div>
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)] h-8" oninput="changeBpm(this.value)"></div>
+                                
+                                <button id="play-btn-mini" onclick="togglePlay('mini')" class="transport-btn touch-manipulation" title="Play/Stop">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
+                                </button>
+                                <button onclick="clearSequencer('mini')" class="transport-btn touch-manipulation" title="Clear">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
                             </div>
                         </div>
 
@@ -367,14 +413,19 @@
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                             <div class="flex items-center gap-3 mb-2 md:mb-0">
                                 <div id="seq-led-large" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
-                                <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">PRO_SEQUENCER_X16</h3>
+                                <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">PRO_X16</h3>
                             </div>
-                            <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-end w-full md:w-auto">
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-large" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch/Lofi</option></select></div>
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">WAVE</label><select id="synth-type" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="sine">Sine</option><option value="square">Square</option><option value="sawtooth">Saw</option><option value="triangle">Tri</option></select></div>
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"></div>
-                                <button id="play-btn-large" onclick="togglePlay('large')" class="px-4 md:px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">PLAY</button>
-                                <button onclick="clearSequencer('large')" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">Clear</button>
+                            <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-center w-full md:w-auto">
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-large" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full h-8"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch</option></select></div>
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">WAVE</label><select id="synth-type" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full h-8"><option value="sine">Sine</option><option value="square">Square</option><option value="sawtooth">Saw</option><option value="triangle">Tri</option></select></div>
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)] h-8" oninput="changeBpm(this.value)"></div>
+                                
+                                <button id="play-btn-large" onclick="togglePlay('large')" class="transport-btn touch-manipulation">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
+                                </button>
+                                <button onclick="clearSequencer('large')" class="transport-btn touch-manipulation">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
                             </div>
                         </div>
 
@@ -540,6 +591,13 @@
         masterGain.connect(analyser); analyser.connect(audioCtx.destination);
         analyser.fftSize = 256; masterGain.gain.value = 0.5;
 
+        // Volumes per track
+        const trackVols = { kick: 0.9, snare: 0.8, hat: 0.7, perc: 0.6, synth: 0.75 };
+
+        function setVol(track, val) {
+            trackVols[track] = val / 100;
+        }
+
         // CLICK SOUND
         function playClickSound() {
             if (!audioCtx || audioCtx.state === 'closed') return;
@@ -649,62 +707,62 @@
                 kick: (t) => {
                     const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
                     o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(0.01,t+0.5);
-                    g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.5);o.start(t);o.stop(t+0.5);
+                    g.gain.setValueAtTime(trackVols.kick,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.5);o.start(t);o.stop(t+0.5);
                 },
                 snare: (t) => {
                     const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.2,audioCtx.sampleRate),d=b.getChannelData(0);
                     for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b;
                     const f=audioCtx.createBiquadFilter();f.type='highpass';f.frequency.value=1000;
                     const g=audioCtx.createGain(); n.connect(f);f.connect(g);g.connect(masterGain);
-                    g.gain.setValueAtTime(0.7,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2); n.start(t);
+                    g.gain.setValueAtTime(trackVols.snare,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2); n.start(t);
                 },
                 hat: (t) => {
                     const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate),d=b.getChannelData(0);
                     for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b;
                     const f=audioCtx.createBiquadFilter();f.type='highpass';f.frequency.value=7000;
                     const g=audioCtx.createGain(); n.connect(f);f.connect(g);g.connect(masterGain);
-                    g.gain.setValueAtTime(0.4,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05); n.start(t);
+                    g.gain.setValueAtTime(trackVols.hat,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05); n.start(t);
                 }
             },
             analog: { // TR-808 Style
                 kick: (t) => {
                     const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
                     o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(50,t+0.8); // Long boom
-                    g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.8);o.start(t);o.stop(t+0.8);
+                    g.gain.setValueAtTime(trackVols.kick,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.8);o.start(t);o.stop(t+0.8);
                 },
                 snare: (t) => {
                     const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
-                    o.type='triangle';o.frequency.setValueAtTime(300,t);g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.1);o.start(t);o.stop(t+0.1);
+                    o.type='triangle';o.frequency.setValueAtTime(300,t);g.gain.setValueAtTime(trackVols.snare*0.8,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.1);o.start(t);o.stop(t+0.1);
                     // Add noise
                     const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.2,audioCtx.sampleRate),d=b.getChannelData(0);
                     for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b;
                     const g2=audioCtx.createGain(); n.connect(g2);g2.connect(masterGain);
-                    g2.gain.setValueAtTime(0.3,t);g2.gain.exponentialRampToValueAtTime(0.01,t+0.2); n.start(t);
+                    g2.gain.setValueAtTime(trackVols.snare*0.5,t);g2.gain.exponentialRampToValueAtTime(0.01,t+0.2); n.start(t);
                 },
                 hat: (t) => { // Tonal Hat
                     const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
                     o.type='square';o.frequency.setValueAtTime(800,t); // High pitch metallic
                     const f=audioCtx.createBiquadFilter();f.type='highpass';f.frequency.value=8000;
                     o.disconnect();o.connect(f);f.connect(g);
-                    g.gain.setValueAtTime(0.2,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05);o.start(t);o.stop(t+0.05);
+                    g.gain.setValueAtTime(trackVols.hat*0.6,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05);o.start(t);o.stop(t+0.05);
                 }
             },
             lofi: { // Glitchy
                 kick: (t) => {
                     const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
                     o.type='square'; o.frequency.setValueAtTime(80,t);
-                    g.gain.setValueAtTime(0.8,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.1);o.start(t);o.stop(t+0.1);
+                    g.gain.setValueAtTime(trackVols.kick,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.1);o.start(t);o.stop(t+0.1);
                 },
                 snare: (t) => {
                     const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate),d=b.getChannelData(0);
                     for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b; // Short burst
                     const g=audioCtx.createGain(); n.connect(g);g.connect(masterGain);
-                    g.gain.setValueAtTime(0.8,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05); n.start(t);
+                    g.gain.setValueAtTime(trackVols.snare,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05); n.start(t);
                 },
                 hat: (t) => {
                     const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
                     o.type='sawtooth'; o.frequency.setValueAtTime(10000,t);
-                    g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.02);o.start(t);o.stop(t+0.02);
+                    g.gain.setValueAtTime(trackVols.hat*0.5,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.02);o.start(t);o.stop(t+0.02);
                 }
             }
         };
@@ -717,12 +775,12 @@
             
             if (type === 'perc1') { // Woodblock / Clave ish
                 o.type = 'sine'; o.frequency.setValueAtTime(800, t);
-                g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                g.gain.setValueAtTime(trackVols.perc, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
                 o.start(t); o.stop(t + 0.1);
             } else { // Tom / Low Perc
                 o.type = 'triangle'; 
                 o.frequency.setValueAtTime(200, t); o.frequency.exponentialRampToValueAtTime(100, t + 0.15);
-                g.gain.setValueAtTime(0.4, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+                g.gain.setValueAtTime(trackVols.perc, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
                 o.start(t); o.stop(t + 0.2);
             }
         }
@@ -739,13 +797,14 @@
             if(k[type]) k[type](now);
         }
         
-        // Synth Trigger (Polyphonic aware - simplified)
+        // Synth Trigger
         function playSynth(freq, time, shape = 'sine') {
             const o=audioCtx.createOscillator(), g=audioCtx.createGain();
             o.type=shape; o.frequency.value=freq; o.connect(g); g.connect(masterGain); 
             // Lower gain to prevent polyphonic clipping
+            const vol = trackVols.synth * 0.25; 
             g.gain.setValueAtTime(0,time); 
-            g.gain.linearRampToValueAtTime(0.15,time+0.02); 
+            g.gain.linearRampToValueAtTime(vol,time+0.02); 
             g.gain.exponentialRampToValueAtTime(0.001,time+0.3);
             o.start(time); o.stop(time+0.3);
         }
@@ -758,12 +817,16 @@
             const led = document.getElementById(`seq-led-${activeSequencer}`);
             
             if(isPlaying) { 
-                btn.innerText = "STOP";
+                btn.classList.add('playing');
+                // Replace Play icon with Pause icon
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
                 led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse');
                 if(audioCtx.state==='suspended')audioCtx.resume(); 
                 intervalId = setInterval(nextStep, (60/bpm)*1000/2); // 8th notes
             } else { 
-                btn.innerText = "PLAY LOOP";
+                btn.classList.remove('playing');
+                // Revert to Play icon
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>`;
                 led.classList.add('bg-red-900'); led.classList.remove('bg-red-500', 'animate-pulse');
                 clearInterval(intervalId); 
                 resetVisuals();
