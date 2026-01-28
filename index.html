@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DAW Portfolio - Jules F</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +17,8 @@
             --glass-text: #ffffff;
             --accent-color: #22c55e;
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+            /* Fix for mobile viewport height issues */
+            --vh: 1vh; 
         }
 
         /* --- FONTS --- */
@@ -30,6 +32,8 @@
         body { 
             background-color: #050505; color: var(--glass-text); overflow-x: hidden; 
             transition: background-color 0.6s ease, color 0.4s ease;
+            /* Prevent text inflation on mobile rotate */
+            -webkit-text-size-adjust: 100%;
         }
         
         /* Light Mode (Ableton) */
@@ -44,10 +48,10 @@
 
         /* ProTools Specific (Grey Background) */
         body[data-theme='protools'] {
-            background-color: #262626; /* Gris anthracite ProTools */
+            background-color: #262626; 
         }
 
-        /* --- GLASS PANELS --- */
+        /* --- GLASS PANELS & INTERACTIONS --- */
         .glass-panel {
             background: var(--glass-surface);
             backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
@@ -57,12 +61,21 @@
             transition: transform 0.4s var(--ease-ios), border-color 0.4s ease;
             position: relative;
         }
-        .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-4px) scale(1.005); }
+        
+        /* ONLY apply hover effects on devices that have a mouse pointer */
+        @media (hover: hover) {
+            .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-4px) scale(1.005); }
+            .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
+            .dock-icon:hover { color: #fff; transform: translateY(-3px); }
+            body.light-mode .dock-icon:hover { color: #000; }
+            .theme-pill:hover { opacity: 1; transform: scale(1.1); background: rgba(255,255,255,0.2); }
+        }
 
         /* --- LAYOUT --- */
         .bento-grid {
             display: grid; grid-template-columns: repeat(12, 1fr);
-            gap: 24px; padding: 120px 24px 140px;
+            gap: 24px; 
+            padding: 100px 24px 140px; /* Default desktop padding */
             max-width: 1600px; margin: 0 auto;
         }
 
@@ -71,64 +84,83 @@
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
         
         .pie-chart {
-            width: 90px; height: 90px; border-radius: 50%;
+            width: 80px; height: 80px; /* Slightly smaller on mobile base */
+            border-radius: 50%;
             background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0);
             display: grid; place-items: center; flex-shrink: 0; margin: 0 auto;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             transition: transform 0.3s;
             position: relative; z-index: 10;
         }
-        .pie-chart:hover { transform: scale(1.05); }
+        @media (min-width: 768px) { .pie-chart { width: 90px; height: 90px; } }
+
         .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; z-index: 1; }
         body.light-mode .pie-chart::after { background: #dcdcdc; }
-        body[data-theme='protools'] .pie-chart::after { background: #262626; } /* Match BG */
+        body[data-theme='protools'] .pie-chart::after { background: #262626; } 
         
-        .pie-chart span { position: relative; z-index: 20; font-family: 'Share Tech Mono'; font-size: 18px; font-weight: bold; }
+        .pie-chart span { position: relative; z-index: 20; font-family: 'Share Tech Mono'; font-size: 16px; md:font-size: 18px; font-weight: bold; }
 
         /* --- PROJECT CARDS --- */
-        .project-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 16/10; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+        .project-card { 
+            position: relative; border-radius: 16px; overflow: hidden; 
+            aspect-ratio: 4/3; /* Taller on mobile */
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.1); 
+        }
+        @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } } /* Wider on desktop */
+
         .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
         body.light-mode .project-card img { filter: brightness(1); }
-        .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
-        .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+        
+        .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+        @media (min-width: 768px) { .project-info { padding: 24px; } }
 
         /* --- DOCK & NAVBAR --- */
         .dock-container {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             display: flex; align-items: center; justify-content: center;
-            gap: 20px; padding: 12px 30px;
-            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(30px);
+            gap: 16px; padding: 10px 24px; /* Compact on mobile */
+            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90;
-            height: 70px;
+            height: 60px; /* Compact height */
         }
+        @media (min-width: 768px) { .dock-container { bottom: 30px; gap: 20px; padding: 12px 30px; height: 70px; } }
+
         body.light-mode .dock-container { background: rgba(200, 200, 200, 0.8); border-color: rgba(0,0,0,0.1); }
         
         .dock-icon {
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
             color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; position: relative;
-            height: 100%; width: 50px;
+            height: 100%; width: auto; min-width: 40px;
         }
+        @media (min-width: 1024px) { .dock-icon { width: 50px; } }
+
         body.light-mode .dock-icon { color: #444; }
-        .dock-icon:hover { color: #fff; transform: translateY(-3px); }
-        body.light-mode .dock-icon:hover { color: #000; }
-        .dock-icon svg { width: 22px; height: 22px; }
-        .dock-icon span { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;}
-        .dock-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.1); }
+        .dock-icon svg { width: 24px; height: 24px; }
+        @media (min-width: 1024px) { .dock-icon svg { width: 22px; height: 22px; } }
+
+        .dock-icon span { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: none;}
+        @media (min-width: 1024px) { .dock-icon span { display: block; } }
+
+        .dock-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.1); }
+        @media (min-width: 768px) { .dock-divider { height: 30px; } }
 
         /* --- THEME ISLAND --- */
         .theme-island {
-            position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 90;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 90;
             background-color: rgba(20, 20, 20, 0.6); 
             background-size: cover; background-position: center;
-            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 100px; padding: 6px; display: flex; gap: 8px; transition: 0.5s;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px; padding: 4px; display: flex; gap: 6px; transition: 0.5s;
         }
+        @media (min-width: 768px) { .theme-island { top: 24px; padding: 6px; gap: 8px; } }
+
         .theme-island::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4); border-radius: 100px; z-index: -1; backdrop-filter: blur(2px); }
-        .theme-pill { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(0,0,0,0.3); }
-        .theme-pill:hover { opacity: 1; transform: scale(1.1); background: rgba(255,255,255,0.2); }
+        .theme-pill { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(0,0,0,0.3); }
+        @media (min-width: 768px) { .theme-pill { width: 36px; height: 36px; } }
         .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: rgba(0,0,0,0.6); }
 
-        /* --- SEQUENCER BG --- */
+        /* --- SEQUENCER BG & MOBILE --- */
         #sequencer-inner { position: relative; overflow: hidden; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
@@ -138,11 +170,23 @@
             mix-blend-mode: soft-light;
             filter: grayscale(100%) contrast(1.2);
         }
-        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10;}
+        
+        /* Mobile Sequencer: Horizontal Scroll container */
+        .sequencer-scroll-container {
+            overflow-x: auto;
+            padding-bottom: 16px;
+            /* Hide scrollbar for neatness */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE 10+ */
+        }
+        .sequencer-scroll-container::-webkit-scrollbar { display: none; /* Chrome/Safari/Webkit */ }
+        .sequencer-track-row { min-width: 500px; /* Ensure it's wide enough to scroll on mobile */ }
+
+        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: manipulation;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
         
-        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10;}
+        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; touch-action: manipulation;}
         .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
         .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
         body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
@@ -155,17 +199,23 @@
         #theme-bg { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; opacity: 0.2; filter: blur(40px) saturate(1.2); transition: 0.8s; transform: scale(1.1); }
         .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.15; }
 
+        /* --- MOBILE BREAKPOINT OVERRIDES --- */
         @media (max-width: 1024px) {
-            .bento-grid { grid-template-columns: 1fr; padding-top: 100px; }
+            .bento-grid { 
+                grid-template-columns: 1fr; 
+                padding: 80px 16px 110px; /* Less padding on mobile */
+            }
             .col-span-12, .col-span-8, .col-span-5, .col-span-7 { grid-column: span 1 !important; }
-            .dock-icon span { display: none; }
+            
+            /* Hero adjustments for mobile */
+            .hero-name { font-size: 3.5rem; line-height: 1; }
         }
     </style>
 </head>
 <body class="font-fl selection:bg-white selection:text-black" data-theme="fl">
 
     <div id="start-screen">
-        <button onclick="startExperience()" class="w-24 h-24 rounded-full bg-[#111] border border-white/10 flex items-center justify-center hover:scale-95 hover:border-white/40 transition shadow-[0_0_50px_rgba(0,0,0,0.5)] click-sound group">
+        <button onclick="startExperience()" class="w-24 h-24 rounded-full bg-[#111] border border-white/10 flex items-center justify-center hover:scale-95 hover:border-white/40 transition shadow-[0_0_50px_rgba(0,0,0,0.5)] click-sound group touch-manipulation">
             <svg class="w-8 h-8 text-white opacity-80 group-hover:text-[var(--accent-color)] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </button>
         <div id="boot-sequence" class="mt-6 font-tech text-green-400 text-sm tracking-[0.2em]">INITIALISATION...</div>
@@ -175,23 +225,23 @@
     <div class="scanlines"></div>
 
     <div class="theme-island" id="theme-widget">
-        <button class="theme-pill click-sound" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL" class="w-5 h-5 object-contain"></button>
-        <button class="theme-pill click-sound" onclick="setTheme('ableton')" title="Ableton"><img src="logo_ableton.png" alt="Live" class="w-5 h-5 object-contain"></button>
-        <button class="theme-pill click-sound" onclick="setTheme('protools')" title="ProTools"><img src="logo_protools.png" alt="PT" class="w-5 h-5 object-contain"></button>
-        <button class="theme-pill click-sound" onclick="setTheme('rx')" title="RX"><img src="logo_rx10.png" alt="RX" class="w-5 h-5 object-contain"></button>
+        <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL" class="w-5 h-5 object-contain"></button>
+        <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton"><img src="logo_ableton.png" alt="Live" class="w-5 h-5 object-contain"></button>
+        <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools"><img src="logo_protools.png" alt="PT" class="w-5 h-5 object-contain"></button>
+        <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('rx')" title="RX"><img src="logo_rx10.png" alt="RX" class="w-5 h-5 object-contain"></button>
     </div>
 
     <main class="bento-grid">
         
-        <section id="hero" class="col-span-12 glass-panel p-10 flex flex-col justify-center items-center text-center min-h-[50vh] scroll-float relative group">
+        <section id="hero" class="col-span-12 glass-panel p-6 md:p-10 flex flex-col justify-center items-center text-center min-h-[40vh] md:min-h-[50vh] scroll-float relative group">
             <div class="relative z-10">
                 <span class="inline-block px-3 py-1 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
-                <h1 class="hero-name text-6xl md:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)]">Jules Frémondière</h1>
-                <p class="text-2xl md:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto">Étudiant Ingénieur du son & Sound Designer</p>
-                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition">jules.fremondiere@3is.fr</a>
-                <div class="mt-10 flex gap-4 justify-center">
-                    <a href="#contact" class="px-8 py-3 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/20">Me Contacter</a>
-                    <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center gap-2">
+                <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)] leading-none md:leading-tight">Jules Frémondière</h1>
+                <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-4">Étudiant Ingénieur du son & Sound Designer</p>
+                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition">jules.fremondiere@3is.fr</a>
+                <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center w-full md:w-auto px-4 md:px-0">
+                    <a href="#contact" class="px-8 py-3 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/20 text-center touch-manipulation">Me Contacter</a>
+                    <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center justify-center gap-2 touch-manipulation">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> CV
                     </a>
                 </div>
@@ -203,7 +253,7 @@
                 <span class="win-title">Stats & Skills.sys</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8 items-center justify-items-center grow">
+            <div class="p-6 md:p-8 grid grid-cols-2 gap-6 md:gap-8 items-center justify-items-center grow">
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Mixage</h4>
@@ -232,85 +282,83 @@
                 <span class="win-title">Timeline.log</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-8 h-full overflow-y-auto custom-scrollbar">
-                <div class="relative pl-8 border-l border-[var(--glass-border)] space-y-12">
+            <div class="p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
+                <div class="relative pl-6 md:pl-8 border-l border-[var(--glass-border)] space-y-10 md:space-y-12">
                     <div class="relative group">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--accent-color)] bg-[#111] group-hover:scale-125 transition"></div>
+                        <div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--accent-color)] bg-[#111] group-hover:scale-125 transition"></div>
                         <span class="text-xs font-mono text-[var(--accent-color)] mb-1 block">2023 – 2026</span>
-                        <h3 class="text-xl font-bold">3iS - Institut International</h3>
+                        <h3 class="text-lg md:text-xl font-bold">3iS - Institut International</h3>
                         <p class="text-sm uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p>
-                        <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--accent-color)]">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p>
+                        <p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--accent-color)]">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p>
                     </div>
                     <div class="relative group flex flex-col md:flex-row gap-6 items-start">
                         <div class="flex-1">
-                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
+                            <div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                             <span class="text-xs font-mono opacity-50 mb-1 block">2023</span>
-                            <h3 class="text-xl font-bold">Service Civique / Césure</h3>
-                            <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)] mb-2">Projet Court Métrage grâce a l’association Thermogène Média.</p>
-                            <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-xs border border-[var(--glass-border)] px-3 py-1 rounded hover:bg-white/10 inline-block transition click-sound">▶ Voir le projet vidéo</a>
+                            <h3 class="text-lg md:text-xl font-bold">Service Civique / Césure</h3>
+                            <p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)] mb-2">Projet Court Métrage grâce a l’association Thermogène Média.</p>
+                            <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-xs border border-[var(--glass-border)] px-3 py-1 rounded hover:bg-white/10 inline-block transition click-sound touch-manipulation">▶ Voir le projet vidéo</a>
                         </div>
-                        <div class="w-32 h-24 shrink-0 rounded overflow-hidden border border-[var(--glass-border)]">
+                        <div class="w-full md:w-32 h-32 md:h-24 shrink-0 rounded overflow-hidden border border-[var(--glass-border)] mt-2 md:mt-0">
                             <img src="peace3.jpg" alt="Asso" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
                         </div>
                     </div>
                     <div class="relative group">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
+                        <div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                         <span class="text-xs font-mono opacity-50 mb-1 block">2022</span>
-                        <h3 class="text-xl font-bold">BAC STI2D ITEC</h3>
-                        <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Esprit d’équipe, Informatique, Sens de la réflexion technique.</p>
+                        <h3 class="text-lg md:text-xl font-bold">BAC STI2D ITEC</h3>
+                        <p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Esprit d’équipe, Informatique, Sens de la réflexion technique.</p>
                     </div>
-                    <div class="relative group flex flex-col md:flex-row gap-6 items-start">
+                     <div class="relative group flex flex-col md:flex-row gap-6 items-start">
                         <div class="flex-1">
-                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
+                             <div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                             <span class="text-xs font-mono opacity-50 mb-1 block">2018 – 2022</span>
-                            <h3 class="text-xl font-bold">Autodidacte & Exploration AV</h3>
+                            <h3 class="text-lg md:text-xl font-bold">Autodidacte & Exploration AV</h3>
                             <div class="mt-2 p-3 bg-white/5 rounded border-l-2 border-[var(--accent-color)]">
                                 <ul class="list-disc list-inside text-sm opacity-70"><li>Composition musicale</li><li>Montage vidéo</li></ul>
                             </div>
                         </div>
-                        <div class="w-32 h-24 shrink-0 rounded overflow-hidden border border-[var(--glass-border)]">
+                         <div class="w-full md:w-32 h-32 md:h-24 shrink-0 rounded overflow-hidden border border-[var(--glass-border)] mt-2 md:mt-0">
                             <img src="peace2.jpg" alt="Work" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
                         </div>
-                    </div>
-                     <div class="relative group">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
-                        <span class="text-xs font-mono opacity-50 mb-1 block">2010 – 2014</span>
-                        <h3 class="text-xl font-bold">Danseur Hip-Hop & Interprète</h3>
-                        <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Tournée Européenne avec le chorégraphe Boris Charmatz.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-[var(--accent-color)]/30">
-            <div id="sequencer-inner" class="bg-black/20 rounded-[20px] p-6 h-full border border-[var(--glass-border)] relative">
+            <div id="sequencer-inner" class="bg-black/20 rounded-[20px] p-4 md:p-6 h-full border border-[var(--glass-border)] relative">
                 <div class="relative z-10">
-                    <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-                        <div class="flex items-center gap-3">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <div class="flex items-center gap-3 mb-2 md:mb-0">
                             <div id="seq-led" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
-                            <h3 class="font-tech text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">MINI_SEQUENCER_8_STEPS</h3>
+                            <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">MINI_SEQUENCER</h3>
                         </div>
-                        <div class="flex gap-4 font-mono text-[10px] items-end">
-                             <div class="flex flex-col"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)]"><option value="808">TR-808</option><option value="909">TR-909</option></select></div>
-                            <div class="flex flex-col"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"><span id="bpm-display" class="mt-1">120</span></div>
-                            <button id="play-btn" onclick="togglePlay()" class="px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60">PLAY LOOP</button>
-                            <button onclick="clearSequencer()" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60">Clear</button>
+                        <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-end w-full md:w-auto">
+                             <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="808">TR-808</option><option value="909">TR-909</option></select></div>
+                            <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"><span id="bpm-display" class="mt-1">120</span></div>
+                            <button id="play-btn" onclick="togglePlay()" class="px-4 md:px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">PLAY LOOP</button>
+                            <button onclick="clearSequencer()" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">Clear</button>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                        <div class="lg:col-span-3 space-y-3">
-                            <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
-                            <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
-                            <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
-                            <div class="pt-4 border-t border-[var(--glass-border)] mt-4">
-                                <div class="flex items-center gap-3">
-                                    <span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">SYN</span>
-                                    <div id="piano-roll" class="flex-1 grid grid-template-columns-8 gap-1" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;"></div>
+                        <div class="lg:col-span-3 space-y-3 overflow-hidden">
+                             <div class="sequencer-scroll-container">
+                                <div class="sequencer-track-row space-y-3">
+                                    <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
+                                    <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
+                                    <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
+                                    <div class="pt-4 border-t border-[var(--glass-border)] mt-4">
+                                        <div class="flex items-center gap-3">
+                                            <span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">SYN</span>
+                                            <div id="piano-roll" class="flex-1 grid grid-template-columns-8 gap-1" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="lg:col-span-1 bg-black/40 rounded-lg border border-[var(--glass-border)] relative overflow-hidden flex items-center justify-center min-h-[100px]">
+                        <div class="lg:col-span-1 bg-black/40 rounded-lg border border-[var(--glass-border)] relative overflow-hidden flex items-center justify-center h-[100px] lg:h-auto">
                             <canvas id="scope-canvas" class="w-full h-full absolute inset-0"></canvas>
                         </div>
                     </div>
@@ -319,78 +367,78 @@
         </section>
 
         <section id="projets" class="col-span-12 space-y-8 scroll-float mt-8">
-            <h2 class="text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
+            <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collabs</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group click-sound">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group click-sound touch-manipulation">
                     <img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg" alt="Capharnaüm">
                     <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                              <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Court-Métrage</span>
                         </div>
-                        <h4 class="text-3xl font-bold mb-2">Capharnaüm</h4>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Capharnaüm</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Sound Design & Mix</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Sound Design - Bruitage - Mix (ProTools, S1 Controller)</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Sound Design - Bruitage - Mix (ProTools, S1)</p>
                     </div>
                 </a>
 
-                <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group click-sound">
+                <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group click-sound touch-manipulation">
                     <img src="https://img.youtube.com/vi/1RaxSos9wtk/hqdefault.jpg" alt="Remix IVY">
                     <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                              <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Remix</span>
                         </div>
-                        <h4 class="text-3xl font-bold mb-2">IVY - Baby Hayabusa</h4>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">IVY - Baby Hayabusa</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Production Musicale</p>
                         <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Montage - DA - Composition - Mix - Master</p>
                     </div>
                 </a>
 
-                <a href="https://www.youtube.com/watch?v=TiqWW0e6RSg" target="_blank" class="project-card group click-sound">
+                <a href="https://www.youtube.com/watch?v=TiqWW0e6RSg" target="_blank" class="project-card group click-sound touch-manipulation">
                     <img src="https://img.youtube.com/vi/TiqWW0e6RSg/maxresdefault.jpg" alt="Désaccordés">
                     <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                              <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Émission TV Direct</span>
                         </div>
-                        <h4 class="text-3xl font-bold mb-2">Désaccordés</h4>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Désaccordés</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Ingénieur Son Direct</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Prise de décision - Routing Behringer x32 - Organisation - Com</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Prise de décision - Routing x32 - Com</p>
                     </div>
                 </a>
 
-                <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" class="project-card group click-sound">
+                <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" class="project-card group click-sound touch-manipulation">
                     <img src="https://img.youtube.com/vi/w_9xYrwzKNs/maxresdefault.jpg" alt="Long Day">
                     <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                              <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Clip Musical</span>
                         </div>
-                        <h4 class="text-3xl font-bold mb-2">Long Day</h4>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Long Day</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Montage // Prise de vue</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Direction Artistique - Montage - Composition - Mix</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Direction Artistique - Montage - Composition</p>
                     </div>
                 </a>
 
-                <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="project-card group click-sound">
+                <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="project-card group click-sound touch-manipulation">
                     <img src="https://img.youtube.com/vi/llGoiisrlu8/maxresdefault.jpg" alt="Ouragan">
                     <div class="project-info">
-                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                              <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Résidence</span>
                         </div>
-                        <h4 class="text-3xl font-bold mb-2">Ouragan</h4>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Ouragan</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Spatialisation Sonore</p>
                         <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Routing Console, Patch, Spatialisation</p>
                     </div>
                 </a>
 
-                <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="project-card group click-sound">
+                <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="project-card group click-sound touch-manipulation">
                     <img src="https://img.youtube.com/vi/U3lwDA_INOQ/maxresdefault.jpg" alt="Instable">
                     <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                              <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Websérie</span>
                         </div>
-                        <h4 class="text-3xl font-bold mb-2">Instable</h4>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Instable</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Post-production Audio</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Supervision sonore, Prise de son, Post Production</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Supervision sonore, Prise de son, Post Prod</p>
                     </div>
                 </a>
             </div>
@@ -402,16 +450,16 @@
             </div>
         </section>
 
-        <section id="contact" class="col-span-12 glass-panel p-10 text-center flex flex-col items-center justify-center gap-6 scroll-float mb-20">
-            <div class="w-24 h-24 rounded-full p-1 border-2 border-[var(--accent-color)]">
+        <section id="contact" class="col-span-12 glass-panel p-6 md:p-10 text-center flex flex-col items-center justify-center gap-6 scroll-float mb-20">
+            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 border-2 border-[var(--accent-color)]">
                 <img src="moi.png" alt="Jules" class="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition duration-500">
             </div>
             <div>
-                <h3 class="text-2xl font-bold">Travaillons ensemble</h3>
-                <p class="opacity-60 mt-2">Disponible pour projets créatifs et techniques.</p>
-                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-2 text-xl font-bold text-[var(--accent-color)] hover:underline">jules.fremondiere@3is.fr</a>
+                <h3 class="text-xl md:text-2xl font-bold">Travaillons ensemble</h3>
+                <p class="opacity-60 mt-2 text-sm md:text-base">Disponible pour projets créatifs et techniques.</p>
+                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-2 text-lg md:text-xl font-bold text-[var(--accent-color)] hover:underline break-all">jules.fremondiere@3is.fr</a>
             </div>
-            <a href="https://linktr.ee/jlo.flp" target="_blank" class="inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1">
+            <a href="https://linktr.ee/jlo.flp" target="_blank" class="inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1 touch-manipulation">
                 Linktree & Réseaux <span>↗</span>
             </a>
             <p class="font-mono text-[10px] opacity-30 mt-8">© 2026 SYSTEM JULES F.</p>
@@ -419,16 +467,16 @@
     </main>
 
     <nav class="dock-container">
-        <a href="#hero" class="dock-icon click-sound">
+        <a href="#hero" class="dock-icon click-sound touch-manipulation">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
         </a>
-        <a href="#skills" class="dock-icon click-sound">
+        <a href="#skills" class="dock-icon click-sound touch-manipulation">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Stats</span>
         </a>
-        <a href="#sequencer" class="dock-icon click-sound">
+        <a href="#sequencer" class="dock-icon click-sound touch-manipulation">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg><span>Lab</span>
         </a>
-        <a href="#projets" class="dock-icon click-sound">
+        <a href="#projets" class="dock-icon click-sound touch-manipulation">
              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Work</span>
         </a>
         <div class="dock-divider"></div>
@@ -436,6 +484,15 @@
     </nav>
 
     <script>
+        // --- MOBILE VIEWPORT FIX ---
+        // Corrects 100vh issues on mobile browsers where address bar hides/shows
+        function setVh() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        window.addEventListener('resize', setVh);
+        setVh();
+
         // --- AUDIO ENGINE ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const masterGain = audioCtx.createGain();
@@ -445,16 +502,36 @@
 
         // CLICK SOUND
         function playClickSound() {
-            if (audioCtx.state === 'suspended') return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            // Check if context exists and is readable
+            if (!audioCtx || audioCtx.state === 'closed') return;
+            
+            // Resume context if suspended (common browser requirement for audio)
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => {
+                    triggerClickOsc();
+                }).catch(e => console.error("Audio resume failed:", e));
+            } else {
+                triggerClickOsc();
+            }
+        }
+
+        function triggerClickOsc() {
+            const osc = audioCtx.createOscillator(); 
+            const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
+            osc.type = 'triangle'; 
+            osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             osc.start(); osc.stop(audioCtx.currentTime + 0.05);
         }
+
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.click-sound, a, button').forEach(el => el.addEventListener('click', playClickSound));
+            document.querySelectorAll('.click-sound, a, button').forEach(el => {
+                // Use both click and touchstart for responsiveness, throttle touch
+                el.addEventListener('click', playClickSound);
+            });
         });
 
         // SEQUENCER VARS
@@ -489,6 +566,7 @@
         function startExperience() {
             document.querySelector('#start-screen button').classList.add('scale-0');
             document.getElementById('boot-sequence').textContent = "SYSTEM_LOADED";
+            // Important for mobile: resume audio on first user interaction
             if(audioCtx.state === 'suspended') audioCtx.resume();
             setTimeout(() => {
                 document.getElementById('start-screen').classList.add('hidden-screen');
@@ -533,7 +611,8 @@
         // SEQUENCER UI
         function createStepBtn(track, index) {
             const btn = document.createElement('button');
-            btn.className = `step-btn click-sound`;
+            // Added touch-manipulation for better mobile response
+            btn.className = `step-btn click-sound touch-manipulation`;
             btn.onclick = () => { sequence[track][index] = !sequence[track][index]; btn.classList.toggle('active'); }; 
             return btn;
         }
@@ -542,7 +621,9 @@
         const pCont = document.getElementById('piano-roll');
         for(let r=0; r<5; r++) {
             for(let c=0; c<8; c++) {
-                const cell = document.createElement('div'); cell.className='piano-cell h-5 click-sound'; cell.id=`note-${r}-${c}`;
+                const cell = document.createElement('div'); 
+                // Added touch-manipulation
+                cell.className='piano-cell h-6 md:h-5 click-sound touch-manipulation'; cell.id=`note-${r}-${c}`;
                 cell.onclick=()=>{ melodyGrid[r][c]=!melodyGrid[r][c]; cell.classList.toggle('active'); }; pCont.appendChild(cell);
             }
         }
@@ -594,7 +675,7 @@
 
         function togglePlay() {
             isPlaying = !isPlaying; 
-            document.getElementById('play-btn').innerText = isPlaying ? "STOP LOOP" : "PLAY LOOP";
+            document.getElementById('play-btn').innerText = isPlaying ? "STOP" : "PLAY LOOP";
             const led = document.getElementById('seq-led');
             if(isPlaying) { led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse'); if(audioCtx.state==='suspended')audioCtx.resume(); intervalId=setInterval(nextStep,(60/bpm)*1000/2); }
             else { led.classList.add('bg-red-900'); led.classList.remove('bg-red-500', 'animate-pulse'); clearInterval(intervalId); resetVisuals(); }
