@@ -78,20 +78,21 @@
             opacity: 0.15; z-index: -1;
         }
 
-        /* --- TOP TOOLBAR DAW --- */
+        /* --- TOP TOOLBAR DAW (DISCRET & RECADRÉ) --- */
         #top-toolbar {
-            position: fixed; top: 0; left: 0; width: 100%; height: 50px; /* Hauteur fixe */
-            z-index: 80; /* Juste sous le thème selecteur mais au dessus du contenu */
-            pointer-events: none; /* Laisse passer les clics si besoin, mais ici c'est visuel */
+            position: fixed; top: 0; left: 0; width: 100%; height: 45px; /* Hauteur unifiée */
+            z-index: 80; 
+            pointer-events: none;
             user-select: none;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            background-color: #111; /* Fallback */
+            background-color: rgba(0,0,0,0.4); /* Fond sombre discret */
+            backdrop-filter: blur(4px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         #toolbar-img {
             width: 100%; height: 100%;
-            object-fit: cover; /* Remplit la barre */
-            object-position: left top; /* Aligne a gauche comme un menu */
-            opacity: 0.9;
+            object-fit: contain; /* Affiche toute l'image sans couper */
+            object-position: center; /* Centre l'image */
+            opacity: 0.5; /* Discrétion demandée */
         }
         
         /* --- SCROLL REVEAL ANIMATION --- */
@@ -176,7 +177,7 @@
 
         /* --- THEME BAR & LABEL --- */
         .theme-container {
-            position: fixed; top: 60px; /* Moved down to accommodate toolbar */
+            position: fixed; top: 60px; /* Moved down */
             left: 50%; transform: translateX(-50%);
             display: flex; flex-direction: column; align-items: center;
             z-index: 90;
@@ -199,7 +200,7 @@
         .dock-btn:hover { color: #fff; background: rgba(255,255,255,0.1); transform: translateY(-2px); }
         .dock-btn span { font-size: 8px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; }
 
-        /* --- VIDEO (ATTRACTIVE STYLE) --- */
+        /* --- VIDEO --- */
         .video-card { 
             position: relative; border-radius: 12px; overflow: hidden; 
             border: 1px solid rgba(255,255,255,0.1); 
@@ -435,73 +436,70 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
+                <!-- PROJETS & COLLABORATIONS -->
+                <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-10 backdrop-blur-md shadow-xl relative window-container scroll-float">
+                    <div id="projects-os-header" class="window-header"></div>
+                    <div class="window-content pt-6">
+                        <h2 class="text-3xl font-bold mb-8 flex items-center gap-4">
+                            <span class="theme-icon-color opacity-80"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+                            Projets & Collaborations
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            
+                            <!-- Capharnaüm -->
+                            <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA&list=RDD-x6BQSPRuA&start_radio=1" target="_blank" class="video-card block group click-sound">
+                                <div class="thumb-container">
+                                    <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm">
+                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
+                                </div>
+                                <div class="p-6 flex-grow flex flex-col">
+                                    <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Capharnaüm</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Court-métrage</span></div>
+                                    <p class="text-sm opacity-80 mb-3 font-medium">Sound Design & Mix</p>
+                                    <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Sound Design - Bruitage - Mix (ProTools, S1 Controller, MixPre 6, MKH-416)</p>
+                                </div>
+                            </a>
 
-        <!-- ROW 2: PROJETS (FULL WIDTH + LARGER) -->
-        <div id="projets-window" class="mb-8">
-            <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-10 backdrop-blur-md shadow-xl relative window-container scroll-float">
-                <div id="projects-os-header" class="window-header"></div>
-                <div class="window-content pt-6">
-                    <h2 class="text-3xl font-bold mb-8 flex items-center gap-4">
-                        <span class="theme-icon-color opacity-80"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
-                        Projets & Collaborations
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        
-                        <!-- Capharnaüm -->
-                        <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA&list=RDD-x6BQSPRuA&start_radio=1" target="_blank" class="video-card block group click-sound">
-                            <div class="thumb-container">
-                                <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm">
-                                <div class="play-overlay"><div class="play-icon">▶</div></div>
-                            </div>
-                            <div class="p-6 flex-grow flex flex-col">
-                                <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Capharnaüm</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Court-métrage</span></div>
-                                <p class="text-sm opacity-80 mb-3 font-medium">Sound Design & Mix</p>
-                                <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Sound Design - Bruitage - Mix (ProTools, S1 Controller, MixPre 6, MKH-416)</p>
-                            </div>
-                        </a>
+                            <!-- Long Day -->
+                            <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs&list=RDw_9xYrwzKNs&start_radio=1" target="_blank" class="video-card block group click-sound">
+                                <div class="thumb-container">
+                                    <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day">
+                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
+                                </div>
+                                <div class="p-6 flex-grow flex flex-col">
+                                    <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Long Day</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Clip Musical</span></div>
+                                    <p class="text-sm opacity-80 mb-3 font-medium">Montage // Prise de vue</p>
+                                    <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Direction Artistique - Montage - Composition - Mix (Live 12, Premiere Pro)</p>
+                                </div>
+                            </a>
 
-                        <!-- Long Day -->
-                        <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs&list=RDw_9xYrwzKNs&start_radio=1" target="_blank" class="video-card block group click-sound">
-                            <div class="thumb-container">
-                                <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day">
-                                <div class="play-overlay"><div class="play-icon">▶</div></div>
-                            </div>
-                            <div class="p-6 flex-grow flex flex-col">
-                                <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Long Day</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Clip Musical</span></div>
-                                <p class="text-sm opacity-80 mb-3 font-medium">Montage // Prise de vue</p>
-                                <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Direction Artistique - Montage - Composition - Mix (Live 12, Premiere Pro)</p>
-                            </div>
-                        </a>
+                            <!-- Ouragan -->
+                            <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="video-card block group click-sound">
+                                <div class="thumb-container">
+                                    <img src="https://img.youtube.com/vi/llGoiisrlu8/hqdefault.jpg" alt="Ouragan">
+                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
+                                </div>
+                                <div class="p-6 flex-grow flex flex-col">
+                                    <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Ouragan</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Résidence</span></div>
+                                    <p class="text-sm opacity-80 mb-3 font-medium">Spatialisation Sonore</p>
+                                    <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Routing Console, Patch, Spatialisation, Communication</p>
+                                </div>
+                            </a>
 
-                        <!-- Ouragan -->
-                        <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="video-card block group click-sound">
-                            <div class="thumb-container">
-                                <img src="https://img.youtube.com/vi/llGoiisrlu8/hqdefault.jpg" alt="Ouragan">
-                                <div class="play-overlay"><div class="play-icon">▶</div></div>
-                            </div>
-                            <div class="p-6 flex-grow flex flex-col">
-                                <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Ouragan</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Résidence</span></div>
-                                <p class="text-sm opacity-80 mb-3 font-medium">Spatialisation Sonore</p>
-                                <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Routing Console, Patch, Spatialisation, Communication</p>
-                            </div>
-                        </a>
+                            <!-- Instable -->
+                            <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="video-card block group click-sound">
+                                <div class="thumb-container">
+                                    <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable">
+                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
+                                </div>
+                                <div class="p-6 flex-grow flex flex-col">
+                                    <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Instable</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Websérie</span></div>
+                                    <p class="text-sm opacity-80 mb-3 font-medium">Post-production Audio</p>
+                                    <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Supervision sonore de A à Z, Prise de son, Post Production</p>
+                                </div>
+                            </a>
 
-                        <!-- Instable -->
-                        <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="video-card block group click-sound">
-                            <div class="thumb-container">
-                                <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable">
-                                <div class="play-overlay"><div class="play-icon">▶</div></div>
-                            </div>
-                            <div class="p-6 flex-grow flex flex-col">
-                                <div class="flex justify-between items-center mb-2"><h4 class="text-xl font-bold group-hover:text-current transition-colors">Instable</h4><span class="text-xs uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-1 rounded">Websérie</span></div>
-                                <p class="text-sm opacity-80 mb-3 font-medium">Post-production Audio</p>
-                                <p class="text-xs opacity-60 font-mono border-t border-white border-opacity-10 pt-3 mt-auto">Supervision sonore de A à Z, Prise de son, Post Production</p>
-                            </div>
-                        </a>
-
+                        </div>
                     </div>
                 </div>
             </div>
@@ -844,10 +842,6 @@
             document.documentElement.style.setProperty('--accent-color', theme.accent);
             document.documentElement.style.setProperty('--meter-color', theme.meterColor);
             document.documentElement.style.setProperty('--vu-gradient', theme.vuGradient);
-            
-            // Ableton Inverted class for specific Pie Chart center color fix
-            if(themeName === 'ableton') document.body.classList.add('ableton-inverted');
-            else document.body.classList.remove('ableton-inverted');
 
             document.querySelectorAll('.theme-icon-color').forEach(i => i.style.color = theme.accent);
             document.querySelectorAll('.theme-border-color').forEach(b => b.style.borderColor = theme.accent);
