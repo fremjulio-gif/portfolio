@@ -82,24 +82,29 @@
         .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
 
-        /* --- DOCK --- */
+        /* --- DOCK (FIXED ALIGNMENT) --- */
         .dock-container {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; justify-content: center;
-            gap: 12px; padding: 10px 20px;
-            background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px);
+            display: flex; align-items: center; justify-content: center; /* Center horizontally */
+            gap: 20px; padding: 12px 30px;
+            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90;
+            height: 70px; /* Fixed height for vertical alignment */
         }
         body.light-mode .dock-container { background: rgba(200, 200, 200, 0.8); border-color: rgba(0,0,0,0.1); }
         
         .dock-icon {
-            padding: 10px 16px; border-radius: 14px;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
             color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; position: relative;
+            height: 100%; width: 50px;
         }
         body.light-mode .dock-icon { color: #444; }
-        .dock-icon:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-5px) scale(1.1); }
-        body.light-mode .dock-icon:hover { color: #000; background: rgba(0,0,0,0.05); }
+        .dock-icon:hover { color: #fff; transform: translateY(-3px); }
+        body.light-mode .dock-icon:hover { color: #000; }
+        .dock-icon svg { width: 22px; height: 22px; }
+        .dock-icon span { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;}
+
+        .dock-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.1); }
 
         /* --- THEME ISLAND --- */
         .theme-island {
@@ -120,15 +125,16 @@
             content: ''; position: absolute; inset: 0;
             background-image: url('console.png');
             background-size: cover; background-position: center;
-            opacity: 0.15; z-index: 0; pointer-events: none;
-            mix-blend-mode: overlay;
+            opacity: 0.2; z-index: 0; pointer-events: none;
+            mix-blend-mode: soft-light; /* Subtil */
+            filter: grayscale(100%) contrast(1.2);
         }
-        /* Piano Roll & Steps from original */
-        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; }
+        /* Piano Roll & Steps */
+        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
         
-        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent;}
+        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10;}
         .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
         .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
         body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
@@ -186,35 +192,35 @@
             </div>
         </section>
 
-        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float">
-            <div class="win-header">
+        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float flex flex-col">
+            <div class="win-header shrink-0">
                 <span class="win-title">Stats & Skills.sys</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center">
+            <div class="p-8 grid grid-cols-2 gap-8 items-center justify-items-center grow">
                 
-                <div class="flex flex-col items-center text-center group w-full">
-                    <div class="pie-chart mb-4" style="--percent: 66"><span>66%</span></div>
-                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Mixage</h4>
-                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Écoute active, prise de décision, sound design, Pro Tools (3 ans).</p>
+                <div class="flex flex-col items-center text-center w-full">
+                    <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
+                    <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Mixage</h4>
+                    <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Écoute active, prise de décision, Pro Tools.</p>
                 </div>
 
-                <div class="flex flex-col items-center text-center group w-full">
-                    <div class="pie-chart mb-4" style="--percent: 70"><span>70%</span></div>
-                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Composition</h4>
-                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Réflexion Artistique, Créativité, Imagination, Organisation.</p>
+                <div class="flex flex-col items-center text-center w-full">
+                    <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
+                    <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Composition</h4>
+                    <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Créativité, Organisation, Live 12.</p>
                 </div>
 
-                <div class="flex flex-col items-center text-center group w-full">
-                    <div class="pie-chart mb-4" style="--percent: 40"><span>40%</span></div>
-                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Master/Repair</h4>
-                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Nettoyage Audio, Prise de recul, (Izotope RX, Ozone).</p>
+                <div class="flex flex-col items-center text-center w-full">
+                    <div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div>
+                    <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Repair</h4>
+                    <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Nettoyage Audio, RX 10, Ozone.</p>
                 </div>
 
-                <div class="flex flex-col items-center text-center group w-full">
-                    <div class="pie-chart mb-4" style="--percent: 70"><span>70%</span></div>
-                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Recording</h4>
-                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Utilisation Mixette (SoundDevice), Prise de son Couple micro.</p>
+                <div class="flex flex-col items-center text-center w-full">
+                    <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
+                    <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Recording</h4>
+                    <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">SoundDevice, Couple micro.</p>
                 </div>
 
             </div>
@@ -424,8 +430,8 @@
         <a href="#projets" class="dock-icon click-sound">
              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Work</span>
         </a>
-        <div class="w-px h-full bg-white/10 mx-2"></div>
-        <div id="time-display" class="font-mono text-xs flex items-center text-[var(--accent-color)] opacity-80">00:00:00</div>
+        <div class="dock-divider"></div>
+        <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 w-16 text-center">00:00:00</div>
     </nav>
 
     <script>
