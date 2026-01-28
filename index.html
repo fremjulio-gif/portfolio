@@ -33,9 +33,8 @@
         }
         #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
         
-        /* BOUTON POWER GROSSI */
         .power-btn {
-            width: 120px; height: 120px; /* Agrandissement */
+            width: 120px; height: 120px;
             border-radius: 50%;
             border: 3px solid rgba(255,255,255,0.15);
             background: radial-gradient(circle, #222 0%, #000 100%);
@@ -45,7 +44,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
-        .power-btn svg { width: 48px; height: 48px; } /* Icône plus grande */
+        .power-btn svg { width: 48px; height: 48px; }
         
         .power-btn:hover {
             color: #fff; border-color: rgba(255,255,255,0.6);
@@ -78,6 +77,17 @@
             opacity: 0.15; z-index: -1;
         }
         
+        /* --- SCROLL REVEAL ANIMATION (FLOTTEMENT) --- */
+        .scroll-float {
+            opacity: 0;
+            transform: translateY(40px); /* Start lower */
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .scroll-float.visible {
+            opacity: 1;
+            transform: translateY(0); /* Float up to position */
+        }
+
         /* --- WINDOW CONTROLS --- */
         .window-header {
             position: absolute; top: 0; left: 0; right: 0;
@@ -141,10 +151,11 @@
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: rgba(255,255,255,0.5);
+            overflow: hidden; /* For images */
         }
         .theme-btn:hover { transform: scale(1.15); background: rgba(255,255,255,0.15); color: #fff; }
         .theme-btn.active { transform: scale(1.1); box-shadow: 0 0 15px currentColor; border-color: currentColor; color: #fff !important; }
-        .theme-btn svg { width: 20px; height: 20px; fill: currentColor; }
+        .theme-btn img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
 
         /* --- BOTTOM CONTROL DOCK --- */
         .control-dock {
@@ -263,26 +274,26 @@
 
     <!-- THEME SELECTION BAR (TOP) -->
     <div class="theme-bar">
-        <!-- FL Studio Logo (Carrot/Fruit shape simplified) -->
+        <!-- FL Studio -->
         <button class="theme-btn text-[#f08c35]" onclick="setTheme('fl')" title="FL Studio">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5,2C14.5,2 11.5,4 11.5,7C11.5,10 13.5,11 13.5,11C13.5,11 12,12 12,14C12,16 13.5,17 13.5,17C13.5,17 11,18 11,20C11,22 13,23 13,23L18,21C18,21 19,18 19,16C19,14 17,13 17,13C17,13 18,12 18,10C18,7 14.5,2 14.5,2Z M7,9C5,9 3,11 3,14C3,17 5,19 7,19C9,19 10,17 10,14C10,11 9,9 7,9Z"/></svg>
+            <img src="logo_flstudio.png" alt="FL Studio">
         </button>
-        <!-- Ableton Logo (Bars) -->
+        <!-- Ableton -->
         <button class="theme-btn text-black bg-[#E6E6E6]" onclick="setTheme('ableton')" title="Ableton Live">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4,4H6V20H4V4M8,4H10V20H8V4M12,4H14V20H12V4M16,4H18V20H16V4Z"/></svg>
+            <img src="logo_ableton.png" alt="Ableton Live">
         </button>
-        <!-- Pro Tools Logo (Wave/Circle simplified) -->
+        <!-- Pro Tools -->
         <button class="theme-btn text-[#40b535]" onclick="setTheme('protools')" title="Pro Tools">
-            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12,7 L12,17 M8,12 L16,12" stroke="currentColor" stroke-width="2"/></svg>
+            <img src="logo_protools.png" alt="Pro Tools">
         </button>
-        <!-- RX Logo (Text) -->
+        <!-- RX -->
         <button class="theme-btn text-[#3ba0e6]" onclick="setTheme('rx')" title="RX Repair">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4,7 L9,7 C11,7 12,8 12,10 C12,12 11,13 9,13 L6,13 L6,17 M6,13 L12,17 M15,7 L20,17 M20,7 L15,17"/></svg>
+            <img src="logo_rx10.png" alt="RX 10">
         </button>
     </div>
 
     <!-- HERO SECTION -->
-    <section id="hero" class="hero-bg w-full h-[60vh] min-h-[400px] flex items-center justify-center relative mb-8 window-container">
+    <section id="hero" class="hero-bg w-full h-[60vh] min-h-[400px] flex items-center justify-center relative mb-8 window-container scroll-float">
         <div class="absolute inset-0 hero-overlay"></div>
         <div class="relative z-10 text-center space-y-6 px-4 window-content">
             <div class="inline-block relative group cursor-default">
@@ -300,7 +311,7 @@
             
             <!-- Left: SKILLS -->
             <div class="md:col-span-4 space-y-6" id="skills-window">
-                <div class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container">
+                <div class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="skills-os-header" class="window-header"></div>
                     <div class="window-content pt-8">
                         <h3 class="text-sm uppercase tracking-widest opacity-60 mb-8 font-bold text-center border-b border-white border-opacity-10 pb-4">Niveaux de Compétence</h3>
@@ -335,7 +346,7 @@
             <div class="md:col-span-8 space-y-6">
                 
                 <!-- MON PARCOURS -->
-                <div id="parcours" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container">
+                <div id="parcours" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="parcours-os-header" class="window-header"></div>
                     <div class="window-content pt-6">
                         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
@@ -402,7 +413,7 @@
                 </div>
 
                 <!-- PROJETS & COLLABORATIONS (VIDEO THUMBNAILS) -->
-                <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container">
+                <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="projects-os-header" class="window-header"></div>
                     <div class="window-content pt-6">
                         <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
@@ -475,8 +486,19 @@
                     </div>
                 </div>
 
+                <!-- COMING SOON SECTION -->
+                <div class="theme-card bg-opacity-40 bg-black border border-white border-opacity-5 rounded-xl p-4 backdrop-blur-sm scroll-float overflow-hidden relative">
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs font-bold uppercase tracking-widest theme-icon-color animate-pulse shrink-0">Prochainement</span>
+                        <div class="h-4 w-[1px] bg-white opacity-20"></div>
+                        <p class="text-xs md:text-sm font-mono opacity-70 whitespace-nowrap overflow-hidden text-ellipsis">
+                            De nouveaux projets arrivent très prochainement : Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres !
+                        </p>
+                    </div>
+                </div>
+
                 <!-- SECTION: MINI LOOPER & SYNTH -->
-                <div id="sequencer" class="theme-card sequencer-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container">
+                <div id="sequencer" class="theme-card sequencer-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="sequencer-os-header" class="window-header"></div>
                     <div class="window-content pt-6">
                         <div class="flex flex-wrap justify-between items-center mb-6 gap-4 relative z-10 mt-2">
@@ -508,7 +530,7 @@
         </div>
 
         <!-- CONTACT SECTION -->
-        <section id="contact" class="mt-32 flex flex-col items-center justify-center space-y-8 pb-32 relative z-20 scale-110 md:scale-125 transition-transform">
+        <section id="contact" class="mt-32 flex flex-col items-center justify-center space-y-8 pb-32 relative z-20 scale-110 md:scale-125 transition-transform scroll-float">
             <div class="relative group cursor-pointer">
                 <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
                 <div class="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white border-opacity-20 shadow-2xl">
@@ -577,7 +599,18 @@
         setInterval(updateTime, 40); // Faster update for MS
         updateTime();
 
-        // --- 2. WINDOW MANAGEMENT ---
+        // --- 2. SCROLL REVEAL OBSERVER ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-float').forEach(el => observer.observe(el));
+
+        // --- 3. WINDOW MANAGEMENT ---
         function handleWindowControl(action, windowId) {
             // Find window container correctly
             const section = document.getElementById(windowId);
@@ -607,7 +640,7 @@
             }
         }
 
-        // --- 3. THEME MANAGER ---
+        // --- 4. THEME MANAGER ---
         const body = document.body;
         const themeBg = document.getElementById('theme-bg');
 
@@ -685,7 +718,7 @@
             
             // Highlight active button
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.theme-btn[title*="${themeName === 'fl' ? 'FL' : themeName === 'ableton' ? 'Ableton' : themeName === 'protools' ? 'Pro' : 'RX'}"]`).classList.add('active');
+            document.querySelector(`.theme-btn[onclick*="'${themeName}'"]`).classList.add('active');
         }
 
         function updateWindowControls(osType) {
@@ -724,7 +757,7 @@
             });
         }
 
-        // --- 3. SEQUENCER LOGIC ---
+        // --- 5. SEQUENCER LOGIC ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120, masterVolume = 0.5, currentKit = '808';
         const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
