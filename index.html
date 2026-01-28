@@ -133,28 +133,21 @@
             display: flex; justify-content: center; align-items: center;
             transition: all 0.5s ease;
         }
-        /* Inverted colors for Pie Chart text on light BG */
         .inverted-text .pie-chart::before {
-            color: #1a1a1a !important; /* Dark text for FL inverted theme */
+            color: #1a1a1a !important; 
         }
-        /* Adjust center circle for inverted themes */
         .inverted-text .pie-chart {
             background: radial-gradient(closest-side, var(--card-bg-color, rgba(255,255,255,0.8)) 75%, transparent 76% 100%),
                         conic-gradient(var(--meter-color) calc(var(--percent) * 1%), rgba(255,255,255,0.3) 0);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        
-        /* Specific override for Ableton Inverted (Orange BG) */
         .ableton-inverted .pie-chart {
-             /* Dark center circle to match dark text intent or light? User asked for orange window. */
-             /* Let's make the center transparent or matching the orange bg to look clean */
              background: radial-gradient(closest-side, #ffbf00 75%, transparent 76% 100%),
                         conic-gradient(var(--meter-color) calc(var(--percent) * 1%), rgba(0,0,0,0.1) 0);
         }
         .ableton-inverted .pie-chart::before {
-            color: #000 !important; /* Black text for Ableton inverted */
+            color: #000 !important;
         }
-
         .pie-chart::before {
             content: attr(data-percent);
             position: absolute;
@@ -199,14 +192,27 @@
         .dock-btn span { font-size: 8px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; }
 
         /* --- VIDEO --- */
-        .video-card { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; background: #000; }
-        .video-card:hover { transform: translateY(-5px); border-color: var(--accent-color, #fff); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .video-card { 
+            position: relative; border-radius: 8px; overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            background: rgba(0,0,0,0.3); /* Darker base */
+            height: 100%;
+            display: flex; flex-direction: column;
+        }
+        .video-card:hover { 
+            transform: translateY(-8px) scale(1.02); 
+            border-color: var(--accent-color, #fff); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 10px var(--accent-color, rgba(255,255,255,0.2)); 
+            z-index: 10;
+        }
         .thumb-container { position: relative; width: 100%; padding-bottom: 56.25%; overflow: hidden; }
-        .thumb-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; opacity: 0.7; }
-        .video-card:hover .thumb-container img { transform: scale(1.05); opacity: 1; }
-        .play-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s; }
+        .thumb-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; opacity: 0.8; }
+        .video-card:hover .thumb-container img { transform: scale(1.1); opacity: 1; }
+        .play-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.3s; }
         .video-card:hover .play-overlay { opacity: 1; }
-        .play-icon { width: 50px; height: 50px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .play-icon { width: 50px; height: 50px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; box-shadow: 0 0 25px rgba(0,0,0,0.6); transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .video-card:hover .play-icon { transform: scale(1); }
 
         /* --- MARQUEE --- */
         .marquee-container { width: 100%; overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
@@ -307,9 +313,10 @@
     <!-- MAIN CONTENT -->
     <main class="container mx-auto px-4 max-w-6xl relative z-20">
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <!-- ROW 1: SKILLS & PARCOURS -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
             
-            <!-- Left: SKILLS -->
+            <!-- Left: SKILLS (4 Cols) -->
             <div class="md:col-span-4 space-y-6" id="skills-window">
                 <div class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="skills-os-header" class="window-header"></div>
@@ -342,10 +349,8 @@
                 </div>
             </div>
 
-            <!-- Right Column -->
-            <div class="md:col-span-8 space-y-6">
-                
-                <!-- MON PARCOURS (REVERSED ORDER) -->
+            <!-- Right: MON PARCOURS (8 Cols) -->
+            <div class="md:col-span-8 space-y-6" id="parcours-window">
                 <div id="parcours" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container scroll-float">
                     <div id="parcours-os-header" class="window-header"></div>
                     <div class="window-content pt-6">
@@ -410,129 +415,135 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- PROJETS & COLLABORATIONS -->
-                <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container scroll-float">
-                    <div id="projects-os-header" class="window-header"></div>
-                    <div class="window-content pt-6">
-                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
-                            <span class="theme-icon-color opacity-80"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
-                            Projets & Collaborations
-                        </h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            
-                            <!-- Capharnaüm -->
-                            <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA&list=RDD-x6BQSPRuA&start_radio=1" target="_blank" class="video-card block group click-sound">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Capharnaüm</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Court-métrage</span></div>
-                                    <p class="text-xs opacity-70 mb-2">Sound Design & Mix</p>
-                                    <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2">Sound Design - Bruitage - Mix (ProTools, S1 Controller, MixPre 6, MKH-416)</p>
-                                </div>
-                            </a>
+        </div>
 
-                            <!-- Long Day -->
-                            <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs&list=RDw_9xYrwzKNs&start_radio=1" target="_blank" class="video-card block group click-sound">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Long Day</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Clip Musical</span></div>
-                                    <p class="text-xs opacity-70 mb-2">Montage // Prise de vue</p>
-                                    <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2">Direction Artistique - Montage - Composition - Mix (Live 12, Premiere Pro)</p>
-                                </div>
-                            </a>
+        <!-- ROW 2: PROJETS (FULL WIDTH) -->
+        <div id="projets-window" class="mb-8">
+            <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container scroll-float">
+                <div id="projects-os-header" class="window-header"></div>
+                <div class="window-content pt-6">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <span class="theme-icon-color opacity-80"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+                        Projets & Collaborations
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        
+                        <!-- Capharnaüm -->
+                        <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA&list=RDD-x6BQSPRuA&start_radio=1" target="_blank" class="video-card block group click-sound">
+                            <div class="thumb-container">
+                                <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm">
+                                <div class="play-overlay"><div class="play-icon">▶</div></div>
+                            </div>
+                            <div class="p-4 flex-grow flex flex-col">
+                                <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Capharnaüm</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Court-métrage</span></div>
+                                <p class="text-xs opacity-70 mb-2">Sound Design & Mix</p>
+                                <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2 mt-auto">Sound Design - Bruitage - Mix (ProTools, S1 Controller, MixPre 6, MKH-416)</p>
+                            </div>
+                        </a>
 
-                            <!-- Ouragan -->
-                            <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="video-card block group click-sound">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/llGoiisrlu8/hqdefault.jpg" alt="Ouragan">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Ouragan</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Résidence</span></div>
-                                    <p class="text-xs opacity-70 mb-2">Spatialisation Sonore</p>
-                                    <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2">Routing Console, Patch, Spatialisation, Communication</p>
-                                </div>
-                            </a>
+                        <!-- Long Day -->
+                        <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs&list=RDw_9xYrwzKNs&start_radio=1" target="_blank" class="video-card block group click-sound">
+                            <div class="thumb-container">
+                                <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day">
+                                <div class="play-overlay"><div class="play-icon">▶</div></div>
+                            </div>
+                            <div class="p-4 flex-grow flex flex-col">
+                                <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Long Day</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Clip Musical</span></div>
+                                <p class="text-xs opacity-70 mb-2">Montage // Prise de vue</p>
+                                <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2 mt-auto">Direction Artistique - Montage - Composition - Mix (Live 12, Premiere Pro)</p>
+                            </div>
+                        </a>
 
-                            <!-- Instable -->
-                            <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="video-card block group click-sound">
-                                <div class="thumb-container">
-                                    <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable">
-                                    <div class="play-overlay"><div class="play-icon">▶</div></div>
-                                </div>
-                                <div class="p-4">
-                                    <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Instable</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Websérie</span></div>
-                                    <p class="text-xs opacity-70 mb-2">Post-production Audio</p>
-                                    <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2">Supervision sonore de A à Z, Prise de son, Post Production</p>
-                                </div>
-                            </a>
+                        <!-- Ouragan -->
+                        <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="video-card block group click-sound">
+                            <div class="thumb-container">
+                                <img src="https://img.youtube.com/vi/llGoiisrlu8/hqdefault.jpg" alt="Ouragan">
+                                <div class="play-overlay"><div class="play-icon">▶</div></div>
+                            </div>
+                            <div class="p-4 flex-grow flex flex-col">
+                                <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Ouragan</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Résidence</span></div>
+                                <p class="text-xs opacity-70 mb-2">Spatialisation Sonore</p>
+                                <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2 mt-auto">Routing Console, Patch, Spatialisation, Communication</p>
+                            </div>
+                        </a>
 
+                        <!-- Instable -->
+                        <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="video-card block group click-sound">
+                            <div class="thumb-container">
+                                <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable">
+                                <div class="play-overlay"><div class="play-icon">▶</div></div>
+                            </div>
+                            <div class="p-4 flex-grow flex flex-col">
+                                <div class="flex justify-between items-center mb-1"><h4 class="text-lg font-bold group-hover:text-current transition-colors">Instable</h4><span class="text-[10px] uppercase tracking-wide opacity-50 border border-white border-opacity-20 px-2 py-0.5 rounded">Websérie</span></div>
+                                <p class="text-xs opacity-70 mb-2">Post-production Audio</p>
+                                <p class="text-[10px] opacity-60 font-mono border-t border-white border-opacity-10 pt-2 mt-auto">Supervision sonore de A à Z, Prise de son, Post Production</p>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW 3: COMING SOON -->
+        <div class="mb-8">
+            <div class="theme-card bg-opacity-40 bg-black border border-white border-opacity-5 rounded-xl p-4 backdrop-blur-sm scroll-float overflow-hidden relative">
+                <div class="flex items-center gap-4 w-full">
+                    <span class="text-xs font-bold uppercase tracking-widest theme-icon-color animate-pulse shrink-0">Prochainement</span>
+                    <div class="h-4 w-[1px] bg-white opacity-20 shrink-0"></div>
+                    <div class="marquee-container">
+                        <div class="marquee-content text-xs md:text-sm font-mono opacity-80">
+                            Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres ! &nbsp;&nbsp;&nbsp; /// &nbsp;&nbsp;&nbsp; Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres !
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- COMING SOON SECTION (Marquee) -->
-                <div class="theme-card bg-opacity-40 bg-black border border-white border-opacity-5 rounded-xl p-4 backdrop-blur-sm scroll-float overflow-hidden relative">
-                    <div class="flex items-center gap-4 w-full">
-                        <span class="text-xs font-bold uppercase tracking-widest theme-icon-color animate-pulse shrink-0">Prochainement</span>
-                        <div class="h-4 w-[1px] bg-white opacity-20 shrink-0"></div>
-                        <div class="marquee-container">
-                            <div class="marquee-content text-xs md:text-sm font-mono opacity-80">
-                                Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres ! &nbsp;&nbsp;&nbsp; /// &nbsp;&nbsp;&nbsp; Documentaire, Court-Métrage, Clip Vidéo, et bien d'autres !
+        <!-- ROW 4: SEQUENCER (FULL WIDTH) -->
+        <div id="sequencer-window" class="mb-8">
+            <div id="sequencer" class="theme-card sequencer-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container scroll-float">
+                <div id="sequencer-os-header" class="window-header"></div>
+                <div class="window-content pt-6">
+                    <div class="flex flex-wrap justify-between items-center mb-6 gap-4 relative z-10 mt-2">
+                        <h3 class="text-sm uppercase tracking-widest opacity-80 font-bold flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>Mini Sequencer + Synth</h3>
+                        <div class="flex items-center gap-4 flex-wrap text-xs font-mono">
+                            <div class="flex flex-col"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black bg-opacity-50 border border-white border-opacity-20 rounded px-2 py-1 focus:outline-none theme-icon-color cursor-pointer click-sound" onchange="changeKit(this.value)"><option value="808">TR-808</option><option value="909">TR-909</option><option value="lofi">LO-FI</option></select></div>
+                            <div class="flex flex-col w-20"><label class="opacity-50 mb-1">BPM</label><span id="bpm-display" class="opacity-80">120</span><input type="range" min="60" max="180" value="120" class="theme-icon-color click-sound" oninput="changeBpm(this.value)"></div>
+                            <div class="flex flex-col w-20"><label class="opacity-50 mb-1">VOL</label><input type="range" min="0" max="100" value="50" class="theme-icon-color click-sound" oninput="changeMasterVolume(this.value)"></div>
+                            <div class="flex gap-2 items-end h-full mt-auto"><button id="play-btn" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20 click-sound" onclick="togglePlay()">PLAY</button><button class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20 click-sound" onclick="clearSequencer()">CLEAR</button></div>
+                        </div>
+                    </div>
+
+                    <!-- Main Sequencer + Visualizer Layout -->
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 relative z-10">
+                        <!-- Step Sequencer (3 cols) -->
+                        <div class="lg:col-span-3 bg-black bg-opacity-30 p-4 rounded-lg border border-white border-opacity-5 space-y-4">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
+                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
+                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
                             </div>
+                            <div class="pt-2 border-t border-white border-opacity-10">
+                                <div class="text-[10px] opacity-50 font-mono mb-2">SYNTH (PENTATONIC)</div>
+                                <div id="piano-roll" class="piano-roll-grid gap-1"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Visualizer (1 col) -->
+                        <div class="lg:col-span-1 flex flex-col justify-end">
+                            <div class="viz-container">
+                                <canvas id="scope-canvas"></canvas>
+                                <div class="peak-meter-container">
+                                    <div id="peak-meter-bar" class="peak-meter-bar"></div>
+                                </div>
+                            </div>
+                            <p class="text-[9px] font-mono opacity-40 text-center mt-2">OUTPUT MONITOR</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- SECTION: MINI LOOPER & SYNTH + VIZ -->
-                <div id="sequencer" class="theme-card sequencer-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container scroll-float">
-                    <div id="sequencer-os-header" class="window-header"></div>
-                    <div class="window-content pt-6">
-                        <div class="flex flex-wrap justify-between items-center mb-6 gap-4 relative z-10 mt-2">
-                            <h3 class="text-sm uppercase tracking-widest opacity-80 font-bold flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>Mini Sequencer + Synth</h3>
-                            <div class="flex items-center gap-4 flex-wrap text-xs font-mono">
-                                <div class="flex flex-col"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black bg-opacity-50 border border-white border-opacity-20 rounded px-2 py-1 focus:outline-none theme-icon-color cursor-pointer click-sound" onchange="changeKit(this.value)"><option value="808">TR-808</option><option value="909">TR-909</option><option value="lofi">LO-FI</option></select></div>
-                                <div class="flex flex-col w-20"><label class="opacity-50 mb-1">BPM</label><span id="bpm-display" class="opacity-80">120</span><input type="range" min="60" max="180" value="120" class="theme-icon-color click-sound" oninput="changeBpm(this.value)"></div>
-                                <div class="flex flex-col w-20"><label class="opacity-50 mb-1">VOL</label><input type="range" min="0" max="100" value="50" class="theme-icon-color click-sound" oninput="changeMasterVolume(this.value)"></div>
-                                <div class="flex gap-2 items-end h-full mt-auto"><button id="play-btn" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20 click-sound" onclick="togglePlay()">PLAY</button><button class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20 click-sound" onclick="clearSequencer()">CLEAR</button></div>
-                            </div>
-                        </div>
-
-                        <!-- Main Sequencer + Visualizer Layout -->
-                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 relative z-10">
-                            <!-- Step Sequencer (3 cols) -->
-                            <div class="lg:col-span-3 bg-black bg-opacity-30 p-4 rounded-lg border border-white border-opacity-5 space-y-4">
-                                <div class="space-y-2">
-                                    <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
-                                    <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
-                                    <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
-                                </div>
-                                <div class="pt-2 border-t border-white border-opacity-10">
-                                    <div class="text-[10px] opacity-50 font-mono mb-2">SYNTH (PENTATONIC)</div>
-                                    <div id="piano-roll" class="piano-roll-grid gap-1"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Visualizer (1 col) -->
-                            <div class="lg:col-span-1 flex flex-col justify-end">
-                                <div class="viz-container">
-                                    <canvas id="scope-canvas"></canvas>
-                                    <div class="peak-meter-container">
-                                        <div id="peak-meter-bar" class="peak-meter-bar"></div>
-                                    </div>
-                                </div>
-                                <p class="text-[9px] font-mono opacity-40 text-center mt-2">OUTPUT MONITOR</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -566,9 +577,9 @@
         <!-- Navigation -->
         <a href="#hero" class="dock-btn click-sound" onclick="restoreWindow('hero')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
         <a href="#skills-window" class="dock-btn click-sound" onclick="restoreWindow('skills-window')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg><span>Skills</span></a>
-        <a href="#parcours" class="dock-btn click-sound" onclick="restoreWindow('parcours')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg><span>Parcours</span></a>
-        <a href="#projets" class="dock-btn click-sound" onclick="restoreWindow('projets')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Projets</span></a>
-        <a href="#sequencer" class="dock-btn click-sound" onclick="restoreWindow('sequencer')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12h.01"/><path d="M16 6v12"/><path d="M8 6v12"/><path d="M20 6v12"/><path d="M4 6v12"/></svg><span>Loop</span></a>
+        <a href="#parcours-window" class="dock-btn click-sound" onclick="restoreWindow('parcours-window')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg><span>Parcours</span></a>
+        <a href="#projets-window" class="dock-btn click-sound" onclick="restoreWindow('projets-window')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Projets</span></a>
+        <a href="#sequencer-window" class="dock-btn click-sound" onclick="restoreWindow('sequencer-window')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12h.01"/><path d="M16 6v12"/><path d="M8 6v12"/><path d="M20 6v12"/><path d="M4 6v12"/></svg><span>Loop</span></a>
         
         <div class="dock-divider"></div>
         
@@ -830,6 +841,16 @@
             headers.forEach(h => {
                 let section = h.closest('section');
                 if(!section) section = h.closest('#skills-window');
+                
+                // Fallback: Check parent ID directly if section is null (e.g. skills window div)
+                if(!section) {
+                     let parent = h.parentElement;
+                     while(parent) {
+                         if(parent.id) { section = parent; break; }
+                         parent = parent.parentElement;
+                     }
+                }
+                
                 const winId = section ? section.id : 'unknown';
 
                 h.className = 'window-header';
