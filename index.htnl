@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jules Frémondière | Ingénieur du Son</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Inter:wght@400;500;600&family=Jost:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- FONTS & BASICS --- */
+        .font-fl { font-family: 'Arial', sans-serif; }
+        .font-ableton { font-family: 'Jost', 'Futura', 'Inter', sans-serif; }
+        .font-protools { font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', sans-serif; }
+        .font-rx { font-family: 'Montserrat', sans-serif; }
+        .font-tech { font-family: 'Share Tech Mono', monospace; }
+
+        html { scroll-behavior: smooth; }
+        body { transition: background-color 0.5s ease, color 0.3s ease; }
+        .theme-element { transition: all 0.4s ease; }
+
+        /* --- IMMERSIVE BOOT SCREEN --- */
+        #start-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #080808;
+            z-index: 100;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease-out, visibility 0.5s;
+        }
+        #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .power-btn {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: radial-gradient(circle, #222 0%, #000 100%);
+            color: #444;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .power-btn:hover {
+            color: #fff; border-color: rgba(255,255,255,0.5);
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+            text-shadow: 0 0 10px #fff;
+        }
+        .boot-text {
+            font-family: 'Share Tech Mono', monospace; color: #4ade80;
+            font-size: 14px; margin-top: 20px; height: 20px; opacity: 0;
+        }
+
+        /* --- BACKGROUNDS --- */
+        #theme-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            z-index: -1; opacity: 0.15; filter: blur(6px) grayscale(40%);
+            transition: background-image 0.5s ease-in-out, opacity 0.5s ease;
+        }
+        .hero-bg {
+            background-image: url('peace.jpg'); background-size: cover;
+            background-position: center bottom; background-attachment: scroll; position: relative;
+        }
+        .hero-overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8)); }
+        
+        .sequencer-card { position: relative; overflow: hidden; z-index: 1; }
+        .sequencer-card::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('console.jpg'); background-size: cover; background-position: center;
+            opacity: 0.15; z-index: -1;
+        }
+        
+        /* --- WINDOW CONTROLS --- */
+        .window-header {
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 28px;
+            display: flex; align-items: center;
+            padding: 0 10px; gap: 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px 10px 0 0;
+            z-index: 20;
+            cursor: grab;
+        }
+        /* Controls Alignment Classes */
+        .ctrl-left { justify-content: flex-start; flex-direction: row; }
+        .ctrl-right { justify-content: flex-end; flex-direction: row; }
+
+        /* Mac Style */
+        .win-ctrl-mac { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: transform 0.1s;}
+        .win-ctrl-mac:hover { transform: scale(1.1); filter: brightness(1.2); }
+        .mac-red { background: #ff5f56; }
+        .mac-yel { background: #ffbd2e; }
+        .mac-grn { background: #27c93f; }
+        
+        /* Windows Style */
+        .win-ctrl-win { 
+            width: 24px; height: 20px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            font-family: sans-serif; font-size: 10px; color: rgba(255,255,255,0.7);
+        }
+        .win-ctrl-win:hover { background: rgba(255,255,255,0.1); color: white; }
+        .win-close:hover { background: #e81123; }
+
+        /* Linux Style */
+        .win-ctrl-lin {
+            width: 16px; height: 16px; border-radius: 2px; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative; display: flex; justify-content: center; align-items: center; font-size: 8px;
+        }
+        .win-ctrl-lin:hover { background: rgba(255,255,255,0.2); }
+
+        /* Minimize/Maximize States */
+        .minimized .window-content { display: none; }
+        .minimized { height: 28px !important; min-height: 0 !important; padding-bottom: 0 !important; overflow: hidden; }
+        .maximized { position: fixed !important; top: 20px; left: 20px; right: 20px; bottom: 100px; z-index: 60; height: auto; }
+        .closed { display: none !important; }
+        
+        /* --- HYBRID VU METER --- */
+        .analog-vu-container { position: relative; width: 140px; height: 70px; overflow: hidden; margin: 0 auto; }
+        .analog-vu-bg {
+            width: 140px; height: 70px;
+            border-radius: 140px 140px 0 0;
+            background: radial-gradient(circle at 50% 100%, #fdf6e3 0%, #e8e6d9 60%, #dcd8c0 100%);
+            border: 4px solid #333; border-bottom: 0;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.2); position: relative;
+        }
+        /* The Gradient Zone - Controlled by Variable */
+        .analog-vu-bg::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 100%;
+            border-radius: 140px 140px 0 0;
+            background: var(--vu-gradient); /* DYNAMIC GRADIENT HERE */
+            opacity: 0.8;
+        }
+        .analog-needle {
+            position: absolute; bottom: 2px; left: 50%;
+            width: 2px; height: 60px;
+            background: var(--meter-color, #cc3300);
+            transform-origin: bottom center; transform: rotate(-90deg);
+            transition: transform 1.5s cubic-bezier(0.2, 1.2, 0.5, 1);
+            z-index: 10; box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .analog-needle::after {
+            content: ''; position: absolute; bottom: -4px; left: -4px;
+            width: 10px; height: 10px; background: #222; border-radius: 50%; border: 1px solid #666;
+        }
+        .analog-glare {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 140px 140px 0 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 40%, transparent 100%);
+            pointer-events: none; z-index: 20;
+        }
+        @keyframes needleFloat {
+            0% { transform: rotate(var(--target-deg)); }
+            25% { transform: rotate(calc(var(--target-deg) + 2deg)); }
+            50% { transform: rotate(calc(var(--target-deg) - 1deg)); }
+            75% { transform: rotate(calc(var(--target-deg) + 1deg)); }
+            100% { transform: rotate(var(--target-deg)); }
+        }
+        .group:hover .analog-needle { animation: needleFloat 0.8s ease-in-out infinite alternate; }
+
+        /* --- UNIFIED DOCK (Control Bar) --- */
+        .control-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 15px;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            z-index: 90;
+            transition: all 0.3s ease;
+            flex-wrap: wrap; /* Safety for small screens */
+            justify-content: center;
+        }
+        .control-dock:hover { border-color: rgba(255,255,255,0.3); }
+        
+        .dock-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.1); margin: 0 5px; }
+        
+        .dock-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            color: rgba(255,255,255,0.6); transition: all 0.2s; cursor: pointer;
+            padding: 6px 10px; border-radius: 6px;
+        }
+        .dock-btn:hover { color: #fff; background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        .dock-btn span { font-size: 8px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; }
+        
+        /* Theme Buttons */
+        .theme-btn-dock {
+            font-size: 9px; font-weight: 800; padding: 4px 8px; border-radius: 4px;
+            cursor: pointer; transition: all 0.2s; color: #000;
+            border: 1px solid transparent;
+            min-width: 30px; text-align: center;
+        }
+        .theme-btn-dock:hover { transform: scale(1.1); filter: brightness(1.1); }
+        .theme-btn-dock.active { border-color: white; box-shadow: 0 0 8px currentColor; }
+
+        /* New Photo Integration */
+        .tech-frame {
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+            padding: 4px;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        }
+        .tech-frame:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-2px); }
+        .tech-frame img { border-radius: 2px; }
+        
+        /* --- PIANO ROLL & INPUTS --- */
+        .piano-roll-grid { display: grid; grid-template-columns: 40px repeat(8, 1fr); gap: 2px; }
+        .piano-key { background: rgba(255,255,255,0.1); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-family: monospace; opacity: 0.7; }
+        .piano-cell { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 2px; cursor: pointer; }
+        .piano-cell.active { background-color: var(--accent-color, #fff); box-shadow: 0 0 5px var(--accent-color, #fff); }
+        .piano-cell.playing-col { background-color: rgba(255,255,255,0.1); }
+        .piano-cell.active.playing-col { filter: brightness(1.5); }
+        
+        /* Typography Override */
+        .hero-title { font-family: 'Montserrat', sans-serif !important; text-shadow: 0 5px 5px rgba(0,0,0,0.8); }
+        .scanlines { background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1)); background-size: 100% 4px; position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 10; opacity: 0.3; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(100,100,100,0.5); border-radius: 4px; }
+        
+        /* Sliders */
+        input[type=range] { -webkit-appearance: none; background: transparent; cursor: pointer; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: currentColor; margin-top: -5px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 1px solid white; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen font-fl overflow-x-hidden selection:bg-opacity-30 pb-32">
+
+    <!-- 1. IMMERSIVE BOOT SCREEN -->
+    <div id="start-screen">
+        <div class="text-center space-y-6">
+            <button onclick="startExperience()" class="power-btn group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 group-hover:opacity-100 transition-opacity"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+            </button>
+            <div id="boot-sequence" class="boot-text"></div>
+        </div>
+    </div>
+
+    <!-- Global Theme Background -->
+    <div id="theme-bg"></div>
+    <div id="scanlines" class="scanlines hidden"></div>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero-bg w-full h-[60vh] min-h-[400px] flex items-center justify-center relative mb-8 window-container">
+        <div class="absolute inset-0 hero-overlay"></div>
+        <div class="relative z-10 text-center space-y-6 px-4 window-content">
+            <div class="inline-block relative group cursor-default">
+                <h1 class="hero-title text-5xl md:text-7xl font-black tracking-tight mb-2 text-white leading-tight drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]">Jules Frémondière</h1>
+                <div class="h-1 w-0 group-hover:w-full transition-all duration-500 bg-white mx-auto opacity-80"></div>
+            </div>
+            <p class="text-xl md:text-2xl text-white font-medium tracking-wide h-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Étudiant Ingénieur du son polyvalent</p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="container mx-auto px-4 max-w-6xl relative z-20">
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            
+            <!-- Left: SKILLS -->
+            <div class="md:col-span-4 space-y-6" id="skills-window">
+                <div class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container">
+                    <div id="skills-os-header" class="window-header"></div> <!-- Controls injected -->
+                    <div class="window-content pt-8">
+                        <h3 class="text-sm uppercase tracking-widest opacity-60 mb-8 font-bold text-center border-b border-white border-opacity-10 pb-4">Niveaux de Compétence</h3>
+                        <div class="flex flex-col gap-10">
+                            <!-- Skill Items -->
+                            <div class="group cursor-default text-center">
+                                <div class="flex justify-between items-end mb-2 px-2"><span class="text-sm font-bold tracking-widest uppercase opacity-90">Mixage</span><span class="text-base font-tech font-bold" style="color:var(--meter-color)">66%</span></div>
+                                <div class="analog-vu-container"><div class="analog-vu-bg"></div><div class="analog-glare"></div><div class="analog-needle" style="transform: rotate(28.8deg); --target-deg: 28.8deg;"></div></div>
+                                <p class="text-sm opacity-70 leading-relaxed mt-2 px-2 text-left border-l-2 border-white border-opacity-20">Écoute active, prise de décision, sound design, Pro Tools (3 ans)</p>
+                            </div>
+                            <div class="group cursor-default text-center">
+                                <div class="flex justify-between items-end mb-2 px-2"><span class="text-sm font-bold tracking-widest uppercase opacity-90">Composition</span><span class="text-base font-tech font-bold" style="color:var(--meter-color)">70%</span></div>
+                                <div class="analog-vu-container"><div class="analog-vu-bg"></div><div class="analog-glare"></div><div class="analog-needle" style="transform: rotate(36deg); --target-deg: 36deg;"></div></div>
+                                <p class="text-sm opacity-70 leading-relaxed mt-2 px-2 text-left border-l-2 border-white border-opacity-20">Réflexion Artistique, Créativité, Imagination, Organisation</p>
+                            </div>
+                            <div class="group cursor-default text-center">
+                                <div class="flex justify-between items-end mb-2 px-2"><span class="text-sm font-bold tracking-widest uppercase opacity-90">Master/Repair</span><span class="text-base font-tech font-bold" style="color:var(--meter-color)">40%</span></div>
+                                <div class="analog-vu-container"><div class="analog-vu-bg"></div><div class="analog-glare"></div><div class="analog-needle" style="transform: rotate(-18deg); --target-deg: -18deg;"></div></div>
+                                <p class="text-sm opacity-70 leading-relaxed mt-2 px-2 text-left border-l-2 border-white border-opacity-20">Nettoyage Audio, Prise de recul, (Izotope RX, Ozone)</p>
+                            </div>
+                            <div class="group cursor-default text-center">
+                                <div class="flex justify-between items-end mb-2 px-2"><span class="text-sm font-bold tracking-widest uppercase opacity-90">Recording</span><span class="text-base font-tech font-bold" style="color:var(--meter-color)">70%</span></div>
+                                <div class="analog-vu-container"><div class="analog-vu-bg"></div><div class="analog-glare"></div><div class="analog-needle" style="transform: rotate(36deg); --target-deg: 36deg;"></div></div>
+                                <p class="text-sm opacity-70 leading-relaxed mt-2 px-2 text-left border-l-2 border-white border-opacity-20">Utilisation Mixette (SoundDevice), Prise de son Couple micro</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="md:col-span-8 space-y-6">
+                
+                <!-- MON PARCOURS -->
+                <div id="parcours" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container">
+                    <div id="parcours-os-header" class="window-header"></div>
+                    <div class="window-content pt-6">
+                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <span class="theme-icon-color opacity-80"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+                            Mon Parcours
+                        </h2>
+                        
+                        <div class="relative border-l-2 border-white border-opacity-20 ml-3 pl-8 space-y-12">
+                            <!-- Step 1 -->
+                            <div class="relative">
+                                <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-current theme-icon-color"></div>
+                                <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎭</span>
+                                <p class="text-sm opacity-60 mb-1 font-mono font-bold">2010 – 2014</p>
+                                <h4 class="text-lg font-bold">Danseur Hip-Hop & Interprète</h4>
+                                <p class="opacity-80 text-sm mt-1">Expériences scéniques, travail du rythme.</p>
+                            </div>
+                            <!-- Step 2 + Photo Tech Frame -->
+                            <div class="relative flex flex-col md:flex-row gap-4 items-start">
+                                <div class="flex-1">
+                                    <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div>
+                                    <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🧊</span>
+                                    <p class="text-sm opacity-60 mb-1 font-mono font-bold">2018 – 2022</p>
+                                    <h4 class="text-lg font-bold">Modélisation 3D & Exploration AV</h4>
+                                    <div class="mt-2 p-3 bg-white bg-opacity-5 rounded-lg border-l-4 theme-border-color">
+                                        <h5 class="font-bold flex items-center gap-2 text-sm uppercase tracking-wide mb-1"><span class="text-xl">🚀</span> Autodidacte</h5>
+                                        <ul class="list-disc list-inside text-sm opacity-80"><li>Composition musicale</li><li>Montage vidéo</li></ul>
+                                    </div>
+                                </div>
+                                <div class="tech-frame md:mt-2 w-32 shrink-0">
+                                    <img src="peace2.jpg" alt="Work" class="w-full h-32 object-cover grayscale hover:grayscale-0 transition duration-500">
+                                </div>
+                            </div>
+                            <!-- Step 3 -->
+                            <div class="relative">
+                                <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div>
+                                <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎓</span>
+                                <p class="text-sm opacity-60 mb-1 font-mono font-bold">2022</p>
+                                <h4 class="text-lg font-bold">BAC STI2D ITEC</h4>
+                                <p class="text-xs uppercase tracking-wider opacity-60">Lycée Livet</p>
+                            </div>
+                            <!-- Step 4 + Photo Tech Frame -->
+                            <div class="relative flex flex-col md:flex-row gap-4 items-start">
+                                <div class="flex-1">
+                                    <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-gray-500"></div>
+                                    <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🤝</span>
+                                    <p class="text-sm opacity-60 mb-1 font-mono font-bold">2023</p>
+                                    <h4 class="text-lg font-bold">Année de césure / Service Civique</h4>
+                                    <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="inline-flex items-center gap-2 mt-2 text-xs border border-white border-opacity-30 px-3 py-1 rounded hover:bg-white hover:bg-opacity-10 transition"><span>▶</span> Voir le projet vidéo</a>
+                                </div>
+                                <div class="tech-frame md:mt-2 w-32 shrink-0">
+                                    <img src="peace3.jpg" alt="Asso" class="w-full h-32 object-cover grayscale hover:grayscale-0 transition duration-500">
+                                </div>
+                            </div>
+                            <!-- Step 5 -->
+                            <div class="relative">
+                                <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full border-4 border-gray-600 bg-white animate-pulse"></div>
+                                <span class="text-2xl absolute -left-[80px] top-0 opacity-50">🎧</span>
+                                <p class="text-sm opacity-60 mb-1 font-mono font-bold text-current">2023 – 2026</p>
+                                <h4 class="text-lg font-bold">3iS - Institut International de l'Image et du Son</h4>
+                                <p class="text-xs uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJETS & COLLABORATIONS -->
+                <div id="projets" class="theme-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-8 backdrop-blur-md shadow-xl relative window-container">
+                    <div id="projects-os-header" class="window-header"></div>
+                    <div class="window-content pt-6">
+                        <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <span class="theme-icon-color opacity-80"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+                            Projets & Collaborations
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-5 rounded-lg bg-black bg-opacity-40 hover:bg-opacity-60 transition border border-transparent hover:border-white hover:border-opacity-20 group">
+                                <div class="flex justify-between mb-2"><span class="text-2xl">🎬</span><span class="text-xs opacity-50 px-2 py-1 border border-white border-opacity-10 rounded">Court-métrage</span></div>
+                                <h4 class="text-xl font-bold group-hover:text-current mb-1">Capharnaüm</h4><p class="text-sm opacity-70 mb-4">Sound Design & Mix</p>
+                                <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA&list=RDD-x6BQSPRuA&start_radio=1" target="_blank" class="block w-full text-center py-2 bg-white bg-opacity-5 hover:bg-opacity-20 rounded transition text-sm font-bold">▶ VOIR LE PROJET</a>
+                            </div>
+                            <div class="p-5 rounded-lg bg-black bg-opacity-40 hover:bg-opacity-60 transition border border-transparent hover:border-white hover:border-opacity-20 group">
+                                <div class="flex justify-between mb-2"><span class="text-2xl">🎵</span><span class="text-xs opacity-50 px-2 py-1 border border-white border-opacity-10 rounded">Clip Musical</span></div>
+                                <h4 class="text-xl font-bold group-hover:text-current mb-1">Long Day</h4><p class="text-sm opacity-70 mb-4">Montage // Prise de vue</p>
+                                <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs&list=RDw_9xYrwzKNs&start_radio=1" target="_blank" class="block w-full text-center py-2 bg-white bg-opacity-5 hover:bg-opacity-20 rounded transition text-sm font-bold">▶ VOIR LE PROJET</a>
+                            </div>
+                            <div class="p-5 rounded-lg bg-black bg-opacity-40 hover:bg-opacity-60 transition border border-transparent hover:border-white hover:border-opacity-20 group">
+                                <div class="flex justify-between mb-2"><span class="text-2xl">🎭</span><span class="text-xs opacity-50 px-2 py-1 border border-white border-opacity-10 rounded">Résidence</span></div>
+                                <h4 class="text-xl font-bold group-hover:text-current mb-1">Ouragan</h4><p class="text-sm opacity-70 mb-4">Spatialisation Sonore</p>
+                                <div class="flex gap-2"><a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="flex-1 text-center py-2 bg-white bg-opacity-5 hover:bg-opacity-20 rounded text-sm font-bold">▶ YOUTUBE</a><a href="https://www.instagram.com/p/DFVFY0EtxAQ/" target="_blank" class="flex-1 text-center py-2 bg-white bg-opacity-5 hover:bg-opacity-20 rounded text-sm font-bold">INSTA ↗</a></div>
+                            </div>
+                            <div class="p-5 rounded-lg bg-black bg-opacity-40 hover:bg-opacity-60 transition border border-transparent hover:border-white hover:border-opacity-20 group">
+                                <div class="flex justify-between mb-2"><span class="text-2xl">📺</span><span class="text-xs opacity-50 px-2 py-1 border border-white border-opacity-10 rounded">Websérie</span></div>
+                                <h4 class="text-xl font-bold group-hover:text-current mb-1">Instable</h4><p class="text-sm opacity-70 mb-4">Post-production Audio</p>
+                                <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="block w-full text-center py-2 bg-white bg-opacity-5 hover:bg-opacity-20 rounded transition text-sm font-bold">▶ VOIR LE PROJET</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION: MINI LOOPER & SYNTH -->
+                <div id="sequencer" class="theme-card sequencer-card bg-opacity-80 bg-[#1e1e1e] border border-white border-opacity-10 rounded-xl p-6 backdrop-blur-md shadow-xl relative window-container">
+                    <div id="sequencer-os-header" class="window-header"></div>
+                    <div class="window-content pt-6">
+                        <div class="flex flex-wrap justify-between items-center mb-6 gap-4 relative z-10 mt-2">
+                            <h3 class="text-sm uppercase tracking-widest opacity-80 font-bold flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>Mini Sequencer + Synth</h3>
+                            <div class="flex items-center gap-4 flex-wrap text-xs font-mono">
+                                <div class="flex flex-col"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black bg-opacity-50 border border-white border-opacity-20 rounded px-2 py-1 focus:outline-none theme-icon-color cursor-pointer" onchange="changeKit(this.value)"><option value="808">TR-808</option><option value="909">TR-909</option><option value="lofi">LO-FI</option></select></div>
+                                <div class="flex flex-col w-20"><label class="opacity-50 mb-1">BPM</label><span id="bpm-display" class="opacity-80">120</span><input type="range" min="60" max="180" value="120" class="theme-icon-color" oninput="changeBpm(this.value)"></div>
+                                <!-- Volume Slider Added -->
+                                <div class="flex flex-col w-20"><label class="opacity-50 mb-1">VOL</label><input type="range" min="0" max="100" value="50" class="theme-icon-color" oninput="changeMasterVolume(this.value)"></div>
+                                <div class="flex gap-2 items-end h-full mt-auto"><button id="play-btn" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20" onclick="togglePlay()">PLAY</button><button class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 px-3 py-1 rounded transition h-8 border border-white border-opacity-20" onclick="clearSequencer()">CLEAR</button></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg border border-white border-opacity-5 relative z-10 space-y-4">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
+                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
+                                <div class="flex items-center gap-2"><span class="text-[10px] w-8 opacity-50 font-mono">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
+                            </div>
+                            <div class="pt-2 border-t border-white border-opacity-10">
+                                <div class="text-[10px] opacity-50 font-mono mb-2">SYNTH (PENTATONIC)</div>
+                                <div id="piano-roll" class="piano-roll-grid gap-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="mt-32 flex flex-col items-center justify-center space-y-8 pb-32 relative z-20 scale-110 md:scale-125 transition-transform">
+            <div class="relative group cursor-pointer">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative w-32 h-32 rounded-full overflow-hidden border-2 border-white border-opacity-20 shadow-2xl">
+                    <img src="moi.png" alt="Jules Frémondière" class="w-full h-full object-cover">
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold tracking-tight">Me Contacter</h3>
+            <a href="https://linktr.ee/jlo.flp" target="_blank" class="px-10 py-4 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-full backdrop-blur-md border border-white border-opacity-20 transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] font-bold text-lg tracking-wide flex items-center gap-3">
+                <span>🔗</span> Linktree & Réseaux
+            </a>
+            <p class="text-xs opacity-40 font-mono pt-4">© 2025 Jules Frémondière</p>
+        </section>
+
+    </main>
+
+    <!-- UNIFIED CONTROL DOCK (Bottom Center) -->
+    <nav class="control-dock">
+        <!-- Navigation -->
+        <a href="#hero" class="dock-btn" onclick="restoreWindow('hero')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+        <a href="#parcours" class="dock-btn" onclick="restoreWindow('parcours')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg><span>Parcours</span></a>
+        <a href="#projets" class="dock-btn" onclick="restoreWindow('projets')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Projets</span></a>
+        <a href="#sequencer" class="dock-btn" onclick="restoreWindow('sequencer')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12h.01"/><path d="M16 6v12"/><path d="M8 6v12"/><path d="M20 6v12"/><path d="M4 6v12"/></svg><span>Loop</span></a>
+        
+        <div class="dock-divider"></div>
+        
+        <!-- Theme Selector -->
+        <div class="theme-selector">
+            <div class="theme-btn-dock bg-[#f08c35]" onclick="setTheme('fl')" title="FL Studio">FL</div>
+            <div class="theme-btn-dock bg-[#E6E6E6]" onclick="setTheme('ableton')" title="Ableton">LIVE</div>
+            <div class="theme-btn-dock bg-[#6232a8] text-white" onclick="setTheme('protools')" title="Pro Tools">PT</div>
+            <div class="theme-btn-dock bg-[#3ba0e6]" onclick="setTheme('rx')" title="RX Repair">RX</div>
+        </div>
+        
+        <div class="dock-divider"></div>
+        
+        <!-- Clock SMPTE Style -->
+        <div id="time-display" class="font-mono font-bold text-xs tracking-widest text-[#f08c35] bg-black px-2 py-1 rounded border border-white border-opacity-10">00:00:00:00</div>
+    </nav>
+
+    <script>
+        // --- 0. IMMERSIVE START ---
+        function startExperience() {
+            const btn = document.querySelector('.power-btn');
+            const txt = document.getElementById('boot-sequence');
+            btn.classList.add('scale-90', 'brightness-150');
+            txt.style.opacity = 1;
+            txt.textContent = "INITIALIZING AUDIO ENGINE...";
+            
+            // Audio Context Resume + Simple Beep
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            
+            // Simple Boot Sound
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+
+            setTimeout(() => {
+                document.getElementById('start-screen').classList.add('hidden-screen');
+            }, 600);
+        }
+
+        // --- 1. CLOCK FUNCTION (SMPTE) ---
+        function updateTime() {
+            const now = new Date();
+            const ms = Math.floor(now.getMilliseconds() / 10); // 2 digit ms
+            const pad = (num) => String(num).padStart(2, '0');
+            document.getElementById('time-display').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}:${pad(ms)}`;
+        }
+        setInterval(updateTime, 40); // Faster update for MS
+        updateTime();
+
+        // --- 2. WINDOW MANAGEMENT ---
+        function handleWindowControl(action, windowId) {
+            // Find window container correctly
+            const section = document.getElementById(windowId);
+            const card = section.classList.contains('window-container') ? section : section.querySelector('.window-container');
+            
+            if (!card) return;
+
+            if (action === 'close') {
+                card.classList.add('closed');
+            } else if (action === 'min') {
+                card.classList.toggle('minimized');
+            } else if (action === 'max') {
+                card.classList.toggle('maximized');
+            }
+        }
+
+        function restoreWindow(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth' });
+            
+            let card = section;
+            if(!section.classList.contains('window-container')) {
+               card = section.querySelector('.window-container'); 
+            }
+            if(card) {
+                card.classList.remove('closed', 'minimized');
+            }
+        }
+
+        // --- 3. THEME MANAGER ---
+        const body = document.body;
+        const themeBg = document.getElementById('theme-bg');
+
+        const themes = {
+            fl: {
+                fontClass: 'font-fl', bgImage: 'flstudio.png', fallbackBg: '#2d3033', text: 'text-[#d4d4d4]',
+                accent: '#2f5e38', // Vert Foncé
+                meterColor: '#f08c35', 
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #22c55e 130deg, #eab308 160deg, #ef4444 180deg)', // Saturation
+                scanlines: false, os: 'win'
+            },
+            ableton: {
+                fontClass: 'font-ableton', bgImage: 'ableton.png', fallbackBg: '#999999', text: 'text-[#333]', // Gris moyen
+                accent: '#ffbf00', // Orange
+                meterColor: '#27c93f',
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #86efac 130deg, #fde047 160deg, #fca5a5 180deg)', // Pastel
+                scanlines: false, os: 'mac'
+            },
+            protools: {
+                fontClass: 'font-protools', bgImage: 'protools.png', fallbackBg: '#1a1a1a', text: 'text-[#e0e0e0]',
+                accent: '#6232a8', meterColor: '#40b535',
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #15803d 130deg, #ca8a04 165deg, #b91c1c 180deg)', // Real
+                scanlines: false, os: 'lin'
+            },
+            rx: {
+                fontClass: 'font-rx', bgImage: 'rx10.png', fallbackBg: '#0b0f14', text: 'text-[#e6f1f7]',
+                accent: '#3ba0e6', meterColor: '#3ba0e6',
+                vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #fef08a 130deg, #fdba74 160deg, #fca5a5 180deg)', // Pastel Yellow-Orange
+                scanlines: true, os: 'win'
+            }
+        };
+
+        function setTheme(themeName) {
+            const theme = themes[themeName];
+            body.className = `min-h-screen overflow-x-hidden selection:bg-opacity-30 pb-32 ${theme.fontClass}`;
+            body.style.backgroundColor = theme.fallbackBg;
+            themeBg.style.backgroundImage = `url('${theme.bgImage}')`;
+            
+            // Ableton Pop Fix: increase opacity of background image slightly
+            if(themeName === 'ableton') themeBg.style.opacity = '0.3';
+            else themeBg.style.opacity = '0.15';
+
+            if (themeName === 'ableton') body.style.color = '#333';
+            else if (themeName === 'fl') body.style.color = '#d4d4d4';
+            else if (themeName === 'protools') body.style.color = '#e0e0e0';
+            else if (themeName === 'rx') body.style.color = '#e6f1f7';
+
+            // Card Colors
+            document.querySelectorAll('.theme-card').forEach(card => {
+                if (themeName === 'ableton') {
+                    card.style.backgroundColor = 'rgba(230, 230, 230, 0.9)';
+                    card.style.borderColor = 'rgba(0,0,0,0.1)';
+                    card.style.color = '#333';
+                } else {
+                    card.style.backgroundColor = (themeName === 'fl') ? 'rgba(40, 44, 48, 0.95)' : 'rgba(30, 30, 30, 0.9)';
+                    card.style.borderColor = ''; card.style.color = '';
+                }
+            });
+
+            // CSS Variables Update
+            document.documentElement.style.setProperty('--accent-color', theme.accent);
+            document.documentElement.style.setProperty('--meter-color', theme.meterColor);
+            document.documentElement.style.setProperty('--vu-gradient', theme.vuGradient);
+
+            // Accents
+            document.querySelectorAll('.theme-icon-color').forEach(i => i.style.color = theme.accent);
+            document.querySelectorAll('.theme-border-color').forEach(b => b.style.borderColor = theme.accent);
+            
+            const timeDisplay = document.getElementById('time-display');
+            timeDisplay.style.color = (themeName === 'ableton') ? '#333' : theme.accent;
+            timeDisplay.style.borderColor = (themeName === 'ableton') ? '#666' : 'rgba(255,255,255,0.1)';
+
+            // OS Controls
+            updateWindowControls(theme.os);
+        }
+
+        function updateWindowControls(osType) {
+            const headers = document.querySelectorAll('.window-header');
+            
+            headers.forEach(h => {
+                // Determine ID based on context
+                let section = h.closest('section');
+                // Fallback if not inside section (e.g. skills which is a div in layout)
+                if(!section) section = h.closest('#skills-window');
+                
+                const winId = section ? section.id : 'unknown';
+
+                h.className = 'window-header';
+                let btns = '';
+
+                if (osType === 'mac') {
+                    h.classList.add('ctrl-left');
+                    btns = `
+                        <div class="win-ctrl-mac mac-red" onclick="handleWindowControl('close', '${winId}')"></div>
+                        <div class="win-ctrl-mac mac-yel" onclick="handleWindowControl('min', '${winId}')"></div>
+                        <div class="win-ctrl-mac mac-grn" onclick="handleWindowControl('max', '${winId}')"></div>`;
+                } else if (osType === 'win') {
+                    h.classList.add('ctrl-right');
+                    btns = `
+                        <div class="win-ctrl-win" onclick="handleWindowControl('min', '${winId}')">_</div>
+                        <div class="win-ctrl-win" onclick="handleWindowControl('max', '${winId}')">□</div>
+                        <div class="win-ctrl-win win-close" onclick="handleWindowControl('close', '${winId}')">✕</div>`;
+                } else if (osType === 'lin') {
+                    h.classList.add('ctrl-right');
+                    btns = `
+                        <div class="win-ctrl-lin" style="border-radius:50%" onclick="handleWindowControl('min', '${winId}')"></div>
+                        <div class="win-ctrl-lin" onclick="handleWindowControl('max', '${winId}')"></div>
+                        <div class="win-ctrl-lin" style="background:rgba(255,255,255,0.2)" onclick="handleWindowControl('close', '${winId}')"></div>`;
+                }
+                h.innerHTML = btns;
+            });
+        }
+
+        // --- 3. SEQUENCER LOGIC ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120, masterVolume = 0.5, currentKit = '808';
+        const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
+        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; 
+        const melodyGrid = Array(5).fill().map(() => Array(8).fill(false));
+
+        function createStepBtn(track, index) {
+            const btn = document.createElement('button');
+            btn.className = `h-6 w-full rounded border border-white border-opacity-20 hover:bg-white hover:bg-opacity-20 transition step-btn bg-white bg-opacity-5`;
+            btn.onclick = () => {
+                sequence[track][index] = !sequence[track][index];
+                btn.classList.toggle('bg-current'); btn.classList.toggle('theme-fill');
+                btn.style.backgroundColor = sequence[track][index] ? getCurrentAccent() : '';
+            }; return btn;
+        }
+        function getCurrentAccent() { return getComputedStyle(document.documentElement).getPropertyValue('--accent-color'); }
+        ['kick', 'snare', 'hat'].forEach(t => { const c = document.getElementById(`track-${t}`); for(let i=0; i<8; i++) c.appendChild(createStepBtn(t, i)); });
+        
+        const pCont = document.getElementById('piano-roll');
+        for(let r=0; r<5; r++) {
+            const l = document.createElement('div'); l.className='piano-key'; l.innerText=["Bb","G","F","Eb","C"][r]; pCont.appendChild(l);
+            for(let c=0; c<8; c++) {
+                const cell = document.createElement('div'); cell.className='piano-cell'; cell.id=`note-${r}-${c}`;
+                cell.onclick=()=>{ melodyGrid[r][c]=!melodyGrid[r][c]; cell.classList.toggle('active'); }; pCont.appendChild(cell);
+            }
+        }
+
+        function playSound(type) {
+            const osc=audioCtx.createOscillator(), gain=audioCtx.createGain(), now=audioCtx.currentTime;
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            if(type==='kick'){ osc.freq(150,now); gain.env(masterVolume,now,0.5); }
+            else if(type==='snare'){ osc.type='triangle'; osc.freq(200,now); gain.env(masterVolume*0.8,now,0.2); }
+            else { osc.type='square'; osc.freq(1000,now); gain.env(masterVolume*0.2,now,0.05); }
+            osc.start(now); osc.stop(now+0.5);
+        }
+        AudioParam.prototype.env = function(v,t,d){ this.setValueAtTime(v,t); this.exponentialRampToValueAtTime(0.01,t+d); };
+        OscillatorNode.prototype.freq = function(v,t){ this.frequency.setValueAtTime(v,t); this.frequency.exponentialRampToValueAtTime(0.01,t+0.5); };
+
+        function playSynth(f,t) {
+            const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+            o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination);
+            g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(masterVolume*0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+            o.start(t); o.stop(t+0.3);
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying; document.getElementById('play-btn').textContent = isPlaying ? "STOP" : "PLAY";
+            if(isPlaying) { if(audioCtx.state === 'suspended') audioCtx.resume(); intervalId = setInterval(nextStep, (60/bpm)*1000/2); }
+            else { clearInterval(intervalId); resetVisuals(); }
+        }
+        function nextStep() {
+            resetVisuals();
+            const cols = document.querySelectorAll(`#track-kick button:nth-child(${currentStep+1}), #track-snare button:nth-child(${currentStep+1}), #track-hat button:nth-child(${currentStep+1})`);
+            cols.forEach(b => b.classList.add('active'));
+            for(let r=0; r<5; r++) document.getElementById(`note-${r}-${currentStep}`).classList.add('playing-col');
+            
+            const now = audioCtx.currentTime;
+            if(sequence.kick[currentStep]) playSound('kick');
+            if(sequence.snare[currentStep]) playSound('snare');
+            if(sequence.hat[currentStep]) playSound('hat');
+            for(let r=0; r<5; r++) if(melodyGrid[r][currentStep]) playSynth(notes[r], now);
+            currentStep = (currentStep + 1) % 8;
+        }
+        function resetVisuals() { document.querySelectorAll('.step-btn, .piano-cell').forEach(b => b.classList.remove('active', 'playing-col')); 
+            for(let r=0; r<5; r++) for(let c=0; c<8; c++) if(melodyGrid[r][c]) document.getElementById(`note-${r}-${c}`).classList.add('active');
+        }
+        function clearSequencer() {
+            sequence.kick.fill(0); sequence.snare.fill(0); sequence.hat.fill(0); melodyGrid.forEach(r=>r.fill(false));
+            document.querySelectorAll('.step-btn').forEach(b=>{b.style.backgroundColor=''; b.classList.remove('theme-fill','bg-current')});
+            document.querySelectorAll('.piano-cell').forEach(c=>c.classList.remove('active'));
+        }
+        function changeBpm(v) { bpm=v; document.getElementById('bpm-display').textContent=v; if(isPlaying){clearInterval(intervalId); intervalId=setInterval(nextStep,(60/bpm)*1000/2);} }
+        function changeKit(v) { currentKit=v; }
+        function changeMasterVolume(v) { masterVolume = v / 100; }
+
+        setTheme('fl');
+    </script>
+</body>
+</html>
