@@ -134,7 +134,7 @@
         @media (min-width: 768px) { .theme-pill { width: 36px; height: 36px; } }
         .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: rgba(0,0,0,0.6); }
 
-        /* --- SEQUENCER & TAB SYSTEM --- */
+        /* --- SEQUENCER --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
@@ -145,7 +145,6 @@
             filter: grayscale(100%) contrast(1.2);
         }
         
-        /* Tabs */
         .seq-tab-btn {
             background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
             color: rgba(255,255,255,0.6); padding: 4px 12px; border-radius: 6px;
@@ -160,9 +159,9 @@
         .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
         .sequencer-scroll-container::-webkit-scrollbar { display: none; }
         .sequencer-track-row { min-width: 500px; }
-        .sequencer-track-row-large { min-width: 800px; } /* Wider for 16 steps */
+        .sequencer-track-row-large { min-width: 800px; }
 
-        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: manipulation;}
+        .step-btn { height: 32px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: manipulation;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
         
@@ -220,16 +219,12 @@
         <section id="hero" class="col-span-12 glass-panel p-6 md:p-10 flex flex-col justify-center items-center text-center min-h-[80vh] md:min-h-[50vh] scroll-float relative group">
             <div class="relative z-10">
                 <span class="inline-block px-3 py-1 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
-                
                 <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)] leading-none md:leading-tight">Jules Frémondière</h1>
-                
                 <div class="inline-block bg-[var(--accent-color)]/20 border border-[var(--accent-color)] text-[var(--accent-color)] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest animate-pulse mb-4">
                     🔴 En recherche de stage
                 </div>
-
                 <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-2">Étudiant Ingénieur du son & Sound Designer</p>
                 <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition">jules.fremondiere@3is.fr</a>
-                
                 <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center w-full md:w-auto px-4 md:px-0">
                     <a href="#contact" class="px-8 py-3 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/20 text-center touch-manipulation">Me Contacter</a>
                     <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center justify-center gap-2 touch-manipulation">
@@ -245,25 +240,21 @@
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
             <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center grow">
-                
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
                     <div class="h-8 flex items-center"><h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4></div>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px] mt-1">Écoute active, prise de décision, Pro Tools.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <div class="h-8 flex items-center"><h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4></div>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px] mt-1">Créativité, Organisation, Live 12.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div>
                     <div class="h-8 flex items-center"><h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4></div>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px] mt-1">Nettoyage Audio, RX 10, Ozone.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <div class="h-8 flex items-center"><h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4></div>
@@ -332,17 +323,18 @@
                 <div class="relative z-10">
                     
                     <div class="flex justify-center gap-4 mb-4">
-                        <button id="btn-mini" onclick="switchSequencer('mini')" class="seq-tab-btn active-tab">MINI (8 Steps)</button>
-                        <button id="btn-large" onclick="switchSequencer('large')" class="seq-tab-btn">LARGE (16 Steps)</button>
+                        <button id="btn-mini" onclick="switchSequencer('mini')" class="seq-tab-btn active-tab touch-manipulation">MINI (8 Steps)</button>
+                        <button id="btn-large" onclick="switchSequencer('large')" class="seq-tab-btn touch-manipulation">LARGE (16 Steps)</button>
                     </div>
 
                     <div id="seq-mini-ui">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                             <div class="flex items-center gap-3 mb-2 md:mb-0">
                                 <div id="seq-led-mini" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
-                                <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">LOOP_STATION_V1</h3>
+                                <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">MINI_LOOP_8</h3>
                             </div>
                             <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-end w-full md:w-auto">
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-mini" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch/Lofi</option></select></div>
                                 <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"></div>
                                 <button id="play-btn-mini" onclick="togglePlay('mini')" class="px-4 md:px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">PLAY</button>
                                 <button onclick="clearSequencer('mini')" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">Clear</button>
@@ -378,7 +370,8 @@
                                 <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">PRO_SEQUENCER_X16</h3>
                             </div>
                             <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-end w-full md:w-auto">
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">SYNTH</label><select id="synth-type" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="sine">Sine</option><option value="square">Square</option><option value="sawtooth">Saw</option><option value="triangle">Triangle</option></select></div>
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-large" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch/Lofi</option></select></div>
+                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">WAVE</label><select id="synth-type" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full"><option value="sine">Sine</option><option value="square">Square</option><option value="sawtooth">Saw</option><option value="triangle">Tri</option></select></div>
                                 <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"></div>
                                 <button id="play-btn-large" onclick="togglePlay('large')" class="px-4 md:px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">PLAY</button>
                                 <button onclick="clearSequencer('large')" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60 grow md:grow-0 touch-manipulation">Clear</button>
@@ -388,10 +381,13 @@
                         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                             <div class="lg:col-span-3 space-y-3 overflow-hidden">
                                 <div class="sequencer-scroll-container">
-                                    <div class="sequencer-track-row-large space-y-3">
+                                    <div class="sequencer-track-row-large space-y-2">
                                         <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">KICK</span><div class="flex-1 grid grid-cols-16 gap-1" style="display:grid; grid-template-columns: repeat(16, 1fr); gap: 2px;" id="track-kick-large"></div></div>
                                         <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">SNAR</span><div class="flex-1 grid grid-cols-16 gap-1" style="display:grid; grid-template-columns: repeat(16, 1fr); gap: 2px;" id="track-snare-large"></div></div>
                                         <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">HATS</span><div class="flex-1 grid grid-cols-16 gap-1" style="display:grid; grid-template-columns: repeat(16, 1fr); gap: 2px;" id="track-hat-large"></div></div>
+                                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">PRC1</span><div class="flex-1 grid grid-cols-16 gap-1" style="display:grid; grid-template-columns: repeat(16, 1fr); gap: 2px;" id="track-perc1-large"></div></div>
+                                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">PRC2</span><div class="flex-1 grid grid-cols-16 gap-1" style="display:grid; grid-template-columns: repeat(16, 1fr); gap: 2px;" id="track-perc2-large"></div></div>
+                                        
                                         <div class="pt-4 border-t border-[var(--glass-border)] mt-4">
                                             <div class="flex items-center gap-3">
                                                 <span class="font-mono text-xs w-10 opacity-60 font-bold bg-black/50 px-1 rounded shrink-0">SYN</span>
@@ -537,7 +533,7 @@
         window.addEventListener('resize', setVh);
         setVh();
 
-        // --- AUDIO ENGINE ---
+        // --- AUDIO ENGINE CORE ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const masterGain = audioCtx.createGain();
         const analyser = audioCtx.createAnalyser();
@@ -578,7 +574,7 @@
         const notesMini = [466.16, 392.00, 349.23, 311.13, 261.63];
 
         // Data for Large (16 steps)
-        const seqLarge = { kick: Array(16).fill(0), snare: Array(16).fill(0), hat: Array(16).fill(0) };
+        const seqLarge = { kick: Array(16).fill(0), snare: Array(16).fill(0), hat: Array(16).fill(0), perc1: Array(16).fill(0), perc2: Array(16).fill(0) };
         const melodyLarge = Array(8).fill().map(() => Array(16).fill(false)); // 8 notes scale
         // C Major + High C: C5, B4, A4, G4, F4, E4, D4, C4
         const notesLarge = [523.25, 493.88, 440.00, 392.00, 349.23, 329.63, 293.66, 261.63]; 
@@ -592,20 +588,26 @@
         const pContMini = document.getElementById('piano-roll-mini');
         for(let r=0; r<5; r++) {
             for(let c=0; c<8; c++) {
-                const cell = createPianoCell(melodyMini, r, c);
+                const cell = document.createElement('div');
+                cell.className = `piano-cell h-5 click-sound touch-manipulation`;
+                cell.id = `note-mini-${r}-${c}`;
+                cell.onclick = () => { melodyMini[r][c] = !melodyMini[r][c]; cell.classList.toggle('active'); };
                 pContMini.appendChild(cell);
             }
         }
 
         // Large
-        ['kick', 'snare', 'hat'].forEach(t => { 
+        ['kick', 'snare', 'hat', 'perc1', 'perc2'].forEach(t => { 
             const c = document.getElementById(`track-${t}-large`); 
             for(let i=0; i<16; i++) c.appendChild(createStepBtn(seqLarge[t], i)); 
         });
         const pContLarge = document.getElementById('piano-roll-large');
         for(let r=0; r<8; r++) {
             for(let c=0; c<16; c++) {
-                const cell = createPianoCell(melodyLarge, r, c);
+                const cell = document.createElement('div');
+                cell.className = `piano-cell h-4 click-sound touch-manipulation`; // smaller height for large
+                cell.id = `note-large-${r}-${c}`;
+                cell.onclick = () => { melodyLarge[r][c] = !melodyLarge[r][c]; cell.classList.toggle('active'); };
                 pContLarge.appendChild(cell);
             }
         }
@@ -617,36 +619,6 @@
             btn.onclick = () => { arrayRef[index] = !arrayRef[index]; btn.classList.toggle('active'); };
             return btn;
         }
-        function createPianoCell(gridRef, r, c) {
-            const cell = document.createElement('div');
-            cell.className = `piano-cell h-5 click-sound touch-manipulation`;
-            cell.id = `note-${activeSequencer === 'mini' ? 'mini' : 'large'}-${r}-${c}`; // ID assignment happens during creation, but IDs need to be unique or handled carefully. 
-            // Better strategy: Assign explicit IDs based on context
-            // Correction: The builder runs once on load. We need explicit IDs.
-            return cell;
-        }
-        // Re-run builder logic to assign IDs correctly:
-        document.getElementById('piano-roll-mini').innerHTML = '';
-        for(let r=0; r<5; r++) {
-            for(let c=0; c<8; c++) {
-                const cell = document.createElement('div');
-                cell.className = `piano-cell h-5 click-sound touch-manipulation`;
-                cell.id = `note-mini-${r}-${c}`;
-                cell.onclick = () => { melodyMini[r][c] = !melodyMini[r][c]; cell.classList.toggle('active'); };
-                document.getElementById('piano-roll-mini').appendChild(cell);
-            }
-        }
-        document.getElementById('piano-roll-large').innerHTML = '';
-        for(let r=0; r<8; r++) {
-            for(let c=0; c<16; c++) {
-                const cell = document.createElement('div');
-                cell.className = `piano-cell h-4 click-sound touch-manipulation`; // smaller height for large
-                cell.id = `note-large-${r}-${c}`;
-                cell.onclick = () => { melodyLarge[r][c] = !melodyLarge[r][c]; cell.classList.toggle('active'); };
-                document.getElementById('piano-roll-large').appendChild(cell);
-            }
-        }
-
 
         // --- SWITCHER LOGIC ---
         function switchSequencer(mode) {
@@ -669,42 +641,117 @@
             }
         }
 
-        // --- AUDIO GENERATORS ---
-        function playSound(type) {
-           const now = audioCtx.currentTime;
-           if(type === 'kick') {
-               const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-               osc.connect(gain); gain.connect(masterGain);
-               osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.5);
-               gain.gain.setValueAtTime(1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-               osc.start(now); osc.stop(now + 0.5);
-           } else if(type === 'snare') {
-               const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-               osc.connect(gain); gain.connect(masterGain); osc.type='triangle'; osc.frequency.setValueAtTime(250, now);
-               gain.gain.setValueAtTime(0.6, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-               osc.start(now); osc.stop(now + 0.2);
-               const bSize = audioCtx.sampleRate * 0.2; const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
-               const d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
-               const n = audioCtx.createBufferSource(); n.buffer = b; const nGain = audioCtx.createGain(); const f = audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=1000;
-               n.connect(f); f.connect(nGain); nGain.connect(masterGain); nGain.gain.setValueAtTime(0.5, now); nGain.gain.exponentialRampToValueAtTime(0.01, now+0.15); n.start(now);
-           } else if(type === 'hat') {
-               const bSize = audioCtx.sampleRate * 0.1; const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
-               const d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
-               const n = audioCtx.createBufferSource(); n.buffer = b; const f = audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=5000;
-               const nGain = audioCtx.createGain(); n.connect(f); f.connect(nGain); nGain.connect(masterGain); nGain.gain.setValueAtTime(0.3, now); nGain.gain.exponentialRampToValueAtTime(0.01, now+0.05); n.start(now);
-           }
+        // --- AUDIO SOUND BANKS & SYNTHESIS ---
+        
+        // Define Kits
+        const kits = {
+            standard: {
+                kick: (t) => {
+                    const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                    o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(0.01,t+0.5);
+                    g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.5);o.start(t);o.stop(t+0.5);
+                },
+                snare: (t) => {
+                    const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.2,audioCtx.sampleRate),d=b.getChannelData(0);
+                    for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b;
+                    const f=audioCtx.createBiquadFilter();f.type='highpass';f.frequency.value=1000;
+                    const g=audioCtx.createGain(); n.connect(f);f.connect(g);g.connect(masterGain);
+                    g.gain.setValueAtTime(0.7,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2); n.start(t);
+                },
+                hat: (t) => {
+                    const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate),d=b.getChannelData(0);
+                    for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b;
+                    const f=audioCtx.createBiquadFilter();f.type='highpass';f.frequency.value=7000;
+                    const g=audioCtx.createGain(); n.connect(f);f.connect(g);g.connect(masterGain);
+                    g.gain.setValueAtTime(0.4,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05); n.start(t);
+                }
+            },
+            analog: { // TR-808 Style
+                kick: (t) => {
+                    const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                    o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(50,t+0.8); // Long boom
+                    g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.8);o.start(t);o.stop(t+0.8);
+                },
+                snare: (t) => {
+                    const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                    o.type='triangle';o.frequency.setValueAtTime(300,t);g.gain.setValueAtTime(0.5,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.1);o.start(t);o.stop(t+0.1);
+                    // Add noise
+                    const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.2,audioCtx.sampleRate),d=b.getChannelData(0);
+                    for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b;
+                    const g2=audioCtx.createGain(); n.connect(g2);g2.connect(masterGain);
+                    g2.gain.setValueAtTime(0.3,t);g2.gain.exponentialRampToValueAtTime(0.01,t+0.2); n.start(t);
+                },
+                hat: (t) => { // Tonal Hat
+                    const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                    o.type='square';o.frequency.setValueAtTime(800,t); // High pitch metallic
+                    const f=audioCtx.createBiquadFilter();f.type='highpass';f.frequency.value=8000;
+                    o.disconnect();o.connect(f);f.connect(g);
+                    g.gain.setValueAtTime(0.2,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05);o.start(t);o.stop(t+0.05);
+                }
+            },
+            lofi: { // Glitchy
+                kick: (t) => {
+                    const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                    o.type='square'; o.frequency.setValueAtTime(80,t);
+                    g.gain.setValueAtTime(0.8,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.1);o.start(t);o.stop(t+0.1);
+                },
+                snare: (t) => {
+                    const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate),d=b.getChannelData(0);
+                    for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; n.buffer=b; // Short burst
+                    const g=audioCtx.createGain(); n.connect(g);g.connect(masterGain);
+                    g.gain.setValueAtTime(0.8,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.05); n.start(t);
+                },
+                hat: (t) => {
+                    const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                    o.type='sawtooth'; o.frequency.setValueAtTime(10000,t);
+                    g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.02);o.start(t);o.stop(t+0.02);
+                }
+            }
+        };
+
+        // Percussion Sounds (FM Synthesis)
+        function playPerc(type, t) {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g); g.connect(masterGain);
+            
+            if (type === 'perc1') { // Woodblock / Clave ish
+                o.type = 'sine'; o.frequency.setValueAtTime(800, t);
+                g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                o.start(t); o.stop(t + 0.1);
+            } else { // Tom / Low Perc
+                o.type = 'triangle'; 
+                o.frequency.setValueAtTime(200, t); o.frequency.exponentialRampToValueAtTime(100, t + 0.15);
+                g.gain.setValueAtTime(0.4, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+                o.start(t); o.stop(t + 0.2);
+            }
+        }
+
+        // Main Drum Trigger
+        function playSound(type, kitName) {
+            const now = audioCtx.currentTime;
+            if(type === 'perc1' || type === 'perc2') {
+                playPerc(type, now);
+                return;
+            }
+            // Use selected kit or fallback to standard
+            const k = kits[kitName] || kits['standard'];
+            if(k[type]) k[type](now);
         }
         
+        // Synth Trigger (Polyphonic aware - simplified)
         function playSynth(freq, time, shape = 'sine') {
             const o=audioCtx.createOscillator(), g=audioCtx.createGain();
             o.type=shape; o.frequency.value=freq; o.connect(g); g.connect(masterGain); 
-            g.gain.setValueAtTime(0,time); g.gain.linearRampToValueAtTime(0.3,time+0.02); g.gain.exponentialRampToValueAtTime(0.001,time+0.3);
+            // Lower gain to prevent polyphonic clipping
+            g.gain.setValueAtTime(0,time); 
+            g.gain.linearRampToValueAtTime(0.15,time+0.02); 
+            g.gain.exponentialRampToValueAtTime(0.001,time+0.3);
             o.start(time); o.stop(time+0.3);
         }
 
         // --- PLAYBACK ---
         function togglePlay(target) {
-            // target matches activeSequencer usually
             isPlaying = !isPlaying;
             
             const btn = document.getElementById(`play-btn-${activeSequencer}`);
@@ -731,26 +778,39 @@
             if(activeSequencer === 'mini') {
                 const s = currentStep % 8;
                 highlightColumn('mini', s, 8, 5);
-                if(seqMini.kick[s]) playSound('kick');
-                if(seqMini.snare[s]) playSound('snare');
-                if(seqMini.hat[s]) playSound('hat');
+                const kName = document.getElementById('kit-select-mini').value;
+                
+                if(seqMini.kick[s]) playSound('kick', kName);
+                if(seqMini.snare[s]) playSound('snare', kName);
+                if(seqMini.hat[s]) playSound('hat', kName);
+                
                 for(let r=0; r<5; r++) if(melodyMini[r][s]) playSynth(notesMini[r], now, 'sine');
+                
                 currentStep = (currentStep + 1) % 8;
             } else {
                 const s = currentStep % 16;
                 highlightColumn('large', s, 16, 8);
-                if(seqLarge.kick[s]) playSound('kick');
-                if(seqLarge.snare[s]) playSound('snare');
-                if(seqLarge.hat[s]) playSound('hat');
+                const kName = document.getElementById('kit-select-large').value;
                 const synthShape = document.getElementById('synth-type').value;
-                for(let r=0; r<8; r++) if(melodyLarge[r][s]) playSynth(notesLarge[r], now, synthShape);
+
+                if(seqLarge.kick[s]) playSound('kick', kName);
+                if(seqLarge.snare[s]) playSound('snare', kName);
+                if(seqLarge.hat[s]) playSound('hat', kName);
+                if(seqLarge.perc1[s]) playSound('perc1', kName);
+                if(seqLarge.perc2[s]) playSound('perc2', kName);
+
+                // Polyphony: Loop through all rows for this step
+                for(let r=0; r<8; r++) {
+                    if(melodyLarge[r][s]) playSynth(notesLarge[r], now, synthShape);
+                }
+                
                 currentStep = (currentStep + 1) % 16;
             }
         }
 
         function highlightColumn(mode, colIdx, maxCols, maxRows) {
             // Tracks
-            const tracks = ['kick', 'snare', 'hat'];
+            const tracks = mode === 'mini' ? ['kick', 'snare', 'hat'] : ['kick', 'snare', 'hat', 'perc1', 'perc2'];
             tracks.forEach(t => {
                 const row = document.getElementById(`track-${t}-${mode}`);
                 if(row && row.children[colIdx]) row.children[colIdx].classList.add('playing-col');
@@ -770,7 +830,8 @@
             if(mode === 'mini') {
                 seqMini.kick.fill(0); seqMini.snare.fill(0); seqMini.hat.fill(0); melodyMini.forEach(r=>r.fill(false));
             } else {
-                seqLarge.kick.fill(0); seqLarge.snare.fill(0); seqLarge.hat.fill(0); melodyLarge.forEach(r=>r.fill(false));
+                seqLarge.kick.fill(0); seqLarge.snare.fill(0); seqLarge.hat.fill(0); 
+                seqLarge.perc1.fill(0); seqLarge.perc2.fill(0); melodyLarge.forEach(r=>r.fill(false));
             }
             // Update UI
             const context = document.getElementById(`seq-${mode}-ui`);
@@ -779,7 +840,6 @@
 
         function changeBpm(v) { 
             bpm = v; 
-            // Update both displays
             const displays = document.querySelectorAll('#bpm-display');
             displays.forEach(d => d.textContent = v);
             if(isPlaying) { clearInterval(intervalId); intervalId = setInterval(nextStep, (60/bpm)*1000/2); }
@@ -796,11 +856,9 @@
             requestAnimationFrame(drawVisualizer);
             analyser.getByteTimeDomainData(dataArray);
             
-            // Draw on both canvases (one is hidden but easier to draw both than check visibility)
             [ {ctx: scopeCtx, cvs: scopeCanvas}, {ctx: scopeCtxLarge, cvs: scopeCanvasLarge} ].forEach(obj => {
                 const {ctx, cvs} = obj;
-                if(cvs.offsetParent === null) return; // Skip if hidden
-                
+                if(cvs.offsetParent === null) return; 
                 ctx.clearRect(0, 0, cvs.width, cvs.height);
                 ctx.lineWidth = 2;
                 ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
