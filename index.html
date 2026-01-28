@@ -601,20 +601,34 @@
         // --- WINDOW MANAGEMENT ---
         function handleWindowControl(action, windowId) {
             const section = document.getElementById(windowId);
+            if (!section) return; // FIX: Safety check for section existence
+            
             const card = section.classList.contains('window-container') ? section : section.querySelector('.window-container');
+            
             if (!card) return;
 
-            if (action === 'close') card.classList.add('closed');
-            else if (action === 'min') card.classList.toggle('minimized');
-            else if (action === 'max') card.classList.toggle('maximized');
+            if (action === 'close') {
+                card.classList.add('closed');
+            } else if (action === 'min') {
+                card.classList.toggle('minimized');
+            } else if (action === 'max') {
+                card.classList.toggle('maximized');
+            }
         }
 
         function restoreWindow(sectionId) {
             const section = document.getElementById(sectionId);
+            if (!section) return;
+            
             section.scrollIntoView({ behavior: 'smooth' });
+            
             let card = section;
-            if(!section.classList.contains('window-container')) card = section.querySelector('.window-container');
-            if(card) card.classList.remove('closed', 'minimized');
+            if(!section.classList.contains('window-container')) {
+               card = section.querySelector('.window-container'); 
+            }
+            if(card) {
+                card.classList.remove('closed', 'minimized');
+            }
         }
 
         // --- THEME MANAGER ---
@@ -688,23 +702,39 @@
 
         function updateWindowControls(osType) {
             const headers = document.querySelectorAll('.window-header');
+            
             headers.forEach(h => {
-                let section = h.closest('section');
-                if(!section) section = h.closest('#skills-window');
-                // Ensure we get the ID of the section that contains the window-container
-                const winId = section ? section.id : 'unknown';
+                // Find ID: First look for a window-container with an ID, then look for a parent with an ID
+                const container = h.closest('.window-container');
+                let winId = container && container.id ? container.id : null;
+                
+                if (!winId) {
+                    // Fallback for wrapped containers (like skills-window)
+                    const parentWithId = h.closest('#skills-window');
+                    if(parentWithId) winId = parentWithId.id;
+                }
 
                 h.className = 'window-header';
                 let btns = '';
+
                 if (osType === 'mac') {
                     h.classList.add('ctrl-left');
-                    btns = `<div class="win-ctrl-mac mac-red" onclick="handleWindowControl('close', '${winId}')"></div><div class="win-ctrl-mac mac-yel" onclick="handleWindowControl('min', '${winId}')"></div><div class="win-ctrl-mac mac-grn" onclick="handleWindowControl('max', '${winId}')"></div>`;
+                    btns = `
+                        <div class="win-ctrl-mac mac-red" onclick="handleWindowControl('close', '${winId}')"></div>
+                        <div class="win-ctrl-mac mac-yel" onclick="handleWindowControl('min', '${winId}')"></div>
+                        <div class="win-ctrl-mac mac-grn" onclick="handleWindowControl('max', '${winId}')"></div>`;
                 } else if (osType === 'win') {
                     h.classList.add('ctrl-right');
-                    btns = `<div class="win-ctrl-win" onclick="handleWindowControl('min', '${winId}')">_</div><div class="win-ctrl-win" onclick="handleWindowControl('max', '${winId}')">□</div><div class="win-ctrl-win win-close" onclick="handleWindowControl('close', '${winId}')">✕</div>`;
+                    btns = `
+                        <div class="win-ctrl-win" onclick="handleWindowControl('min', '${winId}')">_</div>
+                        <div class="win-ctrl-win" onclick="handleWindowControl('max', '${winId}')">□</div>
+                        <div class="win-ctrl-win win-close" onclick="handleWindowControl('close', '${winId}')">✕</div>`;
                 } else if (osType === 'lin') {
                     h.classList.add('ctrl-right');
-                    btns = `<div class="win-ctrl-lin" style="border-radius:50%" onclick="handleWindowControl('min', '${winId}')"></div><div class="win-ctrl-lin" onclick="handleWindowControl('max', '${winId}')"></div><div class="win-ctrl-lin" style="background:rgba(255,255,255,0.2)" onclick="handleWindowControl('close', '${winId}')"></div>`;
+                    btns = `
+                        <div class="win-ctrl-lin" style="border-radius:50%" onclick="handleWindowControl('min', '${winId}')"></div>
+                        <div class="win-ctrl-lin" onclick="handleWindowControl('max', '${winId}')"></div>
+                        <div class="win-ctrl-lin" style="background:rgba(255,255,255,0.2)" onclick="handleWindowControl('close', '${winId}')"></div>`;
                 }
                 h.innerHTML = btns;
             });
