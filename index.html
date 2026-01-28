@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Frémondière Jules</title>
+    <title>DAW Portfolio - Jules F</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,14 +62,18 @@
         .win-header { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
         
+        /* Stats & Skills specific styles */
         .pie-chart {
             width: 90px; height: 90px; border-radius: 50%;
             background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0);
-            display: grid; place-items: center; flex-shrink: 0;
+            display: grid; place-items: center; flex-shrink: 0; margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
         }
+        .pie-chart:hover { transform: scale(1.05); }
         .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; }
         body.light-mode .pie-chart::after { background: #dcdcdc; }
-        .pie-chart span { position: relative; z-index: 10; font-family: 'Share Tech Mono'; font-size: 16px; font-weight: bold; }
+        .pie-chart span { position: relative; z-index: 10; font-family: 'Share Tech Mono'; font-size: 18px; font-weight: bold; }
 
         /* --- PROJECT CARDS --- */
         .project-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 16/10; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
@@ -78,10 +82,10 @@
         .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
 
-        /* --- DOCK & NAVIGATION --- */
+        /* --- DOCK --- */
         .dock-container {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; justify-content: center; /* FIXED ALIGNMENT */
+            display: flex; align-items: center; justify-content: center;
             gap: 12px; padding: 10px 20px;
             background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90;
@@ -101,22 +105,17 @@
         .theme-island {
             position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 90;
             background-color: rgba(20, 20, 20, 0.6); 
-            background-size: cover; background-position: center; /* Background Image Props */
-            backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+            background-size: cover; background-position: center;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
             border-radius: 100px; padding: 6px; display: flex; gap: 8px; transition: 0.5s;
         }
-        /* Overlay to darken the background image of the bar for icon visibility */
-        .theme-island::before {
-            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4); border-radius: 100px; z-index: -1; backdrop-filter: blur(2px);
-        }
+        .theme-island::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4); border-radius: 100px; z-index: -1; backdrop-filter: blur(2px); }
         .theme-pill { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(0,0,0,0.3); }
         .theme-pill:hover { opacity: 1; transform: scale(1.1); background: rgba(255,255,255,0.2); }
         .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: rgba(0,0,0,0.6); }
 
         /* --- SEQUENCER BG --- */
-        #sequencer-inner {
-            position: relative; overflow: hidden;
-        }
+        #sequencer-inner { position: relative; overflow: hidden; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
             background-image: url('console.png');
@@ -124,6 +123,15 @@
             opacity: 0.15; z-index: 0; pointer-events: none;
             mix-blend-mode: overlay;
         }
+        /* Piano Roll & Steps from original */
+        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; }
+        .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
+        body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
+        
+        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent;}
+        .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
+        .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
+        body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
 
         /* --- UTILS --- */
         #start-screen { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
@@ -164,11 +172,12 @@
         <section id="hero" class="col-span-12 glass-panel p-10 flex flex-col justify-center items-center text-center min-h-[50vh] scroll-float relative group">
             <div class="relative z-10">
                 <span class="inline-block px-3 py-1 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
-                <h1 class="hero-name">Jules Frémondière</h1>
-                <p class="text-xl md:text-2xl opacity-70 font-light tracking-wide max-w-2xl mx-auto">Étudiant Ingénieur du son & Sound Designer</p>
-                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-2 text-sm text-[var(--accent-color)] hover:underline font-mono">jules.fremondiere@3is.fr</a>
+                <h1 class="hero-name text-6xl md:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)]">Jules Frémondière</h1>
+                <p class="text-2xl md:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto">Étudiant Ingénieur du son & Sound Designer</p>
                 
-                <div class="mt-8 flex gap-4 justify-center">
+                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition">jules.fremondiere@3is.fr</a>
+                
+                <div class="mt-10 flex gap-4 justify-center">
                     <a href="#contact" class="px-8 py-3 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/20">Me Contacter</a>
                     <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> CV
@@ -182,35 +191,32 @@
                 <span class="win-title">Stats & Skills.sys</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-10 flex flex-col justify-center h-full space-y-10">
-                <div class="flex items-center gap-8 group">
-                    <div class="pie-chart" style="--percent: 66"><span>66%</span></div>
-                    <div>
-                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Mixage</h4>
-                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Écoute active, prise de décision, sound design, Pro Tools (3 ans).</p>
-                    </div>
+            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center">
+                
+                <div class="flex flex-col items-center text-center group w-full">
+                    <div class="pie-chart mb-4" style="--percent: 66"><span>66%</span></div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Mixage</h4>
+                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Écoute active, prise de décision, sound design, Pro Tools (3 ans).</p>
                 </div>
-                <div class="flex items-center gap-8 group">
-                    <div class="pie-chart" style="--percent: 70"><span>70%</span></div>
-                    <div>
-                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Composition</h4>
-                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Réflexion Artistique, Créativité, Imagination, Organisation.</p>
-                    </div>
+
+                <div class="flex flex-col items-center text-center group w-full">
+                    <div class="pie-chart mb-4" style="--percent: 70"><span>70%</span></div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Composition</h4>
+                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Réflexion Artistique, Créativité, Imagination, Organisation.</p>
                 </div>
-                <div class="flex items-center gap-8 group">
-                    <div class="pie-chart" style="--percent: 40"><span>40%</span></div>
-                    <div>
-                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Master/Repair</h4>
-                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Nettoyage Audio, Prise de recul, (Izotope RX, Ozone).</p>
-                    </div>
+
+                <div class="flex flex-col items-center text-center group w-full">
+                    <div class="pie-chart mb-4" style="--percent: 40"><span>40%</span></div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Master/Repair</h4>
+                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Nettoyage Audio, Prise de recul, (Izotope RX, Ozone).</p>
                 </div>
-                <div class="flex items-center gap-8 group">
-                    <div class="pie-chart" style="--percent: 70"><span>70%</span></div>
-                    <div>
-                        <h4 class="text-xl font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Recording</h4>
-                        <p class="text-base opacity-70 leading-relaxed max-w-xs">Utilisation Mixette (SoundDevice), Prise de son Couple micro.</p>
-                    </div>
+
+                <div class="flex flex-col items-center text-center group w-full">
+                    <div class="pie-chart mb-4" style="--percent: 70"><span>70%</span></div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-[var(--accent-color)] mb-2">Recording</h4>
+                    <p class="text-sm opacity-70 leading-relaxed max-w-[200px]">Utilisation Mixette (SoundDevice), Prise de son Couple micro.</p>
                 </div>
+
             </div>
         </section>
 
@@ -278,6 +284,7 @@
                             <h3 class="font-tech text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">MINI_SEQUENCER_8_STEPS</h3>
                         </div>
                         <div class="flex gap-4 font-mono text-[10px] items-end">
+                             <div class="flex flex-col"><label class="opacity-50 mb-1">KIT</label><select id="kit-select" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)]"><option value="808">TR-808</option><option value="909">TR-909</option></select></div>
                             <div class="flex flex-col"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"><span id="bpm-display" class="mt-1">120</span></div>
                             <button id="play-btn" onclick="togglePlay()" class="px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60">PLAY LOOP</button>
                             <button onclick="clearSequencer()" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60">Clear</button>
@@ -422,15 +429,16 @@
     </nav>
 
     <script>
-        // --- AUDIO ENGINE ---
+        // --- AUDIO ENGINE RESTORED (Original Logic) ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const masterGain = audioCtx.createGain();
         const analyser = audioCtx.createAnalyser();
         masterGain.connect(analyser); analyser.connect(audioCtx.destination);
-        analyser.fftSize = 256; masterGain.gain.value = 0.6;
+        analyser.fftSize = 256; masterGain.gain.value = 0.5;
 
+        // CLICK SOUND
         function playClickSound() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.type = 'triangle'; osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
@@ -442,11 +450,13 @@
             document.querySelectorAll('.click-sound, a, button').forEach(el => el.addEventListener('click', playClickSound));
         });
 
-        // SEQUENCER LOGIC
-        let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120;
+        // SEQUENCER VARS
+        let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120, currentKit = '808';
         const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
-        const notes = [466.16, 392.00, 349.23, 311.13, 261.63];
+        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; 
         const melodyGrid = Array(5).fill().map(() => Array(8).fill(false));
+
+        // VISUALIZER
         const scopeCanvas = document.getElementById('scope-canvas');
         const scopeCtx = scopeCanvas.getContext('2d');
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -501,7 +511,6 @@
             document.documentElement.style.setProperty('--accent-color', t.accent);
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`;
             
-            // Set Theme Widget Background
             const widget = document.getElementById('theme-widget');
             widget.style.backgroundImage = `url('${t.bar}')`;
             
@@ -509,7 +518,7 @@
             document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active');
         }
 
-        // SEQUENCER BUILD
+        // SEQUENCER UI
         function createStepBtn(track, index) {
             const btn = document.createElement('button');
             btn.className = `step-btn click-sound`;
@@ -517,6 +526,7 @@
             return btn;
         }
         ['kick', 'snare', 'hat'].forEach(t => { const c = document.getElementById(`track-${t}`); for(let i=0; i<8; i++) c.appendChild(createStepBtn(t, i)); });
+
         const pCont = document.getElementById('piano-roll');
         for(let r=0; r<5; r++) {
             for(let c=0; c<8; c++) {
@@ -525,32 +535,53 @@
             }
         }
 
-        // AUDIO FUNCTIONS
+        // --- ORIGINAL SOUND ENGINE LOGIC ---
         function playSound(type) {
-            const now = audioCtx.currentTime;
-            if(type === 'kick') {
-                const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
-                o.frequency.setValueAtTime(150,now);o.frequency.exponentialRampToValueAtTime(0.01,now+0.5);
-                g.gain.setValueAtTime(1,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.5);o.start(now);o.stop(now+0.5);
-            } else if (type === 'snare') {
-                const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
-                o.type='triangle';o.frequency.setValueAtTime(200,now);g.gain.setValueAtTime(0.5,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.2);o.start(now);o.stop(now+0.2);
-                const b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.2,audioCtx.sampleRate),d=b.getChannelData(0);
-                for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
-                const n=audioCtx.createBufferSource(),ng=audioCtx.createGain();n.buffer=b;n.connect(ng);ng.connect(masterGain);
-                ng.gain.setValueAtTime(0.4,now);ng.gain.exponentialRampToValueAtTime(0.01,now+0.2);n.start(now);
-            } else if (type === 'hat') {
-                const b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate),d=b.getChannelData(0);
-                for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
-                const n=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),ng=audioCtx.createGain();
-                n.buffer=b;f.type='highpass';f.frequency.value=5000;n.connect(f);f.connect(ng);ng.connect(masterGain);
-                ng.gain.setValueAtTime(0.3,now);ng.gain.exponentialRampToValueAtTime(0.01,now+0.05);n.start(now);
-            }
+           const now = audioCtx.currentTime;
+           if(type === 'kick') {
+               const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+               osc.connect(gain); gain.connect(masterGain);
+               osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.5);
+               gain.gain.setValueAtTime(1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+               osc.start(now); osc.stop(now + 0.5);
+               // Click
+               const cOsc = audioCtx.createOscillator(); const cGain = audioCtx.createGain();
+               cOsc.connect(cGain); cGain.connect(masterGain); cOsc.type='square'; cOsc.frequency.value=2000;
+               cGain.gain.setValueAtTime(0.2, now); cGain.gain.exponentialRampToValueAtTime(0.01, now+0.02);
+               cOsc.start(now); cOsc.stop(now+0.02);
+           }
+           else if(type === 'snare') {
+               const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+               osc.connect(gain); gain.connect(masterGain); osc.type='triangle'; osc.frequency.setValueAtTime(250, now);
+               gain.gain.setValueAtTime(0.6, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+               osc.start(now); osc.stop(now + 0.2);
+               // Noise
+               const bSize = audioCtx.sampleRate * 0.2; const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
+               const d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
+               const n = audioCtx.createBufferSource(); n.buffer = b;
+               const nGain = audioCtx.createGain(); const f = audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=1000;
+               n.connect(f); f.connect(nGain); nGain.connect(masterGain);
+               nGain.gain.setValueAtTime(0.5, now); nGain.gain.exponentialRampToValueAtTime(0.01, now+0.15);
+               n.start(now);
+           }
+           else if(type === 'hat') {
+               const bSize = audioCtx.sampleRate * 0.1; const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
+               const d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
+               const n = audioCtx.createBufferSource(); n.buffer = b;
+               const f = audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=5000;
+               const nGain = audioCtx.createGain(); n.connect(f); f.connect(nGain); nGain.connect(masterGain);
+               nGain.gain.setValueAtTime(0.3, now); nGain.gain.exponentialRampToValueAtTime(0.01, now+0.05);
+               n.start(now);
+           }
         }
+        
         function playSynth(f,t) {
-            const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=f;o.connect(g);g.connect(masterGain);
-            g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.3,t+0.05);g.gain.exponentialRampToValueAtTime(0.001,t+0.4);o.start(t);o.stop(t+0.4);
+            const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+            o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(masterGain); 
+            g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+            o.start(t); o.stop(t+0.3);
         }
+
         function togglePlay() {
             isPlaying = !isPlaying; 
             document.getElementById('play-btn').innerText = isPlaying ? "STOP LOOP" : "PLAY LOOP";
