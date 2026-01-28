@@ -62,7 +62,6 @@
         .win-header { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
         
-        /* Stats & Skills specific styles */
         .pie-chart {
             width: 90px; height: 90px; border-radius: 50%;
             background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0);
@@ -82,14 +81,14 @@
         .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
 
-        /* --- DOCK (FIXED ALIGNMENT) --- */
+        /* --- DOCK (ALIGNED) --- */
         .dock-container {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; justify-content: center; /* Center horizontally */
+            display: flex; align-items: center; justify-content: center;
             gap: 20px; padding: 12px 30px;
             background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90;
-            height: 70px; /* Fixed height for vertical alignment */
+            height: 70px;
         }
         body.light-mode .dock-container { background: rgba(200, 200, 200, 0.8); border-color: rgba(0,0,0,0.1); }
         
@@ -126,10 +125,10 @@
             background-image: url('console.png');
             background-size: cover; background-position: center;
             opacity: 0.2; z-index: 0; pointer-events: none;
-            mix-blend-mode: soft-light; /* Subtil */
+            mix-blend-mode: soft-light;
             filter: grayscale(100%) contrast(1.2);
         }
-        /* Piano Roll & Steps */
+        
         .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
@@ -180,9 +179,7 @@
                 <span class="inline-block px-3 py-1 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
                 <h1 class="hero-name text-6xl md:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)]">Jules Frémondière</h1>
                 <p class="text-2xl md:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto">Étudiant Ingénieur du son & Sound Designer</p>
-                
                 <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition">jules.fremondiere@3is.fr</a>
-                
                 <div class="mt-10 flex gap-4 justify-center">
                     <a href="#contact" class="px-8 py-3 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/20">Me Contacter</a>
                     <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center gap-2">
@@ -198,31 +195,26 @@
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
             <div class="p-8 grid grid-cols-2 gap-8 items-center justify-items-center grow">
-                
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Mixage</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Écoute active, prise de décision, Pro Tools.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Composition</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Créativité, Organisation, Live 12.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Repair</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Nettoyage Audio, RX 10, Ozone.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Recording</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">SoundDevice, Couple micro.</p>
                 </div>
-
             </div>
         </section>
 
@@ -325,7 +317,7 @@
                     <img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg" alt="Capharnaüm">
                     <div class="project-info">
                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Court-Métrage</span>
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Court-Métrage</span>
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Capharnaüm</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Sound Design & Mix</p>
@@ -334,10 +326,10 @@
                 </a>
 
                 <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group click-sound">
-                    <img src="https://img.youtube.com/vi/1RaxSos9wtk/maxresdefault.jpg" alt="Remix IVY">
+                    <img src="https://img.youtube.com/vi/1RaxSos9wtk/hqdefault.jpg" alt="Remix IVY">
                     <div class="project-info">
                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Remix</span>
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Remix</span>
                         </div>
                         <h4 class="text-3xl font-bold mb-2">IVY - Baby Hayabusa</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Production Musicale</p>
@@ -349,7 +341,7 @@
                     <img src="https://img.youtube.com/vi/TiqWW0e6RSg/maxresdefault.jpg" alt="Désaccordés">
                     <div class="project-info">
                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Émission TV Direct</span>
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Émission TV Direct</span>
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Désaccordés</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Ingénieur Son Direct</p>
@@ -361,7 +353,7 @@
                     <img src="https://img.youtube.com/vi/w_9xYrwzKNs/maxresdefault.jpg" alt="Long Day">
                     <div class="project-info">
                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Clip Musical</span>
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Clip Musical</span>
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Long Day</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Montage // Prise de vue</p>
@@ -373,7 +365,7 @@
                     <img src="https://img.youtube.com/vi/llGoiisrlu8/maxresdefault.jpg" alt="Ouragan">
                     <div class="project-info">
                          <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Résidence</span>
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Résidence</span>
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Ouragan</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Spatialisation Sonore</p>
@@ -385,7 +377,7 @@
                     <img src="https://img.youtube.com/vi/U3lwDA_INOQ/maxresdefault.jpg" alt="Instable">
                     <div class="project-info">
                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Websérie</span>
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Websérie</span>
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Instable</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Post-production Audio</p>
@@ -435,7 +427,7 @@
     </nav>
 
     <script>
-        // --- AUDIO ENGINE RESTORED (Original Logic) ---
+        // --- AUDIO ENGINE ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const masterGain = audioCtx.createGain();
         const analyser = audioCtx.createAnalyser();
@@ -541,7 +533,7 @@
             }
         }
 
-        // --- ORIGINAL SOUND ENGINE LOGIC ---
+        // AUDIO GENERATORS
         function playSound(type) {
            const now = audioCtx.currentTime;
            if(type === 'kick') {
@@ -550,7 +542,6 @@
                osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(50, now + 0.5);
                gain.gain.setValueAtTime(1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
                osc.start(now); osc.stop(now + 0.5);
-               // Click
                const cOsc = audioCtx.createOscillator(); const cGain = audioCtx.createGain();
                cOsc.connect(cGain); cGain.connect(masterGain); cOsc.type='square'; cOsc.frequency.value=2000;
                cGain.gain.setValueAtTime(0.2, now); cGain.gain.exponentialRampToValueAtTime(0.01, now+0.02);
@@ -561,7 +552,6 @@
                osc.connect(gain); gain.connect(masterGain); osc.type='triangle'; osc.frequency.setValueAtTime(250, now);
                gain.gain.setValueAtTime(0.6, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
                osc.start(now); osc.stop(now + 0.2);
-               // Noise
                const bSize = audioCtx.sampleRate * 0.2; const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
                const d = b.getChannelData(0); for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
                const n = audioCtx.createBufferSource(); n.buffer = b;
