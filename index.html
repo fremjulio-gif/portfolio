@@ -27,17 +27,12 @@
         .font-rx { font-family: 'Montserrat', sans-serif; }
         .font-tech { font-family: 'Share Tech Mono', monospace; }
 
-        /* --- GLOBAL THEMES --- */
-        html, body {
-            max-width: 100vw;
-            overflow-x: hidden; /* Empêche le scroll horizontal global */
-        }
-
+        /* --- GLOBAL & LIGHT MODE --- */
+        html, body { max-width: 100vw; overflow-x: hidden; }
         body { 
             background-color: #050505; color: var(--glass-text); 
             transition: background-color 0.6s ease, color 0.4s ease;
-            -webkit-text-size-adjust: 100%;
-            margin: 0; padding: 0;
+            -webkit-text-size-adjust: 100%; margin: 0; padding: 0;
         }
         
         body.light-mode {
@@ -48,10 +43,7 @@
         }
         body.light-mode .scanlines { opacity: 0.05; }
         body.light-mode .project-info { background: linear-gradient(to top, rgba(220,220,220,0.95), rgba(220,220,220,0.8), transparent); color: black; }
-
-        body[data-theme='protools'] {
-            background-color: #262626; 
-        }
+        body[data-theme='protools'] { background-color: #262626; }
 
         /* --- GLASS PANELS --- */
         .glass-panel {
@@ -61,8 +53,7 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
             border-radius: 24px; overflow: hidden;
             transition: transform 0.4s var(--ease-ios), border-color 0.4s ease;
-            position: relative;
-            width: 100%; /* Force width fit */
+            position: relative; width: 100%;
         }
         
         @media (hover: hover) {
@@ -76,11 +67,8 @@
         /* --- LAYOUT --- */
         .bento-grid {
             display: grid; grid-template-columns: repeat(12, 1fr);
-            gap: 24px; 
-            padding: 100px 24px 140px;
-            max-width: 1600px; margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
+            gap: 24px; padding: 100px 24px 140px;
+            max-width: 1600px; margin: 0 auto; width: 100%; box-sizing: border-box;
         }
 
         /* --- WIDGETS --- */
@@ -88,33 +76,22 @@
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
         
         .pie-chart {
-            width: 80px; height: 80px;
-            border-radius: 50%;
+            width: 80px; height: 80px; border-radius: 50%;
             background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0);
             display: grid; place-items: center; flex-shrink: 0; margin: 0 auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            transition: transform 0.3s;
-            position: relative; z-index: 10;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: transform 0.3s; position: relative; z-index: 10;
         }
         @media (min-width: 768px) { .pie-chart { width: 90px; height: 90px; } }
-
         .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; z-index: 1; }
         body.light-mode .pie-chart::after { background: #dcdcdc; }
         body[data-theme='protools'] .pie-chart::after { background: #262626; } 
-        
         .pie-chart span { position: relative; z-index: 20; font-family: 'Share Tech Mono'; font-size: 16px; md:font-size: 18px; font-weight: bold; }
 
         /* --- PROJECT CARDS --- */
-        .project-card { 
-            position: relative; border-radius: 16px; overflow: hidden; 
-            aspect-ratio: 4/3; 
-            cursor: pointer; border: 1px solid rgba(255,255,255,0.1); 
-        }
+        .project-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
         @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
-
         .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
         body.light-mode .project-card img { filter: brightness(1); }
-        
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
         @media (min-width: 768px) { .project-info { padding: 24px; } }
 
@@ -125,12 +102,9 @@
             gap: 16px; padding: 10px 24px;
             background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90;
-            height: 60px;
-            width: 90%; /* Prevent overflow on small screens */
-            max-width: 500px;
+            height: 60px; width: 90%; max-width: 500px;
         }
         @media (min-width: 768px) { .dock-container { bottom: 30px; gap: 20px; padding: 12px 30px; height: 70px; width: auto; max-width: none; } }
-
         body.light-mode .dock-container { background: rgba(200, 200, 200, 0.8); border-color: rgba(0,0,0,0.1); }
         
         .dock-icon {
@@ -139,62 +113,52 @@
             height: 100%; width: auto; min-width: 40px;
         }
         @media (min-width: 1024px) { .dock-icon { width: 50px; } }
-
         body.light-mode .dock-icon { color: #444; }
         .dock-icon svg { width: 24px; height: 24px; }
         @media (min-width: 1024px) { .dock-icon svg { width: 22px; height: 22px; } }
-
         .dock-icon span { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: none;}
         @media (min-width: 1024px) { .dock-icon span { display: block; } }
-
         .dock-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.1); }
         @media (min-width: 768px) { .dock-divider { height: 30px; } }
 
         /* --- THEME ISLAND --- */
         .theme-island {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 90;
-            background-color: rgba(20, 20, 20, 0.6); 
-            background-size: cover; background-position: center;
+            background-color: rgba(20, 20, 20, 0.6); background-size: cover; background-position: center;
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 100px; padding: 4px; display: flex; gap: 6px; transition: 0.5s;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 4px; display: flex; gap: 6px; transition: 0.5s;
         }
         @media (min-width: 768px) { .theme-island { top: 24px; padding: 6px; gap: 8px; } }
-
         .theme-island::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4); border-radius: 100px; z-index: -1; backdrop-filter: blur(2px); }
         .theme-pill { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(0,0,0,0.3); }
         @media (min-width: 768px) { .theme-pill { width: 36px; height: 36px; } }
         .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: rgba(0,0,0,0.6); }
 
-        /* --- SEQUENCER --- */
+        /* --- SEQUENCER BG --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
             background-image: url('console.png');
             background-size: cover; background-position: center;
-            opacity: 0.2; z-index: 0; pointer-events: none;
-            mix-blend-mode: soft-light;
+            opacity: 0.15; z-index: 0; pointer-events: none;
+            mix-blend-mode: overlay;
             filter: grayscale(100%) contrast(1.2);
         }
-        
-        .sequencer-scroll-container {
-            overflow-x: auto;
-            padding-bottom: 16px;
-            width: 100%;
-            scrollbar-width: none; 
-            -ms-overflow-style: none;
-        }
+        .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
         .sequencer-scroll-container::-webkit-scrollbar { display: none; }
         .sequencer-track-row { min-width: 500px; }
-
         .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: manipulation;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
-        
         .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; touch-action: manipulation;}
         .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
         .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
         body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
+
+        /* --- LOADING BAR (BOOT) --- */
+        .loading-container { width: 200px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 20px; position: relative; }
+        .loading-bar { height: 100%; width: 0%; background: var(--accent-color); animation: loadProject 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes loadProject { 0% { width: 0%; } 40% { width: 60%; } 70% { width: 80%; } 100% { width: 100%; } }
 
         /* --- UTILS --- */
         #start-screen { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
@@ -204,15 +168,8 @@
         #theme-bg { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; opacity: 0.2; filter: blur(40px) saturate(1.2); transition: 0.8s; transform: scale(1.1); }
         .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.15; }
 
-        /* --- MOBILE BREAKPOINT SPECIFIC --- */
         @media (max-width: 1024px) {
-            .bento-grid { 
-                display: flex;
-                flex-direction: column;
-                padding: 80px 16px 110px; 
-                width: 100%;
-                max-width: 100%;
-            }
+            .bento-grid { display: flex; flex-direction: column; padding: 80px 16px 110px; width: 100%; max-width: 100%; }
             .glass-panel { width: 100%; margin-bottom: 24px; }
             .col-span-12, .col-span-8, .col-span-5, .col-span-7 { width: 100%; }
             .hero-name { font-size: 3.5rem; line-height: 1; word-break: break-word; }
@@ -222,10 +179,14 @@
 <body class="font-fl selection:bg-white selection:text-black" data-theme="fl">
 
     <div id="start-screen">
-        <button onclick="startExperience()" class="w-24 h-24 rounded-full bg-[#111] border border-white/10 flex items-center justify-center hover:scale-95 hover:border-white/40 transition shadow-[0_0_50px_rgba(0,0,0,0.5)] click-sound group touch-manipulation">
-            <svg class="w-8 h-8 text-white opacity-80 group-hover:text-[var(--accent-color)] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        </button>
-        <div id="boot-sequence" class="mt-6 font-tech text-green-400 text-sm tracking-[0.2em]">INITIALISATION...</div>
+        <div onclick="startExperience()" class="cursor-pointer flex flex-col items-center group">
+            <h2 class="font-tech text-[var(--accent-color)] text-xl tracking-[0.3em] mb-2 group-hover:brightness-125 transition">LOADING PROJECT</h2>
+            <div class="font-mono text-xs text-gray-500 mb-6">Initializing Core Audio Engine...</div>
+            <div class="loading-container">
+                <div class="loading-bar"></div>
+            </div>
+            <div class="mt-8 text-[10px] text-gray-600 font-mono opacity-50">JULES_FREMONDIERE_V2.0.exe</div>
+        </div>
     </div>
 
     <div id="theme-bg"></div>
@@ -243,9 +204,17 @@
         <section id="hero" class="col-span-12 glass-panel p-6 md:p-10 flex flex-col justify-center items-center text-center min-h-[80vh] md:min-h-[50vh] scroll-float relative group">
             <div class="relative z-10">
                 <span class="inline-block px-3 py-1 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-widest mb-6 backdrop-blur-md">Portfolio 2026</span>
+                
                 <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)] leading-none md:leading-tight">Jules Frémondière</h1>
-                <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-4">Étudiant Ingénieur du son & Sound Designer</p>
+                
+                <div class="inline-block bg-[var(--accent-color)]/20 border border-[var(--accent-color)] text-[var(--accent-color)] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest animate-pulse mb-4">
+                    🔴 En recherche de stage
+                </div>
+
+                <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-2">Étudiant Ingénieur du son & Sound Designer</p>
+                
                 <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition">jules.fremondiere@3is.fr</a>
+                
                 <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center w-full md:w-auto px-4 md:px-0">
                     <a href="#contact" class="px-8 py-3 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/20 text-center touch-manipulation">Me Contacter</a>
                     <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center justify-center gap-2 touch-manipulation">
@@ -531,6 +500,10 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.click-sound, a, button').forEach(el => { el.addEventListener('click', playClickSound); });
+            // Add click listener to document to resume audio context if auto-started
+            document.addEventListener('click', () => {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            }, { once: true });
         });
 
         // SEQUENCER VARS
@@ -562,14 +535,17 @@
             scopeCtx.stroke();
         }
 
-        function startExperience() {
-            document.querySelector('#start-screen button').classList.add('scale-0');
-            document.getElementById('boot-sequence').textContent = "SYSTEM_LOADED";
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            setTimeout(() => {
-                document.getElementById('start-screen').classList.add('hidden-screen');
-                drawVisualizer();
-            }, 500);
+        // AUTO START LOGIC
+        let autoStartTimer = setTimeout(() => {
+            startExperience(true);
+        }, 3000);
+
+        function startExperience(isAuto = false) {
+            clearTimeout(autoStartTimer);
+            document.getElementById('start-screen').classList.add('hidden-screen');
+            // If manual click, resume audio immediately. If auto, wait for first interaction.
+            if (!isAuto && audioCtx.state === 'suspended') audioCtx.resume();
+            drawVisualizer();
         }
 
         setInterval(() => {
