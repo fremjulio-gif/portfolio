@@ -16,127 +16,120 @@
             --glass-surface: rgba(10, 10, 10, 0.65);
             --glass-text: #ffffff;
             --accent-color: #22c55e;
-            --accent-glow: 0 0 20px rgba(255, 255, 255, 0.1);
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* --- THEME FONTS --- */
-        .font-fl { font-family: 'Arial', sans-serif; letter-spacing: normal; }
-        .font-ableton { font-family: 'Jost', 'Futura', sans-serif; letter-spacing: 0.02em; }
-        .font-protools { font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', sans-serif; font-weight: 500; }
+        /* --- FONTS --- */
+        .font-fl { font-family: 'Arial', sans-serif; }
+        .font-ableton { font-family: 'Jost', sans-serif; letter-spacing: 0.02em; }
+        .font-protools { font-family: 'Avenir Next', 'Helvetica Neue', sans-serif; font-weight: 500; }
         .font-rx { font-family: 'Montserrat', sans-serif; }
         .font-tech { font-family: 'Share Tech Mono', monospace; }
 
-        /* --- GLOBAL STYLES --- */
+        /* --- GLOBAL & LIGHT MODE --- */
         body { 
-            background-color: #050505; 
-            color: var(--glass-text);
-            overflow-x: hidden; 
+            background-color: #050505; color: var(--glass-text); overflow-x: hidden; 
             transition: background-color 0.6s ease, color 0.4s ease;
         }
-
-        /* LIGHT MODE (Ableton Style) */
         body.light-mode {
-            --glass-surface: rgba(220, 220, 220, 0.6); /* Light Grey Glass */
+            --glass-surface: rgba(220, 220, 220, 0.6); 
             --glass-border: rgba(0, 0, 0, 0.1);
-            --glass-text: #1a1a1a; /* Dark Text */
-            --accent-glow: 0 0 20px rgba(0, 0, 0, 0.1);
-            background-color: #dcdcdc; /* Classic Ableton Grey */
+            --glass-text: #1a1a1a;
+            background-color: #dcdcdc;
         }
         body.light-mode .scanlines { opacity: 0.05; }
-        body.light-mode .win-header { border-bottom: 1px solid rgba(0,0,0,0.1); }
-        body.light-mode .win-title { color: #000; opacity: 0.6; }
         body.light-mode .project-info { background: linear-gradient(to top, rgba(220,220,220,0.95), rgba(220,220,220,0.8), transparent); color: black; }
-        body.light-mode .project-card { border-color: rgba(0,0,0,0.2); }
-        body.light-mode .dock-container { background: rgba(200, 200, 200, 0.8); border-color: rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        body.light-mode .dock-icon { color: #444; }
-        body.light-mode .dock-icon:hover { color: #000; background: rgba(0,0,0,0.05); }
 
         /* --- GLASS PANELS --- */
         .glass-panel {
             background: var(--glass-surface);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border); border-top: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
-            border-radius: 24px;
-            overflow: hidden;
-            transition: transform 0.4s var(--ease-ios), box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.6s ease;
+            border-radius: 24px; overflow: hidden;
+            transition: transform 0.4s var(--ease-ios), border-color 0.4s ease;
         }
-        .glass-panel:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-4px) scale(1.005);
-        }
+        .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-4px) scale(1.005); }
 
-        /* --- BENTO GRID --- */
+        /* --- LAYOUT --- */
         .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-auto-rows: minmax(100px, auto);
-            gap: 24px;
-            padding: 120px 24px 140px;
+            display: grid; grid-template-columns: repeat(12, 1fr);
+            gap: 24px; padding: 120px 24px 140px;
             max-width: 1600px; margin: 0 auto;
         }
 
-        /* --- TYPOGRAPHY HERO --- */
-        h1.hero-name {
-            font-size: clamp(3rem, 7vw, 6rem);
-            font-weight: 800; letter-spacing: -0.02em;
-            line-height: 1; margin-bottom: 1rem;
-        }
-        /* Gradient Text only in Dark Mode */
-        body:not(.light-mode) h1.hero-name {
-            background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        body.light-mode h1.hero-name { color: #1a1a1a; }
-
-        /* --- PIE CHART (Skills) --- */
+        /* --- WIDGETS --- */
+        .win-header { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
+        
         .pie-chart {
             width: 90px; height: 90px; border-radius: 50%;
             background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0);
-            position: relative; display: grid; place-items: center; flex-shrink: 0;
-            transition: all 0.5s ease;
+            display: grid; place-items: center; flex-shrink: 0;
         }
-        .pie-chart::after { 
-            content: ''; position: absolute; inset: 8px; 
-            background: #111; border-radius: 50%; 
-            transition: background 0.6s;
-        }
+        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; }
         body.light-mode .pie-chart::after { background: #dcdcdc; }
-        body.light-mode .pie-chart { background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(0,0,0,0.1) 0); }
         .pie-chart span { position: relative; z-index: 10; font-family: 'Share Tech Mono'; font-size: 16px; font-weight: bold; }
-        
-        /* --- SEQUENCER --- */
-        .step-btn { height: 36px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; }
-        .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
-        body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
-        .playing-col { filter: brightness(1.4); transform: scale(0.95); }
-        
-        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent;}
-        .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
-        body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
 
-        /* --- UTILS & ANIMATIONS --- */
-        .win-header { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; opacity: 0.5; }
+        /* --- PROJECT CARDS --- */
+        .project-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 16/10; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
         .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
         body.light-mode .project-card img { filter: brightness(1); }
         .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
-        
-        .dock-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; padding: 10px 20px; background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90; }
-        .theme-island { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 90; background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; padding: 6px; display: flex; gap: 8px; transition: 0.3s; }
-        .theme-pill { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.6; transition: 0.3s; }
-        .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); }
 
+        /* --- DOCK & NAVIGATION --- */
+        .dock-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; justify-content: center; /* FIXED ALIGNMENT */
+            gap: 12px; padding: 10px 20px;
+            background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; z-index: 90;
+        }
+        body.light-mode .dock-container { background: rgba(200, 200, 200, 0.8); border-color: rgba(0,0,0,0.1); }
+        
+        .dock-icon {
+            padding: 10px 16px; border-radius: 14px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; position: relative;
+        }
+        body.light-mode .dock-icon { color: #444; }
+        .dock-icon:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-5px) scale(1.1); }
+        body.light-mode .dock-icon:hover { color: #000; background: rgba(0,0,0,0.05); }
+
+        /* --- THEME ISLAND --- */
+        .theme-island {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 90;
+            background-color: rgba(20, 20, 20, 0.6); 
+            background-size: cover; background-position: center; /* Background Image Props */
+            backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px; padding: 6px; display: flex; gap: 8px; transition: 0.5s;
+        }
+        /* Overlay to darken the background image of the bar for icon visibility */
+        .theme-island::before {
+            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.4); border-radius: 100px; z-index: -1; backdrop-filter: blur(2px);
+        }
+        .theme-pill { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(0,0,0,0.3); }
+        .theme-pill:hover { opacity: 1; transform: scale(1.1); background: rgba(255,255,255,0.2); }
+        .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: rgba(0,0,0,0.6); }
+
+        /* --- SEQUENCER BG --- */
+        #sequencer-inner {
+            position: relative; overflow: hidden;
+        }
+        #sequencer-inner::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: url('console.png');
+            background-size: cover; background-position: center;
+            opacity: 0.15; z-index: 0; pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        /* --- UTILS --- */
         #start-screen { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
         .scroll-float { opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-ios); }
         .scroll-float.visible { opacity: 1; transform: translateY(0); }
-
-        /* BACKGROUND */
         #theme-bg { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; opacity: 0.2; filter: blur(40px) saturate(1.2); transition: 0.8s; transform: scale(1.1); }
         .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.15; }
 
@@ -159,7 +152,7 @@
     <div id="theme-bg"></div>
     <div class="scanlines"></div>
 
-    <div class="theme-island">
+    <div class="theme-island" id="theme-widget">
         <button class="theme-pill click-sound" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL" class="w-5 h-5 object-contain"></button>
         <button class="theme-pill click-sound" onclick="setTheme('ableton')" title="Ableton"><img src="logo_ableton.png" alt="Live" class="w-5 h-5 object-contain"></button>
         <button class="theme-pill click-sound" onclick="setTheme('protools')" title="ProTools"><img src="logo_protools.png" alt="PT" class="w-5 h-5 object-contain"></button>
@@ -190,7 +183,6 @@
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
             <div class="p-10 flex flex-col justify-center h-full space-y-10">
-                
                 <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 66"><span>66%</span></div>
                     <div>
@@ -198,7 +190,6 @@
                         <p class="text-base opacity-70 leading-relaxed max-w-xs">Écoute active, prise de décision, sound design, Pro Tools (3 ans).</p>
                     </div>
                 </div>
-
                 <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 70"><span>70%</span></div>
                     <div>
@@ -206,7 +197,6 @@
                         <p class="text-base opacity-70 leading-relaxed max-w-xs">Réflexion Artistique, Créativité, Imagination, Organisation.</p>
                     </div>
                 </div>
-
                 <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 40"><span>40%</span></div>
                     <div>
@@ -214,7 +204,6 @@
                         <p class="text-base opacity-70 leading-relaxed max-w-xs">Nettoyage Audio, Prise de recul, (Izotope RX, Ozone).</p>
                     </div>
                 </div>
-
                 <div class="flex items-center gap-8 group">
                     <div class="pie-chart" style="--percent: 70"><span>70%</span></div>
                     <div>
@@ -239,27 +228,24 @@
                         <p class="text-sm uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p>
                         <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--accent-color)]">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p>
                     </div>
-
                     <div class="relative group flex flex-col md:flex-row gap-6 items-start">
                         <div class="flex-1">
                             <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                             <span class="text-xs font-mono opacity-50 mb-1 block">2023</span>
                             <h3 class="text-xl font-bold">Service Civique / Césure</h3>
-                            <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)] mb-2">Projet Court Métrage grâce a l’association Thermogène Média (Home Studio, Direction d’acteur).</p>
+                            <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)] mb-2">Projet Court Métrage grâce a l’association Thermogène Média.</p>
                             <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-xs border border-[var(--glass-border)] px-3 py-1 rounded hover:bg-white/10 inline-block transition click-sound">▶ Voir le projet vidéo</a>
                         </div>
                         <div class="w-32 h-24 shrink-0 rounded overflow-hidden border border-[var(--glass-border)]">
                             <img src="peace3.jpg" alt="Asso" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
                         </div>
                     </div>
-
                     <div class="relative group">
                         <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                         <span class="text-xs font-mono opacity-50 mb-1 block">2022</span>
                         <h3 class="text-xl font-bold">BAC STI2D ITEC</h3>
                         <p class="text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Esprit d’équipe, Informatique, Sens de la réflexion technique.</p>
                     </div>
-
                     <div class="relative group flex flex-col md:flex-row gap-6 items-start">
                         <div class="flex-1">
                             <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
@@ -273,8 +259,7 @@
                             <img src="peace2.jpg" alt="Work" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500">
                         </div>
                     </div>
-
-                    <div class="relative group">
+                     <div class="relative group">
                         <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div>
                         <span class="text-xs font-mono opacity-50 mb-1 block">2010 – 2014</span>
                         <h3 class="text-xl font-bold">Danseur Hip-Hop & Interprète</h3>
@@ -285,33 +270,35 @@
         </section>
 
         <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-[var(--accent-color)]/30">
-            <div class="bg-black/20 rounded-[20px] p-6 h-full border border-[var(--glass-border)]">
-                <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
-                    <div class="flex items-center gap-3">
-                        <div id="seq-led" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
-                        <h3 class="font-tech text-lg text-[var(--accent-color)] tracking-widest">MINI_SEQUENCER_8_STEPS</h3>
-                    </div>
-                    <div class="flex gap-4 font-mono text-[10px] items-end">
-                        <div class="flex flex-col"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"><span id="bpm-display" class="mt-1">120</span></div>
-                        <button id="play-btn" onclick="togglePlay()" class="px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase">PLAY LOOP</button>
-                        <button onclick="clearSequencer()" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase">Clear</button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    <div class="lg:col-span-3 space-y-3">
-                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
-                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
-                        <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
-                        <div class="pt-4 border-t border-[var(--glass-border)] mt-4">
-                            <div class="flex items-center gap-3">
-                                <span class="font-mono text-xs w-8 opacity-60 font-bold">SYN</span>
-                                <div id="piano-roll" class="flex-1 grid grid-template-columns-8 gap-1" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;"></div>
-                            </div>
+            <div id="sequencer-inner" class="bg-black/20 rounded-[20px] p-6 h-full border border-[var(--glass-border)] relative">
+                <div class="relative z-10">
+                    <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+                        <div class="flex items-center gap-3">
+                            <div id="seq-led" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
+                            <h3 class="font-tech text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">MINI_SEQUENCER_8_STEPS</h3>
+                        </div>
+                        <div class="flex gap-4 font-mono text-[10px] items-end">
+                            <div class="flex flex-col"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-24 accent-[var(--accent-color)]" oninput="changeBpm(this.value)"><span id="bpm-display" class="mt-1">120</span></div>
+                            <button id="play-btn" onclick="togglePlay()" class="px-6 py-1 h-8 border border-[var(--accent-color)] text-[var(--accent-color)] font-bold rounded hover:bg-[var(--accent-color)] hover:text-black transition uppercase bg-black/60">PLAY LOOP</button>
+                            <button onclick="clearSequencer()" class="px-4 py-1 h-8 border border-[var(--glass-border)] rounded hover:bg-white/10 transition uppercase bg-black/60">Clear</button>
                         </div>
                     </div>
-                    <div class="lg:col-span-1 bg-black/30 rounded-lg border border-[var(--glass-border)] relative overflow-hidden flex items-center justify-center min-h-[100px]">
-                        <canvas id="scope-canvas" class="w-full h-full absolute inset-0"></canvas>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                        <div class="lg:col-span-3 space-y-3">
+                            <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">KICK</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-kick"></div></div>
+                            <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">SNAR</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-snare"></div></div>
+                            <div class="flex items-center gap-3"><span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">HATS</span><div class="flex-1 grid grid-cols-8 gap-1" id="track-hat"></div></div>
+                            <div class="pt-4 border-t border-[var(--glass-border)] mt-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="font-mono text-xs w-8 opacity-60 font-bold bg-black/50 px-1 rounded">SYN</span>
+                                    <div id="piano-roll" class="flex-1 grid grid-template-columns-8 gap-1" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-1 bg-black/40 rounded-lg border border-[var(--glass-border)] relative overflow-hidden flex items-center justify-center min-h-[100px]">
+                            <canvas id="scope-canvas" class="w-full h-full absolute inset-0"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -329,9 +316,34 @@
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Capharnaüm</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Sound Design & Mix</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Sound Design - Bruitage - Mix (ProTools, S1 Controller, MixPre 6, MKH-416)</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Sound Design - Bruitage - Mix (ProTools, S1 Controller)</p>
                     </div>
                 </a>
+
+                <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group click-sound">
+                    <img src="https://img.youtube.com/vi/1RaxSos9wtk/maxresdefault.jpg" alt="Remix IVY">
+                    <div class="project-info">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Remix</span>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">IVY - Baby Hayabusa</h4>
+                        <p class="text-sm font-medium opacity-90 mb-4">Production Musicale</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Montage - DA - Composition - Mix - Master</p>
+                    </div>
+                </a>
+
+                <a href="https://www.youtube.com/watch?v=TiqWW0e6RSg" target="_blank" class="project-card group click-sound">
+                    <img src="https://img.youtube.com/vi/TiqWW0e6RSg/maxresdefault.jpg" alt="Désaccordés">
+                    <div class="project-info">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500">
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-2 py-1 text-[10px] uppercase font-bold rounded">Émission TV Direct</span>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">Désaccordés</h4>
+                        <p class="text-sm font-medium opacity-90 mb-4">Ingénieur Son Direct</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Prise de décision - Routing Behringer x32 - Organisation - Com</p>
+                    </div>
+                </a>
+
                 <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" class="project-card group click-sound">
                     <img src="https://img.youtube.com/vi/w_9xYrwzKNs/maxresdefault.jpg" alt="Long Day">
                     <div class="project-info">
@@ -340,9 +352,10 @@
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Long Day</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Montage // Prise de vue</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Direction Artistique - Montage - Composition - Mix (Live 12, Premiere Pro)</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Direction Artistique - Montage - Composition - Mix</p>
                     </div>
                 </a>
+
                 <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="project-card group click-sound">
                     <img src="https://img.youtube.com/vi/llGoiisrlu8/maxresdefault.jpg" alt="Ouragan">
                     <div class="project-info">
@@ -351,9 +364,10 @@
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Ouragan</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Spatialisation Sonore</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Routing Console, Patch, Spatialisation, Communication</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Routing Console, Patch, Spatialisation</p>
                     </div>
                 </a>
+
                 <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="project-card group click-sound">
                     <img src="https://img.youtube.com/vi/U3lwDA_INOQ/maxresdefault.jpg" alt="Instable">
                     <div class="project-info">
@@ -362,7 +376,7 @@
                         </div>
                         <h4 class="text-3xl font-bold mb-2">Instable</h4>
                         <p class="text-sm font-medium opacity-90 mb-4">Post-production Audio</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Supervision sonore de A à Z, Prise de son, Post Production</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Supervision sonore, Prise de son, Post Production</p>
                     </div>
                 </a>
             </div>
@@ -388,7 +402,6 @@
             </a>
             <p class="font-mono text-[10px] opacity-30 mt-8">© 2026 SYSTEM JULES F.</p>
         </section>
-
     </main>
 
     <nav class="dock-container">
@@ -429,13 +442,11 @@
             document.querySelectorAll('.click-sound, a, button').forEach(el => el.addEventListener('click', playClickSound));
         });
 
-        // SEQUENCER VARS
+        // SEQUENCER LOGIC
         let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120;
         const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
-        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; // Bb pentatonic
+        const notes = [466.16, 392.00, 349.23, 311.13, 261.63];
         const melodyGrid = Array(5).fill().map(() => Array(8).fill(false));
-
-        // VISUALIZER
         const scopeCanvas = document.getElementById('scope-canvas');
         const scopeCtx = scopeCanvas.getContext('2d');
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -475,41 +486,37 @@
 
         // THEMES LOGIC
         const themes = {
-            fl: { bg: 'flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' },
-            ableton: { bg: 'ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' }, /* Orange Ableton */
-            protools: { bg: 'protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' },
-            rx: { bg: 'rx10.png', accent: '#3b82f6', font: 'font-rx', mode: 'dark' }
+            fl: { bg: 'flstudio.png', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' },
+            ableton: { bg: 'ableton.png', bar: 'bar_ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' },
+            protools: { bg: 'protools.png', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' },
+            rx: { bg: 'rx10.png', bar: 'bar_rx.png', accent: '#3b82f6', font: 'font-rx', mode: 'dark' }
         };
 
         function setTheme(name) {
             const t = themes[name];
             document.body.className = `${t.font} selection:bg-white selection:text-black`;
-            
-            // Handle Light/Dark Mode
-            if(t.mode === 'light') {
-                document.body.classList.add('light-mode');
-            } else {
-                document.body.classList.remove('light-mode');
-            }
+            if(t.mode === 'light') document.body.classList.add('light-mode');
+            else document.body.classList.remove('light-mode');
 
             document.documentElement.style.setProperty('--accent-color', t.accent);
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`;
+            
+            // Set Theme Widget Background
+            const widget = document.getElementById('theme-widget');
+            widget.style.backgroundImage = `url('${t.bar}')`;
             
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active'));
             document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active');
         }
 
-        // SEQUENCER UI
+        // SEQUENCER BUILD
         function createStepBtn(track, index) {
             const btn = document.createElement('button');
             btn.className = `step-btn click-sound`;
-            btn.onclick = () => {
-                sequence[track][index] = !sequence[track][index];
-                btn.classList.toggle('active');
-            }; return btn;
+            btn.onclick = () => { sequence[track][index] = !sequence[track][index]; btn.classList.toggle('active'); }; 
+            return btn;
         }
         ['kick', 'snare', 'hat'].forEach(t => { const c = document.getElementById(`track-${t}`); for(let i=0; i<8; i++) c.appendChild(createStepBtn(t, i)); });
-
         const pCont = document.getElementById('piano-roll');
         for(let r=0; r<5; r++) {
             for(let c=0; c<8; c++) {
@@ -518,71 +525,39 @@
             }
         }
 
-        // AUDIO GENERATORS (IMPROVED)
+        // AUDIO FUNCTIONS
         function playSound(type) {
             const now = audioCtx.currentTime;
-            
             if(type === 'kick') {
-                const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-                osc.connect(g); g.connect(masterGain);
-                osc.frequency.setValueAtTime(150, now);
-                osc.frequency.exponentialRampToValueAtTime(0.01, now + 0.5);
-                g.gain.setValueAtTime(1, now);
-                g.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-                osc.start(now); osc.stop(now + 0.5);
+                const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                o.frequency.setValueAtTime(150,now);o.frequency.exponentialRampToValueAtTime(0.01,now+0.5);
+                g.gain.setValueAtTime(1,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.5);o.start(now);o.stop(now+0.5);
             } else if (type === 'snare') {
-                const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-                osc.connect(g); g.connect(masterGain);
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(200, now);
-                g.gain.setValueAtTime(0.5, now); g.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-                osc.start(now); osc.stop(now + 0.2);
-                
-                // Noise burst
-                const bSize = audioCtx.sampleRate * 0.2;
-                const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
-                const d = b.getChannelData(0);
-                for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
-                const noise = audioCtx.createBufferSource(); noise.buffer = b;
-                const ng = audioCtx.createGain(); noise.connect(ng); ng.connect(masterGain);
-                ng.gain.setValueAtTime(0.4, now); ng.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-                noise.start(now);
+                const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(masterGain);
+                o.type='triangle';o.frequency.setValueAtTime(200,now);g.gain.setValueAtTime(0.5,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.2);o.start(now);o.stop(now+0.2);
+                const b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.2,audioCtx.sampleRate),d=b.getChannelData(0);
+                for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+                const n=audioCtx.createBufferSource(),ng=audioCtx.createGain();n.buffer=b;n.connect(ng);ng.connect(masterGain);
+                ng.gain.setValueAtTime(0.4,now);ng.gain.exponentialRampToValueAtTime(0.01,now+0.2);n.start(now);
             } else if (type === 'hat') {
-                const bSize = audioCtx.sampleRate * 0.05;
-                const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
-                const d = b.getChannelData(0);
-                for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
-                const noise = audioCtx.createBufferSource(); noise.buffer = b;
-                const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 5000;
-                const ng = audioCtx.createGain();
-                noise.connect(filter); filter.connect(ng); ng.connect(masterGain);
-                ng.gain.setValueAtTime(0.3, now); ng.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-                noise.start(now);
+                const b=audioCtx.createBuffer(1,audioCtx.sampleRate*0.05,audioCtx.sampleRate),d=b.getChannelData(0);
+                for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+                const n=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),ng=audioCtx.createGain();
+                n.buffer=b;f.type='highpass';f.frequency.value=5000;n.connect(f);f.connect(ng);ng.connect(masterGain);
+                ng.gain.setValueAtTime(0.3,now);ng.gain.exponentialRampToValueAtTime(0.01,now+0.05);n.start(now);
             }
         }
-        
         function playSynth(f,t) {
-            const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-            o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(masterGain); 
-            g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.3,t+0.05); g.gain.exponentialRampToValueAtTime(0.001,t+0.4);
-            o.start(t); o.stop(t+0.4);
+            const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=f;o.connect(g);g.connect(masterGain);
+            g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.3,t+0.05);g.gain.exponentialRampToValueAtTime(0.001,t+0.4);o.start(t);o.stop(t+0.4);
         }
-
         function togglePlay() {
             isPlaying = !isPlaying; 
-            const btn = document.getElementById('play-btn');
-            btn.innerText = isPlaying ? "STOP LOOP" : "PLAY LOOP";
+            document.getElementById('play-btn').innerText = isPlaying ? "STOP LOOP" : "PLAY LOOP";
             const led = document.getElementById('seq-led');
-            
-            if(isPlaying) { 
-                led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse');
-                if(audioCtx.state === 'suspended') audioCtx.resume(); 
-                intervalId = setInterval(nextStep, (60/bpm)*1000/2); 
-            } else { 
-                led.classList.add('bg-red-900'); led.classList.remove('bg-red-500', 'animate-pulse');
-                clearInterval(intervalId); resetVisuals(); 
-            }
+            if(isPlaying) { led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse'); if(audioCtx.state==='suspended')audioCtx.resume(); intervalId=setInterval(nextStep,(60/bpm)*1000/2); }
+            else { led.classList.add('bg-red-900'); led.classList.remove('bg-red-500', 'animate-pulse'); clearInterval(intervalId); resetVisuals(); }
         }
-
         function nextStep() {
             resetVisuals();
             const cols = document.querySelectorAll(`#track-kick button:nth-child(${currentStep+1}), #track-snare button:nth-child(${currentStep+1}), #track-hat button:nth-child(${currentStep+1})`);
