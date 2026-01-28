@@ -26,11 +26,13 @@
         .font-rx { font-family: 'Montserrat', sans-serif; }
         .font-tech { font-family: 'Share Tech Mono', monospace; }
 
-        /* --- GLOBAL & LIGHT MODE --- */
+        /* --- GLOBAL THEMES --- */
         body { 
             background-color: #050505; color: var(--glass-text); overflow-x: hidden; 
             transition: background-color 0.6s ease, color 0.4s ease;
         }
+        
+        /* Light Mode (Ableton) */
         body.light-mode {
             --glass-surface: rgba(220, 220, 220, 0.6); 
             --glass-border: rgba(0, 0, 0, 0.1);
@@ -40,6 +42,11 @@
         body.light-mode .scanlines { opacity: 0.05; }
         body.light-mode .project-info { background: linear-gradient(to top, rgba(220,220,220,0.95), rgba(220,220,220,0.8), transparent); color: black; }
 
+        /* ProTools Specific (Grey Background) */
+        body[data-theme='protools'] {
+            background-color: #262626; /* Gris anthracite ProTools */
+        }
+
         /* --- GLASS PANELS --- */
         .glass-panel {
             background: var(--glass-surface);
@@ -48,7 +55,7 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
             border-radius: 24px; overflow: hidden;
             transition: transform 0.4s var(--ease-ios), border-color 0.4s ease;
-            position: relative; /* Base positioning */
+            position: relative;
         }
         .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-4px) scale(1.005); }
 
@@ -69,11 +76,13 @@
             display: grid; place-items: center; flex-shrink: 0; margin: 0 auto;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             transition: transform 0.3s;
-            position: relative; z-index: 10; /* Text priority */
+            position: relative; z-index: 10;
         }
         .pie-chart:hover { transform: scale(1.05); }
         .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; z-index: 1; }
         body.light-mode .pie-chart::after { background: #dcdcdc; }
+        body[data-theme='protools'] .pie-chart::after { background: #262626; } /* Match BG */
+        
         .pie-chart span { position: relative; z-index: 20; font-family: 'Share Tech Mono'; font-size: 18px; font-weight: bold; }
 
         /* --- PROJECT CARDS --- */
@@ -83,7 +92,7 @@
         .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
 
-        /* --- DOCK (FIXED ALIGNMENT) --- */
+        /* --- DOCK & NAVBAR --- */
         .dock-container {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             display: flex; align-items: center; justify-content: center;
@@ -104,7 +113,6 @@
         body.light-mode .dock-icon:hover { color: #000; }
         .dock-icon svg { width: 22px; height: 22px; }
         .dock-icon span { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;}
-
         .dock-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.1); }
 
         /* --- THEME ISLAND --- */
@@ -154,7 +162,7 @@
         }
     </style>
 </head>
-<body class="font-fl selection:bg-white selection:text-black">
+<body class="font-fl selection:bg-white selection:text-black" data-theme="fl">
 
     <div id="start-screen">
         <button onclick="startExperience()" class="w-24 h-24 rounded-full bg-[#111] border border-white/10 flex items-center justify-center hover:scale-95 hover:border-white/40 transition shadow-[0_0_50px_rgba(0,0,0,0.5)] click-sound group">
@@ -196,31 +204,26 @@
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
             <div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8 items-center justify-items-center grow">
-                
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Mixage</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Écoute active, prise de décision, Pro Tools.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Composition</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Créativité, Organisation, Live 12.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Repair</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">Nettoyage Audio, RX 10, Ozone.</p>
                 </div>
-
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)] mb-1">Recording</h4>
                     <p class="text-xs opacity-70 leading-relaxed max-w-[150px]">SoundDevice, Couple micro.</p>
                 </div>
-
             </div>
         </section>
 
@@ -457,7 +460,7 @@
         // SEQUENCER VARS
         let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120, currentKit = '808';
         const sequence = { kick: Array(8).fill(0), snare: Array(8).fill(0), hat: Array(8).fill(0) };
-        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; 
+        const notes = [466.16, 392.00, 349.23, 311.13, 261.63]; 
         const melodyGrid = Array(5).fill().map(() => Array(8).fill(false));
 
         // VISUALIZER
@@ -509,8 +512,13 @@
         function setTheme(name) {
             const t = themes[name];
             document.body.className = `${t.font} selection:bg-white selection:text-black`;
+            
+            // Handle specific modes
             if(t.mode === 'light') document.body.classList.add('light-mode');
             else document.body.classList.remove('light-mode');
+            
+            // Set Data Attribute for CSS targeting (ProTools Grey Fix)
+            document.body.setAttribute('data-theme', name);
 
             document.documentElement.style.setProperty('--accent-color', t.accent);
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`;
@@ -526,7 +534,7 @@
         function createStepBtn(track, index) {
             const btn = document.createElement('button');
             btn.className = `step-btn click-sound`;
-            btn.onclick = () => { sequence[track][index] = !sequence[track][index]; btn.classList.toggle('active'); }; 
+            btn.onclick = () => { sequence[track][index] = !sequence[track][index]; btn.classList.toggle('active'); }; 
             return btn;
         }
         ['kick', 'snare', 'hat'].forEach(t => { const c = document.getElementById(`track-${t}`); for(let i=0; i<8; i++) c.appendChild(createStepBtn(t, i)); });
@@ -579,13 +587,13 @@
         
         function playSynth(f,t) {
             const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-            o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(masterGain); 
+            o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(masterGain); 
             g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.4,t+0.02); g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
             o.start(t); o.stop(t+0.3);
         }
 
         function togglePlay() {
-            isPlaying = !isPlaying; 
+            isPlaying = !isPlaying; 
             document.getElementById('play-btn').innerText = isPlaying ? "STOP LOOP" : "PLAY LOOP";
             const led = document.getElementById('seq-led');
             if(isPlaying) { led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse'); if(audioCtx.state==='suspended')audioCtx.resume(); intervalId=setInterval(nextStep,(60/bpm)*1000/2); }
