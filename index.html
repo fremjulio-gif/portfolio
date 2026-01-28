@@ -145,15 +145,35 @@
             filter: grayscale(100%) contrast(1.2);
         }
         
-        .seq-tab-btn {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.6); padding: 4px 12px; border-radius: 6px;
-            font-family: 'Share Tech Mono', monospace; font-size: 10px; cursor: pointer;
-            transition: all 0.2s;
+        /* APPLE STYLE SEGMENTED CONTROL */
+        .seq-tabs-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 9999px; /* Full pill */
+            padding: 4px;
+            display: inline-flex;
+            gap: 0;
+            border: 1px solid rgba(255,255,255,0.05);
         }
+        body.light-mode .seq-tabs-container { background: rgba(0, 0, 0, 0.05); border-color: rgba(0,0,0,0.1); }
+
+        .seq-tab-btn {
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            padding: 8px 24px;
+            border-radius: 9999px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            border: none;
+        }
+        body.light-mode .seq-tab-btn { color: #666; }
+
         .seq-tab-btn.active-tab {
-            background: var(--accent-color); color: #000; font-weight: bold; border-color: transparent;
-            box-shadow: 0 0 10px var(--accent-color);
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .transport-btn {
@@ -165,7 +185,6 @@
         .transport-btn:hover { background: var(--accent-color); color: #000; }
         .transport-btn.playing { background: var(--accent-color); color: #000; box-shadow: 0 0 10px var(--accent-color); }
 
-        /* MIXER STYLES */
         .mixer-panel {
             max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out;
             background: rgba(0,0,0,0.4); border-radius: 12px; margin-top: 10px;
@@ -174,8 +193,8 @@
         
         .fader-group { display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .fader-track { 
-            appearance: none; width: 6px; height: 80px; writing-mode: bt-lr; /* Firefox */
-            -webkit-appearance: slider-vertical; /* Webkit */
+            appearance: none; width: 6px; height: 80px; writing-mode: bt-lr; 
+            -webkit-appearance: slider-vertical; 
             background: rgba(255,255,255,0.1); border-radius: 4px;
         }
         input[type=range][orient=vertical] {
@@ -189,12 +208,35 @@
 
         .step-btn { height: 32px; width: 100%; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: manipulation;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 10px var(--accent-color); }
+        
+        /* LIGHT MODE ABLETON STYLE FIX */
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
+        body.light-mode .step-btn.active { 
+            background-color: #333; /* Dark Grey for contrast */
+            border-color: #333; 
+            box-shadow: none; 
+        }
         
         .piano-cell { background: rgba(255,255,255,0.03); border-radius: 2px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; touch-action: manipulation;}
         .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
         .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
+        
         body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
+        body.light-mode .piano-cell.active { 
+            background-color: #333; /* Dark Grey for contrast */
+            opacity: 1;
+        }
+
+        /* --- SKILLS BACKGROUND --- */
+        #skills { position: relative; overflow: hidden; }
+        #skills::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: url('console.png');
+            background-size: cover; background-position: center;
+            opacity: 0.1; /* Very subtle */
+            z-index: 0; pointer-events: none;
+            mix-blend-mode: overlay;
+        }
 
         /* --- LOADING BAR --- */
         .loading-container { width: 200px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; margin-top: 20px; position: relative; }
@@ -265,7 +307,7 @@
                 <span class="win-title">Stats & Skills.sys</span>
                 <div class="flex gap-2"><div class="w-2 h-2 rounded-full bg-white/20"></div><div class="w-2 h-2 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center grow">
+            <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center grow relative z-10">
                 <div class="flex flex-col items-center text-center w-full">
                     <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
                     <div class="h-8 flex items-center"><h4 class="text-sm md:text-base font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4></div>
@@ -348,13 +390,13 @@
             <div id="sequencer-inner" class="bg-black/20 rounded-[20px] p-4 md:p-6 h-full border border-[var(--glass-border)] relative">
                 <div class="relative z-10">
                     
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex gap-2">
-                            <button id="btn-mini" onclick="switchSequencer('mini')" class="seq-tab-btn active-tab touch-manipulation">MINI</button>
-                            <button id="btn-large" onclick="switchSequencer('large')" class="seq-tab-btn touch-manipulation">LARGE</button>
+                    <div class="flex justify-center items-center mb-6">
+                        <div class="seq-tabs-container">
+                            <button id="btn-mini" onclick="switchSequencer('mini')" class="seq-tab-btn active-tab touch-manipulation">MINI SEQ</button>
+                            <button id="btn-large" onclick="switchSequencer('large')" class="seq-tab-btn touch-manipulation">PRO SEQ</button>
                         </div>
-                        <button onclick="document.getElementById('mixer-panel').classList.toggle('open')" class="seq-tab-btn flex items-center gap-2 border-[var(--accent-color)] text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:text-black">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="21" x2="8" y2="3"></line><line x1="16" y1="21" x2="16" y2="3"></line><line x1="12" y1="21" x2="12" y2="3"></line><line x1="4" y1="21" x2="4" y2="3"></line><line x1="20" y1="21" x2="20" y2="3"></line></svg> MIXER
+                        <button onclick="document.getElementById('mixer-panel').classList.toggle('open')" class="ml-4 seq-tab-btn flex items-center gap-2 border-[var(--accent-color)] text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:text-black">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="21" x2="8" y2="3"></line><line x1="16" y1="21" x2="16" y2="3"></line><line x1="12" y1="21" x2="12" y2="3"></line><line x1="4" y1="21" x2="4" y2="3"></line><line x1="20" y1="21" x2="20" y2="3"></line></svg>
                         </button>
                     </div>
 
