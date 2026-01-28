@@ -139,7 +139,7 @@
         }
         /* Adjust center circle for inverted themes */
         .inverted-text .pie-chart {
-            background: radial-gradient(closest-side, rgba(240, 140, 53, 0.9) 75%, transparent 76% 100%),
+            background: radial-gradient(closest-side, var(--card-bg-color, rgba(255,255,255,0.8)) 75%, transparent 76% 100%),
                         conic-gradient(var(--meter-color) calc(var(--percent) * 1%), rgba(255,255,255,0.3) 0);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
@@ -684,24 +684,31 @@
 
         // --- WINDOW MANAGEMENT ---
         function handleWindowControl(action, windowId) {
-            const section = document.getElementById(windowId);
+            // Find the closest container based on the windowId passed or the structure
+            let section;
+            if(windowId) {
+                 section = document.getElementById(windowId);
+            }
+            // If function is called from inline HTML where 'this' context is tricky, rely on DOM traversal if needed
+            
             if (!section) return;
+            
+            // The card to manipulate is either the section itself (if it has window-container) or a child
             const card = section.classList.contains('window-container') ? section : section.querySelector('.window-container');
+            
             if (!card) return;
 
             if (action === 'close') {
-                card.classList.remove('maximized'); // Ensure we exit max first
+                card.classList.remove('maximized'); 
                 document.body.classList.remove('lock-scroll');
                 card.classList.add('closed');
             } else if (action === 'min') {
-                card.classList.remove('maximized'); // Ensure we exit max first
+                card.classList.remove('maximized'); 
                 document.body.classList.remove('lock-scroll');
                 card.classList.toggle('minimized');
             } else if (action === 'max') {
-                card.classList.remove('minimized'); // Ensure we exit min first
+                card.classList.remove('minimized'); 
                 card.classList.toggle('maximized');
-                
-                // Toggle Scroll Lock on Body
                 if (card.classList.contains('maximized')) {
                     document.body.classList.add('lock-scroll');
                 } else {
@@ -722,7 +729,6 @@
             }
             if(card) {
                 card.classList.remove('closed', 'minimized');
-                // Don't auto-maximize or lock scroll on restore, just show it
             }
         }
 
@@ -735,14 +741,14 @@
                 fontClass: 'font-fl', bgImage: 'flstudio.png', fallbackBg: '#2d3033', text: 'text-[#d4d4d4]',
                 accent: '#2f5e38', meterColor: '#f08c35', 
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #22c55e 130deg, #eab308 160deg, #ef4444 180deg)',
-                cardBg: '#f08c35', cardBorder: '#f08c35', skillsTextColor: '#1a1a1a', // FIXED: Orange BG for skills card in FL
+                cardBg: '#355e3b', cardBorder: '#2f5e38', skillsTextColor: '#fff', // Green for FL
                 scanlines: false, os: 'win'
             },
             ableton: {
                 fontClass: 'font-ableton', bgImage: 'ableton.png', fallbackBg: '#999999', text: 'text-[#333]',
-                accent: '#ffbf00', meterColor: '#27c93f',
+                accent: '#ffbf00', meterColor: '#ffbf00', // Orange meter
                 vuGradient: 'conic-gradient(from 0deg at 50% 100%, transparent 0deg, transparent 130deg, #86efac 130deg, #fde047 160deg, #fca5a5 180deg)',
-                cardBg: 'rgba(30, 30, 30, 0.95)', cardBorder: '#fff', skillsTextColor: '#fff', // Inverted Ableton (Dark BG, Light Text)
+                cardBg: 'rgba(30, 30, 30, 0.95)', cardBorder: '#fff', skillsTextColor: '#fff', // Inverted Ableton
                 scanlines: false, os: 'mac'
             },
             protools: {
@@ -805,6 +811,10 @@
             document.documentElement.style.setProperty('--accent-color', theme.accent);
             document.documentElement.style.setProperty('--meter-color', theme.meterColor);
             document.documentElement.style.setProperty('--vu-gradient', theme.vuGradient);
+            
+            // Ableton Inverted class for specific Pie Chart center color fix
+            if(themeName === 'ableton') document.body.classList.add('ableton-inverted');
+            else document.body.classList.remove('ableton-inverted');
 
             document.querySelectorAll('.theme-icon-color').forEach(i => i.style.color = theme.accent);
             document.querySelectorAll('.theme-border-color').forEach(b => b.style.borderColor = theme.accent);
@@ -821,9 +831,15 @@
             const headers = document.querySelectorAll('.window-header');
             
             headers.forEach(h => {
-                let section = h.closest('section');
-                if(!section) section = h.closest('#skills-window');
-                const winId = section ? section.id : 'unknown';
+                // Determine ID based on context correctly this time
+                const container = h.closest('.window-container');
+                let winId = container ? container.id : null;
+                
+                // Fallback for wrapped containers like skills-window
+                if (!winId) {
+                    const parentWrapper = h.closest('#skills-window');
+                    if (parentWrapper) winId = parentWrapper.id;
+                }
 
                 h.className = 'window-header';
                 let btns = '';
