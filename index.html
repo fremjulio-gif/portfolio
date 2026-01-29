@@ -37,22 +37,20 @@
             transition: background-color 0.6s ease, color 0.4s ease, filter 0.3s ease;
             -webkit-text-size-adjust: 100%; margin: 0; padding: 0;
         }
+
         body.switching-theme { filter: blur(12px) brightness(1.2); transform: scale(0.98); }
 
-        /* Light Mode (Ableton Optimized) */
+        /* Light Mode */
         body.light-mode {
             --glass-surface: rgba(255, 255, 255, 0.2); 
             --glass-border: rgba(255, 255, 255, 0.3);
             --glass-highlight: rgba(255, 255, 255, 0.5);
             --glass-text: #1a1a1a;
-            background-color: #909090; /* Darker Grey */
+            background-color: #909090;
         }
         body.light-mode .scanlines { opacity: 0.02; }
         body.light-mode .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.7), transparent); color: black; }
         
-        /* Ableton Pick Theme Text Fix */
-        body.light-mode #theme-label { color: #000; font-weight: 800; text-shadow: 0 1px 0 rgba(255,255,255,0.5); opacity: 1; }
-
         body[data-theme='protools'] { background-color: #262626; }
 
         /* --- LIQUID GLASS PANELS --- */
@@ -60,21 +58,26 @@
             background: linear-gradient(145deg, var(--glass-surface) 0%, rgba(255,255,255,0.02) 100%);
             backdrop-filter: blur(50px) saturate(140%); -webkit-backdrop-filter: blur(50px) saturate(140%);
             border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-highlight), inset 0 0 20px rgba(255,255,255,0.02);
+            box-shadow: 
+                var(--glass-shadow),
+                inset 0 1px 0 0 var(--glass-highlight),
+                inset 0 0 20px rgba(255,255,255,0.02);
             border-radius: 32px; overflow: hidden;
             transition: transform 0.5s var(--ease-ios), border-color 0.4s ease, box-shadow 0.4s ease;
             position: relative; width: 100%;
         }
+        
         @media (hover: hover) {
             .glass-panel:hover { 
-                border-color: var(--accent-color); transform: translateY(-8px) scale(1.01); 
+                border-color: var(--accent-color); 
+                transform: translateY(-8px) scale(1.01); 
                 box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), inset 0 1px 0 0 var(--glass-highlight), 0 0 0 1px var(--accent-color);
             }
-            .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
+            /* UNIFIED PROJECT CARD ANIMATION */
+            .project-card:hover img { transform: scale(1.1); filter: brightness(0.6); }
             .dock-icon:hover { color: #fff; transform: translateY(-5px); }
             body.light-mode .dock-icon:hover { color: #000; }
-            .theme-pill:hover { opacity: 1; transform: scale(1.15); background: rgba(255,255,255,0.3); }
-            .theme-pill:hover img { transform: scale(1.4); }
+            .theme-pill:hover { opacity: 1; transform: scale(1.1); background: rgba(255,255,255,0.3); }
         }
 
         /* --- LAYOUT --- */
@@ -87,13 +90,15 @@
         /* --- WIDGETS --- */
         .win-header { 
             height: 44px; display: flex; align-items: center; justify-content: space-between; 
-            padding: 0 24px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); flex-shrink: 0;
+            padding: 0 24px; border-bottom: 1px solid var(--glass-border); 
+            background: rgba(255,255,255,0.03); flex-shrink: 0;
         }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
         
         .stat-item {
             display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;
-            transition: transform 0.3s var(--ease-ios); padding: 10px; border-radius: 20px;
+            transition: transform 0.3s var(--ease-ios);
+            padding: 10px; border-radius: 20px;
         }
         @media (min-width: 1024px) {
             .stat-item:hover { transform: translateY(-10px) scale(1.05); background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
@@ -119,10 +124,11 @@
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.4), transparent); }
         @media (min-width: 768px) { .project-info { padding: 24px; } }
 
-        /* --- DOCK --- */
+        /* --- DOCK & ISLAND --- */
         .dock-container {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; justify-content: center; gap: 16px; padding: 10px 24px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; padding: 10px 24px;
             background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(40px) saturate(150%);
             border: 1px solid var(--glass-border); border-radius: 30px; z-index: 90;
             height: 65px; width: 90%; max-width: 500px;
@@ -130,6 +136,7 @@
         }
         @media (min-width: 768px) { .dock-container { bottom: 30px; gap: 20px; padding: 12px 30px; height: 80px; width: auto; max-width: none; } }
         body.light-mode .dock-container { background: rgba(255, 255, 255, 0.4); border-color: rgba(255,255,255,0.4); }
+        
         .dock-icon { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: rgba(255,255,255,0.7); transition: 0.3s; cursor: pointer; height: 100%; width: auto; min-width: 40px; }
         @media (min-width: 1024px) { .dock-icon { width: 50px; } }
         body.light-mode .dock-icon { color: #444; }
@@ -139,7 +146,6 @@
         @media (min-width: 1024px) { .dock-icon span { display: block; } }
         .dock-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.15); }
 
-        /* --- THEME ISLAND --- */
         .theme-island {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 90;
             background-color: rgba(20, 20, 20, 0.6); background-size: cover; background-position: center;
@@ -152,10 +158,11 @@
         .theme-pill { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(255,255,255,0.05); }
         @media (min-width: 768px) { .theme-pill { width: 48px; height: 48px; } }
         .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-color); background: rgba(0,0,0,0.6); }
-        .theme-pill img { width: 20px; height: 20px; transform: scale(1.25); transition: transform 0.3s; }
-        @media (min-width: 768px) { .theme-pill img { width: 24px; height: 24px; } }
+        /* BIGGER LOGOS */
+        .theme-pill img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+        @media (min-width: 768px) { .theme-pill img { padding: 8px; } }
 
-        /* --- SEQUENCER --- */
+        /* --- SEQUENCER & MIXER --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
@@ -187,7 +194,7 @@
         .transport-btn:hover { background: var(--accent-color); color: #000; }
         .transport-btn.playing { background: var(--accent-color); color: #000; box-shadow: 0 0 15px var(--accent-color); }
 
-        /* PRO DAW MIXER FADERS (FIXED) */
+        /* MIXER PANEL */
         .mixer-panel {
             max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out;
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
@@ -198,31 +205,15 @@
         .fader-group { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
         .fader-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #666; letter-spacing: 1px; }
         
-        /* ROTATED RANGE FOR TRUE VERTICAL FADER */
-        .fader-container {
-            height: 100px; width: 30px; display: flex; align-items: center; justify-content: center; position: relative;
+        /* VERTICAL FADERS */
+        input[type=range][orient=vertical] { 
+            appearance: none; -webkit-appearance: none; 
+            writing-mode: bt-lr; width: 30px; height: 120px; padding: 0; 
+            background: transparent; cursor: pointer; display: flex; justify-content: center; margin: 0 auto;
         }
-        input[type=range].vertical-fader {
-            -webkit-appearance: none;
-            width: 100px; /* Length of the fader track */
-            height: 30px; /* Hitbox width */
-            background: transparent;
-            transform: rotate(-90deg);
-            transform-origin: center;
-            position: absolute;
-            cursor: pointer;
-        }
-        input[type=range].vertical-fader::-webkit-slider-runnable-track {
-            width: 100%; height: 6px; background: #111; border: 1px solid #333; border-radius: 4px; box-shadow: inset 0 0 3px #000;
-        }
-        input[type=range].vertical-fader::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px; height: 26px; /* Thumb dimensions (rotated) */
-            background: linear-gradient(#555, #222);
-            border: 1px solid #666; border-radius: 3px;
-            margin-top: -11px; /* Align center */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
-        }
+        input[type=range][orient=vertical]::-webkit-slider-runnable-track { width: 8px; height: 100%; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 99px; box-shadow: inset 0 0 5px rgba(0,0,0,1); }
+        input[type=range][orient=vertical]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 30px; margin-left: -12px; background: linear-gradient(to bottom, #555, #222); border-top: 1px solid #777; border-bottom: 1px solid #000; border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8); margin-top: 0; position: relative; z-index: 2; }
+        input[type=range][orient=vertical]::-webkit-slider-thumb:active { background: var(--accent-color); border-color: #fff; }
 
         .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
         .sequencer-scroll-container::-webkit-scrollbar { display: none; }
@@ -252,12 +243,15 @@
         .loading-bar { height: 100%; width: 0%; background: var(--accent-color); border-radius: 99px; animation: loadProject 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; box-shadow: 0 0 15px var(--accent-color); }
         @keyframes loadProject { 0% { width: 0%; } 40% { width: 60%; } 70% { width: 80%; } 100% { width: 100%; } }
 
-        /* --- UTILS & BG (IMPROVED VISIBILITY) --- */
+        /* --- UTILS & BG --- */
         #start-screen { position: fixed; inset: 0; z-index: 100; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
         .scroll-float { opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-ios); }
         .scroll-float.visible { opacity: 1; transform: translateY(0); }
-        #theme-bg { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; opacity: 0.4; filter: blur(8px) saturate(1.1); transition: 0.8s; transform: scale(1.1); }
+        
+        /* PARALLAX BG BASE */
+        #theme-bg { position: fixed; top: 0; left: 0; width: 100%; height: 120%; /* Taller for parallax */ z-index: -2; background-size: cover; background-position: center; opacity: 0.35; filter: blur(25px) saturate(1.2); transition: background-image 0.8s, opacity 0.8s; will-change: transform; }
+        
         .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.1; }
 
         @media (max-width: 1024px) {
@@ -402,7 +396,7 @@
             </div>
         </section>
 
-        <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-[var(--accent-color)]/30 min-h-[40vh] md:min-h-0 shadow-[0_0_40px_-10px_var(--accent-color)]/20">
+        <section id="sequencer" class="col-span-12 glass-panel p-0 scroll-float border-[var(--accent-color)]/30 min-h-[40vh] md:min-h-0 shadow-[0_0_40px_-10px_var(--accent-color)]/20">
             <div class="win-header">
                 <span class="win-title">Sequencer.vst</span>
                 <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
@@ -410,12 +404,12 @@
             <div id="sequencer-inner" class="bg-black/20 p-4 md:p-6 h-full relative">
                 <div class="relative z-10">
                     
-                    <div class="flex justify-center items-center mb-6">
+                    <div class="flex justify-center items-center mb-6 gap-6">
                         <div class="seq-tabs-container">
                             <button id="btn-mini" onclick="switchSequencer('mini')" class="seq-tab-btn active-tab touch-manipulation">MINI SEQ</button>
                             <button id="btn-large" onclick="switchSequencer('large')" class="seq-tab-btn touch-manipulation">PRO SEQ</button>
                         </div>
-                        <button onclick="document.getElementById('mixer-panel').classList.toggle('open')" class="ml-4 seq-tab-btn flex items-center gap-2 border-[var(--accent-color)] text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:text-black">
+                        <button onclick="document.getElementById('mixer-panel').classList.toggle('open')" class="seq-tab-btn flex items-center gap-2 border-[var(--accent-color)] text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:text-black">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="21" x2="8" y2="3"></line><line x1="16" y1="21" x2="16" y2="3"></line><line x1="12" y1="21" x2="12" y2="3"></line><line x1="4" y1="21" x2="4" y2="3"></line><line x1="20" y1="21" x2="20" y2="3"></line></svg>
                         </button>
                     </div>
@@ -423,47 +417,41 @@
                     <div id="mixer-panel" class="mixer-panel mb-4">
                         <div class="flex justify-around px-2 font-mono text-[9px] text-center text-gray-400">
                             <div class="fader-group">
-                                <div class="fader-container">
-                                    <input type="range" class="vertical-fader" min="0" max="100" value="90" oninput="setVol('kick', this.value)">
-                                </div>
+                                <input type="range" orient="vertical" min="0" max="100" value="90" oninput="setVol('kick', this.value)">
                                 <label>KICK</label>
                             </div>
                             <div class="fader-group">
-                                <div class="fader-container">
-                                    <input type="range" class="vertical-fader" min="0" max="100" value="80" oninput="setVol('snare', this.value)">
-                                </div>
+                                <input type="range" orient="vertical" min="0" max="100" value="80" oninput="setVol('snare', this.value)">
                                 <label>SNAR</label>
                             </div>
                             <div class="fader-group">
-                                <div class="fader-container">
-                                    <input type="range" class="vertical-fader" min="0" max="100" value="70" oninput="setVol('hat', this.value)">
-                                </div>
+                                <input type="range" orient="vertical" min="0" max="100" value="70" oninput="setVol('hat', this.value)">
                                 <label>HATS</label>
                             </div>
                             <div class="fader-group">
-                                <div class="fader-container">
-                                    <input type="range" class="vertical-fader" min="0" max="100" value="60" oninput="setVol('perc', this.value)">
-                                </div>
+                                <input type="range" orient="vertical" min="0" max="100" value="60" oninput="setVol('perc', this.value)">
                                 <label>PERC</label>
                             </div>
                             <div class="fader-group">
-                                <div class="fader-container">
-                                    <input type="range" class="vertical-fader" min="0" max="100" value="75" oninput="setVol('synth', this.value)">
-                                </div>
+                                <input type="range" orient="vertical" min="0" max="100" value="75" oninput="setVol('synth', this.value)">
                                 <label>SYN</label>
                             </div>
                         </div>
                     </div>
 
                     <div id="seq-mini-ui">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                            <div class="flex items-center gap-3 mb-2 md:mb-0">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                            <div class="flex items-center gap-3">
                                 <div id="seq-led-mini" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
-                                <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">MINI_LOOP_8</h3>
+                                <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">BEAT_LAB_8</h3>
+                                <span class="text-[9px] opacity-50 font-mono hidden md:block">TAP GRID TO COMPOSE</span>
                             </div>
-                            <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-center w-full md:w-auto">
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-mini" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full h-8"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch</option></select></div>
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)] h-8" oninput="changeBpm(this.value)"></div>
+                            <div class="flex flex-wrap gap-4 items-center justify-center">
+                                <select id="kit-select-mini" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] text-xs h-8"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch</option></select>
+                                <div class="flex items-center gap-2 bg-black/30 rounded px-2 py-1 h-8 border border-white/10">
+                                    <input type="range" min="60" max="180" value="120" class="w-16 accent-[var(--accent-color)]" oninput="changeBpm(this.value)">
+                                    <span id="bpm-display-mini" class="font-mono text-xs text-[var(--accent-color)]">120 BPM</span>
+                                </div>
                                 <button id="play-btn-mini" onclick="togglePlay('mini')" class="transport-btn touch-manipulation" title="Play/Stop"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg></button>
                                 <button onclick="clearSequencer('mini')" class="transport-btn touch-manipulation" title="Clear"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                             </div>
@@ -486,15 +474,18 @@
                     </div>
 
                     <div id="seq-large-ui" class="hidden">
-                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                             <div class="flex items-center gap-3 mb-2 md:mb-0">
                                 <div id="seq-led-large" class="w-3 h-3 rounded-full bg-red-900 transition-colors"></div>
                                 <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">PRO_X16</h3>
                             </div>
-                            <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-center w-full md:w-auto">
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">KIT</label><select id="kit-select-large" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full h-8"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch</option></select></div>
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">WAVE</label><select id="synth-type" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] w-full h-8"><option value="sine">Sine</option><option value="square">Square</option><option value="sawtooth">Saw</option><option value="triangle">Tri</option></select></div>
-                                <div class="flex flex-col grow md:grow-0"><label class="opacity-50 mb-1">BPM</label><input type="range" min="60" max="180" value="120" class="w-full md:w-24 accent-[var(--accent-color)] h-8" oninput="changeBpm(this.value)"></div>
+                            <div class="flex flex-wrap gap-3 md:gap-4 font-mono text-[10px] items-center w-full md:w-auto justify-center">
+                                <select id="kit-select-large" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] text-xs h-8"><option value="standard">Standard</option><option value="analog">808 Analog</option><option value="lofi">Glitch</option></select>
+                                <select id="synth-type" class="bg-black/50 border border-white/20 rounded px-2 py-1 text-[var(--glass-text)] text-xs h-8"><option value="sine">Sine</option><option value="square">Square</option><option value="sawtooth">Saw</option><option value="triangle">Tri</option></select>
+                                <div class="flex items-center gap-2 bg-black/30 rounded px-2 py-1 h-8 border border-white/10">
+                                    <input type="range" min="60" max="180" value="120" class="w-16 accent-[var(--accent-color)]" oninput="changeBpm(this.value)">
+                                    <span id="bpm-display-large" class="font-mono text-xs text-[var(--accent-color)]">120 BPM</span>
+                                </div>
                                 <button id="play-btn-large" onclick="togglePlay('large')" class="transport-btn touch-manipulation"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg></button>
                                 <button onclick="clearSequencer('large')" class="transport-btn touch-manipulation"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                             </div>
@@ -545,7 +536,7 @@
                     </a>
 
                     <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group click-sound touch-manipulation">
-                        <img src="cover.jpg" alt="Srh - qutumeregardes" class="object-cover object-bottom w-full h-full transition duration-500 group-hover:scale-105">
+                        <img src="cover.jpg" alt="Srh - qutumeregardes" class="object-cover object-bottom w-full h-full">
                         <div class="project-info">
                             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Musique</span>
@@ -666,7 +657,7 @@
 
     <nav class="dock-container">
         <a href="#hero" class="dock-icon click-sound touch-manipulation">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
         </a>
         <a href="#skills" class="dock-icon click-sound touch-manipulation">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Stats</span>
@@ -725,7 +716,6 @@
 
         function playThemeSwitchSound() {
             if (!audioCtx || audioCtx.state === 'suspended') return;
-            // Swoosh effect
             const bSize = audioCtx.sampleRate * 0.5;
             const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
             const d = b.getChannelData(0);
@@ -910,7 +900,14 @@
             else { seqLarge.kick.fill(0); seqLarge.snare.fill(0); seqLarge.hat.fill(0); seqLarge.perc1.fill(0); seqLarge.perc2.fill(0); melodyLarge.forEach(r=>r.fill(false)); }
             const context = document.getElementById(`seq-${mode}-ui`); context.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
         }
-        function changeBpm(v) { bpm = v; const displays = document.querySelectorAll('#bpm-display'); displays.forEach(d => d.textContent = v); if(isPlaying) { clearInterval(intervalId); intervalId = setInterval(nextStep, (60/bpm)*1000/2); } }
+        function changeBpm(v) { 
+            bpm = v; 
+            const displayMini = document.getElementById('bpm-display-mini');
+            const displayLarge = document.getElementById('bpm-display-large');
+            if(displayMini) displayMini.textContent = v + ' BPM';
+            if(displayLarge) displayLarge.textContent = v + ' BPM';
+            if(isPlaying) { clearInterval(intervalId); intervalId = setInterval(nextStep, (60/bpm)*1000/2); } 
+        }
 
         // --- VISUALIZER ---
         const scopeCanvas = document.getElementById('scope-canvas-mini');
