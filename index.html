@@ -32,7 +32,7 @@
         .font-rx { font-family: 'Montserrat', sans-serif; }
         .font-tech { font-family: 'Share Tech Mono', monospace; }
 
-        /* --- GLOBAL & LIGHT MODE --- */
+        /* --- GLOBAL --- */
         html, body { max-width: 100vw; overflow-x: hidden; }
         body { 
             background-color: #050505; color: var(--glass-text); 
@@ -42,25 +42,24 @@
 
         body.switching-theme { filter: blur(12px) brightness(1.2); transform: scale(0.98); }
 
-        /* Light Mode (Ableton Mid Grey) */
+        /* Light Mode */
         body.light-mode {
             --glass-surface: rgba(255, 255, 255, 0.2); 
             --glass-border: rgba(255, 255, 255, 0.3);
             --glass-highlight: rgba(255, 255, 255, 0.5);
             --glass-text: #1a1a1a;
-            background-color: #A0A0A0; /* Mid Grey proper to Ableton */
+            background-color: #A0A0A0;
         }
         body.light-mode .scanlines { opacity: 0.02; }
         body.light-mode .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.7), transparent); color: black; }
         
         body[data-theme='protools'] { background-color: #262626; }
 
-        /* --- LIQUID GLASS PANELS (IOS 26 STYLE) --- */
+        /* --- LIQUID GLASS PANELS --- */
         .glass-panel {
             background: linear-gradient(145deg, var(--glass-surface) 0%, rgba(255,255,255,0.02) 100%);
             backdrop-filter: blur(50px) saturate(140%); -webkit-backdrop-filter: blur(50px) saturate(140%);
             border: 1px solid var(--glass-border);
-            /* Double border + Depth Shadow */
             box-shadow: 
                 var(--glass-shadow),
                 inset 0 1px 0 0 var(--glass-highlight),
@@ -94,19 +93,13 @@
         .win-header { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.02); }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
         
-        /* --- STATS & SKILLS (DESKTOP ENHANCEMENTS) --- */
         .stat-item {
-            display: flex; flex-direction: column; items-align: center; text-align: center; width: 100%;
+            display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;
             transition: transform 0.3s var(--ease-ios);
             padding: 10px; border-radius: 20px;
         }
-        /* Hover effect only on desktop */
         @media (min-width: 1024px) {
-            .stat-item:hover {
-                transform: translateY(-10px) scale(1.05);
-                background: rgba(255,255,255,0.03);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            }
+            .stat-item:hover { transform: translateY(-10px) scale(1.05); background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         }
 
         .pie-chart {
@@ -115,10 +108,7 @@
             display: grid; place-items: center; flex-shrink: 0; margin: 0 auto 1rem;
             box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3); transition: transform 0.3s; position: relative; z-index: 10;
         }
-        @media (min-width: 1024px) { 
-            .pie-chart { width: 130px; height: 130px; margin-bottom: 1.5rem; } /* BIGGER ON DESKTOP */
-            .pie-chart span { font-size: 24px !important; }
-        }
+        @media (min-width: 1024px) { .pie-chart { width: 130px; height: 130px; margin-bottom: 1.5rem; } .pie-chart span { font-size: 24px !important; } }
         .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; transition: background 0.6s; z-index: 1; box-shadow: inset 0 5px 15px rgba(0,0,0,0.5); }
         body.light-mode .pie-chart::after { background: #dcdcdc; box-shadow: inset 0 5px 15px rgba(0,0,0,0.1); }
         body[data-theme='protools'] .pie-chart::after { background: #262626; } 
@@ -169,13 +159,14 @@
         .theme-pill img { width: 20px; height: 20px; transform: scale(1.25); transition: transform 0.3s; }
         @media (min-width: 768px) { .theme-pill img { width: 24px; height: 24px; } }
 
-        /* --- SEQUENCER & PRO MIXER --- */
+        /* --- SEQUENCER & MIXER --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
             background-image: url('console.png'); background-size: cover; background-position: center;
-            opacity: 0.15; z-index: 0; pointer-events: none; mix-blend-mode: overlay;
-            filter: grayscale(100%) contrast(1.2);
+            opacity: 0.35; /* Increased Visibility */
+            z-index: 0; pointer-events: none; mix-blend-mode: overlay;
+            filter: grayscale(100%) contrast(1.2) blur(1px); /* Slight blur */
         }
         
         .seq-tabs-container {
@@ -208,44 +199,45 @@
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
             border-radius: 16px; margin-top: 10px;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%;
         }
         .mixer-panel.open { max-height: 240px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
         
         .fader-group { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
         .fader-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #666; letter-spacing: 1px; }
         
-        /* Custom Fader Styling */
         input[type=range][orient=vertical] {
             appearance: none; -webkit-appearance: none;
-            writing-mode: bt-lr; width: 12px; height: 120px; padding: 0;
-            background: transparent; cursor: pointer;
+            writing-mode: bt-lr; width: 100%; height: 120px; padding: 0;
+            background: transparent; cursor: pointer; display: flex; justify-content: center;
         }
         /* Track */
         input[type=range][orient=vertical]::-webkit-slider-runnable-track {
-            width: 6px; height: 100%; cursor: pointer;
-            background: #000; border: 1px solid #333; border-radius: 10px;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+            width: 8px; height: 100%; cursor: pointer;
+            background: #111; border: 1px solid #333; border-radius: 99px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,1);
         }
         /* Thumb (Fader Cap) */
         input[type=range][orient=vertical]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 24px; width: 16px; margin-left: -6px; /* Align center */
-            background: linear-gradient(to bottom, #444, #222);
-            border: 1px solid #555; border-radius: 2px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
-            margin-top: 0;
-            position: relative; z-index: 2;
+            height: 20px; width: 30px; margin-left: -12px; /* Center Cap */
+            background: linear-gradient(to bottom, #555, #222);
+            border-top: 1px solid #777; border-bottom: 1px solid #000;
+            border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8);
+            margin-top: 0; position: relative; z-index: 2;
         }
-        input[type=range][orient=vertical]::-webkit-slider-thumb:hover { background: #555; }
-        
+        input[type=range][orient=vertical]::-webkit-slider-thumb:active { background: var(--accent-color); border-color: #fff; }
+
         .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
         .sequencer-scroll-container::-webkit-scrollbar { display: none; }
         .sequencer-track-row { min-width: 500px; }
         .sequencer-track-row-large { min-width: 800px; }
+        
         .step-btn { height: 32px; width: 100%; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: manipulation;}
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 12px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
         body.light-mode .step-btn.active { background-color: #333; border-color: #333; box-shadow: none; }
+        
         .piano-cell { background: rgba(255,255,255,0.03); border-radius: 4px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; touch-action: manipulation;}
         .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
         .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
@@ -265,13 +257,11 @@
         .loading-bar { height: 100%; width: 0%; background: var(--accent-color); border-radius: 99px; animation: loadProject 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; box-shadow: 0 0 15px var(--accent-color); }
         @keyframes loadProject { 0% { width: 0%; } 40% { width: 60%; } 70% { width: 80%; } 100% { width: 100%; } }
 
-        /* --- UTILS & BG VISIBILITY TWEAK --- */
+        /* --- UTILS --- */
         #start-screen { position: fixed; inset: 0; z-index: 100; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
         .scroll-float { opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-ios); }
         .scroll-float.visible { opacity: 1; transform: translateY(0); }
-        
-        /* INCREASED BG VISIBILITY */
         #theme-bg { position: fixed; inset: 0; z-index: -2; background-size: cover; background-position: center; opacity: 0.35; filter: blur(25px) saturate(1.2); transition: 0.8s; transform: scale(1.1); }
         .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.1; }
 
@@ -527,6 +517,34 @@
             <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                
+                <a href="https://youtu.be/9UOw2Qhdke0" target="_blank" class="project-card group click-sound touch-manipulation">
+                    <img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg" alt="Je suis la fumée">
+                    <div class="project-info">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Court-Métrage</span>
+                        </div>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Je suis la fumée...</h4>
+                        <p class="text-sm font-medium opacity-90 mb-4">Prise de son & Post-Prod</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Prise de son, Percheman, Red Voix Off</p>
+                    </div>
+                </a>
+
+                <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group click-sound touch-manipulation">
+                    <div class="w-full h-full bg-neutral-900 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-50"></div>
+                        <span class="relative z-10 font-bold text-2xl text-gray-500 tracking-widest border border-gray-600 px-4 py-2 rounded">COVER ART</span>
+                    </div>
+                    <div class="project-info">
+                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Musique</span>
+                        </div>
+                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Srh - qutumeregardes</h4>
+                        <p class="text-sm font-medium opacity-90 mb-4">Mix & Master</p>
+                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Mixage - Mastering</p>
+                    </div>
+                </a>
+
                 <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group click-sound touch-manipulation">
                     <img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg" alt="Capharnaüm">
                     <div class="project-info">
@@ -660,7 +678,9 @@
         const trackVols = { kick: 0.9, snare: 0.8, hat: 0.7, perc: 0.6, synth: 0.75 };
 
         function setVol(track, val) {
-            trackVols[track] = val / 100;
+            // Logarithmic scaling for better fader feel
+            const normalized = val / 100;
+            trackVols[track] = normalized * normalized; // x^2 approx log
         }
 
         // CLICK SOUND + THEME SWOOSH
@@ -682,7 +702,6 @@
 
         function playThemeSwitchSound() {
             if (!audioCtx || audioCtx.state === 'suspended') return;
-            // Swoosh effect
             const bSize = audioCtx.sampleRate * 0.5;
             const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
             const d = b.getChannelData(0);
