@@ -14,6 +14,7 @@
     <style>
         /* --- CORE VARS --- */
         :root {
+            /* ULTRA LIQUID GLASS VARS */
             --glass-surface: rgba(18, 18, 18, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-highlight: rgba(255, 255, 255, 0.15);
@@ -73,7 +74,7 @@
                 transform: translateY(-8px) scale(1.01); 
                 box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), inset 0 1px 0 0 var(--glass-highlight), 0 0 0 1px var(--accent-color);
             }
-            .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
+            .project-card:hover img { transform: scale(1.1); filter: brightness(0.6); }
             .dock-icon:hover { color: #fff; transform: translateY(-5px); }
             body.light-mode .dock-icon:hover { color: #000; }
             .theme-pill:hover { opacity: 1; transform: scale(1.15); background: rgba(255,255,255,0.3); }
@@ -88,8 +89,15 @@
         }
 
         /* --- WIDGETS --- */
-        .win-header { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.02); }
+        /* Mac OS Finder Style Header */
+        .win-header { 
+            height: 44px; display: flex; align-items: center; justify-content: space-between; 
+            padding: 0 24px; border-bottom: 1px solid var(--glass-border); 
+            background: rgba(255,255,255,0.03); flex-shrink: 0;
+        }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
+        .win-controls { display: flex; gap: 8px; }
+        .win-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); }
         
         .stat-item {
             display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;
@@ -117,7 +125,7 @@
         @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
         .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
         body.light-mode .project-card img { filter: brightness(1); }
-        .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+        .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.4), transparent); }
         @media (min-width: 768px) { .project-info { padding: 24px; } }
 
         /* --- DOCK & ISLAND --- */
@@ -157,7 +165,7 @@
         .theme-pill img { width: 20px; height: 20px; transform: scale(1.25); transition: transform 0.3s; }
         @media (min-width: 768px) { .theme-pill img { width: 24px; height: 24px; } }
 
-        /* --- SEQUENCER & MIXER --- */
+        /* --- SEQUENCER --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
@@ -165,7 +173,6 @@
             opacity: 0.15; z-index: 0; pointer-events: none; mix-blend-mode: overlay;
             filter: grayscale(100%) contrast(1.2);
         }
-        
         .seq-tabs-container {
             background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
             border-radius: 9999px; padding: 4px; display: inline-flex; gap: 0;
@@ -190,37 +197,18 @@
         .transport-btn:hover { background: var(--accent-color); color: #000; }
         .transport-btn.playing { background: var(--accent-color); color: #000; box-shadow: 0 0 15px var(--accent-color); }
 
-        /* PRO DAW MIXER FADERS */
         .mixer-panel {
             max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out;
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
             border-radius: 16px; margin-top: 10px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.5);
-            width: 100%;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.5); width: 100%;
         }
         .mixer-panel.open { max-height: 240px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        
         .fader-group { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
         .fader-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #666; letter-spacing: 1px; }
-        
-        input[type=range][orient=vertical] {
-            appearance: none; -webkit-appearance: none;
-            writing-mode: bt-lr; width: 100%; height: 120px; padding: 0;
-            background: transparent; cursor: pointer; display: flex; justify-content: center;
-        }
-        input[type=range][orient=vertical]::-webkit-slider-runnable-track {
-            width: 8px; height: 100%; cursor: pointer;
-            background: #111; border: 1px solid #333; border-radius: 99px;
-            box-shadow: inset 0 0 5px rgba(0,0,0,1);
-        }
-        input[type=range][orient=vertical]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 20px; width: 30px; margin-left: -12px; 
-            background: linear-gradient(to bottom, #555, #222);
-            border-top: 1px solid #777; border-bottom: 1px solid #000;
-            border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8);
-            margin-top: 0; position: relative; z-index: 2;
-        }
+        input[type=range][orient=vertical] { appearance: none; -webkit-appearance: none; writing-mode: bt-lr; width: 100%; height: 120px; padding: 0; background: transparent; cursor: pointer; display: flex; justify-content: center; }
+        input[type=range][orient=vertical]::-webkit-slider-runnable-track { width: 8px; height: 100%; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 99px; box-shadow: inset 0 0 5px rgba(0,0,0,1); }
+        input[type=range][orient=vertical]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 30px; margin-left: -12px; background: linear-gradient(to bottom, #555, #222); border-top: 1px solid #777; border-bottom: 1px solid #000; border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8); margin-top: 0; position: relative; z-index: 2; }
         input[type=range][orient=vertical]::-webkit-slider-thumb:active { background: var(--accent-color); border-color: #fff; }
 
         .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
@@ -241,9 +229,10 @@
         #skills { position: relative; overflow: hidden; }
         #skills::before { content: ''; position: absolute; inset: 0; background-image: url('console.png'); background-size: cover; background-position: center; opacity: 0.1; z-index: 0; pointer-events: none; mix-blend-mode: overlay; }
 
-        /* --- MARQUEE ANIMATION (FASTER) --- */
+        /* --- MARQUEE --- */
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { display: inline-block; animation: marquee 15s linear infinite; }
+        .animate-marquee { display: flex; animation: marquee 15s linear infinite; width: max-content;}
+        .marquee-item { padding-right: 40px; }
 
         /* --- LOADING BAR --- */
         .loading-container { width: 220px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; margin-top: 20px; position: relative; }
@@ -288,7 +277,7 @@
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL" class="object-contain"></button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton"><img src="logo_ableton.png" alt="Live" class="object-contain"></button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools"><img src="logo_protools.png" alt="PT" class="object-contain"></button>
-            </div>
+        </div>
     </div>
 
     <main class="bento-grid">
@@ -317,31 +306,26 @@
                 <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
             </div>
             <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center grow relative z-10">
-                
                 <div class="stat-item">
                     <div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div>
                     <div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4></div>
                     <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Écoute active, prise de décision, Pro Tools.</p>
                 </div>
-
                 <div class="stat-item">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4></div>
                     <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Créativité, Organisation, Live 12.</p>
                 </div>
-
                 <div class="stat-item">
                     <div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div>
                     <div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4></div>
                     <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Nettoyage Audio, RX 10, Ozone.</p>
                 </div>
-
                 <div class="stat-item">
                     <div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div>
                     <div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4></div>
                     <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">SoundDevice, Couple micro.</p>
                 </div>
-
             </div>
         </section>
 
@@ -400,8 +384,12 @@
             </div>
         </section>
 
-        <section id="sequencer" class="col-span-12 glass-panel p-1 scroll-float border-[var(--accent-color)]/30 min-h-[40vh] md:min-h-0 shadow-[0_0_40px_-10px_var(--accent-color)]/20">
-            <div id="sequencer-inner" class="bg-black/20 rounded-[24px] p-4 md:p-6 h-full border border-[var(--glass-border)] relative">
+        <section id="sequencer" class="col-span-12 glass-panel p-0 scroll-float border-[var(--accent-color)]/30 min-h-[40vh] md:min-h-0 shadow-[0_0_40px_-10px_var(--accent-color)]/20">
+            <div class="win-header">
+                <span class="win-title">Sequencer.vst</span>
+                <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+            </div>
+            <div id="sequencer-inner" class="bg-black/20 p-4 md:p-6 h-full relative">
                 <div class="relative z-10">
                     
                     <div class="flex justify-center items-center mb-6">
@@ -490,113 +478,129 @@
             </div>
         </section>
 
-        <section id="projets" class="col-span-12 space-y-8 scroll-float mt-8">
-            <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
+        <section id="projets" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative">
+            <div class="win-header">
+                <span class="win-title">Explorer / Projects</span>
+                <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <div class="p-8 space-y-8">
+                <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
                 
-                <a href="https://youtu.be/9UOw2Qhdke0" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg" alt="Je suis la fumée">
-                    <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Court-Métrage</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    
+                    <a href="https://youtu.be/9UOw2Qhdke0" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg" alt="Je suis la fumée" class="object-cover scale-125 object-center">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Court-Métrage</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Je suis la fumée...</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Prise de son & Post-Prod</p>
+                            <p class="font-mono text-[10px] opacity-70 border-t border-white/20 pt-3">Prise de son, Percheman, Red Voix Off</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Je suis la fumée...</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Prise de son & Post-Prod</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Prise de son, Percheman, Red Voix Off</p>
-                    </div>
-                </a>
+                    </a>
 
-                <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="cover.jpg" alt="Srh - qutumeregardes" class="w-full h-full object-cover">
-                    <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Musique</span>
+                    <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="cover.jpg" alt="Srh - qutumeregardes" class="object-cover scale-110 object-bottom w-full h-full">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Musique</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2">Srh - qutumeregardes</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Mix & Master</p>
+                            <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Mixage - Mastering</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Srh - qutumeregardes</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Mix & Master</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Mixage - Mastering</p>
-                    </div>
-                </a>
+                    </a>
 
-                <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg" alt="Capharnaüm">
-                    <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Court-Métrage</span>
+                    <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg" alt="Capharnaüm">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Court-Métrage</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2">Capharnaüm</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Sound Design & Mix</p>
+                            <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Sound Design - Bruitage - Mix (ProTools, S1)</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Capharnaüm</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Sound Design & Mix</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Sound Design - Bruitage - Mix (ProTools, S1)</p>
-                    </div>
-                </a>
+                    </a>
 
-                <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="https://img.youtube.com/vi/1RaxSos9wtk/hqdefault.jpg" alt="Remix IVY">
-                    <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Remix</span>
+                    <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="https://img.youtube.com/vi/1RaxSos9wtk/hqdefault.jpg" alt="Remix IVY">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Remix</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2">IVY - Baby Hayabusa</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Production Musicale</p>
+                            <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Montage - DA - Composition - Mix - Master</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">IVY - Baby Hayabusa</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Production Musicale</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Montage - DA - Composition - Mix - Master</p>
-                    </div>
-                </a>
+                    </a>
 
-                <a href="https://www.youtube.com/watch?v=TiqWW0e6RSg" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="https://img.youtube.com/vi/TiqWW0e6RSg/maxresdefault.jpg" alt="Désaccordés">
-                    <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Émission TV Direct</span>
+                    <a href="https://www.youtube.com/watch?v=TiqWW0e6RSg" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="https://img.youtube.com/vi/TiqWW0e6RSg/maxresdefault.jpg" alt="Désaccordés">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Émission TV Direct</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2">Désaccordés</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Ingénieur Son Direct</p>
+                            <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Prise de décision - Routing x32 - Com</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Désaccordés</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Ingénieur Son Direct</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Prise de décision - Routing x32 - Com</p>
-                    </div>
-                </a>
+                    </a>
 
-                <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="https://img.youtube.com/vi/w_9xYrwzKNs/maxresdefault.jpg" alt="Long Day">
-                    <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Clip Musical</span>
+                    <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="https://img.youtube.com/vi/w_9xYrwzKNs/maxresdefault.jpg" alt="Long Day">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Clip Musical</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2">Long Day</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Montage // Prise de vue</p>
+                            <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Direction Artistique - Montage - Composition</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Long Day</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Montage // Prise de vue</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Direction Artistique - Montage - Composition</p>
-                    </div>
-                </a>
+                    </a>
 
-                <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="https://img.youtube.com/vi/llGoiisrlu8/maxresdefault.jpg" alt="Ouragan">
-                    <div class="project-info">
-                         <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Résidence</span>
+                    <a href="https://www.youtube.com/watch?v=llGoiisrlu8" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="https://img.youtube.com/vi/llGoiisrlu8/maxresdefault.jpg" alt="Ouragan">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Résidence</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2">Ouragan</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Spatialisation Sonore</p>
+                            <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Routing Console, Patch, Spatialisation</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Ouragan</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Spatialisation Sonore</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Routing Console, Patch, Spatialisation</p>
-                    </div>
-                </a>
+                    </a>
 
-                <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="project-card group click-sound touch-manipulation">
-                    <img src="https://img.youtube.com/vi/U3lwDA_INOQ/maxresdefault.jpg" alt="Instable">
-                    <div class="project-info">
-                        <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
-                             <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Websérie</span>
+                    <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" class="project-card group click-sound touch-manipulation">
+                        <img src="https://img.youtube.com/vi/U3lwDA_INOQ/maxresdefault.jpg" alt="Instable">
+                        <div class="project-info">
+                            <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
+                                <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md">Websérie</span>
+                            </div>
+                            <h4 class="text-2xl md:text-3xl font-bold mb-2">Instable</h4>
+                            <p class="text-sm font-medium opacity-90 mb-4">Post-production Audio</p>
+                            <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Supervision sonore, Prise de son, Post Prod</p>
                         </div>
-                        <h4 class="text-2xl md:text-3xl font-bold mb-2">Instable</h4>
-                        <p class="text-sm font-medium opacity-90 mb-4">Post-production Audio</p>
-                        <p class="font-mono text-[10px] opacity-60 border-t border-white/20 pt-3">Supervision sonore, Prise de son, Post Prod</p>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
         </section>
 
         <section id="contact" class="col-span-12 glass-panel p-0 text-center flex flex-col items-center justify-center gap-6 scroll-float mb-20 overflow-hidden">
+            
+            <div class="win-header w-full">
+                <span class="win-title">Contact.app</span>
+                <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+            </div>
+
             <div class="w-full bg-[var(--accent-color)]/10 border-b border-[var(--accent-color)]/20 py-3 overflow-hidden">
-                <div class="whitespace-nowrap animate-marquee text-sm font-mono font-bold tracking-widest text-[var(--accent-color)] uppercase">
-                     PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE • PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •
+                <div class="whitespace-nowrap animate-marquee text-sm font-mono font-bold tracking-[0.2em] text-[var(--accent-color)] uppercase flex">
+                     <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
+                     <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
+                     <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
+                     <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
                 </div>
             </div>
 
@@ -678,7 +682,6 @@
 
         function playThemeSwitchSound() {
             if (!audioCtx || audioCtx.state === 'suspended') return;
-            // Swoosh effect
             const bSize = audioCtx.sampleRate * 0.5;
             const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
             const d = b.getChannelData(0);
