@@ -14,7 +14,6 @@
     <style>
         /* --- CORE VARS --- */
         :root {
-            /* ULTRA LIQUID GLASS VARS */
             --glass-surface: rgba(18, 18, 18, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-highlight: rgba(255, 255, 255, 0.15);
@@ -74,7 +73,7 @@
                 transform: translateY(-8px) scale(1.01); 
                 box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), inset 0 1px 0 0 var(--glass-highlight), 0 0 0 1px var(--accent-color);
             }
-            .project-card:hover img { transform: scale(1.1); filter: brightness(0.6); }
+            .project-card:hover img { transform: scale(1.05); filter: brightness(0.6); }
             .dock-icon:hover { color: #fff; transform: translateY(-5px); }
             body.light-mode .dock-icon:hover { color: #000; }
             .theme-pill:hover { opacity: 1; transform: scale(1.15); background: rgba(255,255,255,0.3); }
@@ -89,15 +88,12 @@
         }
 
         /* --- WIDGETS --- */
-        /* Mac OS Finder Style Header */
         .win-header { 
             height: 44px; display: flex; align-items: center; justify-content: space-between; 
             padding: 0 24px; border-bottom: 1px solid var(--glass-border); 
             background: rgba(255,255,255,0.03); flex-shrink: 0;
         }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
-        .win-controls { display: flex; gap: 8px; }
-        .win-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); }
         
         .stat-item {
             display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;
@@ -197,6 +193,7 @@
         .transport-btn:hover { background: var(--accent-color); color: #000; }
         .transport-btn.playing { background: var(--accent-color); color: #000; box-shadow: 0 0 15px var(--accent-color); }
 
+        /* MIXER FADERS FIX */
         .mixer-panel {
             max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out;
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
@@ -206,7 +203,13 @@
         .mixer-panel.open { max-height: 240px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
         .fader-group { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
         .fader-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #666; letter-spacing: 1px; }
-        input[type=range][orient=vertical] { appearance: none; -webkit-appearance: none; writing-mode: bt-lr; width: 100%; height: 120px; padding: 0; background: transparent; cursor: pointer; display: flex; justify-content: center; }
+        
+        /* FADER WIDTH FIX */
+        input[type=range][orient=vertical] { 
+            appearance: none; -webkit-appearance: none; 
+            writing-mode: bt-lr; width: 30px; /* Fixed width */ height: 120px; padding: 0; 
+            background: transparent; cursor: pointer; display: flex; justify-content: center; margin: 0 auto;
+        }
         input[type=range][orient=vertical]::-webkit-slider-runnable-track { width: 8px; height: 100%; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 99px; box-shadow: inset 0 0 5px rgba(0,0,0,1); }
         input[type=range][orient=vertical]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 30px; margin-left: -12px; background: linear-gradient(to bottom, #555, #222); border-top: 1px solid #777; border-bottom: 1px solid #000; border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8); margin-top: 0; position: relative; z-index: 2; }
         input[type=range][orient=vertical]::-webkit-slider-thumb:active { background: var(--accent-color); border-color: #fff; }
@@ -272,7 +275,7 @@
     <div class="scanlines"></div>
 
     <div class="theme-island" id="theme-widget">
-        <span class="text-[10px] font-mono uppercase tracking-widest opacity-60 hidden md:block pt-1">Pick your theme</span>
+        <span class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm">Pick your theme</span>
         <div class="flex gap-2">
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio"><img src="logo_flstudio.png" alt="FL" class="object-contain"></button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton"><img src="logo_ableton.png" alt="Live" class="object-contain"></button>
@@ -285,12 +288,12 @@
         <section id="hero" class="col-span-12 glass-panel p-6 md:p-10 flex flex-col justify-center items-center text-center min-h-[80vh] md:min-h-[50vh] scroll-float relative group">
             <div class="relative z-10">
                 <span class="inline-block px-4 py-1.5 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-[0.2em] mb-8 backdrop-blur-md shadow-lg">Portfolio 2026</span>
-                <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)] leading-none md:leading-tight drop-shadow-2xl">Jules Frémondière</h1>
+                <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)] leading-[1.1] drop-shadow-2xl">Jules Frémondière</h1>
                 <div class="inline-block bg-[var(--accent-color)]/10 border border-[var(--accent-color)] text-[var(--accent-color)] px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest animate-pulse mb-6 shadow-[0_0_20px_rgba(var(--accent-color),0.2)]">
                     🔴 En recherche de stage
                 </div>
-                <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-2">Étudiant Ingénieur du son & Sound Designer</p>
-                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition">jules.fremondiere@3is.fr</a>
+                <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-2 leading-snug">Étudiant Ingénieur du son & Sound Designer</p>
+                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition leading-normal">jules.fremondiere@3is.fr</a>
                 <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center w-full md:w-auto px-4 md:px-0">
                     <a href="#contact" class="px-8 py-4 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/30 text-center touch-manipulation tracking-wider">ME CONTACTER</a>
                     <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-4 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center justify-center gap-2 touch-manipulation tracking-wider backdrop-blur-md">
@@ -502,7 +505,7 @@
                     </a>
 
                     <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group click-sound touch-manipulation">
-                        <img src="cover.jpg" alt="Srh - qutumeregardes" class="object-cover scale-110 object-bottom w-full h-full">
+                        <img src="cover.jpg" alt="Srh - qutumeregardes" class="object-cover object-bottom w-full h-full transition duration-500 group-hover:scale-105">
                         <div class="project-info">
                             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Musique</span>
