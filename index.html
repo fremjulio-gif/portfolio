@@ -7,530 +7,628 @@
     <link rel="icon" type="image/png" href="moi.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CORE VARS --- */
+        /* =========================================
+           1. CORE VARIABLES & RESET
+           ========================================= */
         :root {
-            --glass-surface: rgba(18, 18, 18, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-highlight: rgba(255, 255, 255, 0.15);
-            --glass-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.8);
+            --glass-surface: rgba(18, 18, 18, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.9);
             --glass-text: #ffffff;
-            --accent-color: #22c55e;
+            --accent-color: #22c55e; /* FL Green default */
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
-            --vh: 1vh; 
+            --vh: 1vh;
         }
 
-        /* --- GLOBAL & CURSOR --- */
-        html, body { max-width: 100vw; overflow-x: hidden; user-select: none; -webkit-user-select: none; }
+        html, body { 
+            max-width: 100vw; overflow-x: hidden; 
+            user-select: none; -webkit-user-select: none;
+            cursor: crosshair; /* UX GAMER REQUEST */
+        }
         
-        /* 1. CURSEUR CROSSHAIR (Desktop uniquement) */
-        @media (pointer: fine) {
-            body { cursor: crosshair; }
-            a, button, .click-sound, input { cursor: crosshair !important; }
-        }
-
         body { 
             background-color: #050505; color: var(--glass-text); 
             transition: background-color 0.6s ease, color 0.4s ease;
-            -webkit-text-size-adjust: 100%; margin: 0; padding: 0;
-            font-family: 'Arial', sans-serif; /* Default font */
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
         }
-        body.font-fl { font-family: 'Arial', sans-serif; }
-        body.font-ableton { font-family: 'Jost', sans-serif; letter-spacing: 0.02em; }
-        body.font-protools { font-family: 'Avenir Next', 'Helvetica Neue', sans-serif; font-weight: 500; }
+        
+        a, button, input, .click-sound, .project-card, .lab-row { cursor: crosshair !important; }
 
-        body.switching-theme { filter: blur(12px) brightness(1.2); transform: scale(0.98); transition: 0.3s; }
+        /* THEME ANIMATION JELLY */
+        @keyframes jelly {
+            0% { transform: scale(1); }
+            30% { transform: scale(0.98); filter: brightness(1.2); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        body.switching-theme .glass-panel { animation: jelly 0.5s var(--ease-ios); }
 
-        /* Light Mode */
+        /* LIGHT MODE (ABLETON) */
         body.light-mode {
-            --glass-surface: rgba(255, 255, 255, 0.15); 
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --glass-highlight: rgba(255, 255, 255, 0.4);
+            --glass-surface: rgba(255, 255, 255, 0.25); 
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-highlight: rgba(255, 255, 255, 0.6);
             --glass-text: #1a1a1a;
-            background-color: #6e6e6e;
+            background-color: #777777; /* Concrete Grey */
         }
-        body.light-mode .scanlines { opacity: 0.02; }
-        body.light-mode .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.7), transparent); color: black; }
-        body.light-mode #theme-label { color: #1a1a1a; font-weight: 800; text-shadow: none; opacity: 1; }
+        body.light-mode .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.5), transparent); color: black; }
+        body.light-mode #theme-label { color: #000; font-weight: 800; text-shadow: none; opacity: 1; }
+        body.light-mode .scanlines { opacity: 0.03; }
 
-        /* --- LIQUID GLASS PANELS --- */
+        /* FONTS CLASSES */
+        .font-fl { font-family: 'Arial', sans-serif; }
+        .font-ableton { font-family: 'Jost', sans-serif; letter-spacing: 0.02em; }
+        .font-protools { font-family: 'Avenir Next', 'Helvetica Neue', sans-serif; font-weight: 500; }
+        .font-tech { font-family: 'Share Tech Mono', monospace; }
+
+        /* =========================================
+           2. COMPONENT STYLES (GLASS, WIDGETS)
+           ========================================= */
         .glass-panel {
-            background: linear-gradient(145deg, var(--glass-surface) 0%, rgba(255,255,255,0.02) 100%);
-            backdrop-filter: blur(50px) saturate(140%); -webkit-backdrop-filter: blur(50px) saturate(140%);
+            background: linear-gradient(160deg, var(--glass-surface) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(40px) saturate(120%); -webkit-backdrop-filter: blur(40px) saturate(120%);
             border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-highlight), inset 0 0 20px rgba(255,255,255,0.02);
+            box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-highlight);
             border-radius: 32px; overflow: hidden;
-            transition: transform 0.5s var(--ease-ios), border-color 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.4s var(--ease-ios), border-color 0.3s;
             position: relative; width: 100%;
         }
-        @media (hover: hover) {
-            .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-8px) scale(1.01); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), inset 0 1px 0 0 var(--glass-highlight), 0 0 0 1px var(--accent-color); }
-        }
+        .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-4px); }
 
-        /* --- LAYOUT --- */
-        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: 100px 24px 140px; max-width: 1600px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-        .win-header { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); flex-shrink: 0; }
+        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: 100px 24px 140px; max-width: 1600px; margin: 0 auto; box-sizing: border-box; }
+        
+        .win-header { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
 
-        /* --- WIDGETS --- */
-        .stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; transition: transform 0.3s var(--ease-ios); padding: 10px; border-radius: 20px; }
-        @media (min-width: 1024px) { .stat-item:hover { transform: translateY(-10px) scale(1.05); background: rgba(255,255,255,0.03); } }
-        .pie-chart { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0); display: grid; place-items: center; flex-shrink: 0; margin: 0 auto 1rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3); position: relative; z-index: 10; }
-        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; z-index: 1; }
+        /* STATS */
+        .stat-item { padding: 10px; border-radius: 20px; text-align: center; transition: 0.3s; }
+        .stat-item:hover { background: rgba(255,255,255,0.05); }
+        .pie-chart { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0); display: grid; place-items: center; margin: 0 auto 1rem; position: relative; }
+        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; }
         body.light-mode .pie-chart::after { background: #dcdcdc; }
-        .pie-chart span { position: relative; z-index: 20; font-family: 'Share Tech Mono'; font-size: 16px; font-weight: bold; }
+        .pie-chart span { position: relative; z-index: 10; font-family: 'Share Tech Mono'; font-weight: bold; }
 
-        /* Project Cards */
-        .project-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; cursor: crosshair; border: 1px solid var(--glass-border); }
+        /* PROJECTS */
+        .project-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 16/10; border: 1px solid var(--glass-border); }
         .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
-        .project-card:hover img { transform: scale(1.1); filter: brightness(0.6); }
-        .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.4), transparent); }
+        .project-card:hover img { transform: scale(1.1); filter: brightness(1); }
+        .project-info { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
 
-        /* --- LAB & WAVEFORMS --- */
-        .lab-row { display: flex; flex-direction: column; padding: 16px; border-bottom: 1px solid var(--glass-border); transition: 0.2s; cursor: crosshair; }
-        .lab-row:last-child { border-bottom: none; }
+        /* LAB & WAVEFORM */
+        .lab-row { padding: 16px; border-bottom: 1px solid var(--glass-border); transition: 0.2s; }
         .lab-row:hover { background: rgba(255,255,255,0.05); }
-        .lab-info { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-        .waveform-container { width: 100%; height: 40px; position: relative; background: rgba(0,0,0,0.2); border-radius: 4px; overflow: hidden; }
+        .lab-row.playing { background: var(--accent-color); color: #000; }
+        .waveform-container { height: 40px; background: rgba(0,0,0,0.2); margin-top: 8px; border-radius: 4px; position: relative; overflow: hidden; }
         .waveform-canvas { width: 100%; height: 100%; display: block; }
-        .play-btn-lab { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; margin-right: 12px; transition: 0.2s; }
-        .lab-row.playing .play-btn-lab { background: var(--accent-color); border-color: var(--accent-color); color: black; }
+        .progress-overlay { position: absolute; top:0; left:0; height:100%; background: rgba(255,255,255,0.2); width: 0%; pointer-events: none; transition: width 0.1s linear; }
 
-        /* --- INSPIRATIONS (LINKS) --- */
-        .inspi-link { 
-            text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s; 
-            display: inline-block;
+        /* SEQUENCER SPECIFIC */
+        #sequencer-inner { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 20px; position: relative; overflow: hidden; }
+        #sequencer-inner::before { content: ''; position: absolute; inset: 0; background: url('console.png') center/cover; opacity: 0.15; z-index: 0; pointer-events: none; }
+        
+        .step-btn { height: 32px; width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; transition: 0.1s; position: relative; z-index: 10; touch-action: none; }
+        .step-btn.active { background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color); border-color: transparent; }
+        
+        .piano-cell { height: 20px; border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02); position: relative; z-index: 10; touch-action: none; }
+        .piano-cell.note-start { background: var(--accent-color); border-right: none; }
+        .piano-cell.note-sustain { background: var(--accent-color); opacity: 0.6; border-left: none; }
+        .piano-cell.playing { filter: brightness(2); }
+
+        /* FADERS */
+        .fader-group { display: flex; flex-direction: column; align-items: center; height: 160px; }
+        .fader-track { 
+            appearance: none; -webkit-appearance: none; 
+            width: 120px; height: 30px; 
+            background: transparent; 
+            transform: rotate(-90deg); transform-origin: center;
+            cursor: crosshair; margin: 45px 0;
         }
-        .inspi-link:hover { border-bottom-color: var(--accent-color); color: var(--accent-color); transform: translateX(4px); }
-        .inspi-card { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-        .inspi-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; border: 1px solid var(--glass-border); }
+        .fader-track::-webkit-slider-runnable-track { width: 100%; height: 6px; background: #222; border-radius: 10px; border: 1px solid #444; }
+        .fader-track::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 30px; background: #888; margin-top: -7px; border-radius: 4px; border: 1px solid #000; box-shadow: 0 2px 5px black; }
 
-        /* --- DOCK --- */
-        .dock-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 16px; padding: 10px 24px; background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(40px) saturate(150%); border: 1px solid var(--glass-border); border-radius: 30px; z-index: 90; height: 65px; width: 90%; max-width: 500px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5), inset 0 1px 0 0 var(--glass-highlight); }
-        body.light-mode .dock-container { background: rgba(255, 255, 255, 0.4); border-color: rgba(255,255,255,0.4); }
-        .dock-icon { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: rgba(255,255,255,0.7); transition: 0.3s; cursor: crosshair; height: 100%; width: auto; min-width: 40px; }
-        body.light-mode .dock-icon { color: #444; }
-        .dock-icon span { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-top: 4px; display: none; }
-        @media (min-width: 1024px) { .dock-icon span { display: block; } }
-        .dock-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.15); }
+        /* LOADING */
+        #start-screen { position: fixed; inset: 0; z-index: 999; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s; }
+        #start-screen.hidden-screen { opacity: 0; pointer-events: none; }
+        .loader-bar { width: 200px; height: 4px; background: #222; border-radius: 10px; overflow: hidden; margin-top: 20px; }
+        .loader-fill { width: 0%; height: 100%; background: var(--accent-color); animation: load 2s ease-out forwards; }
+        @keyframes load { 100% { width: 100%; } }
 
-        /* --- THEME ISLAND --- */
-        .theme-island { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 90; background-color: rgba(20, 20, 20, 0.6); backdrop-filter: blur(40px) saturate(150%); border: 1px solid var(--glass-border); border-radius: 100px; padding: 6px; display: flex; align-items: center; gap: 12px; transition: 0.5s; }
-        .theme-pill { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; cursor: crosshair; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(255,255,255,0.05); }
-        .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-color); background: rgba(0,0,0,0.6); }
-        .theme-pill img { width: 100%; height: 100%; padding: 8px; object-fit: contain; }
-
-        /* --- SEQUENCER --- */
-        #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
-        #sequencer-inner::before { content: ''; position: absolute; inset: 0; background-image: url('console.png'); background-size: cover; background-position: center; opacity: 0.15; z-index: 0; pointer-events: none; mix-blend-mode: overlay; filter: grayscale(100%) contrast(1.2); }
-        
-        .mixer-panel { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%); border-radius: 16px; margin-top: 10px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.5); }
-        .mixer-panel.open { max-height: 240px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        
-        .fader-wrapper { position: relative; width: 40px; height: 120px; display: flex; justify-content: center; }
-        input[type=range][orient=vertical] { -webkit-appearance: none; appearance: none; position: absolute; top: 50%; left: 50%; width: 120px; height: 30px; transform: translate(-50%, -50%) rotate(-90deg); background: transparent; cursor: crosshair; }
-        input[type=range][orient=vertical]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: crosshair; background: #111; border: 1px solid #333; border-radius: 99px; }
-        input[type=range][orient=vertical]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 30px; margin-left: 0; background: linear-gradient(to right, #555, #222); border-top: 1px solid #777; border-bottom: 1px solid #000; border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8); margin-top: -6px; position: relative; z-index: 2; }
-
-        .step-btn { height: 32px; width: 100%; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; cursor: crosshair; }
-        .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 12px var(--accent-color); }
-        
-        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 4px; cursor: crosshair; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; }
-        .piano-cell.active { background: var(--accent-color); opacity: 0.9; }
-        .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
-        .piano-label { font-family: monospace; font-size: 9px; color: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; }
-        
-        /* Sequencer Scroll */
-        .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; }
-        .sequencer-track-row { min-width: 500px; } .sequencer-track-row-large { min-width: 800px; }
-
-        /* --- MARQUEE --- */
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { display: flex; animation: marquee 15s linear infinite; width: max-content;}
-        
-        /* --- VISION MODAL --- */
-        #vision-modal { transition: opacity 0.3s ease; }
-        #vision-modal.hidden { opacity: 0; pointer-events: none; }
-        .vision-bar-container { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; width: 100%; }
-        .vision-bar-fill { height: 100%; background: var(--accent-color); width: 0%; transition: width 1s ease-out; }
-
-        /* --- LOADING & BG --- */
-        #theme-bg { position: fixed; top: 0; left: 0; width: 100%; height: 120%; z-index: -2; background-size: cover; background-position: center; opacity: 0.6; filter: blur(8px) saturate(1.1); transition: 0.8s; }
-        .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.1; }
-        
+        /* RESPONSIVE */
         @media (max-width: 1024px) {
-            .bento-grid { display: flex; flex-direction: column; padding: 80px 16px 110px; width: 100%; max-width: 100%; }
-            .col-span-12, .col-span-8, .col-span-5, .col-span-7 { width: 100%; }
-            .hero-name { font-size: 3.5rem; line-height: 1; word-break: break-word; }
-            .mobile-center-controls { justify-content: center; width: 100%; }
+            .bento-grid { display: flex; flex-direction: column; padding: 80px 16px; }
+            .col-span-12, .col-span-5, .col-span-7 { width: 100%; }
         }
     </style>
 </head>
-<body class="font-fl selection:bg-white selection:text-black" data-theme="fl">
+<body class="font-fl text-white selection:bg-white selection:text-black">
 
-    <div id="start-screen" class="fixed inset-0 z-50 bg-[#050505] flex flex-col justify-center items-center transition-opacity duration-1000">
-        <div onclick="startExperience()" class="cursor-crosshair flex flex-col items-center group">
-            <h2 class="font-tech text-[var(--accent-color)] text-xl tracking-[0.3em] mb-2">LOADING PROJECT</h2>
-            <div class="font-mono text-xs text-gray-500 mb-6">Initializing Core Audio Engine...</div>
-            <div class="w-56 h-1.5 bg-white/10 rounded-full overflow-hidden relative">
-                <div class="h-full bg-[var(--accent-color)] animate-[loadProject_2.5s_ease-out_forwards]"></div>
-            </div>
-            <div class="mt-8 text-[10px] text-gray-600 font-mono opacity-50">JULES_FREMONDIERE_V2.0.exe</div>
+    <div id="start-screen">
+        <div onclick="initAudioAndStart()" class="flex flex-col items-center cursor-pointer group">
+            <h1 class="text-3xl font-bold tracking-[0.3em] text-[var(--accent-color)] mb-2 font-tech">SYSTEM BOOT</h1>
+            <p class="text-xs text-gray-500 font-mono">Click anywhere to initialize AudioContext</p>
+            <div class="loader-bar"><div class="loader-fill"></div></div>
+            <p class="mt-4 text-[10px] text-gray-700 font-mono">JULES_FREMONDIERE_V2.0.exe</p>
         </div>
     </div>
-    <style>@keyframes loadProject { 0% { width: 0%; } 100% { width: 100%; } }</style>
 
-    <div id="theme-bg"></div>
-    <div class="scanlines"></div>
+    <div id="theme-bg" class="fixed inset-0 z-[-1] bg-cover bg-center opacity-60 transition-all duration-700 blur-sm scale-110"></div>
+    <div class="fixed inset-0 z-[-1] pointer-events-none opacity-5 bg-[url('https://grainy-gradients.vercel.org/noise.svg')]"></div>
 
-    <div class="theme-island" id="theme-widget">
-        <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300">Pick your theme</span>
-        <div class="flex gap-2">
-            <button class="theme-pill click-sound" onclick="setTheme('fl')"><img src="logo_flstudio.png" alt="FL" class="object-contain"></button>
-            <button class="theme-pill click-sound" onclick="setTheme('ableton')"><img src="logo_ableton.png" alt="Live" class="object-contain"></button>
-            <button class="theme-pill click-sound" onclick="setTheme('protools')"><img src="logo_protools.png" alt="PT" class="object-contain"></button>
-        </div>
+    <div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-black/60 backdrop-blur-xl p-2 rounded-full border border-white/10 shadow-2xl">
+        <span id="theme-label" class="text-[10px] font-mono uppercase px-2 opacity-80 hidden md:block">Pick Theme</span>
+        <button onclick="setTheme('fl')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/20 transition p-1"><img src="logo_flstudio.png" class="w-full h-full object-contain"></button>
+        <button onclick="setTheme('ableton')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/20 transition p-1"><img src="logo_ableton.png" class="w-full h-full object-contain"></button>
+        <button onclick="setTheme('protools')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/20 transition p-1"><img src="logo_protools.png" class="w-full h-full object-contain"></button>
     </div>
 
     <main class="bento-grid">
         
-        <section id="hero" class="col-span-12 glass-panel p-6 md:p-10 flex flex-col justify-center items-center text-center min-h-[80vh] md:min-h-[50vh]">
-            <div class="relative z-10">
-                <span class="inline-block px-4 py-1.5 rounded-full border border-[var(--glass-border)] bg-white/5 text-[10px] uppercase tracking-[0.2em] mb-8 backdrop-blur-md shadow-lg">Portfolio 2026</span>
-                <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight mb-4 text-[var(--accent-color)] leading-[1.1] drop-shadow-2xl">Jules Frémondière</h1>
-                <div class="inline-block bg-[var(--accent-color)]/10 border border-[var(--accent-color)] text-[var(--accent-color)] px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest animate-pulse mb-6">🔴 En recherche de stage</div>
-                <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-2 leading-snug">Étudiant Ingénieur du son & Sound Designer</p>
-                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition leading-normal">jules.fremondiere@3is.fr</a>
-                
-                <div class="mt-10 flex flex-col items-center gap-6 justify-center w-full md:w-auto px-4 md:px-0">
-                     <div class="flex gap-4">
-                        <a href="#contact" class="px-8 py-4 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg">ME CONTACTER</a>
-                        <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-4 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center justify-center gap-2">CV</a>
-                    </div>
-                </div>
-            </div>
+        <section class="col-span-12 glass-panel p-10 flex flex-col items-center justify-center text-center min-h-[50vh]">
+            <span class="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] uppercase tracking-widest mb-6">Portfolio 2026</span>
+            <h1 class="text-6xl md:text-8xl font-black text-[var(--accent-color)] mb-2 tracking-tight drop-shadow-2xl">Jules Frémondière</h1>
+            <div class="px-4 py-1.5 rounded-full bg-[var(--accent-color)]/10 border border-[var(--accent-color)] text-[var(--accent-color)] text-xs font-bold uppercase tracking-widest mb-6 animate-pulse">🔴 En recherche de stage</div>
+            <p class="text-2xl font-light opacity-80 max-w-2xl mx-auto leading-normal">Étudiant Ingénieur du son & Sound Designer</p>
+            <a href="mailto:jules.fremondiere@3is.fr" class="mt-4 font-mono opacity-60 hover:opacity-100 transition">jules.fremondiere@3is.fr</a>
         </section>
 
-        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel flex flex-col">
-            <div class="win-header shrink-0"><span class="win-title">Stats & Skills.sys</span><div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
-            <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center grow relative z-10">
-                <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 66"><span>66%</span></div><h4 class="text-sm font-bold uppercase text-[var(--accent-color)]">Mixage</h4></div>
-                <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><h4 class="text-sm font-bold uppercase text-[var(--accent-color)]">Composition</h4></div>
-                <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div><h4 class="text-sm font-bold uppercase text-[var(--accent-color)]">Repair</h4></div>
-                <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><h4 class="text-sm font-bold uppercase text-[var(--accent-color)]">Recording</h4></div>
+        <section class="col-span-12 lg:col-span-5 glass-panel flex flex-col">
+            <div class="win-header"><span class="win-title">Stats & Skills.sys</span><div class="flex gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
+            <div class="p-8 grid grid-cols-2 gap-8 items-center justify-items-center flex-1">
+                <div class="stat-item"><div class="pie-chart" style="--percent:66"><span>66%</span></div><h4 class="text-xs font-bold uppercase text-[var(--accent-color)] mt-2">Mixage</h4></div>
+                <div class="stat-item"><div class="pie-chart" style="--percent:70"><span>70%</span></div><h4 class="text-xs font-bold uppercase text-[var(--accent-color)] mt-2">Compo</h4></div>
+                <div class="stat-item"><div class="pie-chart" style="--percent:40"><span>40%</span></div><h4 class="text-xs font-bold uppercase text-[var(--accent-color)] mt-2">Repair</h4></div>
+                <div class="stat-item"><div class="pie-chart" style="--percent:70"><span>70%</span></div><h4 class="text-xs font-bold uppercase text-[var(--accent-color)] mt-2">Record</h4></div>
                 
-                <button onclick="openVision()" class="col-span-2 mt-4 px-6 py-4 rounded-2xl border border-[var(--glass-border)] bg-white/5 hover:bg-white/10 transition group flex flex-col md:flex-row items-center justify-center gap-4 w-full cursor-crosshair relative overflow-hidden shadow-lg hover:border-[var(--accent-color)]">
-                    <span class="text-xs font-mono uppercase tracking-widest text-[var(--accent-color)] z-10 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> Ouvrir Vision.dmg & Setup
-                     </span>
+                <button onclick="toggleVision()" class="col-span-2 w-full mt-4 px-6 py-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 group">
+                    <span class="text-xs font-mono uppercase tracking-widest text-[var(--accent-color)] group-hover:scale-105 transition">📂 Ouvrir Vision.dmg</span>
                 </button>
             </div>
         </section>
 
-        <section id="parcours" class="col-span-12 lg:col-span-7 glass-panel">
-            <div class="win-header"><span class="win-title">Timeline.log</span><div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
-            <div class="p-6 md:p-8 h-full overflow-y-auto custom-scrollbar max-h-[60vh]">
-                <div class="relative pl-6 md:pl-8 border-l border-[var(--glass-border)] space-y-10">
-                    <div class="relative group"><div class="absolute -left-[29px] top-1 w-4 h-4 rounded-full border-2 border-[var(--accent-color)] bg-[#111]"></div><span class="text-xs font-mono text-[var(--accent-color)] font-bold">2023 – 2026</span><h3 class="text-lg font-bold">3iS - Institut International</h3><p class="text-sm opacity-60">Bachelor Son à l'image</p></div>
-                    <div class="relative group"><div class="absolute -left-[29px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111]"></div><span class="text-xs font-mono opacity-50">2023</span><h3 class="text-lg font-bold">Service Civique / Césure</h3><p class="text-sm opacity-70">Projet Court Métrage (Thermogène Média).</p></div>
-                    <div class="relative group"><div class="absolute -left-[29px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111]"></div><span class="text-xs font-mono opacity-50">2022</span><h3 class="text-lg font-bold">BAC STI2D ITEC</h3></div>
+        <section class="col-span-12 lg:col-span-7 glass-panel h-[600px] flex flex-col">
+            <div class="win-header"><span class="win-title">Timeline.log</span></div>
+            <div class="p-8 overflow-y-auto flex-1 custom-scrollbar">
+                <div class="border-l border-white/10 pl-8 space-y-12">
+                    <div class="relative"><div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--accent-color)] bg-[#111]"></div><span class="text-xs font-mono text-[var(--accent-color)]">2023-2026</span><h3 class="text-xl font-bold">3iS - Institut International</h3><p class="text-sm opacity-60">Bachelor Son</p></div>
+                    <div class="relative"><div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-white/20 bg-[#111]"></div><span class="text-xs font-mono opacity-50">2023</span><h3 class="text-xl font-bold">Service Civique</h3><p class="text-sm opacity-60">Thermogène Média</p></div>
+                    <div class="relative"><div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-white/20 bg-[#111]"></div><span class="text-xs font-mono opacity-50">2022</span><h3 class="text-xl font-bold">BAC STI2D</h3></div>
+                    <div class="relative"><div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full border-2 border-white/20 bg-[#111]"></div><span class="text-xs font-mono opacity-50">2018-2022</span><h3 class="text-xl font-bold">Autodidacte</h3><p class="text-sm opacity-60">Exploration MAO</p></div>
                 </div>
             </div>
         </section>
 
-        <section id="projets" class="col-span-12 glass-panel">
-            <div class="win-header"><span class="win-title">explorer.prproj</span><div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
-            <div class="p-8 space-y-8">
-                <h2 class="text-3xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <a href="https://youtu.be/9UOw2Qhdke0" target="_blank" class="project-card group"><img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg" class="object-cover scale-125"><div class="project-info"><h4 class="text-2xl font-bold">Je suis la fumée...</h4><p class="text-sm">Prise de son & Post-Prod</p></div></a>
-                    <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group"><img src="cover.jpg" class="object-cover object-bottom"><div class="project-info"><h4 class="text-2xl font-bold">Srh - qutumeregardes</h4><p class="text-sm">Mix & Master</p></div></a>
-                    <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group"><img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg"><div class="project-info"><h4 class="text-2xl font-bold">Capharnaüm</h4><p class="text-sm">Sound Design & Mix</p></div></a>
-                    <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group"><img src="https://img.youtube.com/vi/1RaxSos9wtk/hqdefault.jpg"><div class="project-info"><h4 class="text-2xl font-bold">IVY - Baby Hayabusa</h4><p class="text-sm">Production Musicale</p></div></a>
-                </div>
-            </div>
-        </section>
-
-        <section id="lab" class="col-span-12 glass-panel relative z-20">
-             <div class="win-header"><span class="win-title">lab_records.sh</span><div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
-            <div class="p-6 font-mono">
-                <div class="flex items-center gap-3 mb-6 text-[var(--accent-color)]"><span class="animate-pulse">●</span><span class="text-sm tracking-widest uppercase">Live Monitoring // Work In Progress</span></div>
-                <div class="space-y-0">
-                    <div class="lab-row group" onclick="playLabTrack('rover.mp3', this)"><div class="lab-info"><div class="flex items-center gap-3"><div class="play-btn-lab">▶</div><div><h4 class="text-sm font-bold">rover.mp3</h4><p class="text-[10px] opacity-50">Ambient</p></div></div><span class="text-xs opacity-50">02:14</span></div><div class="waveform-container"><canvas class="waveform-canvas"></canvas><div class="absolute inset-0 bg-[var(--accent-color)] opacity-10 pointer-events-none progress-overlay" style="width:0%"></div></div></div>
-                    <div class="lab-row group" onclick="playLabTrack('wordsnight.mp3', this)"><div class="lab-info"><div class="flex items-center gap-3"><div class="play-btn-lab">▶</div><div><h4 class="text-sm font-bold">wordsnight.mp3</h4><p class="text-[10px] opacity-50">Lo-fi</p></div></div><span class="text-xs opacity-50">01:45</span></div><div class="waveform-container"><canvas class="waveform-canvas"></canvas><div class="absolute inset-0 bg-[var(--accent-color)] opacity-10 pointer-events-none progress-overlay" style="width:0%"></div></div></div>
-                    <div class="lab-row group" onclick="playLabTrack('shadow.mp3', this)"><div class="lab-info"><div class="flex items-center gap-3"><div class="play-btn-lab">▶</div><div><h4 class="text-sm font-bold">shadow.mp3</h4><p class="text-[10px] opacity-50">Dark Synth</p></div></div><span class="text-xs opacity-50">03:02</span></div><div class="waveform-container"><canvas class="waveform-canvas"></canvas><div class="absolute inset-0 bg-[var(--accent-color)] opacity-10 pointer-events-none progress-overlay" style="width:0%"></div></div></div>
-                </div>
-            </div>
-            <audio id="lab-audio-player" class="hidden"></audio>
-        </section>
-
-        <section id="inspirations" class="col-span-12 glass-panel">
-             <div class="win-header"><span class="win-title">Reference_Library</span><div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
+        <section class="col-span-12 glass-panel">
+            <div class="win-header"><span class="win-title">explorer.prproj</span></div>
             <div class="p-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div>
-                        <h4 class="text-sm font-bold text-[var(--accent-color)] uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Séries / Films</h4>
-                        <div class="space-y-4">
-                            <a href="https://www.imdb.com/title/tt0903747/" target="_blank" class="inspi-card inspi-link"><img src="pluribus.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Pluribus</h5><p class="text-[10px] opacity-60">SF, esthétique minimaliste.</p></div></a>
-                            <a href="https://www.imdb.com/title/tt1190634/" target="_blank" class="inspi-card inspi-link"><img src="theboys.webp" class="inspi-img"><div><h5 class="font-bold text-sm">The Boys</h5><p class="text-[10px] opacity-60">Sound design recherché.</p></div></a>
-                            <a href="https://www.imdb.com/title/tt6751668/" target="_blank" class="inspi-card inspi-link"><img src="parasite.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Parasite</h5><p class="text-[10px] opacity-60">Baroque, Glockenspiel.</p></div></a>
-                        </div>
+                <h3 class="text-3xl font-black mb-8 flex items-center gap-2"><span class="text-[var(--accent-color)]">///</span> Projets</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <a href="https://youtu.be/9UOw2Qhdke0" target="_blank" class="project-card group"><img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg"><div class="project-info"><h4 class="text-2xl font-bold">Je suis la fumée...</h4><p class="text-sm opacity-80">Court-métrage</p></div></a>
+                    <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group"><img src="cover.jpg" class="object-cover object-bottom"><div class="project-info"><h4 class="text-2xl font-bold">Srh - qutumeregardes</h4><p class="text-sm opacity-80">Mix & Master</p></div></a>
+                    <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" class="project-card group"><img src="https://img.youtube.com/vi/D-x6BQSPRuA/maxresdefault.jpg"><div class="project-info"><h4 class="text-2xl font-bold">Capharnaüm</h4><p class="text-sm opacity-80">Sound Design</p></div></a>
+                    <a href="https://www.youtube.com/watch?v=1RaxSos9wtk" target="_blank" class="project-card group"><img src="https://img.youtube.com/vi/1RaxSos9wtk/hqdefault.jpg"><div class="project-info"><h4 class="text-2xl font-bold">IVY</h4><p class="text-sm opacity-80">Remix</p></div></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="col-span-12 glass-panel">
+            <div class="win-header"><span class="win-title">lab_records.sh</span></div>
+            <div class="p-8">
+                <div class="flex items-center gap-3 mb-6 text-[var(--accent-color)]"><span class="animate-pulse">●</span><span class="text-xs font-mono uppercase">Live Monitoring</span></div>
+                <div class="space-y-4">
+                    <div class="lab-row" data-src="rover.mp3">
+                        <div class="lab-info"><span class="font-bold">rover.mp3</span><span class="text-xs opacity-50">02:14</span></div>
+                        <div class="waveform-container" onclick="seekTrack(event, this)"><canvas class="waveform-canvas"></canvas><div class="progress-overlay"></div></div>
+                        <button class="mt-2 text-xs uppercase hover:text-[var(--accent-color)]" onclick="togglePlayTrack(this)">[ Play / Pause ]</button>
                     </div>
-                     <div>
-                        <h4 class="text-sm font-bold text-[var(--accent-color)] uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Albums</h4>
-                        <div class="space-y-4">
-                            <a href="https://www.discogs.com/artist/191828-Mike-Dean" target="_blank" class="inspi-card inspi-link"><img src="425.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Mike Dean "425"</h5><p class="text-[10px] opacity-60">Synthétique, Saturé.</p></div></a>
-                            <a href="#" class="inspi-card inspi-link"><img src="ftp.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Femtogo</h5><p class="text-[10px] opacity-60">Introspectif, Jazz/Rap.</p></div></a>
+                     <div class="lab-row" data-src="wordsnight.mp3">
+                        <div class="lab-info"><span class="font-bold">wordsnight.mp3</span><span class="text-xs opacity-50">01:45</span></div>
+                        <div class="waveform-container" onclick="seekTrack(event, this)"><canvas class="waveform-canvas"></canvas><div class="progress-overlay"></div></div>
+                         <button class="mt-2 text-xs uppercase hover:text-[var(--accent-color)]" onclick="togglePlayTrack(this)">[ Play / Pause ]</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="col-span-12 glass-panel">
+            <div class="win-header"><span class="win-title">Reference_Library</span></div>
+            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="text-xs font-bold text-[var(--accent-color)] uppercase mb-4 border-b border-white/10 pb-2">Films / Séries</h4>
+                    <div class="space-y-4">
+                        <a href="https://www.imdb.com/title/tt0903747/" target="_blank" class="inspi-link block"><div class="inspi-card"><img src="pluribus.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Pluribus</h5><p class="text-[10px] opacity-60">SF Minimaliste</p></div></div></a>
+                        <a href="https://www.imdb.com/title/tt1190634/" target="_blank" class="inspi-link block"><div class="inspi-card"><img src="theboys.webp" class="inspi-img"><div><h5 class="font-bold text-sm">The Boys</h5><p class="text-[10px] opacity-60">Sound Design</p></div></div></a>
+                         <a href="https://www.imdb.com/title/tt6751668/" target="_blank" class="inspi-link block"><div class="inspi-card"><img src="parasite.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Parasite</h5><p class="text-[10px] opacity-60">Baroque</p></div></div></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-[var(--accent-color)] uppercase mb-4 border-b border-white/10 pb-2">Albums</h4>
+                     <div class="space-y-4">
+                        <a href="https://www.discogs.com/artist/191828-Mike-Dean" target="_blank" class="inspi-link block"><div class="inspi-card"><img src="425.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Mike Dean "425"</h5><p class="text-[10px] opacity-60">Synthétique</p></div></div></a>
+                        <a href="#" target="_blank" class="inspi-link block"><div class="inspi-card"><img src="ftp.webp" class="inspi-img"><div><h5 class="font-bold text-sm">Femtogo</h5><p class="text-[10px] opacity-60">Jazz/Rap</p></div></div></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="col-span-12 glass-panel p-0 text-center mb-32 overflow-hidden">
+            <div class="win-header w-full"><span class="win-title">Contact.app</span></div>
+            <div class="bg-[var(--accent-color)]/10 border-b border-[var(--accent-color)]/20 py-2">
+                <div class="whitespace-nowrap flex animate-[marquee_20s_linear_infinite]">
+                    <span class="px-4 font-mono text-xs font-bold text-[var(--accent-color)]">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
+                    <span class="px-4 font-mono text-xs font-bold text-[var(--accent-color)]">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
+                </div>
+            </div>
+            <div class="p-12 flex flex-col items-center">
+                 <button onclick="toggleVision()" class="mb-8 px-6 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono uppercase tracking-widest text-[var(--accent-color)] shadow-lg hover:scale-105">+ MA VISION</button>
+                <div class="w-32 h-32 rounded-full border border-[var(--accent-color)]/30 p-1 mb-6"><img src="moi.png" class="w-full h-full rounded-full object-cover grayscale"></div>
+                <h3 class="text-2xl font-bold mb-2">Travaillons ensemble</h3>
+                <a href="mailto:jules.fremondiere@3is.fr" class="text-lg font-bold text-[var(--accent-color)] hover:underline">jules.fremondiere@3is.fr</a>
+            </div>
+        </section>
+
+        <section id="sequencer" class="col-span-12 glass-panel p-0 min-h-[500px]">
+            <div class="win-header"><span class="win-title">Sequencer.vst</span></div>
+            <div id="sequencer-inner" class="p-6">
+                <div class="flex flex-wrap justify-center gap-6 mb-8">
+                    <button id="play-btn" class="transport-btn w-12 h-12" onclick="togglePlay()"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+                    <div class="flex items-center gap-2 bg-black/40 rounded px-3 py-2 border border-white/10">
+                        <input type="range" min="60" max="180" value="120" class="w-24 accent-[var(--accent-color)]" oninput="updateBpm(this.value)">
+                        <span id="bpm-display" class="font-mono text-xs w-16 text-center">120 BPM</span>
+                    </div>
+                    <select id="scale-select" class="bg-black/40 border border-white/10 rounded px-2 text-xs h-10" onchange="updateScale()"><option value="minor">Minor</option><option value="major">Major</option></select>
+                </div>
+
+                <div class="flex justify-center gap-4 mb-8 bg-black/20 p-4 rounded-xl">
+                    <div class="fader-group"><input type="range" class="fader-track" min="0" max="100" value="80" oninput="updateVol('kick', this.value)"><label class="text-[9px] mt-2 font-mono">KICK</label></div>
+                    <div class="fader-group"><input type="range" class="fader-track" min="0" max="100" value="70" oninput="updateVol('snare', this.value)"><label class="text-[9px] mt-2 font-mono">SNARE</label></div>
+                    <div class="fader-group"><input type="range" class="fader-track" min="0" max="100" value="60" oninput="updateVol('hat', this.value)"><label class="text-[9px] mt-2 font-mono">HATS</label></div>
+                    <div class="fader-group"><input type="range" class="fader-track" min="0" max="100" value="70" oninput="updateVol('synth', this.value)"><label class="text-[9px] mt-2 font-mono">SYNTH</label></div>
+                </div>
+
+                <div class="space-y-4 overflow-x-auto pb-4">
+                    <div class="min-w-[600px] space-y-2">
+                        <div class="flex items-center gap-4"><span class="w-10 text-[10px] font-mono font-bold text-right opacity-60">KICK</span><div class="flex-1 grid grid-cols-16 gap-1" id="track-kick"></div></div>
+                        <div class="flex items-center gap-4"><span class="w-10 text-[10px] font-mono font-bold text-right opacity-60">SNAR</span><div class="flex-1 grid grid-cols-16 gap-1" id="track-snare"></div></div>
+                        <div class="flex items-center gap-4"><span class="w-10 text-[10px] font-mono font-bold text-right opacity-60">HATS</span><div class="flex-1 grid grid-cols-16 gap-1" id="track-hat"></div></div>
+                    </div>
+                    <div class="min-w-[600px] border-t border-white/10 pt-4">
+                        <div class="flex items-start gap-4">
+                            <span class="w-10 text-[10px] font-mono font-bold text-right opacity-60 pt-1">SYN</span>
+                            <div class="flex-1 grid grid-template-columns-16 gap-1" id="piano-roll" style="display:grid; grid-template-columns: repeat(16, 1fr); gap: 2px;"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="col-span-12 glass-panel p-0 text-center flex flex-col items-center justify-center gap-6 mb-20 overflow-hidden">
-            <div class="win-header w-full"><span class="win-title">Contact.app</span><div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
-            <div class="w-full bg-[var(--accent-color)]/10 border-b border-[var(--accent-color)]/20 py-3 overflow-hidden">
-                <div class="whitespace-nowrap animate-marquee text-sm font-mono font-bold tracking-[0.2em] text-[var(--accent-color)] uppercase flex">
-                     <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
-                     <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
-                </div>
-            </div>
-            <div class="p-10 flex flex-col items-center">
-                <button onclick="openVision()" class="mb-8 px-6 py-2 rounded-full border border-[var(--glass-border)] bg-white/5 hover:bg-white/10 transition click-sound font-mono text-xs uppercase tracking-widest text-[var(--accent-color)] shadow-lg hover:scale-105">+ MA VISION</button>
-                <div class="w-32 h-32 rounded-full p-0.5 border border-[var(--accent-color)]/30 overflow-hidden"><img src="moi.png" class="w-full h-full object-cover grayscale transition duration-500"></div>
-                <div class="mt-6"><h3 class="text-xl md:text-2xl font-bold">Travaillons ensemble</h3><a href="mailto:jules.fremondiere@3is.fr" class="block mt-2 text-lg md:text-xl font-bold text-[var(--accent-color)] hover:underline break-all">jules.fremondiere@3is.fr</a></div>
-                <p class="font-mono text-[10px] opacity-30 mt-8">© 2026 SYSTEM JULES F.</p>
-            </div>
-        </section>
-
-        <section id="sequencer" class="col-span-12 glass-panel p-0 border-[var(--accent-color)]/30 min-h-[40vh] shadow-[0_0_40px_-10px_var(--accent-color)]/20">
-            <div class="win-header"><span class="win-title">Sequencer.vst</span><div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div></div>
-            <div id="sequencer-inner" class="bg-black/20 p-4 md:p-6 h-full relative">
-                <div class="relative z-10">
-                    <div class="flex justify-center items-center mb-6 gap-6">
-                         <div class="text-[var(--accent-color)] font-mono text-xs animate-pulse">AUDIO ENGINE READY - TAP GRID TO PLAY</div>
-                         <button onclick="clearSequencer()" class="text-xs border border-white/20 px-2 py-1 rounded hover:bg-white/10">CLEAR</button>
-                    </div>
-                    <div class="sequencer-scroll-container">
-                        <div class="sequencer-track-row space-y-3" id="sequencer-tracks">
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
-    
-    <div id="vision-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div onclick="closeVision()" class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
-        <div class="relative glass-panel w-full max-w-2xl transform transition-all duration-300 scale-95 opacity-0" id="vision-content">
-             <div class="win-header"><span class="win-title">vision.dmg</span><button onclick="closeVision()" class="text-white/50 hover:text-white transition">✕</button></div>
+
+    <div id="vision-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300" onclick="toggleVision()"></div>
+        <div class="glass-panel w-full max-w-2xl relative z-10 transform scale-95 opacity-0 transition-all duration-300" id="vision-content">
+            <div class="win-header"><span class="win-title">Vision.dmg</span><button onclick="toggleVision()" class="hover:text-white">✕</button></div>
             <div class="p-8 space-y-8 overflow-y-auto max-h-[80vh] custom-scrollbar">
-                <div><h4 class="text-[var(--accent-color)] font-bold uppercase tracking-widest mb-4">Outils de référence</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-white/5 p-4 rounded-xl border border-white/10">Sennheiser MKH 416 & 50</div><div class="bg-white/5 p-4 rounded-xl border border-white/10">Casque HD25 & Mixpre 633</div><div class="bg-white/5 p-4 rounded-xl border border-white/10">SSL 2 & Yamaha HS7</div></div></div>
-                <div><h4 class="text-[var(--accent-color)] font-bold uppercase tracking-widest mb-4">Maîtrise Technique</h4><div class="space-y-4 text-xs font-mono"><div class="flex justify-between"><span>FL Studio</span><span>80%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 80%"></div></div><div class="flex justify-between"><span>Ableton</span><span>75%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 75%"></div></div><div class="flex justify-between"><span>Pro Tools</span><span>70%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 70%"></div></div><div class="flex justify-between"><span>Premiere Pro</span><span>65%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 65%"></div></div></div></div>
-                <div><h4 class="text-[var(--accent-color)] font-bold uppercase tracking-widest mb-4">Matériel Perso</h4><div class="text-xs font-mono opacity-80">Scarlett Focusrite 2i2 • RODE NT1A • YAMAHA HS7 • DT 990 PRO • Macbook Pro M2.</div></div>
+                <div><h4 class="text-[var(--accent-color)] font-bold uppercase text-xs tracking-widest mb-3">Matériel Perso</h4><div class="bg-white/5 p-3 rounded font-mono text-xs">Scarlett Focusrite 2i2 • RODE NT1A • YAMAHA HS7 • DT 990 PRO • Macbook Pro M2</div></div>
+                <div><h4 class="text-[var(--accent-color)] font-bold uppercase text-xs tracking-widest mb-3">Maîtrise Technique</h4><div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between"><span>FL Studio</span><span>80%</span></div><div class="w-full bg-white/10 h-1.5 rounded"><div class="h-full bg-[var(--accent-color)]" style="width:80%"></div></div>
+                    <div class="flex justify-between"><span>Ableton</span><span>75%</span></div><div class="w-full bg-white/10 h-1.5 rounded"><div class="h-full bg-[var(--accent-color)]" style="width:75%"></div></div>
+                    <div class="flex justify-between"><span>Pro Tools</span><span>70%</span></div><div class="w-full bg-white/10 h-1.5 rounded"><div class="h-full bg-[var(--accent-color)]" style="width:70%"></div></div>
+                    <div class="flex justify-between"><span>Premiere Pro</span><span>65%</span></div><div class="w-full bg-white/10 h-1.5 rounded"><div class="h-full bg-[var(--accent-color)]" style="width:65%"></div></div>
+                </div></div>
+                 <div><h4 class="text-[var(--accent-color)] font-bold uppercase text-xs tracking-widest mb-3">Outils Réf</h4><div class="grid grid-cols-2 gap-2 text-xs font-mono"><div class="bg-white/5 p-2 rounded border border-white/10">Sennheiser MKH 416</div><div class="bg-white/5 p-2 rounded border border-white/10">Sound Devices 633</div><div class="bg-white/5 p-2 rounded border border-white/10">Casque HD25</div><div class="bg-white/5 p-2 rounded border border-white/10">SSL 2</div></div></div>
             </div>
         </div>
     </div>
 
     <nav class="dock-container">
-        <a href="#hero" class="dock-icon click-sound"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></a>
-        <a href="#skills" class="dock-icon click-sound"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></a>
-        <a href="#lab" class="dock-icon click-sound"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg></a>
-        <a href="#projets" class="dock-icon click-sound"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></a>
+        <a href="#hero" class="dock-icon"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></a>
+        <a href="#skills" class="dock-icon"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></a>
+        <a href="#lab" class="dock-icon"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg></a>
+        <a href="#projets" class="dock-icon"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></a>
     </nav>
 
     <script>
-        // --- 1. CORE AUDIO & MOBILE UNLOCK ---
+        // --- 1. CORE & AUDIO INIT ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // UNLOCK AUDIO ON FIRST CLICK (CRUCIAL FOR MOBILE)
-        document.addEventListener('click', () => {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }, { once: true });
-        document.addEventListener('touchstart', () => {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }, { once: true });
+        let isAudioUnlocked = false;
 
-        // --- 2. LAB WAVEFORM VISUALIZER ---
-        function initWaveforms() {
-            document.querySelectorAll('.waveform-canvas').forEach(canvas => {
-                const ctx = canvas.getContext('2d');
-                canvas.width = canvas.parentElement.offsetWidth;
-                canvas.height = 40;
-                
-                // Draw fake waveform data
-                const bars = 50;
-                const barWidth = canvas.width / bars;
-                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--glass-text').trim() || '#fff';
-                
-                for(let i=0; i<bars; i++) {
-                    const h = Math.random() * canvas.height * 0.8;
-                    ctx.globalAlpha = 0.5;
-                    ctx.fillRect(i * barWidth, (canvas.height - h)/2, barWidth - 2, h);
-                }
-            });
+        function initAudioAndStart() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            isAudioUnlocked = true;
+            document.getElementById('start-screen').classList.add('hidden-screen');
+            drawLabWaveforms(); // Draw canvases
         }
-        window.addEventListener('resize', initWaveforms);
-        setTimeout(initWaveforms, 500); // Wait for load
 
-        const labPlayer = document.getElementById('lab-audio-player');
-        let currentLabRow = null;
+        // --- 2. LAB AUDIO PLAYER (WAVEFORM VISUALIZER) ---
+        const labPlayer = document.createElement('audio');
+        let currentLabBtn = null;
+        let labAnimationId;
 
-        function playLabTrack(src, row) {
-            // Seek logic on click (simulate by visual update for demo)
-            if (currentLabRow === row && !labPlayer.paused) {
+        function togglePlayTrack(btn) {
+            const row = btn.closest('.lab-row');
+            const src = row.dataset.src;
+            const progress = row.querySelector('.progress-overlay');
+
+            // Reset others
+            if(currentLabBtn && currentLabBtn !== btn) {
+                labPlayer.pause();
+                currentLabBtn.closest('.lab-row').classList.remove('playing');
+                currentLabBtn.innerText = '[ Play / Pause ]';
+                currentLabBtn.closest('.lab-row').querySelector('.progress-overlay').style.width = '0%';
+                cancelAnimationFrame(labAnimationId);
+            }
+
+            if(labPlayer.src.includes(src) && !labPlayer.paused) {
                 labPlayer.pause();
                 row.classList.remove('playing');
-                row.querySelector('.play-btn-lab').innerHTML = '▶';
+                btn.innerText = '[ Play ]';
+                cancelAnimationFrame(labAnimationId);
             } else {
-                if(currentLabRow) {
-                    currentLabRow.classList.remove('playing');
-                    currentLabRow.querySelector('.play-btn-lab').innerHTML = '▶';
-                }
-                // Simulate play if file missing, or real play
                 labPlayer.src = src;
-                labPlayer.play().catch(e => console.log("Audio not found in demo, simulating UI"));
-                
+                labPlayer.play().catch(e => console.log("Audio file missing - simulating play UI"));
                 row.classList.add('playing');
-                row.querySelector('.play-btn-lab').innerHTML = '❚❚';
-                currentLabRow = row;
-                
-                // Fake progress animation
-                const progress = row.querySelector('.progress-overlay');
-                progress.style.transition = 'width 30s linear'; // Fake duration
-                progress.style.width = '100%';
+                btn.innerText = '[ Pause ]';
+                currentLabBtn = btn;
+                updateProgress(progress);
             }
         }
 
-        // --- 3. ROBUST SYNTH & SEQUENCER ---
+        function updateProgress(el) {
+            if(labPlayer.paused) return;
+            const pct = (labPlayer.currentTime / (labPlayer.duration || 1)) * 100;
+            el.style.width = `${pct}%`;
+            labAnimationId = requestAnimationFrame(() => updateProgress(el));
+        }
+
+        function seekTrack(e, container) {
+            if(!currentLabBtn) return;
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const pct = x / rect.width;
+            labPlayer.currentTime = pct * (labPlayer.duration || 1);
+        }
+
+        function drawLabWaveforms() {
+            document.querySelectorAll('.waveform-canvas').forEach(cvs => {
+                const ctx = cvs.getContext('2d');
+                cvs.width = cvs.parentElement.offsetWidth;
+                cvs.height = 40;
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                const bars = 60;
+                const gap = 2;
+                const w = (cvs.width / bars) - gap;
+                for(let i=0; i<bars; i++) {
+                    const h = Math.random() * 20 + 5;
+                    ctx.fillRect(i * (w+gap), (40-h)/2, w, h);
+                }
+            });
+        }
+
+        // --- 3. SEQUENCER ENGINE (SYNTH & DRUMS) ---
+        let bpm = 120;
+        let isSeqPlaying = false;
+        let seqStep = 0;
+        let seqInterval;
+        const seqData = {
+            KICK: Array(16).fill(false),
+            SNARE: Array(16).fill(false),
+            HAT: Array(16).fill(false),
+            SYNTH: Array(8).fill().map(() => Array(16).fill(false)) // 8 notes polyphony row
+        };
+        
+        // Volumes
+        const vols = { kick: 0.8, snare: 0.8, hat: 0.6, synth: 0.6 };
+        function updateVol(type, val) { vols[type] = (val/100)*(val/100); } // Logarithmic
+        
+        // Master Bus
         const masterGain = audioCtx.createGain();
-        masterGain.gain.value = 0.3;
+        masterGain.gain.value = 0.5;
         masterGain.connect(audioCtx.destination);
 
-        // Sound Synthesis (No ROMs needed)
-        function playKick(t) {
+        // Synthesis (No samples needed)
+        function triggerKick(t) {
             const osc = audioCtx.createOscillator();
             const g = audioCtx.createGain();
             osc.connect(g); g.connect(masterGain);
             osc.frequency.setValueAtTime(150, t);
             osc.frequency.exponentialRampToValueAtTime(0.01, t + 0.5);
-            g.gain.setValueAtTime(1, t);
+            g.gain.setValueAtTime(vols.kick, t);
             g.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
             osc.start(t); osc.stop(t + 0.5);
         }
-        function playSnare(t) {
+        function triggerSnare(t) {
             const osc = audioCtx.createOscillator();
             const g = audioCtx.createGain();
             osc.type = 'triangle';
             osc.connect(g); g.connect(masterGain);
-            g.gain.setValueAtTime(0.5, t);
+            g.gain.setValueAtTime(vols.snare, t);
             g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
             osc.start(t); osc.stop(t + 0.2);
             
-            // Noise burst
-            const bufferSize = audioCtx.sampleRate * 0.2;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            // Noise
+            const bSize = audioCtx.sampleRate * 0.2;
+            const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
+            const d = b.getChannelData(0);
+            for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
             const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-            const noiseGain = audioCtx.createGain();
-            noise.connect(noiseGain); noiseGain.connect(masterGain);
-            noiseGain.gain.setValueAtTime(0.5, t);
-            noiseGain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+            noise.buffer = b;
+            const ng = audioCtx.createGain();
+            noise.connect(ng); ng.connect(masterGain);
+            ng.gain.setValueAtTime(vols.snare * 0.5, t);
+            ng.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
             noise.start(t);
         }
-        function playHat(t) {
-            const bufferSize = audioCtx.sampleRate * 0.05;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+        function triggerHat(t) {
+            const bSize = audioCtx.sampleRate * 0.05;
+            const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
+            const d = b.getChannelData(0);
+            for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
             const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'highpass'; filter.frequency.value = 5000;
+            noise.buffer = b;
+            const f = audioCtx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 8000;
             const g = audioCtx.createGain();
-            noise.connect(filter); filter.connect(g); g.connect(masterGain);
-            g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+            noise.connect(f); f.connect(g); g.connect(masterGain);
+            g.gain.setValueAtTime(vols.hat, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
             noise.start(t);
+        }
+        
+        // Synth Notes (Frequencies for C Minor Scale)
+        const scaleFreqs = [523.25, 466.16, 392.00, 349.23, 311.13, 261.63, 233.08, 196.00]; // Top to Bottom
+        
+        function triggerSynth(freq, t, dur) {
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.value = freq;
+            
+            // Lowpass filter for analog feel
+            const f = audioCtx.createBiquadFilter();
+            f.type = 'lowpass';
+            f.frequency.value = 800;
+            
+            osc.connect(f); f.connect(g); g.connect(masterGain);
+            
+            const v = vols.synth * 0.4;
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(v, t + 0.02);
+            g.gain.setValueAtTime(v, t + dur - 0.05);
+            g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+            
+            osc.start(t); osc.stop(t + dur);
         }
 
-        // Build Sequencer UI
-        const tracks = ['KICK', 'SNARE', 'HATS'];
-        const seqData = { KICK: Array(8).fill(false), SNARE: Array(8).fill(false), HATS: Array(8).fill(false) };
-        const container = document.getElementById('sequencer-tracks');
-        
-        tracks.forEach(track => {
-            const row = document.createElement('div');
-            row.className = "flex items-center gap-2";
-            row.innerHTML = `<span class="font-mono text-xs w-12 opacity-60 font-bold">${track}</span>`;
-            
-            const grid = document.createElement('div');
-            grid.className = "flex-1 grid grid-cols-8 gap-1";
-            
-            for(let i=0; i<8; i++) {
-                const btn = document.createElement('button');
-                btn.className = "step-btn h-8 rounded bg-white/5 border border-white/10 cursor-crosshair";
-                // SIMPLE CLICK/TAP LOGIC FOR MOBILE AND DESKTOP
+        // --- 4. BUILD UI (MOBILE OPTIMIZED: SIMPLE TAP) ---
+        // Drums
+        ['KICK', 'SNARE', 'HAT'].forEach(type => {
+            const container = document.getElementById(`track-${type.toLowerCase()}`);
+            for(let i=0; i<16; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'step-btn';
                 btn.onclick = () => {
-                    seqData[track][i] = !seqData[track][i];
-                    btn.classList.toggle('active', seqData[track][i]);
-                    // Immediate feedback sound
-                    if(seqData[track][i]) {
-                        if(track==='KICK') playKick(audioCtx.currentTime);
-                        if(track==='SNARE') playSnare(audioCtx.currentTime);
-                        if(track==='HATS') playHat(audioCtx.currentTime);
-                    }
+                    seqData[type][i] = !seqData[type][i];
+                    btn.classList.toggle('active');
                 };
-                grid.appendChild(btn);
+                container.appendChild(btn);
             }
-            row.appendChild(grid);
-            container.appendChild(row);
         });
 
-        // Sequencer Loop
-        let step = 0;
-        setInterval(() => {
-            if (audioCtx.state !== 'running') return;
-            const now = audioCtx.currentTime;
-            // Visual feedback loop (simplified for demo)
-            // Play logic:
-            const nextTime = now + 0.1; // Simple lookahead
-            if(seqData.KICK[step]) playKick(now);
-            if(seqData.SNARE[step]) playSnare(now);
-            if(seqData.HATS[step]) playHat(now);
-            
-            // Visuals
-            document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('brightness-150'));
-            // Ideally highlight current column logic here
-            step = (step + 1) % 8;
-        }, 250); // 120 BPM approx
-
-        function clearSequencer() {
-            Object.keys(seqData).forEach(k => seqData[k].fill(false));
-            document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+        // Piano Roll
+        const pianoContainer = document.getElementById('piano-roll');
+        for(let r=0; r<8; r++) {
+            for(let c=0; c<16; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'piano-cell';
+                // Simple Tap Logic for Mobile & Desktop
+                cell.onclick = () => {
+                    // Check if already active
+                    const isActive = seqData.SYNTH[r][c];
+                    
+                    if(isActive) {
+                        // Remove note
+                        seqData.SYNTH[r][c] = false;
+                        cell.classList.remove('note-start');
+                        // Also clear sustain if next is sustain (simplified)
+                    } else {
+                        // Add note
+                        seqData.SYNTH[r][c] = 1; // 1 = start
+                        cell.classList.add('note-start');
+                        // Preview sound
+                        triggerSynth(scaleFreqs[r], audioCtx.currentTime, 0.2);
+                    }
+                };
+                pianoContainer.appendChild(cell);
+            }
         }
 
+        // Clock
+        function togglePlay() {
+            if(isSeqPlaying) {
+                clearInterval(seqInterval);
+                isSeqPlaying = false;
+                document.getElementById('play-btn').classList.remove('playing');
+            } else {
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                isSeqPlaying = true;
+                document.getElementById('play-btn').classList.add('playing');
+                seqInterval = setInterval(stepSequencer, (60/bpm)*1000/4); // 16th notes
+            }
+        }
 
-        // --- 4. STARTUP & THEMES ---
-        setTimeout(() => { document.getElementById('start-screen').classList.add('hidden-screen'); }, 2000);
-        
+        function stepSequencer() {
+            const now = audioCtx.currentTime;
+            const stepDur = (60/bpm)/4;
+            
+            // Drums
+            if(seqData.KICK[seqStep]) triggerKick(now);
+            if(seqData.SNARE[seqStep]) triggerSnare(now);
+            if(seqData.HAT[seqStep]) triggerHat(now);
+            
+            // Synth (Check active notes)
+            for(let r=0; r<8; r++) {
+                if(seqData.SYNTH[r][seqStep] === 1) {
+                    // Find length (sustain not implemented in simple UI but supported in engine logic)
+                    triggerSynth(scaleFreqs[r], now, stepDur);
+                }
+            }
+            
+            // Visual Highlight (Cols)
+            const cells = document.querySelectorAll('.step-btn, .piano-cell');
+            // Heavy DOM operation, normally optimized, but okay for portfolio
+            // We just animate CSS via :nth-child logic if possible, or skip for performance
+            
+            seqStep = (seqStep + 1) % 16;
+        }
+
+        function updateBpm(v) { 
+            bpm = v; 
+            document.getElementById('bpm-display').innerText = v + ' BPM';
+            if(isSeqPlaying) { togglePlay(); togglePlay(); } // restart with new timing
+        }
+
+        // --- 5. THEMES & UI UTILS ---
         function setTheme(name) {
             document.body.classList.add('switching-theme');
-            setTimeout(() => document.body.classList.remove('switching-theme'), 300);
+            setTimeout(() => document.body.classList.remove('switching-theme'), 500);
+            
+            document.body.classList.remove('light-mode');
             if(name === 'ableton') document.body.classList.add('light-mode');
-            else document.body.classList.remove('light-mode');
-            // Background image swap logic
-            document.getElementById('theme-bg').style.backgroundImage = `url('${name}.png')`; // Ensure pngs exist
+            
+            const accent = name === 'fl' ? '#22c55e' : (name === 'ableton' ? '#fb923c' : '#a855f7');
+            document.documentElement.style.setProperty('--accent-color', accent);
+            
+            document.getElementById('theme-bg').style.backgroundImage = `url('${name}.png')`;
         }
 
-        // VISION MODAL
-        function openVision() { document.getElementById('vision-modal').classList.remove('hidden', 'opacity-0'); }
-        function closeVision() { document.getElementById('vision-modal').classList.add('hidden', 'opacity-0'); }
+        function toggleVision() {
+            const modal = document.getElementById('vision-modal');
+            const content = document.getElementById('vision-content');
+            if(modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95', 'opacity-0'); }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function setVh() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        window.addEventListener('resize', setVh);
+        setVh();
+        
+        // Init Default
+        setTheme('fl');
     </script>
 </body>
 </html>
