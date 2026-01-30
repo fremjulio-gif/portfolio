@@ -34,11 +34,19 @@
         html, body { max-width: 100vw; overflow-x: hidden; user-select: none; cursor: crosshair; }
         body { 
             background-color: #050505; color: var(--glass-text); 
-            transition: background-color 0.6s ease, color 0.4s ease, filter 0.3s ease;
+            transition: background-color 0.6s ease, color 0.4s ease;
             -webkit-text-size-adjust: 100%; margin: 0; padding: 0;
         }
 
-        body.switching-theme { filter: blur(12px) brightness(1.2); transform: scale(0.98); }
+        /* Theme Animation: Slide Down Reveal */
+        @keyframes slideReveal {
+            0% { transform: translateY(-5%) scale(1.02); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 0.6; }
+        }
+
+        body.switching-theme #theme-bg { 
+            animation: slideReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
 
         /* Light Mode */
         body.light-mode {
@@ -112,7 +120,7 @@
         .lab-btn-area { cursor: pointer; padding: 8px; margin: -8px; border-radius: 50%; transition: background 0.2s; z-index: 30; }
         .lab-btn-area:active { background: rgba(255,255,255,0.1); transform: scale(0.95); }
 
-        /* Reference Library Refined */
+        /* Reference Library */
         .inspi-card-large { position: relative; overflow: hidden; border-radius: 16px; border: 1px solid var(--glass-border); transition: all 0.4s var(--ease-ios); aspect-ratio: 16/9; cursor: pointer; opacity: 0; animation: fadeInUp 0.8s forwards; }
         .inspi-card-large:hover { transform: translateY(-5px); border-color: var(--accent-color); box-shadow: 0 15px 40px -10px rgba(0,0,0,0.5); }
         .inspi-card-large:hover img { transform: scale(1.05); filter: brightness(0.6); }
@@ -127,7 +135,7 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- PAD MACHINE (3x3) --- */
-        .pad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: 300px; }
+        .pad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: 300px; width: 100%; }
         .drum-pad { 
             background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -233,7 +241,7 @@
         .scroll-float { opacity: 0; transform: translateY(20px); transition: 0.8s var(--ease-ios); }
         .scroll-float.visible { opacity: 1; transform: translateY(0); }
         
-        #theme-bg { position: fixed; top: 0; left: 0; width: 100%; height: 120%; z-index: -2; background-size: cover; background-position: center; opacity: 0.6; filter: blur(8px) saturate(1.1); transition: background-image 0.8s, opacity 0.8s; will-change: transform; }
+        #theme-bg { position: fixed; top: 0; left: 0; width: 100%; height: 120%; z-index: -2; background-size: cover; background-position: center; opacity: 0.6; filter: blur(8px) saturate(1.1); transition: background-position 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s; will-change: transform, background-image; }
         
         .scanlines { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.2) 50%); background-size: 100% 4px; opacity: 0.1; }
 
@@ -518,7 +526,7 @@
                     </div>
                 </div>
             </div>
-            <audio id="lab-audio-player" class="hidden"></audio>
+            <audio id="lab-audio-player" class="hidden" crossorigin="anonymous"></audio>
         </section>
 
         <section id="inspirations" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
@@ -669,22 +677,30 @@
                         </div>
                     </div>
 
-                    <div id="seq-pads-ui">
-                         <div class="flex flex-col items-center justify-center h-full">
-                            <div class="flex items-center gap-3 mb-6">
-                                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                                <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">INSTANT_PADS</h3>
+                    <div id="seq-pads-ui" class="h-full">
+                         <div class="flex flex-col lg:flex-row items-center justify-center gap-8 h-full pb-8">
+                             <!-- Left Col: Pads -->
+                            <div class="flex flex-col items-center w-full max-w-sm">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                                    <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">INSTANT_PADS</h3>
+                                </div>
+                                <div class="pad-grid w-full" style="grid-template-columns: repeat(3, 1fr);">
+                                    <button class="drum-pad touch-manipulation" id="pad-0" onpointerdown="playPad('kick', this)"><span class="pad-key-hint">A / Q</span>KICK</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-1" onpointerdown="playPad('snare', this)"><span class="pad-key-hint">Z / W</span>SNARE</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-2" onpointerdown="playPad('hat', this)"><span class="pad-key-hint">E</span>HAT</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-3" onpointerdown="playPad('perc1', this)"><span class="pad-key-hint">R</span>PERC 1</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-4" onpointerdown="playPad('perc2', this)"><span class="pad-key-hint">T</span>PERC 2</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-5" onpointerdown="playPad('synth', this, 261.63)"><span class="pad-key-hint">Y</span>C4</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-6" onpointerdown="playPad('synth', this, 329.63)"><span class="pad-key-hint">U</span>E4</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-7" onpointerdown="playPad('synth', this, 392.00)"><span class="pad-key-hint">I</span>G4</button>
+                                    <button class="drum-pad touch-manipulation" id="pad-8" onpointerdown="playPad('synth', this, 523.25)"><span class="pad-key-hint">O</span>C5</button>
+                                </div>
                             </div>
-                            <div class="pad-grid w-full max-w-md mx-auto" style="grid-template-columns: repeat(3, 1fr);">
-                                <button class="drum-pad touch-manipulation" id="pad-0" onpointerdown="playPad('kick', this)"><span class="pad-key-hint">A / Q</span>KICK</button>
-                                <button class="drum-pad touch-manipulation" id="pad-1" onpointerdown="playPad('snare', this)"><span class="pad-key-hint">Z / W</span>SNARE</button>
-                                <button class="drum-pad touch-manipulation" id="pad-2" onpointerdown="playPad('hat', this)"><span class="pad-key-hint">E</span>HAT</button>
-                                <button class="drum-pad touch-manipulation" id="pad-3" onpointerdown="playPad('perc1', this)"><span class="pad-key-hint">R</span>PERC 1</button>
-                                <button class="drum-pad touch-manipulation" id="pad-4" onpointerdown="playPad('perc2', this)"><span class="pad-key-hint">T</span>PERC 2</button>
-                                <button class="drum-pad touch-manipulation" id="pad-5" onpointerdown="playPad('synth', this, 261.63)"><span class="pad-key-hint">Y</span>C4</button>
-                                <button class="drum-pad touch-manipulation" id="pad-6" onpointerdown="playPad('synth', this, 329.63)"><span class="pad-key-hint">U</span>E4</button>
-                                <button class="drum-pad touch-manipulation" id="pad-7" onpointerdown="playPad('synth', this, 392.00)"><span class="pad-key-hint">I</span>G4</button>
-                                <button class="drum-pad touch-manipulation" id="pad-8" onpointerdown="playPad('synth', this, 523.25)"><span class="pad-key-hint">O</span>C5</button>
+                            
+                            <!-- Right Col: Scope Duplicate -->
+                            <div class="w-full max-w-sm h-[160px] lg:h-[300px] bg-black/40 rounded-lg border border-[var(--glass-border)] relative overflow-hidden flex items-center justify-center hidden lg:flex">
+                                <canvas id="scope-canvas-pads" class="w-full h-full absolute inset-0"></canvas>
                             </div>
                         </div>
                     </div>
@@ -766,7 +782,6 @@
         window.addEventListener('scroll', () => { 
             const scrolled = window.pageYOffset; 
             const bg = document.getElementById('theme-bg');
-            // Small transform to simulate distance
             if(bg) bg.style.transform = 'translateY(' + (scrolled * 0.15) + 'px)'; 
         });
 
@@ -795,6 +810,21 @@
         const labPlayer = document.getElementById('lab-audio-player');
         let currentPlayingRow = null;
 
+        // Initialize Web Audio source for Lab Player if not exists
+        let labSourceNode = null;
+        function initLabAudio() {
+            if (!labSourceNode && labPlayer) {
+                 // Important: Connect HTML audio element to Web Audio graph to visualize
+                 try {
+                    labSourceNode = audioCtx.createMediaElementSource(labPlayer);
+                    labSourceNode.connect(analyser);
+                    // No need to connect to destination again as analyser is connected
+                 } catch(e) { console.log("Source already connected or error", e); }
+            }
+        }
+
+        labPlayer.addEventListener('play', initLabAudio);
+
         labPlayer.addEventListener('timeupdate', () => {
             if(!currentPlayingRow || labPlayer.duration === 0) return;
             const pct = (labPlayer.currentTime / labPlayer.duration) * 100;
@@ -813,12 +843,36 @@
              }
         };
 
+        // Visualizer Loop
         function drawVisualizer() {
             requestAnimationFrame(drawVisualizer);
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
             analyser.getByteFrequencyData(dataArray);
-            // Visualizer logic (same as previous)
+
+            const canvases = document.querySelectorAll('canvas');
+
+            canvases.forEach(canvas => {
+                if (!canvas || !canvas.offsetParent) return; // Skip if hidden
+                const ctx = canvas.getContext('2d');
+                const width = canvas.width = canvas.offsetWidth;
+                const height = canvas.height = canvas.offsetHeight;
+                
+                ctx.clearRect(0, 0, width, height);
+                const barWidth = (width / bufferLength) * 2.5;
+                let barHeight;
+                let x = 0;
+                
+                // Get accent color from CSS var for dynamic coloring
+                const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+                ctx.fillStyle = accentColor;
+
+                for(let i = 0; i < bufferLength; i++) {
+                    barHeight = (dataArray[i] / 255) * height;
+                    ctx.fillRect(x, height - barHeight, barWidth, barHeight);
+                    x += barWidth + 1;
+                }
+            });
         }
         drawVisualizer(); 
 
@@ -884,7 +938,11 @@
         }
         function playThemeSwitchSound() {
             if (!audioCtx || audioCtx.state === 'suspended') return;
-            // ... (Simple noise burst)
+            const bSize = audioCtx.sampleRate * 0.5; const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate); const d = b.getChannelData(0);
+            for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
+            const n = audioCtx.createBufferSource(); n.buffer = b; const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 200; const g = audioCtx.createGain();
+            n.connect(f); f.connect(g); g.connect(audioCtx.destination);
+            const now = audioCtx.currentTime; f.frequency.setValueAtTime(200, now); f.frequency.exponentialRampToValueAtTime(3000, now + 0.3); g.gain.setValueAtTime(0.1, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.4); n.start(now);
         }
         document.querySelectorAll('.click-sound').forEach(el => el.addEventListener('click', playClickSound));
 
@@ -940,7 +998,7 @@
                     o.type='triangle'; o.frequency.setValueAtTime(250, t); 
                     g.gain.setValueAtTime(trackVols.snare * 0.5, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.1); 
                     o.start(t); o.stop(t+0.1);
-                    return n; // simplified return
+                    return n; 
                 },
                 hat: (t) => { 
                     const dur = 0.05;
