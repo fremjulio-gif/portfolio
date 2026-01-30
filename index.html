@@ -161,7 +161,7 @@
         .theme-pill img { width: 20px; height: 20px; transform: scale(1.25); transition: transform 0.3s; }
         @media (min-width: 768px) { .theme-pill img { width: 24px; height: 24px; } }
 
-        /* --- SEQUENCER --- */
+        /* --- SEQUENCER & MIXER --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
         #sequencer-inner::before {
             content: ''; position: absolute; inset: 0;
@@ -193,7 +193,6 @@
         .transport-btn:hover { background: var(--accent-color); color: #000; }
         .transport-btn.playing { background: var(--accent-color); color: #000; box-shadow: 0 0 15px var(--accent-color); }
 
-        /* MIXER PANEL - DEBUGGED */
         .mixer-panel {
             max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out;
             background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
@@ -204,17 +203,9 @@
         .fader-group { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
         .fader-group label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #666; letter-spacing: 1px; }
         
-        /* VERTICAL FADERS FIX */
-        .fader-wrapper { position: relative; width: 40px; height: 120px; display: flex; justify-content: center; }
-        input[type=range][orient=vertical] { 
-            appearance: none; -webkit-appearance: none; 
-            position: absolute; top: 50%; left: 50%;
-            width: 120px; height: 30px; 
-            transform: translate(-50%, -50%) rotate(-90deg); 
-            background: transparent; cursor: pointer;
-        }
-        input[type=range][orient=vertical]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 99px; box-shadow: inset 0 0 5px rgba(0,0,0,1); }
-        input[type=range][orient=vertical]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 30px; margin-left: 0; background: linear-gradient(to right, #555, #222); border-top: 1px solid #777; border-bottom: 1px solid #000; border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8); margin-top: -6px; position: relative; z-index: 2; }
+        input[type=range][orient=vertical] { appearance: none; -webkit-appearance: none; writing-mode: bt-lr; width: 30px; height: 120px; padding: 0; background: transparent; cursor: pointer; display: flex; justify-content: center; margin: 0 auto; }
+        input[type=range][orient=vertical]::-webkit-slider-runnable-track { width: 8px; height: 100%; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 99px; box-shadow: inset 0 0 5px rgba(0,0,0,1); }
+        input[type=range][orient=vertical]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 30px; margin-left: -12px; background: linear-gradient(to bottom, #555, #222); border-top: 1px solid #777; border-bottom: 1px solid #000; border-radius: 4px; box-shadow: 0 4px 5px rgba(0,0,0,0.8); margin-top: 0; position: relative; z-index: 2; }
         input[type=range][orient=vertical]::-webkit-slider-thumb:active { background: var(--accent-color); border-color: #fff; }
 
         .sequencer-scroll-container { overflow-x: auto; padding-bottom: 16px; width: 100%; scrollbar-width: none; -ms-overflow-style: none; }
@@ -225,6 +216,7 @@
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 12px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
         body.light-mode .step-btn.active { background-color: #333; border-color: #333; box-shadow: none; }
+        
         .piano-cell { background: rgba(255,255,255,0.03); border-radius: 4px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; touch-action: none; }
         .piano-cell.note-start { background: var(--accent-color); opacity: 1; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; }
         .piano-cell.note-sustain { background: var(--accent-color); opacity: 0.7; border-left: none; border-radius: 0; }
@@ -312,23 +304,11 @@
                 </div>
                 <p class="text-xl md:text-2xl lg:text-4xl opacity-80 font-light tracking-wide max-w-4xl mx-auto mt-2 leading-snug">Étudiant Ingénieur du son & Sound Designer</p>
                 <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition leading-normal">jules.fremondiere@3is.fr</a>
-                
-                <div class="mt-10 flex flex-col items-center gap-6 justify-center w-full md:w-auto px-4 md:px-0">
-                    <div class="flex gap-4">
-                        <a href="#contact" class="px-8 py-4 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/30 text-center touch-manipulation tracking-wider">ME CONTACTER</a>
-                        <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-4 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center justify-center gap-2 touch-manipulation tracking-wider backdrop-blur-md">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> CV
-                        </a>
-                    </div>
-                    
-                    <button onclick="openVision()" class="flex flex-col items-center gap-2 opacity-70 hover:opacity-100 transition duration-300 cursor-pointer group">
-                        <span class="px-6 py-2 rounded-full border border-[var(--glass-border)] bg-white/5 hover:bg-white/10 transition font-mono text-xs uppercase tracking-widest text-[var(--accent-color)] shadow-lg group-hover:scale-105">
-                            + MA VISION
-                        </span>
-                         <div class="w-32 h-32 rounded-full p-0.5 border border-[var(--accent-color)]/30 group-hover:border-[var(--accent-color)] transition overflow-hidden">
-                             <img src="moi.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition">
-                        </div>
-                    </button>
+                <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center w-full md:w-auto px-4 md:px-0">
+                    <a href="#contact" class="px-8 py-4 rounded-full bg-[var(--accent-color)] text-black font-bold text-sm hover:scale-105 transition transform click-sound shadow-lg shadow-[var(--accent-color)]/30 text-center touch-manipulation tracking-wider">ME CONTACTER</a>
+                    <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-4 rounded-full border border-[var(--glass-border)] hover:bg-white/10 font-medium text-sm transition click-sound flex items-center justify-center gap-2 touch-manipulation tracking-wider backdrop-blur-md">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> CV
+                    </a>
                 </div>
             </div>
         </section>
@@ -343,6 +323,14 @@
                 <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Créativité, Organisation, Live 12.</p></div>
                 <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 40"><span>40%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Nettoyage Audio, RX 10, Ozone.</p></div>
                 <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">SoundDevice, Couple micro.</p></div>
+                
+                <button onclick="openVision()" class="col-span-2 mt-4 px-6 py-4 rounded-2xl border border-[var(--glass-border)] bg-white/5 hover:bg-white/10 transition group flex flex-col md:flex-row items-center justify-center gap-4 w-full cursor-pointer relative overflow-hidden shadow-lg hover:border-[var(--accent-color)]">
+                    <div class="absolute inset-0 bg-[var(--accent-color)]/5 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                     <span class="text-xs font-mono uppercase tracking-widest text-[var(--accent-color)] z-10 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        Ouvrir Vision.dmg & Setup
+                     </span>
+                </button>
             </div>
         </section>
 
@@ -396,11 +384,11 @@
 
                     <div id="mixer-panel" class="mixer-panel mb-4">
                         <div class="flex justify-around px-2 font-mono text-[9px] text-center text-gray-400">
-                            <div class="fader-group"><div class="fader-wrapper"><input type="range" orient="vertical" min="0" max="100" value="90" oninput="setVol('kick', this.value)"></div><label>KICK</label></div>
-                            <div class="fader-group"><div class="fader-wrapper"><input type="range" orient="vertical" min="0" max="100" value="80" oninput="setVol('snare', this.value)"></div><label>SNAR</label></div>
-                            <div class="fader-group"><div class="fader-wrapper"><input type="range" orient="vertical" min="0" max="100" value="70" oninput="setVol('hat', this.value)"></div><label>HATS</label></div>
-                            <div class="fader-group"><div class="fader-wrapper"><input type="range" orient="vertical" min="0" max="100" value="60" oninput="setVol('perc', this.value)"></div><label>PERC</label></div>
-                            <div class="fader-group"><div class="fader-wrapper"><input type="range" orient="vertical" min="0" max="100" value="75" oninput="setVol('synth', this.value)"></div><label>SYN</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="90" oninput="setVol('kick', this.value)"><label>KICK</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="80" oninput="setVol('snare', this.value)"><label>SNAR</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="70" oninput="setVol('hat', this.value)"><label>HATS</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="60" oninput="setVol('perc', this.value)"><label>PERC</label></div>
+                            <div class="fader-group"><input type="range" orient="vertical" min="0" max="100" value="75" oninput="setVol('synth', this.value)"><label>SYN</label></div>
                         </div>
                     </div>
 
@@ -729,7 +717,7 @@
 
     <nav class="dock-container">
         <a href="#hero" class="dock-icon click-sound touch-manipulation">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 01-1 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Home</span>
         </a>
         <a href="#skills" class="dock-icon click-sound touch-manipulation">
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg><span>Stats</span>
@@ -788,6 +776,7 @@
 
         function playThemeSwitchSound() {
             if (!audioCtx || audioCtx.state === 'suspended') return;
+            // Swoosh effect
             const bSize = audioCtx.sampleRate * 0.5;
             const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate);
             const d = b.getChannelData(0);
