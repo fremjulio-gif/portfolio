@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DAW Portfolio - Jules F</title>
+    <!-- Favicon updated to moi.png -->
     <link rel="icon" type="image/png" href="moi.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -165,12 +166,9 @@
         
         .piano-cell { background: rgba(255,255,255,0.03); border-radius: 4px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; touch-action: none; }
         .piano-cell.note-start { background: var(--accent-color); opacity: 1; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; }
-        .piano-cell.note-sustain { background: var(--accent-color); opacity: 0.7; border-left: none; border-radius: 0; }
-        .piano-cell.note-sustain:last-child, .piano-cell.note-start:not(:has(+ .note-sustain)) { border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-right: 1px solid transparent; }
         .piano-cell.playing-col, .step-btn.playing-col { filter: brightness(1.5); }
         body.light-mode .piano-cell { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
         body.light-mode .piano-cell.note-start { background-color: #333; } 
-        body.light-mode .piano-cell.note-sustain { background-color: #555; }
         .piano-label { font-family: monospace; font-size: 9px; color: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; }
         body.light-mode .piano-label { color: #000; font-weight: bold; }
 
@@ -996,25 +994,17 @@
         function createStepBtn(arrayRef, index, dataArray) {
             const btn = document.createElement('button'); btn.className = `step-btn click-sound touch-manipulation`;
             
-            // Simplified Mobile Interaction: Tap to toggle (Pointerdown covers touch and mouse)
-            btn.addEventListener('pointerdown', (e) => {
-                 // Try unlocking audio on interaction if not done
+            const toggle = (e) => {
+                if (e.cancelable) e.preventDefault(); // Stop scroll
                 if (audioCtx.state === 'suspended') audioCtx.resume();
-                
-                e.preventDefault(); 
-                const state = !dataArray[index]; 
-                dataArray[index] = state; 
-                btn.classList.toggle('active', state); 
-                btn.setPointerCapture(e.pointerId); 
-            });
-            
-            // Drag to paint only if pointer is down (Desktop mainly)
-            btn.addEventListener('pointerenter', (e) => { 
-                if (e.buttons > 0) { 
-                    dataArray[index] = true; 
-                    btn.classList.add('active'); 
-                } 
-            });
+
+                const state = !dataArray[index];
+                dataArray[index] = state;
+                btn.classList.toggle('active', state);
+            };
+
+            // Use pointerdown for immediate response on touch and mouse
+            btn.addEventListener('pointerdown', toggle);
             return btn;
         }
 
@@ -1028,23 +1018,23 @@
             for(let r=0; r<rows; r++) { for(let c=0; c<cols; c++) {
                     const cell = document.createElement('div'); cell.className = `piano-cell ${mode==='mini'?'h-5':'h-4'} click-sound touch-manipulation relative`; cell.id = `note-${mode}-${r}-${c}`;
                     if (c === 0) { const noteName = getNoteNameFromFreq(currentNotes[r]); cell.innerHTML = `<span class="piano-label absolute left-0 top-0 text-[8px] opacity-40 pointer-events-none p-0.5">${noteName}</span>`; }
-                    if (gridData[r][c]) { cell.classList.add('active'); if (gridData[r][c] === 1) cell.classList.add('note-start'); if (gridData[r][c] === 2) cell.classList.add('note-sustain'); }
+                    if (gridData[r][c]) { cell.classList.add('active'); if (gridData[r][c] === 1) cell.classList.add('note-start'); }
                     
                     cell.addEventListener('pointerdown', (e) => { 
+                        if (e.cancelable) e.preventDefault();
                         if (audioCtx.state === 'suspended') audioCtx.resume();
-                        e.preventDefault(); 
+                        
                         const state = !gridData[r][c]; 
-                        const newVal = state ? 1 : 0; 
-                        gridData[r][c] = newVal; 
-                        updateCellVisual(cell, newVal); 
+                        gridData[r][c] = state ? 1 : 0; 
+                        
+                        updateCellVisual(cell, gridData[r][c]); 
                         cell.setPointerCapture(e.pointerId); 
                     });
                     
-                    cell.addEventListener('pointerenter', (e) => { if (e.buttons > 0) { gridData[r][c] = 2; updateCellVisual(cell, 2); } });
                     container.appendChild(cell);
             }}
         }
-        function updateCellVisual(cell, val) { cell.classList.remove('active', 'note-start', 'note-sustain'); if (val > 0) cell.classList.add('active'); if (val === 1) cell.classList.add('note-start'); if (val === 2) cell.classList.add('note-sustain'); }
+        function updateCellVisual(cell, val) { cell.classList.remove('active', 'note-start', 'note-sustain'); if (val > 0) cell.classList.add('active'); if (val === 1) cell.classList.add('note-start'); }
         function getNoteNameFromFreq(freq) { const noteNames = Object.keys(notesFreq); let closestNote = ''; let minDiff = Infinity; for (const name of noteNames) { const f = notesFreq[name]; if (Math.abs(freq - f) < minDiff) { minDiff = Math.abs(freq - f); closestNote = name; } } return closestNote; }
         
         updatePianoRoll('mini'); updatePianoRoll('large');
@@ -1065,12 +1055,12 @@
             if(activeSequencer === 'mini') {
                 const s = currentStep % 8; highlightColumn('mini', s, 8, 5); const kName = document.getElementById('kit-select-mini').value;
                 if(seqMini.kick[s]) playSound('kick', kName); if(seqMini.snare[s]) playSound('snare', kName); if(seqMini.hat[s]) playSound('hat', kName);
-                for(let r=0; r<5; r++) { const cellVal = melodyMini[r][s]; if (cellVal === 1) { let dur = 1; for(let k=1; k<8; k++) { if(melodyMini[r][(s+k)%8] === 2) dur++; else break; } playSynth(currentScaleNotesMini[r], now, dur * stepDuration, 'sine'); } }
+                for(let r=0; r<5; r++) { const cellVal = melodyMini[r][s]; if (cellVal === 1) { playSynth(currentScaleNotesMini[r], now, stepDuration, 'sine'); } }
                 currentStep = (currentStep + 1) % 8;
             } else {
                 const s = currentStep % 16; highlightColumn('large', s, 16, 8); const kName = document.getElementById('kit-select-large').value; const synthShape = document.getElementById('synth-type').value;
                 if(seqLarge.kick[s]) playSound('kick', kName); if(seqLarge.snare[s]) playSound('snare', kName); if(seqLarge.hat[s]) playSound('hat', kName); if(seqLarge.perc1[s]) playSound('perc1', kName); if(seqLarge.perc2[s]) playSound('perc2', kName);
-                for(let r=0; r<8; r++) { const cellVal = melodyLarge[r][s]; if (cellVal === 1) { let dur = 1; for(let k=1; k<16; k++) { if(melodyLarge[r][(s+k)%16] === 2) dur++; else break; } playSynth(currentScaleNotesLarge[r], now, dur * stepDuration, synthShape); } }
+                for(let r=0; r<8; r++) { const cellVal = melodyLarge[r][s]; if (cellVal === 1) { playSynth(currentScaleNotesLarge[r], now, stepDuration, synthShape); } }
                 currentStep = (currentStep + 1) % 16;
             }
         }
