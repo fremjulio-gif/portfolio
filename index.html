@@ -486,7 +486,7 @@
 
         <section id="inspirations" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
              <div class="win-header">
-                <span class="win-title">inspirations.md</span>
+                <span class="win-title">Reference_Library</span>
                 <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
             </div>
             <div class="p-8">
@@ -729,23 +729,22 @@
         masterGain.connect(analyser); analyser.connect(audioCtx.destination);
         analyser.fftSize = 256; masterGain.gain.value = 0.5;
         
-        // --- MOBILE AUDIO UNLOCK FIX ---
-        let audioUnlocked = false;
-        const unlockAudio = () => {
-            if(audioUnlocked) return;
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            // Create brief silent buffer to force unlock on iOS
-            const buffer = audioCtx.createBuffer(1, 1, 22050);
-            const source = audioCtx.createBufferSource();
-            source.buffer = buffer;
-            source.connect(audioCtx.destination);
-            source.start(0);
-            audioUnlocked = true;
-            document.removeEventListener('click', unlockAudio);
-            document.removeEventListener('touchstart', unlockAudio);
+        // --- MOBILE AUDIO UNLOCK FIX & GLOBAL LISTENER ---
+        const unlockAudioContext = () => {
+            if (audioCtx.state !== 'running') {
+                audioCtx.resume().then(() => {
+                    // console.log('AudioContext unlocked/resumed');
+                    // Remove listeners once unlocked to avoid spamming resume
+                    document.body.removeEventListener('click', unlockAudioContext);
+                    document.body.removeEventListener('touchstart', unlockAudioContext);
+                    document.body.removeEventListener('keydown', unlockAudioContext);
+                });
+            }
         };
-        document.addEventListener('click', unlockAudio);
-        document.addEventListener('touchstart', unlockAudio);
+        // Aggressive listeners for unlock
+        document.body.addEventListener('click', unlockAudioContext);
+        document.body.addEventListener('touchstart', unlockAudioContext);
+        document.body.addEventListener('keydown', unlockAudioContext);
 
         // --- 2. LAB PLAYER LOGIC (With Timelines) ---
         const labPlayer = document.getElementById('lab-audio-player');
@@ -1123,7 +1122,7 @@
         }
 
         // --- 4. THEME & VISION ---
-        const themes = { fl: { bg: 'flstudio.png', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' }, ableton: { bg: 'ableton.png', bar: 'bar_ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' }, protools: { bg: 'protools.png', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } };
+        const themes = { fl: { bg: 'peace.jpg', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' }, ableton: { bg: 'peace2.jpg', bar: 'bar_ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' }, protools: { bg: 'peace3.jpg', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } };
         function setTheme(name) { 
             playThemeSwitchSound(); document.body.classList.add('switching-theme'); setTimeout(() => document.body.classList.remove('switching-theme'), 300); const t = themes[name]; document.body.className = `${t.font} selection:bg-white selection:text-black`; if(t.mode === 'light') document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode'); document.body.setAttribute('data-theme', name); document.documentElement.style.setProperty('--accent-color', t.accent); 
             // Updates theme background and widget bar images
