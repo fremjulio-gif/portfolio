@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DAW Portfolio - Jules F</title>
-    <!-- Placeholder for favicon -->
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+    <!-- Favicon updated to moi.png -->
+    <link rel="icon" type="image/png" href="moi.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,6 +132,7 @@
 
         /* --- SEQUENCER --- */
         #sequencer-inner { position: relative; overflow: hidden; width: 100%; transition: height 0.3s ease; }
+        /* Removed console.png as it wasn't in the provided list */
         #sequencer-inner::before { content: ''; position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.15; z-index: 0; pointer-events: none; mix-blend-mode: overlay; filter: grayscale(100%) contrast(1.2); }
         .seq-tabs-container { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 9999px; padding: 4px; display: inline-flex; gap: 0; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
         body.light-mode .seq-tabs-container { background: rgba(0, 0, 0, 0.05); border-color: rgba(0,0,0,0.1); }
@@ -177,6 +178,7 @@
 
         /* --- SKILLS BACKGROUND --- */
         #skills { position: relative; overflow: hidden; }
+        /* Removed console.png */
         #skills::before { content: ''; position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.1; z-index: 0; pointer-events: none; mix-blend-mode: overlay; }
 
         /* --- MARQUEE --- */
@@ -234,15 +236,15 @@
     <div class="theme-island" id="theme-widget">
         <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300">Pick your theme</span>
         <div class="flex gap-2">
-            <!-- Using FontAwesome icons as fallbacks if images don't load, handled via styling or just relying on buttons -->
+            <!-- Icons updated -->
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio">
-                <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-[8px] font-bold text-black">FL</div>
+                <img src="logo_flstudio.png" alt="FL" class="object-contain">
             </button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton">
-                 <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[8px] font-bold text-black">LIVE</div>
+                <img src="logo_ableton.png" alt="Live" class="object-contain">
             </button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools">
-                 <div class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-[8px] font-bold text-white">PT</div>
+                <img src="logo_protools.png" alt="PT" class="object-contain">
             </button>
         </div>
     </div>
@@ -296,9 +298,9 @@
             <div class="p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
                 <div class="relative pl-6 md:pl-8 border-l border-[var(--glass-border)] space-y-10 md:space-y-12">
                     <div class="relative group"><div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--accent-color)] bg-[#111] group-hover:scale-150 transition shadow-[0_0_10px_var(--accent-color)]"></div><span class="text-xs font-mono text-[var(--accent-color)] mb-1 block font-bold">2023 – 2026</span><h3 class="text-lg md:text-xl font-bold">3iS - Institut International</h3><p class="text-sm uppercase tracking-wider opacity-60 mb-2">Bachelor Son à l'image / Ingénieur du son</p><p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--accent-color)]">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p></div>
-                    <div class="relative group flex flex-col md:flex-row gap-6 items-start"><div class="flex-1"><div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div><span class="text-xs font-mono opacity-50 mb-1 block">2023</span><h3 class="text-lg md:text-xl font-bold">Service Civique / Césure</h3><p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)] mb-2">Projet Court Métrage grâce a l’association Thermogène Média.</p><a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-xs border border-[var(--glass-border)] px-4 py-2 rounded-full hover:bg-white/10 inline-block transition click-sound touch-manipulation font-bold">▶ Voir le projet vidéo</a></div><div class="w-full md:w-32 h-32 md:h-24 shrink-0 rounded-lg overflow-hidden border border-[var(--glass-border)] mt-2 md:mt-0 shadow-lg"><img src="https://images.unsplash.com/photo-1542204637-e67bc7d41e48?q=80&w=1935&auto=format&fit=crop" alt="Asso" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500 hover:scale-110"></div></div>
+                    <div class="relative group flex flex-col md:flex-row gap-6 items-start"><div class="flex-1"><div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div><span class="text-xs font-mono opacity-50 mb-1 block">2023</span><h3 class="text-lg md:text-xl font-bold">Service Civique / Césure</h3><p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)] mb-2">Projet Court Métrage grâce a l’association Thermogène Média.</p><a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-xs border border-[var(--glass-border)] px-4 py-2 rounded-full hover:bg-white/10 inline-block transition click-sound touch-manipulation font-bold">▶ Voir le projet vidéo</a></div><div class="w-full md:w-32 h-32 md:h-24 shrink-0 rounded-lg overflow-hidden border border-[var(--glass-border)] mt-2 md:mt-0 shadow-lg"><img src="peace3.jpg" alt="Asso" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500 hover:scale-110"></div></div>
                     <div class="relative group"><div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div><span class="text-xs font-mono opacity-50 mb-1 block">2022</span><h3 class="text-lg md:text-xl font-bold">BAC STI2D ITEC</h3><p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Esprit d’équipe, Informatique, Sens de la réflexion technique.</p></div>
-                     <div class="relative group flex flex-col md:flex-row gap-6 items-start"><div class="flex-1"><div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div><span class="text-xs font-mono opacity-50 mb-1 block">2018 – 2022</span><h3 class="text-lg md:text-xl font-bold">Autodidacte & Exploration AV</h3><div class="mt-2 p-4 bg-white/5 rounded-xl border-l-2 border-[var(--accent-color)]"><ul class="list-disc list-inside text-sm opacity-70 space-y-1"><li>Composition musicale</li><li>Montage vidéo</li></ul></div></div><div class="w-full md:w-32 h-32 md:h-24 shrink-0 rounded-lg overflow-hidden border border-[var(--glass-border)] mt-2 md:mt-0 shadow-lg"><img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop" alt="Work" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500 hover:scale-110"></div></div>
+                     <div class="relative group flex flex-col md:flex-row gap-6 items-start"><div class="flex-1"><div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div><span class="text-xs font-mono opacity-50 mb-1 block">2018 – 2022</span><h3 class="text-lg md:text-xl font-bold">Autodidacte & Exploration AV</h3><div class="mt-2 p-4 bg-white/5 rounded-xl border-l-2 border-[var(--accent-color)]"><ul class="list-disc list-inside text-sm opacity-70 space-y-1"><li>Composition musicale</li><li>Montage vidéo</li></ul></div></div><div class="w-full md:w-32 h-32 md:h-24 shrink-0 rounded-lg overflow-hidden border border-[var(--glass-border)] mt-2 md:mt-0 shadow-lg"><img src="peace2.jpg" alt="Work" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500 hover:scale-110"></div></div>
                      <div class="relative group"><div class="absolute -left-[29px] md:-left-[37px] top-1 w-4 h-4 rounded-full border-2 border-[var(--glass-border)] bg-[#111] group-hover:border-[var(--accent-color)] transition"></div><span class="text-xs font-mono opacity-50 mb-1 block">2010 – 2014</span><h3 class="text-lg md:text-xl font-bold">Danseur Hip-Hop & Interprète</h3><p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--glass-border)]">Tournée Européenne avec le chorégraphe Boris Charmatz.</p></div>
                 </div>
             </div>
@@ -328,7 +330,7 @@
                     </a>
 
                     <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" class="project-card group click-sound touch-manipulation">
-                        <img src="https://images.unsplash.com/photo-1514525253440-b393452e3383?q=80&w=2000&auto=format&fit=crop" alt="Srh - qutumeregardes" class="object-cover object-bottom w-full h-full transition duration-500 group-hover:scale-105">
+                        <img src="cover.jpg" alt="Srh - qutumeregardes" class="object-cover object-bottom w-full h-full transition duration-500 group-hover:scale-105">
                         <div class="project-info">
                             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Musique</span>
@@ -426,7 +428,7 @@
                 </div>
                 
                 <div class="space-y-0">
-                    <div class="lab-row group" onclick="playLabTrack('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', this, event)">
+                    <div class="lab-row group" onclick="playLabTrack('rover.mp3', this, event)">
                         <div class="lab-content-wrapper">
                             <div class="flex items-center gap-4">
                                 <div class="w-8 h-8 flex items-center justify-center border border-white/10 rounded group-hover:border-[var(--accent-color)] transition">
@@ -444,7 +446,7 @@
                             <div class="lab-progress-fill"></div>
                         </div>
                     </div>
-                     <div class="lab-row group" onclick="playLabTrack('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', this, event)">
+                     <div class="lab-row group" onclick="playLabTrack('wordsnight.mp3', this, event)">
                         <div class="lab-content-wrapper">
                             <div class="flex items-center gap-4">
                                 <div class="w-8 h-8 flex items-center justify-center border border-white/10 rounded group-hover:border-[var(--accent-color)] transition">
@@ -462,7 +464,7 @@
                             <div class="lab-progress-fill"></div>
                         </div>
                     </div>
-                     <div class="lab-row group" onclick="playLabTrack('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', this, event)">
+                     <div class="lab-row group" onclick="playLabTrack('shadow.mp3', this, event)">
                         <div class="lab-content-wrapper">
                             <div class="flex items-center gap-4">
                                 <div class="w-8 h-8 flex items-center justify-center border border-white/10 rounded group-hover:border-[var(--accent-color)] transition">
@@ -482,7 +484,7 @@
                     </div>
                 </div>
             </div>
-            <audio id="lab-audio-player" class="hidden" crossorigin="anonymous"></audio>
+            <audio id="lab-audio-player" class="hidden"></audio>
         </section>
 
         <section id="inspirations" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
@@ -498,19 +500,19 @@
                         <h4 class="text-sm font-bold text-[var(--accent-color)] uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Séries / Films</h4>
                         <div class="space-y-6">
                             <div class="inspi-card">
-                                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=200&auto=format&fit=crop" class="inspi-img">
+                                <img src="pluribus.webp" class="inspi-img">
                                 <div><h5 class="font-bold text-sm">Pluribus</h5><p class="text-[10px] opacity-60">SF, esthétique minimaliste, bruitages précis.</p></div>
                             </div>
                             <div class="inspi-card">
-                                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=200&auto=format&fit=crop" class="inspi-img">
+                                <img src="theboys.webp" class="inspi-img">
                                 <div><h5 class="font-bold text-sm">The Boys</h5><p class="text-[10px] opacity-60">SF, futuriste, sound design recherchés.</p></div>
                             </div>
                             <div class="inspi-card">
-                                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=200&auto=format&fit=crop" class="inspi-img">
+                                <img src="parasite.webp" class="inspi-img">
                                 <div><h5 class="font-bold text-sm">Parasite</h5><p class="text-[10px] opacity-60">Baroque, Glockenspiel, bruitages précis.</p></div>
                             </div>
                             <div class="inspi-card">
-                                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=200&auto=format&fit=crop" class="inspi-img">
+                                <img src="midsommar.webp" class="inspi-img">
                                 <div><h5 class="font-bold text-sm">Midsommar</h5><p class="text-[10px] opacity-60">Mix réaliste, Contemplatif, Nappes Anxiogènes.</p></div>
                             </div>
                         </div>
@@ -520,15 +522,15 @@
                         <h4 class="text-sm font-bold text-[var(--accent-color)] uppercase tracking-widest mb-6 border-b border-white/10 pb-2">Albums</h4>
                         <div class="space-y-6">
                             <div class="inspi-card">
-                                <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=200&auto=format&fit=crop" class="inspi-img">
+                                <img src="425.webp" class="inspi-img">
                                 <div><h5 class="font-bold text-sm">Mike Dean "425"</h5><p class="text-[10px] opacity-60">Synthétique, Saturé, Electro/Ambient.</p></div>
                             </div>
                             <div class="inspi-card">
-                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=200&auto=format&fit=crop" class="inspi-img">
+                                <img src="ftp.webp" class="inspi-img">
                                 <div><h5 class="font-bold text-sm">Femtogo "FRANC TIREUR..."</h5><p class="text-[10px] opacity-60">Introspectif, Mélancolique, Jazz/Rap.</p></div>
                             </div>
                             <div class="inspi-card">
-                                <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=200&auto=format&fit=crop" class="inspi-img">
+                                <img src="pretty.png" class="inspi-img">
                                 <div><h5 class="font-bold text-sm">"PRETTY DOLLCORPSE"</h5><p class="text-[10px] opacity-60">Textures glitchés, VSS, Sampling.</p></div>
                             </div>
                         </div>
@@ -555,7 +557,7 @@
 
             <div class="p-10 flex flex-col items-center">
                 <div class="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 border-2 border-[var(--accent-color)]">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" alt="Jules" class="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition duration-500">
+                    <img src="moi.png" alt="Jules" class="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition duration-500">
                 </div>
                 <div class="mt-6">
                     <h3 class="text-xl md:text-2xl font-bold">Travaillons ensemble</h3>
@@ -907,7 +909,7 @@
             standard: {
                 kick: (t) => { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.connect(g); g.connect(masterGain); o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(0.01, t + 0.5); g.gain.setValueAtTime(trackVols.kick, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.5); o.start(t); o.stop(t + 0.5); },
                 snare: (t) => { createNoise(0.2, trackVols.snare, t); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.connect(g); g.connect(masterGain); o.type='triangle'; o.frequency.setValueAtTime(250, t); g.gain.setValueAtTime(trackVols.snare * 0.5, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.1); o.start(t); o.stop(t+0.1); },
-                hat: (t) => { createNoise(0.05, trackVols.hat * 0.8, t); const f = audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=6000; f.connect(g); g.connect(masterGain); } // Fixed hat routing
+                hat: (t) => { createNoise(0.05, trackVols.hat * 0.8, t); const f = audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=6000; f.connect(g); g.connect(masterGain); }
             },
             analog: {
                 kick: (t) => { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.connect(g); g.connect(masterGain); o.type='square'; o.frequency.setValueAtTime(100, t); o.frequency.exponentialRampToValueAtTime(0.01, t + 0.8); g.gain.setValueAtTime(trackVols.kick, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.8); o.start(t); o.stop(t + 0.8); },
@@ -1032,11 +1034,13 @@
         function playSynth(freq, time, duration, shape = 'sine') { const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type=shape; o.frequency.value=freq; o.connect(g); g.connect(masterGain); const vol = trackVols.synth * 0.25; g.gain.setValueAtTime(0, time); g.gain.linearRampToValueAtTime(vol, time + 0.02); g.gain.setValueAtTime(vol, time + duration - 0.05); g.gain.exponentialRampToValueAtTime(0.001, time + duration); o.start(time); o.stop(time + duration); }
 
         // --- 4. THEME & VISION ---
-        const themes = { fl: { bg: 'flstudio.png', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' }, ableton: { bg: 'ableton.png', bar: 'bar_ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' }, protools: { bg: 'protools.png', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } };
+        const themes = { fl: { bg: 'peace.jpg', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' }, ableton: { bg: 'peace2.jpg', bar: 'bar_ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' }, protools: { bg: 'peace3.jpg', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } };
         function setTheme(name) { 
             playThemeSwitchSound(); document.body.classList.add('switching-theme'); setTimeout(() => document.body.classList.remove('switching-theme'), 300); const t = themes[name]; document.body.className = `${t.font} selection:bg-white selection:text-black`; if(t.mode === 'light') document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode'); document.body.setAttribute('data-theme', name); document.documentElement.style.setProperty('--accent-color', t.accent); 
-            // Note: Since I don't have the images, I'm just leaving the color change logic active
-            // document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`; 
+            // Updates theme background and widget bar images
+            document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`; 
+            document.getElementById('theme-widget').style.backgroundImage = `url('${t.bar}')`;
+            
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
         }
 
