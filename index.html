@@ -526,7 +526,6 @@
                     </div>
                 </div>
             </div>
-            <audio id="lab-audio-player" class="hidden" crossorigin="anonymous"></audio>
         </section>
 
         <section id="inspirations" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
@@ -806,42 +805,39 @@
         document.body.addEventListener('touchstart', unlockAudioContext);
         document.body.addEventListener('keydown', unlockAudioContext);
 
-        // --- 2. LAB PLAYER LOGIC (With Timelines) ---
-        const labPlayer = document.getElementById('lab-audio-player');
-        let currentPlayingRow = null;
+        // --- 2. LAB PLAYER LOGIC (FIXED) ---
+        // New implementation: Fetch -> Decode -> Buffer -> SourceNode
+        
+        const labBuffers = {}; // Store decoded buffers here
+        let currentLabSource = null;
+        let currentLabStart = 0;
+        let currentLabDuration = 0;
+        let currentLabRow = null;
+        let progressAnimId = null;
 
-        // Initialize Web Audio source for Lab Player if not exists
-        let labSourceNode = null;
-        function initLabAudio() {
-            if (!labSourceNode && labPlayer) {
-                 // Important: Connect HTML audio element to Web Audio graph to visualize
-                 try {
-                    labSourceNode = audioCtx.createMediaElementSource(labPlayer);
-                    labSourceNode.connect(analyser);
-                    // No need to connect to destination again as analyser is connected
-                 } catch(e) { console.log("Source already connected or error", e); }
+        // Fetch & Decode Function
+        async function loadLabSample(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const arrayBuffer = await response.arrayBuffer();
+                const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+                labBuffers[url] = audioBuffer;
+                console.log(`Audio Lab Loaded: ${url}`);
+                return audioBuffer;
+            } catch (e) {
+                console.error('Error loading lab audio:', e);
             }
         }
 
-        labPlayer.addEventListener('play', initLabAudio);
-
-        labPlayer.addEventListener('timeupdate', () => {
-            if(!currentPlayingRow || labPlayer.duration === 0) return;
-            const pct = (labPlayer.currentTime / labPlayer.duration) * 100;
-            const fill = currentPlayingRow.querySelector('.lab-progress-fill');
-            if(fill) fill.style.width = `${pct}%`;
+        // Preload Lab Audio
+        Promise.all([
+            loadLabSample('rover.mp3'),
+            loadLabSample('wordsnight.mp3'),
+            loadLabSample('shadow.mp3')
+        ]).then(() => {
+            console.log('All Lab Audio Loaded & Ready');
         });
-        
-        labPlayer.onended = () => {
-             if(currentPlayingRow) {
-                currentPlayingRow.classList.remove('playing');
-                currentPlayingRow.querySelector('.play-icon').classList.remove('hidden');
-                currentPlayingRow.querySelector('.pause-icon').classList.add('hidden');
-                const fill = currentPlayingRow.querySelector('.lab-progress-fill');
-                if(fill) fill.style.width = '0%';
-                currentPlayingRow = null;
-             }
-        };
 
         // Visualizer Loop
         function drawVisualizer() {
@@ -863,7 +859,6 @@
                 let barHeight;
                 let x = 0;
                 
-                // Get accent color from CSS var for dynamic coloring
                 const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
                 ctx.fillStyle = accentColor;
 
@@ -876,48 +871,113 @@
         }
         drawVisualizer(); 
 
+        // Update Progress Bar UI
+        function updateLabProgress() {
+            if (!currentLabSource || !currentLabRow) return;
+            
+            const elapsedTime = audioCtx.currentTime - currentLabStart;
+            const duration = currentLabDuration;
+            
+            if (elapsedTime >= duration) {
+                // End of playback
+                stopLabPlayback();
+                return;
+            }
+
+            const pct = (elapsedTime / duration) * 100;
+            const fill = currentLabRow.querySelector('.lab-progress-fill');
+            if(fill) fill.style.width = `${pct}%`;
+            
+            progressAnimId = requestAnimationFrame(updateLabProgress);
+        }
+
+        function stopLabPlayback() {
+            if (currentLabSource) {
+                try { currentLabSource.stop(); } catch(e){}
+                currentLabSource = null;
+            }
+            if (progressAnimId) cancelAnimationFrame(progressAnimId);
+            
+            if (currentLabRow) {
+                currentLabRow.classList.remove('playing');
+                currentLabRow.querySelector('.play-icon').classList.remove('hidden');
+                currentLabRow.querySelector('.pause-icon').classList.add('hidden');
+                const fill = currentLabRow.querySelector('.lab-progress-fill');
+                if(fill) fill.style.width = '0%';
+                currentLabRow = null;
+            }
+        }
+
         function playLabTrack(src, row, event, action) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             
+            // Check if buffer exists
+            if (!labBuffers[src]) {
+                console.warn('Buffer not ready for:', src);
+                // Attempt to load if not present (fallback)
+                loadLabSample(src).then(() => playLabTrack(src, row, event, action));
+                return;
+            }
+
             if (action === 'toggle') {
-                if (currentPlayingRow === row && !labPlayer.paused) {
-                    labPlayer.pause();
-                    row.classList.remove('playing');
-                    row.querySelector('.play-icon').classList.remove('hidden');
-                    row.querySelector('.pause-icon').classList.add('hidden');
+                if (currentLabRow === row) {
+                    // Stop if clicking same playing row
+                    stopLabPlayback();
                     return;
                 }
-                if(labPlayer.src !== src && !src.endsWith(labPlayer.src.split('/').pop())) labPlayer.src = src;
-                if (currentPlayingRow && currentPlayingRow !== row) {
-                    currentPlayingRow.classList.remove('playing');
-                    currentPlayingRow.querySelector('.play-icon').classList.remove('hidden');
-                    currentPlayingRow.querySelector('.pause-icon').classList.add('hidden');
-                    const prevFill = currentPlayingRow.querySelector('.lab-progress-fill');
-                    if(prevFill) prevFill.style.width = '0%';
-                }
-                labPlayer.play();
-                row.classList.add('playing');
-                row.querySelector('.play-icon').classList.add('hidden');
-                row.querySelector('.pause-icon').classList.remove('hidden');
-                currentPlayingRow = row;
                 
-            } else if (action === 'seek') {
-                if (currentPlayingRow !== row) {
-                    playLabTrack(src, row, event, 'toggle');
+                // Stop previous if clicking new row
+                if (currentLabRow && currentLabRow !== row) {
+                    stopLabPlayback();
                 }
+
+                // Start Playback
+                startSource(src, row, 0);
+
+            } else if (action === 'seek') {
+                // If seeking on a different track, treat as toggle (start new)
+                if (currentLabRow !== row) {
+                    playLabTrack(src, row, event, 'toggle');
+                    return;
+                }
+
                 const rect = event.currentTarget.getBoundingClientRect();
                 const clickX = event.clientX - rect.left;
                 const pct = Math.max(0, Math.min(1, clickX / rect.width));
-                if (labPlayer.duration) {
-                     labPlayer.currentTime = pct * labPlayer.duration;
-                } else {
-                     const seekOnLoad = () => {
-                         labPlayer.currentTime = pct * labPlayer.duration;
-                         labPlayer.removeEventListener('loadedmetadata', seekOnLoad);
-                     };
-                     labPlayer.addEventListener('loadedmetadata', seekOnLoad);
+                const offset = pct * labBuffers[src].duration;
+                
+                // Stop current instance and restart at offset
+                if (currentLabSource) {
+                    try { currentLabSource.stop(); } catch(e){}
                 }
+                startSource(src, row, offset);
             }
+        }
+
+        function startSource(src, row, offset) {
+            const buffer = labBuffers[src];
+            const source = audioCtx.createBufferSource();
+            source.buffer = buffer;
+            // Connect: Source -> Analyser -> Destination
+            source.connect(analyser); 
+            // Note: Analyser is already connected to destination in setup
+            
+            source.start(0, offset);
+            
+            currentLabSource = source;
+            currentLabRow = row;
+            currentLabDuration = buffer.duration;
+            // Adjust start time to account for offset so progress bar matches
+            currentLabStart = audioCtx.currentTime - offset;
+            
+            // Update UI
+            row.classList.add('playing');
+            row.querySelector('.play-icon').classList.add('hidden');
+            row.querySelector('.pause-icon').classList.remove('hidden');
+            
+            // Start Animation Loop
+            if (progressAnimId) cancelAnimationFrame(progressAnimId);
+            updateLabProgress();
         }
         
         // --- 3. SEQUENCER CORE (STABILIZED) ---
