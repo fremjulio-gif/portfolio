@@ -781,7 +781,7 @@
         window.addEventListener('scroll', () => { 
             const scrolled = window.pageYOffset; 
             const bg = document.getElementById('theme-bg');
-            if(bg) bg.style.transform = 'translateY(' + (scrolled * 0.15) + 'px)'; 
+            if(bg) bg.style.transform = 'translateY(' + -(scrolled * 0.05) + 'px)';
         });
 
         // Audio Context Setup
