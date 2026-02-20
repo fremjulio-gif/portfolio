@@ -481,7 +481,7 @@
                             </div>
                             <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">02:14</span>
                         </div>
-                        <div class="lab-timeline-area" onclick="playLabTrack('rover.mp3', document.getElementById('lab-row-1'), event, 'seek')"></div>
+                        <div class="lab-timeline-area" onpointerdown="playLabTrack('rover.mp3', document.getElementById('lab-row-1'), event, 'seek')"></div>
                         <div class="lab-progress-bg">
                             <div class="lab-progress-fill"></div>
                         </div>
@@ -500,7 +500,7 @@
                             </div>
                             <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">01:45</span>
                         </div>
-                        <div class="lab-timeline-area" onclick="playLabTrack('wordsnight.mp3', document.getElementById('lab-row-2'), event, 'seek')"></div>
+                        <div class="lab-timeline-area" onpointerdown="playLabTrack('wordsnight.mp3', document.getElementById('lab-row-2'), event, 'seek')"></div>
                         <div class="lab-progress-bg">
                             <div class="lab-progress-fill"></div>
                         </div>
@@ -519,7 +519,7 @@
                             </div>
                             <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">03:02</span>
                         </div>
-                          <div class="lab-timeline-area" onclick="playLabTrack('shadow.mp3', document.getElementById('lab-row-3'), event, 'seek')"></div>
+                          <div class="lab-timeline-area" onpointerdown="playLabTrack('shadow.mp3', document.getElementById('lab-row-3'), event, 'seek')"></div>
                           <div class="lab-progress-bg">
                             <div class="lab-progress-fill"></div>
                         </div>
@@ -538,7 +538,7 @@
                             </div>
                             <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">03:02</span>
                         </div>
-                          <div class="lab-timeline-area" onclick="playLabTrack('perception.mp3', document.getElementById('lab-row-4'), event, 'seek')"></div>
+                          <div class="lab-timeline-area" onpointerdown="playLabTrack('perception.mp3', document.getElementById('lab-row-4'), event, 'seek')"></div>
                           <div class="lab-progress-bg">
                             <div class="lab-progress-fill"></div>
                         </div>
@@ -557,7 +557,7 @@
                             </div>
                             <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">01:54</span>
                         </div>
-                          <div class="lab-timeline-area" onclick="playLabTrack('lightoff.mp3', document.getElementById('lab-row-5'), event, 'seek')"></div>
+                          <div class="lab-timeline-area" onpointerdown="playLabTrack('lightoff.mp3', document.getElementById('lab-row-5'), event, 'seek')"></div>
                           <div class="lab-progress-bg">
                             <div class="lab-progress-fill"></div>
                         </div>
@@ -980,7 +980,7 @@
                 }
 
                 const rect = event.currentTarget.getBoundingClientRect();
-                const clickX = event.clientX - rect.left;
+                const getClientX = event.clientX || (event.touches && event.touches[0].clientX) || (event.changedTouches && event.changedTouches[0].clientX) || 0; const clickX = getClientX - rect.left;
                 const pct = Math.max(0, Math.min(1, clickX / rect.width));
                 const offset = pct * labBuffers[src].duration;
                 
