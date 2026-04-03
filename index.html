@@ -638,35 +638,42 @@
             </div>
         </section>
 
-        <section id="contact" class="col-span-12 glass-panel p-0 text-center flex flex-col items-center justify-center gap-6 scroll-float mb-20 overflow-hidden">
+        <section id="contact" class="col-span-12 glass-panel p-0 text-center flex flex-col items-center justify-center scroll-float mb-32 overflow-hidden relative">
             
-            <div class="win-header w-full">
+            <div class="absolute inset-0 z-0 grid grid-cols-3 md:grid-cols-4 gap-2 p-2 opacity-15 blur-[4px] pointer-events-none grayscale">
+                <img src="peace3.jpg" class="w-full h-full object-cover rounded-lg">
+                <img src="panameart.webp" class="w-full h-full object-cover rounded-lg">
+                <img src="peace2.jpg" class="w-full h-full object-cover rounded-lg">
+                <img src="peace.jpg" class="w-full h-full object-cover rounded-lg hidden md:block">
+                <img src="fusee.png" class="w-full h-full object-cover rounded-lg">
+                <img src="cover.jpg" class="w-full h-full object-cover rounded-lg">
+                <img src="etranger.jpg" class="w-full h-full object-cover rounded-lg">
+                <img src="midsommar.webp" class="w-full h-full object-cover rounded-lg hidden md:block">
+            </div>
+
+            <div class="win-header w-full relative z-10">
                 <span class="win-title">Contact.app</span>
                 <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
             </div>
 
-            <div class="w-full relative overflow-hidden py-3 border-b border-[var(--accent-color)]/20 bg-[var(--accent-color)]/5">
-                <div class="absolute inset-0 z-0 opacity-20" style="background-image: url('peace.jpg'); background-size: cover; background-position: center; mix-blend-mode: overlay;"></div>
-                <div class="whitespace-nowrap animate-marquee text-sm font-mono font-bold tracking-[0.2em] text-[var(--accent-color)] uppercase flex relative z-10">
-                      <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE • REGISSEUR AU PANAME ART •</span>
-                      <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE • REGISSEUR AU PANAME ART •</span>
-                      <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE • REGISSEUR AU PANAME ART •</span>
-                      <span class="marquee-item">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE • REGISSEUR AU PANAME ART •</span>
+            <div class="w-full bg-[var(--accent-color)]/10 border-b border-[var(--accent-color)]/20 py-3 overflow-hidden relative z-10">
+                <div class="whitespace-nowrap flex animate-[marquee_20s_linear_infinite]">
+                    <span class="px-4 font-mono text-xs font-bold text-[var(--accent-color)]">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
+                    <span class="px-4 font-mono text-xs font-bold text-[var(--accent-color)]">PROCHAINEMENT : NOUVEAUX DOCUS • CLIPS EN PREPA • COURT MÉTRAGE •</span>
                 </div>
             </div>
 
-            <div class="p-10 flex flex-col items-center">
-                <div class="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 border-2 border-[var(--accent-color)]">
-                    <img src="moi.png" alt="Jules" class="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition duration-500">
+            <div class="p-12 flex flex-col items-center relative z-10">
+                 <button onclick="toggleVision()" class="mb-8 px-6 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs font-mono uppercase tracking-widest text-[var(--accent-color)] shadow-lg hover:scale-105">+ MA VISION</button>
+                
+                <div class="w-32 h-32 rounded-full border border-[var(--accent-color)]/30 p-1 mb-6">
+                    <img src="moi.png" class="w-full h-full rounded-full object-cover grayscale transition duration-500">
                 </div>
-                <div class="mt-6">
-                    <h3 class="text-xl md:text-2xl font-bold">Travaillons ensemble</h3>
-                    <p class="opacity-60 mt-2 text-sm md:text-base">Disponible pour projets créatifs et techniques.</p>
-                    <a href="mailto:jules.fremondiere@3is.fr" class="block mt-2 text-lg md:text-xl font-bold text-[var(--accent-color)] hover:underline break-all">jules.fremondiere@3is.fr</a>
-                </div>
-                <a href="https://linktr.ee/jlo.flp" target="_blank" class="mt-6 inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1 touch-manipulation">
-                    Linktree & Réseaux <span>↗</span>
-                </a>
+                
+                <h3 class="text-2xl font-bold mb-2">Travaillons ensemble</h3>
+                <a href="mailto:jules.fremondiere@3is.fr" class="text-lg font-bold text-[var(--accent-color)] hover:underline">jules.fremondiere@3is.fr</a>
+                <a href="https://linktr.ee/jlo.flp" target="_blank" class="mt-6 inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1 touch-manipulation">Linktree & Réseaux <span>↗</span></a>
+                
                 <p class="font-mono text-[10px] opacity-30 mt-8">© 2026 SYSTEM JULES F.</p>
             </div>
         </section>
