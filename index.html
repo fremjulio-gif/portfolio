@@ -1394,7 +1394,7 @@
             dx: { url: 'dx.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false },
             mx: { url: 'mx.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false },
             fx: { url: 'fx.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false },
-            foley: { url: 'foley.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false }
+            foley: { url: 'foley.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false },
             AMB: { url: 'AMB.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false }
         };
 
@@ -1576,8 +1576,14 @@
             if (ptxIsPlaying) {
                 togglePtxPlay(); // Stop
                 togglePtxPlay(); // Restart at new offset
-            }
         }
+            function formatPtxTime(seconds) {
+            if (isNaN(seconds) || seconds < 0) return "0:00";
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+        
         
         setTheme('fl');
     </script>
