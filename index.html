@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DAW Portfolio - Jules F</title>
@@ -128,8 +127,8 @@
         .inspi-card-large:hover img { transform: scale(1.05); filter: brightness(0.6); }
         .inspi-card-large:hover .inspi-content { opacity: 1; transform: translateY(0); }
         /* Zoom spécifique pour l'album Notinbed */
-        .img-notinbed { transform: scale(2); } /* Change 1.3 (30% de zoom) selon tes besoins */
-        .inspi-card-large:hover .img-notinbed { transform: scale(1.4); filter: brightness(0.6); } /* Garde le zoom + effet au survol */
+        .img-notinbed { transform: scale(2); } 
+        .inspi-card-large:hover .img-notinbed { transform: scale(1.4); filter: brightness(0.6); } 
         
         .inspi-img-large { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease, filter 0.4s ease; }
         .object-bottom-fix { object-position: bottom; }
@@ -637,14 +636,16 @@
                             </a>
                             
                             <a href="https://open.spotify.com/intl-fr/album/2zbL9Au0oSnB6Yy8mTCp18?si=7fyLQyeZRVejaQP8aUbyRg" target="_blank" class="inspi-card-large group block">
-                                <img src="asinine.webp" class="inspi-img-large"> <div class="inspi-content">
+                                <img src="asinine.webp" class="inspi-img-large"> 
+                                <div class="inspi-content">
                                     <h5 class="font-bold text-lg text-white mb-1 group-hover:text-[var(--accent-color)] transition">Asinine - "La Jetée"</h5>
                                     <p class="text-xs text-gray-300">Mélancolie, Résilience, Rap Experimental.</p>
                                 </div>
                             </a>
                             
                             <a href="https://open.spotify.com/intl-fr/album/39ZEVXaHtMaTuxWOUJXbiH?si=f14iFE3PRw6i6y9ekvo9qA" target="_blank" class="inspi-card-large group block">
-                                <img src="arone.webp" class="inspi-img-large"> <div class="inspi-content">
+                                <img src="arone.webp" class="inspi-img-large"> 
+                                <div class="inspi-content">
                                     <h5 class="font-bold text-lg text-white mb-1 group-hover:text-[var(--accent-color)] transition">Arøne - "DRAMA"</h5>
                                     <p class="text-xs text-gray-300">Dansant, Hyperpop, 2-Step.</p>
                                 </div>
@@ -774,7 +775,7 @@
                 </div>
             </div>
         </section>
-    
+        
         <section id="contact" class="col-span-12 glass-panel p-0 text-center flex flex-col items-center justify-center scroll-float mb-32 overflow-hidden relative">
             
             <div class="absolute inset-0 z-0 grid grid-cols-3 md:grid-cols-4 gap-2 p-2 opacity-30 blur-[2px] pointer-events-none grayscale">
@@ -804,16 +805,15 @@
                 </div>
             </div>
 
-                <div class="w-32 h-32 rounded-full border border-[var(--accent-color)]/30 p-1 mb-6">
+                <div class="w-32 h-32 rounded-full border border-[var(--accent-color)]/30 p-1 mb-6 relative z-10 mt-10">
                     <img src="moi.png" class="w-full h-full rounded-full object-cover grayscale transition duration-500">
                 </div>
                 
-                <h3 class="text-2xl font-bold mb-2">Travaillons ensemble</h3>
-                <a href="mailto:jules.fremondiere@3is.fr" class="text-lg font-bold text-[var(--accent-color)] hover:underline">jules.fremondiere@3is.fr</a>
-                <a href="https://linktr.ee/jlo.flp" target="_blank" class="mt-6 inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1 touch-manipulation">Linktree & Réseaux <span>↗</span></a>
+                <h3 class="text-2xl font-bold mb-2 relative z-10">Travaillons ensemble</h3>
+                <a href="mailto:jules.fremondiere@3is.fr" class="text-lg font-bold text-[var(--accent-color)] hover:underline relative z-10">jules.fremondiere@3is.fr</a>
+                <a href="https://linktr.ee/jlo.flp" target="_blank" class="mt-6 inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1 touch-manipulation relative z-10">Linktree & Réseaux <span>↗</span></a>
                 
-                <p class="font-mono text-[10px] opacity-30 mt-8">© 2026 SYSTEM JULES F.</p>
-            </div>
+                <p class="font-mono text-[10px] opacity-30 mt-8 relative z-10">© 2026 SYSTEM JULES F.</p>
         </section>
 
         <section id="sequencer-egg" class="col-span-12 glass-panel p-0 scroll-float border-[var(--accent-color)]/30 min-h-[40vh] md:min-h-0 shadow-[0_0_40px_-10px_var(--accent-color)]/20 opacity-80 hover:opacity-100 transition duration-500 hidden">
@@ -860,8 +860,7 @@
 
                     <div id="seq-pads-ui" class="h-full">
                          <div class="flex flex-col lg:flex-row items-center justify-center gap-8 h-full pb-8">
-                             <!-- Left Col: Pads -->
-                            <div class="flex flex-col items-center w-full max-w-sm">
+                             <div class="flex flex-col items-center w-full max-w-sm">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
                                     <h3 class="font-tech text-base md:text-lg text-[var(--accent-color)] tracking-widest bg-black/50 px-2 rounded">INSTANT_PADS</h3>
@@ -879,7 +878,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Right Col: Scope Duplicate -->
                             <div class="w-full max-w-sm h-[160px] lg:h-[300px] bg-black/40 rounded-lg border border-[var(--glass-border)] relative overflow-hidden flex items-center justify-center hidden lg:flex">
                                 <canvas id="scope-canvas-pads" class="w-full h-full absolute inset-0"></canvas>
                             </div>
@@ -998,42 +996,46 @@
 
         const wavesurfers = {};
 
-        // Initialisation de WaveSurfer pour chaque track
-        labTracks.forEach(track => {
-            const ws = WaveSurfer.create({
-                container: `#waveform-${track.id}`,
-                waveColor: 'rgba(255, 255, 255, 0.3)',
-                progressColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#22c55e',
-                cursorColor: '#ffffff',
-                barWidth: 2,
-                barGap: 2,
-                barRadius: 2,
-                height: 48,
-                url: track.url,
-                normalize: true // Harmonise le volume visuel des ondes
-            });
-
-            wavesurfers[track.id] = ws;
-
-            // Synchronisation de l'interface (Boutons Play/Pause)
-            ws.on('play', () => {
-                // Pause les autres musiques automatiquement
-                Object.keys(wavesurfers).forEach(id => {
-                    if (id !== track.id && wavesurfers[id].isPlaying()) {
-                        wavesurfers[id].pause();
-                    }
+        try {
+            // Initialisation de WaveSurfer pour chaque track
+            labTracks.forEach(track => {
+                const ws = WaveSurfer.create({
+                    container: `#waveform-${track.id}`,
+                    waveColor: 'rgba(255, 255, 255, 0.3)',
+                    progressColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#22c55e',
+                    cursorColor: '#ffffff',
+                    barWidth: 2,
+                    barGap: 2,
+                    barRadius: 2,
+                    height: 48,
+                    url: track.url,
+                    normalize: true // Harmonise le volume visuel des ondes
                 });
-                updateLabUI(track.id, true);
-            });
 
-            ws.on('pause', () => updateLabUI(track.id, false));
-            ws.on('finish', () => updateLabUI(track.id, false));
-        });
+                wavesurfers[track.id] = ws;
+
+                // Synchronisation de l'interface (Boutons Play/Pause)
+                ws.on('play', () => {
+                    // Pause les autres musiques automatiquement
+                    Object.keys(wavesurfers).forEach(id => {
+                        if (id !== track.id && wavesurfers[id].isPlaying()) {
+                            wavesurfers[id].pause();
+                        }
+                    });
+                    updateLabUI(track.id, true);
+                });
+
+                ws.on('pause', () => updateLabUI(track.id, false));
+                ws.on('finish', () => updateLabUI(track.id, false));
+            });
+        } catch(e) {
+            console.error("WaveSurfer n'a pas pu se charger (Bloqueur de pub ?)", e);
+        }
 
         // Fonction appelée par le clic sur le bouton play/pause
         function toggleWaveSurfer(id) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            wavesurfers[id].playPause();
+            if (wavesurfers[id]) wavesurfers[id].playPause();
         }
 
         // Mise à jour visuelle des boutons et des couleurs
@@ -1180,7 +1182,12 @@
             return btn;
         }
 
-        ['kick', 'snare', 'hat', 'perc1', 'perc2'].forEach(t => { const c = document.getElementById(`track-${t}-large`); for(let i=0; i<16; i++) c.appendChild(createStepBtn(seqLarge[t], i, seqLarge[t])); });
+        ['kick', 'snare', 'hat', 'perc1', 'perc2'].forEach(t => { 
+            const c = document.getElementById(`track-${t}-large`); 
+            if(c) {
+                for(let i=0; i<16; i++) c.appendChild(createStepBtn(seqLarge[t], i, seqLarge[t])); 
+            }
+        });
 
         function updatePianoRoll(mode) {
             const container = document.getElementById(`piano-roll-${mode}`); 
@@ -1340,6 +1347,44 @@
             activeVoices['synth'] = { source: o, gain: g };
         }
 
+        // --- VISUALISEUR OSCILLOSCOPE (SÉQUENCEUR) ---
+        const scopeCanvases = [
+            document.getElementById('scope-canvas-pads'),
+            document.getElementById('scope-canvas-large')
+        ];
+        const timeDomainData = new Uint8Array(analyser.frequencyBinCount);
+
+        function drawScope() {
+            requestAnimationFrame(drawScope);
+            analyser.getByteTimeDomainData(timeDomainData);
+
+            scopeCanvases.forEach(canvas => {
+                if (!canvas || !canvas.offsetParent) return; 
+                
+                const ctx = canvas.getContext('2d');
+                const width = canvas.width = canvas.offsetWidth;
+                const height = canvas.height = canvas.offsetHeight;
+                
+                ctx.clearRect(0, 0, width, height);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#22c55e';
+                ctx.beginPath();
+
+                const sliceWidth = width * 1.0 / analyser.frequencyBinCount;
+                let x = 0;
+
+                for (let i = 0; i < analyser.frequencyBinCount; i++) {
+                    const v = timeDomainData[i] / 128.0;
+                    const y = v * (height / 2);
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                    x += sliceWidth;
+                }
+                ctx.stroke();
+            });
+        }
+        drawScope();
+
         // --- 4. THEME & VISION ---
         const themes = { 
             fl: { bg: 'flstudio.png', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' }, 
@@ -1353,7 +1398,7 @@
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
             // Met à jour la couleur des waveforms WaveSurfer au changement de thème
             Object.values(wavesurfers).forEach(ws => {
-                ws.setOptions({ progressColor: t.accent });
+                if(ws) ws.setOptions({ progressColor: t.accent });
             });
         }
 
@@ -1387,9 +1432,9 @@
 
         let autoStartTimer = setTimeout(() => { startExperience(true); }, 3000);
         function startExperience(isAuto = false) { clearTimeout(autoStartTimer); document.getElementById('start-screen').classList.add('hidden-screen'); if (!isAuto && audioCtx.state === 'suspended') audioCtx.resume();  }
-        setInterval(() => { const now = new Date(); document.getElementById('time-display').textContent = now.toLocaleTimeString('fr-FR', {hour12:false}) + ':' + Math.floor(now.getMilliseconds()/10); }, 40);
+        setInterval(() => { const now = new Date(); const timeDisp = document.getElementById('time-display'); if(timeDisp) timeDisp.textContent = now.toLocaleTimeString('fr-FR', {hour12:false}) + ':' + Math.floor(now.getMilliseconds()/10); }, 40);
 
-// --- 5. SESSION.PTX (MULTI-TRACK ENGINE) ---
+        // --- 5. SESSION.PTX (MULTI-TRACK ENGINE) ---
         const ptxTracks = {
             dx: { url: 'dx.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false },
             mx: { url: 'mx.mp3', buffer: null, source: null, gainNode: null, vol: 0.8, isMuted: false, isSolo: false },
@@ -1405,13 +1450,20 @@
         let ptxDuration = 0;
         let ptxAnimFrame = null;
 
+        // FORMAT TIME FUNCTION
+        function formatPtxTime(seconds) {
+            if (isNaN(seconds) || seconds < 0) return "0:00";
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
         async function loadPtxSession() {
             const btnText = document.getElementById('ptx-play-text');
             const videoOverlay = document.getElementById('ptx-video-overlay');
-            btnText.innerText = "LOADING STEMS...";
+            if(btnText) btnText.innerText = "LOADING STEMS...";
             
             try {
-                // Fetch and decode all stems simultaneously
                 await Promise.all(Object.keys(ptxTracks).map(async (key) => {
                     const response = await fetch(ptxTracks[key].url);
                     if (!response.ok) throw new Error(`Missing ${ptxTracks[key].url}`);
@@ -1419,21 +1471,22 @@
                     ptxTracks[key].buffer = await audioCtx.decodeAudioData(arrayBuffer);
                 }));
                 
-                ptxDuration = ptxTracks.dx.buffer.duration; // Assume all stems are same length
+                ptxDuration = ptxTracks.dx.buffer.duration; 
                 document.getElementById('ptx-time-total').innerText = formatPtxTime(ptxDuration);
                 ptxIsLoaded = true;
                 
-                if(videoOverlay) videoOverlay.style.opacity = '0'; // Cache l'overlay de la vidéo
+                if(videoOverlay) videoOverlay.style.opacity = '0'; 
                 setTimeout(() => { if(videoOverlay) videoOverlay.style.display = 'none'; }, 500);
                 
-                btnText.innerText = "PLAY SESSION"; // Prêt à lancer
+                if(btnText) btnText.innerText = "PLAY SESSION"; 
             } catch (error) {
-                console.error(error);
-                btnText.innerText = "ERROR: STEMS NOT FOUND";
+                console.error("SESSION PTX ERROR:", error);
+                if(btnText) btnText.innerText = "ERROR: STEMS NOT FOUND";
                 if(videoOverlay) videoOverlay.innerHTML = "<span class='text-red-500'>ERROR LOADING MEDIA</span>";
-                setTimeout(() => btnText.innerText = "LOAD SESSION", 2000);
+                setTimeout(() => { if(btnText) btnText.innerText = "LOAD SESSION"; }, 2000);
             }
         }
+
         function togglePtxPlay() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             
@@ -1445,7 +1498,6 @@
             const video = document.getElementById('ptx-video');
 
             if (ptxIsPlaying) {
-                // STOP AUDIO & VIDEO
                 Object.values(ptxTracks).forEach(t => {
                     if(t.source) { try { t.source.stop(); } catch(e){} t.source = null; }
                 });
@@ -1457,7 +1509,6 @@
                 document.getElementById('ptx-play-text').innerText = "PLAY SESSION";
                 document.getElementById('ptx-play-icon').innerText = "▶";
             } else {
-                // PLAY AUDIO & VIDEO
                 if (ptxOffset >= ptxDuration) ptxOffset = 0;
                 ptxStartTime = audioCtx.currentTime;
                 
@@ -1475,7 +1526,6 @@
                 
                 updatePtxRouting(); 
                 
-                // Synchro stricte de la vidéo sur l'offset audio
                 if(video) {
                     video.currentTime = ptxOffset;
                     video.play().catch(e => console.log("Video autoplay prevented:", e));
@@ -1485,7 +1535,6 @@
                 document.getElementById('ptx-play-icon').innerText = "❚❚";
                 ptxAnimFrame = requestAnimationFrame(updatePtxUI);
                 
-                // Handle natural end
                 ptxTracks.dx.source.onended = () => {
                     if(audioCtx.currentTime - ptxStartTime + ptxOffset >= ptxDuration) {
                         ptxIsPlaying = false;
@@ -1512,7 +1561,8 @@
             Object.keys(ptxTracks).forEach(key => {
                 const t = ptxTracks[key];
                 const region = document.getElementById(`ptx-region-${key}`);
-                
+                if(!region) return;
+
                 let targetVol = 0;
                 if (anySolo) {
                     targetVol = t.isSolo ? t.vol : 0;
@@ -1521,10 +1571,9 @@
                 }
                 
                 if(t.gainNode) {
-                    t.gainNode.gain.setTargetAtTime(targetVol, audioCtx.currentTime + 0.05); // Smooth fade
+                    t.gainNode.gain.setTargetAtTime(targetVol, audioCtx.currentTime + 0.05); 
                 }
                 
-                // Visual feedback
                 if(targetVol > 0) region.classList.add('region-active');
                 else region.classList.remove('region-active');
             });
@@ -1543,7 +1592,7 @@
         }
 
         function changePtxVol(trackKey, val) {
-            ptxTracks[trackKey].vol = (val / 100) * (val / 100); // Logarithmic curve
+            ptxTracks[trackKey].vol = (val / 100) * (val / 100); 
             updatePtxRouting();
         }
 
@@ -1571,19 +1620,13 @@
             document.getElementById('ptx-time-current').innerText = formatPtxTime(ptxOffset);
             
             const video = document.getElementById('ptx-video');
-            if(video) video.currentTime = ptxOffset; // Déplace la frame vidéo
+            if(video) video.currentTime = ptxOffset; 
             
             if (ptxIsPlaying) {
-                togglePtxPlay(); // Stop
-                togglePtxPlay(); // Restart at new offset
+                togglePtxPlay(); 
+                togglePtxPlay(); 
+            }
         }
-            function formatPtxTime(seconds) {
-            if (isNaN(seconds) || seconds < 0) return "0:00";
-            const m = Math.floor(seconds / 60);
-            const s = Math.floor(seconds % 60);
-            return `${m}:${s.toString().padStart(2, '0')}`;
-        }
-        
         
         setTheme('fl');
     </script>
