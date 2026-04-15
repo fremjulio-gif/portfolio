@@ -1621,7 +1621,7 @@
             const video = document.getElementById('ptx-video');
             if(video) video.currentTime = ptxOffset; 
             
-            // Cut itself : Si ça joue, on stop et on relance sans se superposer
+            // Cut itself : Si ça joue, on stop et on relance sans se superposer.
             if (ptxIsPlaying) {
                 stopPtxAudio(); 
                 playPtxAudio(); 
