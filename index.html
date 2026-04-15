@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DAW Portfolio - Jules F</title>
     <link rel="icon" type="image/png" href="moi.png">
-    
+
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -471,11 +473,11 @@
                     <span class="text-sm tracking-widest uppercase">Live Monitoring // Work In Progress</span>
                 </div>
                 
-                <div class="space-y-0">
-                    <div class="lab-row group" id="lab-row-1">
-                        <div class="lab-content-wrapper">
+                <div class="space-y-4">
+                    <div class="lab-row group" id="lab-row-rover">
+                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="playLabTrack('rover.mp3', document.getElementById('lab-row-1'), event, 'toggle')">
+                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('rover')">
                                     <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                     <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                 </div>
@@ -484,17 +486,14 @@
                                     <p class="text-[10px] opacity-50">Ambient - Trap</p>
                                 </div>
                             </div>
-                            <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">02:14</span>
                         </div>
-                        <div class="lab-timeline-area" onpointerdown="playLabTrack('rover.mp3', document.getElementById('lab-row-1'), event, 'seek')"></div>
-                        <div class="lab-progress-bg">
-                            <div class="lab-progress-fill"></div>
-                        </div>
+                        <div id="waveform-rover" class="w-full mt-2 cursor-crosshair"></div>
                     </div>
-                      <div class="lab-row group" id="lab-row-2">
-                        <div class="lab-content-wrapper">
+
+                    <div class="lab-row group" id="lab-row-wordsnight">
+                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="playLabTrack('wordsnight.mp3', document.getElementById('lab-row-2'), event, 'toggle')">
+                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('wordsnight')">
                                     <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                     <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                 </div>
@@ -503,17 +502,14 @@
                                     <p class="text-[10px] opacity-50">Pop - Lo-fi</p>
                                 </div>
                             </div>
-                            <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">01:45</span>
                         </div>
-                        <div class="lab-timeline-area" onpointerdown="playLabTrack('wordsnight.mp3', document.getElementById('lab-row-2'), event, 'seek')"></div>
-                        <div class="lab-progress-bg">
-                            <div class="lab-progress-fill"></div>
-                        </div>
+                        <div id="waveform-wordsnight" class="w-full mt-2 cursor-crosshair"></div>
                     </div>
-                      <div class="lab-row group" id="lab-row-3">
-                        <div class="lab-content-wrapper">
+
+                    <div class="lab-row group" id="lab-row-shadow">
+                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="playLabTrack('shadow.mp3', document.getElementById('lab-row-3'), event, 'toggle')">
+                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('shadow')">
                                     <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                     <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                 </div>
@@ -522,50 +518,8 @@
                                     <p class="text-[10px] opacity-50">Dark Synth - Bass</p>
                                 </div>
                             </div>
-                            <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">03:02</span>
                         </div>
-                          <div class="lab-timeline-area" onpointerdown="playLabTrack('shadow.mp3', document.getElementById('lab-row-3'), event, 'seek')"></div>
-                          <div class="lab-progress-bg">
-                            <div class="lab-progress-fill"></div>
-                        </div>
-                    </div>
-                    <div class="lab-row group" id="lab-row-4">
-                        <div class="lab-content-wrapper">
-                            <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="playLabTrack('perception.mp3', document.getElementById('lab-row-4'), event, 'toggle')">
-                                    <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold">perception.mp3</h4>
-                                    <p class="text-[10px] opacity-50">Cinematic - War Music</p>
-                                </div>
-                            </div>
-                            <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">01:21</span>
-                        </div>
-                          <div class="lab-timeline-area" onpointerdown="playLabTrack('perception.mp3', document.getElementById('lab-row-4'), event, 'seek')"></div>
-                          <div class="lab-progress-bg">
-                            <div class="lab-progress-fill"></div>
-                        </div>
-                    </div>
-                    <div class="lab-row group" id="lab-row-5">
-                        <div class="lab-content-wrapper">
-                            <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="playLabTrack('lightoff.mp3', document.getElementById('lab-row-5'), event, 'toggle')">
-                                    <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold">lightoff.mp3</h4>
-                                    <p class="text-[10px] opacity-50">Ambient - Cinematic</p>
-                                </div>
-                            </div>
-                            <span class="text-xs opacity-50 font-bold group-hover:text-[var(--accent-color)]">01:54</span>
-                        </div>
-                          <div class="lab-timeline-area" onpointerdown="playLabTrack('lightoff.mp3', document.getElementById('lab-row-5'), event, 'seek')"></div>
-                          <div class="lab-progress-bg">
-                            <div class="lab-progress-fill"></div>
-                        </div>
+                        <div id="waveform-shadow" class="w-full mt-2 cursor-crosshair"></div>
                     </div>
                 </div>
             </div>
@@ -871,179 +825,69 @@
         document.body.addEventListener('touchstart', unlockAudioContext);
         document.body.addEventListener('keydown', unlockAudioContext);
 
-        // --- 2. LAB PLAYER LOGIC (FIXED) ---
-        // New implementation: Fetch -> Decode -> Buffer -> SourceNode
-        
-        const labBuffers = {}; // Store decoded buffers here
-        let currentLabSource = null;
-        let currentLabStart = 0;
-        let currentLabDuration = 0;
-        let currentLabRow = null;
-        let progressAnimId = null;
+        // --- 2. LAB PLAYER LOGIC (WAVESURFER.JS) ---
+        const labTracks = [
+            { id: 'rover', url: 'rover.mp3' },
+            { id: 'wordsnight', url: 'wordsnight.mp3' },
+            { id: 'shadow', url: 'shadow.mp3' }
+        ];
 
-        // Fetch & Decode Function
-        async function loadLabSample(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const arrayBuffer = await response.arrayBuffer();
-                const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-                labBuffers[url] = audioBuffer;
-                console.log(`Audio Lab Loaded: ${url}`);
-                return audioBuffer;
-            } catch (e) {
-                console.error('Error loading lab audio:', e);
-            }
-        }
+        const wavesurfers = {};
 
-        // Preload Lab Audio
-        Promise.all([
-            loadLabSample('rover.mp3'),
-            loadLabSample('wordsnight.mp3'),
-            loadLabSample('shadow.mp3')
-        ]).then(() => {
-            console.log('All Lab Audio Loaded & Ready');
+        // Initialisation de WaveSurfer pour chaque track
+        labTracks.forEach(track => {
+            const ws = WaveSurfer.create({
+                container: `#waveform-${track.id}`,
+                waveColor: 'rgba(255, 255, 255, 0.3)',
+                progressColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#22c55e',
+                cursorColor: '#ffffff',
+                barWidth: 2,
+                barGap: 2,
+                barRadius: 2,
+                height: 48,
+                url: track.url,
+                normalize: true // Harmonise le volume visuel des ondes
+            });
+
+            wavesurfers[track.id] = ws;
+
+            // Synchronisation de l'interface (Boutons Play/Pause)
+            ws.on('play', () => {
+                // Pause les autres musiques automatiquement
+                Object.keys(wavesurfers).forEach(id => {
+                    if (id !== track.id && wavesurfers[id].isPlaying()) {
+                        wavesurfers[id].pause();
+                    }
+                });
+                updateLabUI(track.id, true);
+            });
+
+            ws.on('pause', () => updateLabUI(track.id, false));
+            ws.on('finish', () => updateLabUI(track.id, false));
         });
 
-        // Visualizer Loop
-        function drawVisualizer() {
-            requestAnimationFrame(drawVisualizer);
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-            analyser.getByteFrequencyData(dataArray);
-
-            const canvases = document.querySelectorAll('canvas');
-
-            canvases.forEach(canvas => {
-                if (!canvas || !canvas.offsetParent) return; // Skip if hidden
-                const ctx = canvas.getContext('2d');
-                const width = canvas.width = canvas.offsetWidth;
-                const height = canvas.height = canvas.offsetHeight;
-                
-                ctx.clearRect(0, 0, width, height);
-                const barWidth = (width / bufferLength) * 2.5;
-                let barHeight;
-                let x = 0;
-                
-                const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
-                ctx.fillStyle = accentColor;
-
-                for(let i = 0; i < bufferLength; i++) {
-                    barHeight = (dataArray[i] / 255) * height;
-                    ctx.fillRect(x, height - barHeight, barWidth, barHeight);
-                    x += barWidth + 1;
-                }
-            });
-        }
-        drawVisualizer(); 
-
-        // Update Progress Bar UI
-        function updateLabProgress() {
-            if (!currentLabSource || !currentLabRow) return;
-            
-            const elapsedTime = audioCtx.currentTime - currentLabStart;
-            const duration = currentLabDuration;
-            
-            if (elapsedTime >= duration) {
-                // End of playback
-                stopLabPlayback();
-                return;
-            }
-
-            const pct = (elapsedTime / duration) * 100;
-            const fill = currentLabRow.querySelector('.lab-progress-fill');
-            if(fill) fill.style.width = `${pct}%`;
-            
-            progressAnimId = requestAnimationFrame(updateLabProgress);
-        }
-
-        function stopLabPlayback() {
-            if (currentLabSource) {
-                try { currentLabSource.stop(); } catch(e){}
-                currentLabSource = null;
-            }
-            if (progressAnimId) cancelAnimationFrame(progressAnimId);
-            
-            if (currentLabRow) {
-                currentLabRow.classList.remove('playing');
-                currentLabRow.querySelector('.play-icon').classList.remove('hidden');
-                currentLabRow.querySelector('.pause-icon').classList.add('hidden');
-                const fill = currentLabRow.querySelector('.lab-progress-fill');
-                if(fill) fill.style.width = '0%';
-                currentLabRow = null;
-            }
-        }
-
-        function playLabTrack(src, row, event, action) {
+        // Fonction appelée par le clic sur le bouton play/pause
+        function toggleWaveSurfer(id) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            // Check if buffer exists
-            if (!labBuffers[src]) {
-                console.warn('Buffer not ready for:', src);
-                // Attempt to load if not present (fallback)
-                loadLabSample(src).then(() => playLabTrack(src, row, event, action));
-                return;
-            }
-
-            if (action === 'toggle') {
-                if (currentLabRow === row) {
-                    // Stop if clicking same playing row
-                    stopLabPlayback();
-                    return;
-                }
-                
-                // Stop previous if clicking new row
-                if (currentLabRow && currentLabRow !== row) {
-                    stopLabPlayback();
-                }
-
-                // Start Playback
-                startSource(src, row, 0);
-
-            } else if (action === 'seek') {
-                // If seeking on a different track, treat as toggle (start new)
-                if (currentLabRow !== row) {
-                    playLabTrack(src, row, event, 'toggle');
-                    return;
-                }
-
-                const rect = event.currentTarget.getBoundingClientRect();
-                const getClientX = event.clientX || (event.touches && event.touches[0].clientX) || (event.changedTouches && event.changedTouches[0].clientX) || 0; const clickX = getClientX - rect.left;
-                const pct = Math.max(0, Math.min(1, clickX / rect.width));
-                const offset = pct * labBuffers[src].duration;
-                
-                // Stop current instance and restart at offset
-                if (currentLabSource) {
-                    try { currentLabSource.stop(); } catch(e){}
-                }
-                startSource(src, row, offset);
-            }
+            wavesurfers[id].playPause();
         }
 
-        function startSource(src, row, offset) {
-            const buffer = labBuffers[src];
-            const source = audioCtx.createBufferSource();
-            source.buffer = buffer;
-            // Connect: Source -> Analyser -> Destination
-            source.connect(analyser); 
-            // Note: Analyser is already connected to destination in setup
-            
-            source.start(0, offset);
-            
-            currentLabSource = source;
-            currentLabRow = row;
-            currentLabDuration = buffer.duration;
-            // Adjust start time to account for offset so progress bar matches
-            currentLabStart = audioCtx.currentTime - offset;
-            
-            // Update UI
-            row.classList.add('playing');
-            row.querySelector('.play-icon').classList.add('hidden');
-            row.querySelector('.pause-icon').classList.remove('hidden');
-            
-            // Start Animation Loop
-            if (progressAnimId) cancelAnimationFrame(progressAnimId);
-            updateLabProgress();
+        // Mise à jour visuelle des boutons et des couleurs
+        function updateLabUI(id, isPlaying) {
+            const row = document.getElementById(`lab-row-${id}`);
+            if(!row) return;
+            const playIcon = row.querySelector('.play-icon');
+            const pauseIcon = row.querySelector('.pause-icon');
+
+            if (isPlaying) {
+                row.classList.add('playing');
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            } else {
+                row.classList.remove('playing');
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
         }
         
         // --- 3. SEQUENCER CORE (STABILIZED) ---
@@ -1343,6 +1187,10 @@
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`; 
             document.getElementById('theme-widget').style.backgroundImage = `url('${t.bar}')`;
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
+            // Met à jour la couleur des waveforms WaveSurfer au changement de thème
+            Object.values(wavesurfers).forEach(ws => {
+                ws.setOptions({ progressColor: t.accent });
+            });
         }
 
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); }); }, {threshold: 0.1}); document.querySelectorAll('.scroll-float').forEach(el => observer.observe(el));
