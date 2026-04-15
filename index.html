@@ -648,6 +648,12 @@
             
             <div class="p-6 bg-[#1a1a1a] font-protools text-xs rounded-b-[32px]">
                 
+                <div class="p-6 bg-[#1a1a1a] font-protools text-xs rounded-b-[32px]">
+                
+                <h3 class="text-lg md:text-xl font-bold text-white mb-6 border-b border-[#333] pb-3 tracking-wide">
+                    <span class="text-[var(--accent-color)]">///</span> One Battle After Another - Session Reconstruction
+                </h3>
+                    
                 <div class="mb-6 bg-black rounded-lg border border-[#333] overflow-hidden w-full max-w-2xl mx-auto aspect-video flex items-center justify-center relative shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
                     <video id="ptx-video" class="w-full h-full object-contain pointer-events-none" playsinline muted preload="auto">
                         <source src="video.mp4" type="video/mp4">
@@ -675,76 +681,91 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-2" id="ptx-tracks-container">
+                <div class="flex flex-col gap-4" id="ptx-tracks-container">
                     
-                    <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
-                        <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
-                            <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">DX (Dialogues)</div>
-                            <div class="flex items-center gap-2">
-                                <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('dx', this)">M</button>
-                                <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('dx', this)">S</button>
-                                <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('dx', this.value)">
+                    <div>
+                        <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
+                            <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
+                                <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">DX (Dialogues)</div>
+                                <div class="flex items-center gap-2">
+                                    <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('dx', this)">M</button>
+                                    <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('dx', this)">S</button>
+                                    <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('dx', this.value)">
+                                </div>
+                            </div>
+                            <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-dx">
+                                <div id="ws-ptx-dx" class="absolute inset-0 pointer-events-none opacity-80"></div>
                             </div>
                         </div>
-                        <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-dx">
-                            <div id="ws-ptx-dx" class="absolute inset-0 pointer-events-none opacity-80"></div>
-                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1.5 ml-2 italic tracking-wide">↳ Récupération de la voix via IA puis restauration sous iZotope RX10.</p>
                     </div>
 
-                    <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
-                        <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
-                            <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">MX (Musique)</div>
-                            <div class="flex items-center gap-2">
-                                <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('mx', this)">M</button>
-                                <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('mx', this)">S</button>
-                                <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('mx', this.value)">
+                    <div>
+                        <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
+                            <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
+                                <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">MX (Musique)</div>
+                                <div class="flex items-center gap-2">
+                                    <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('mx', this)">M</button>
+                                    <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('mx', this)">S</button>
+                                    <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('mx', this.value)">
+                                </div>
+                            </div>
+                            <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-mx">
+                                <div id="ws-ptx-mx" class="absolute inset-0 pointer-events-none opacity-80"></div>
                             </div>
                         </div>
-                        <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-mx">
-                            <div id="ws-ptx-mx" class="absolute inset-0 pointer-events-none opacity-80"></div>
-                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1.5 ml-2 italic tracking-wide">↳ Composition originale sur Ableton Live 12, mixage orienté dynamique.</p>
                     </div>
 
-                    <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
-                        <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
-                            <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">FX (Sound Design)</div>
-                            <div class="flex items-center gap-2">
-                                <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('fx', this)">M</button>
-                                <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('fx', this)">S</button>
-                                <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('fx', this.value)">
+                    <div>
+                        <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
+                            <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
+                                <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">FX (Sound Design)</div>
+                                <div class="flex items-center gap-2">
+                                    <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('fx', this)">M</button>
+                                    <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('fx', this)">S</button>
+                                    <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('fx', this.value)">
+                                </div>
+                            </div>
+                            <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-fx">
+                                 <div id="ws-ptx-fx" class="absolute inset-0 pointer-events-none opacity-80"></div>
                             </div>
                         </div>
-                        <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-fx">
-                             <div id="ws-ptx-fx" class="absolute inset-0 pointer-events-none opacity-80"></div>
-                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1.5 ml-2 italic tracking-wide">↳ Synthèse granulaire et impacts créés sur-mesure (Arturia Pigments).</p>
                     </div>
 
-                    <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
-                        <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
-                            <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">FOLEY (Bruitages)</div>
-                            <div class="flex items-center gap-2">
-                                <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('foley', this)">M</button>
-                                <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('foley', this)">S</button>
-                                <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('foley', this.value)">
+                    <div>
+                        <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
+                            <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
+                                <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">FOLEY (Bruitages)</div>
+                                <div class="flex items-center gap-2">
+                                    <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('foley', this)">M</button>
+                                    <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('foley', this)">S</button>
+                                    <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('foley', this.value)">
+                                </div>
+                            </div>
+                            <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-foley">
+                                 <div id="ws-ptx-foley" class="absolute inset-0 pointer-events-none opacity-80"></div>
                             </div>
                         </div>
-                        <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-foley">
-                             <div id="ws-ptx-foley" class="absolute inset-0 pointer-events-none opacity-80"></div>
-                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1.5 ml-2 italic tracking-wide">↳ Travail de synchro et textures organiques, en partant d'une prise de son moyenne.</p>
                     </div>
 
-                    <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
-                        <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
-                            <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">AMB (Ambiances)</div>
-                            <div class="flex items-center gap-2">
-                                <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('AMB', this)">M</button>
-                                <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('AMB', this)">S</button>
-                                <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('AMB', this.value)">
+                    <div>
+                        <div class="ptx-track flex flex-col md:flex-row h-auto md:h-16 bg-[#2a2a2a] rounded overflow-hidden border border-[#333]">
+                            <div class="w-full md:w-40 bg-[#333] p-2 flex md:flex-col items-center md:items-stretch justify-between shrink-0 border-b md:border-b-0 md:border-r border-[#111]">
+                                <div class="font-bold text-white tracking-wider text-[10px] md:text-xs">AMB (Ambiances)</div>
+                                <div class="flex items-center gap-2">
+                                    <button class="ptx-mute w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxMute('AMB', this)">M</button>
+                                    <button class="ptx-solo w-7 h-6 bg-gray-600 hover:bg-gray-500 text-black font-bold rounded text-[10px] transition" onclick="togglePtxSolo('AMB', this)">S</button>
+                                    <input type="range" class="ptx-vol w-full ml-2 md:ml-0 md:mt-2 h-1" min="0" max="100" value="80" oninput="changePtxVol('AMB', this.value)">
+                                </div>
+                            </div>
+                            <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-AMB">
+                                 <div id="ws-ptx-AMB" class="absolute inset-0 pointer-events-none opacity-80"></div>
                             </div>
                         </div>
-                        <div class="flex-1 relative bg-[#1e222a] overflow-hidden h-12 md:h-auto ptx-region" id="ptx-region-AMB">
-                             <div id="ws-ptx-AMB" class="absolute inset-0 pointer-events-none opacity-80"></div>
-                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1.5 ml-2 italic tracking-wide">↳ Grosse recherche d'ambiances et de sons de voitures, nettoyage spectral léger.</p>
                     </div>
 
                 </div>
