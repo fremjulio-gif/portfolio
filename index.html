@@ -14,15 +14,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CORE VARS --- */
+        /* --- CORE VARS & THEME ISOLATION --- */
         :root {
+            /* Variables de thèmes dynamiques (manipulées par le JS) */
+            --theme-accent: #22c55e; 
+            
+            /* Variables d'interface (écrasables par le Clean Mode) */
+            --accent-color: var(--theme-accent);
+            
             --glass-surface: rgba(18, 18, 18, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-highlight: rgba(255, 255, 255, 0.15);
             --glass-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.8);
             --glass-text: #ffffff;
-            --accent-color: #22c55e;
+            
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-apple: cubic-bezier(0.25, 0.8, 0.25, 1);
             --vh: 1vh; 
         }
 
@@ -36,7 +43,7 @@
         html, body { max-width: 100vw; overflow-x: hidden; user-select: none; -webkit-user-select: none; cursor: crosshair; }
         body { 
             background-color: #050505; color: var(--glass-text); 
-            transition: background-color 0.6s ease, color 0.5s ease;
+            transition: background-color 0.6s ease, color 0.4s ease;
             -webkit-text-size-adjust: 100%; margin: 0; padding: 0;
         }
 
@@ -52,58 +59,110 @@
         }
         body.switching-theme #theme-bg { animation: slideReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
-        /* Light Mode */
-        body.light-mode {
+        /* Light Mode (Themes Classiques) */
+        body.light-mode:not(.clean-mode) {
             --glass-surface: rgba(255, 255, 255, 0.2); 
             --glass-border: rgba(255, 255, 255, 0.3);
             --glass-highlight: rgba(255, 255, 255, 0.5);
             --glass-text: #1a1a1a;
             background-color: #A0A0A0;
         }
-        body.light-mode .scanlines { opacity: 0.02; }
-        body.light-mode .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.7), transparent); color: black; }
-        body.light-mode #theme-label { color: #1a1a1a; font-weight: 800; text-shadow: none; opacity: 1; }
-        body[data-theme='protools'] { background-color: #262626; }
+        body.light-mode:not(.clean-mode) .scanlines { opacity: 0.02; }
+        body.light-mode:not(.clean-mode) .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.7), transparent); color: black; }
+        body.light-mode:not(.clean-mode) #theme-label { color: #1a1a1a; font-weight: 800; text-shadow: none; opacity: 1; }
+        body[data-theme='protools']:not(.clean-mode) { background-color: #262626; }
 
-        /* --- CLEAN MODE (LIQUID GLASS) --- */
+        /* =========================================
+           CLEAN MODE : ESTHÉTIQUE APPLE / LIQUID GLASS 
+           ========================================= */
+        
         body.clean-mode {
             background-color: #000000 !important;
-            --glass-text: #f4f4f5;
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --glass-surface: rgba(255, 255, 255, 0.03);
-            --glass-highlight: rgba(255, 255, 255, 0.02);
-            --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
-            color: #f4f4f5 !important;
-        }
-        body.clean-mode #theme-bg, 
-        body.clean-mode .scanlines {
-            opacity: 0 !important; /* Noir profond */
-            transition: opacity 0.5s ease-in-out;
-        }
-        body.clean-mode .glass-panel {
-            background: var(--glass-surface) !important;
-            backdrop-filter: blur(15px) saturate(120%) !important;
-            -webkit-backdrop-filter: blur(15px) saturate(120%) !important;
-            border: 1px solid var(--glass-border) !important;
-            box-shadow: var(--glass-shadow) !important;
-        }
-        body.clean-mode h1, body.clean-mode h2, body.clean-mode h3, body.clean-mode h4, body.clean-mode .win-title {
-            letter-spacing: 0.08em;
-            font-weight: 300;
-        }
-        body.clean-mode .dock-container {
-            background: rgba(255, 255, 255, 0.03) !important;
-            backdrop-filter: blur(25px) saturate(150%) !important;
-            -webkit-backdrop-filter: blur(25px) saturate(150%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+            
+            /* Verrouillage absolu des variables de couleur et effets verre */
+            --accent-color: #FFFFFF !important; 
+            --glass-text: #F5F5F7 !important;
+            --glass-border: rgba(255, 255, 255, 0.08) !important;
+            --glass-surface: rgba(255, 255, 255, 0.05) !important;
+            --glass-highlight: rgba(255, 255, 255, 0.02) !important;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+            
+            color: #F5F5F7 !important;
+            
+            /* Typographie Système Apple + Lissage parfait */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
         }
 
-        /* Focus Mode: Le dock s'efface quand on survole la grille principale */
+        /* Application globale des transitions fluides Apple */
+        body.clean-mode * {
+            font-family: inherit;
+            transition: background-color 0.5s var(--ease-apple), 
+                        border-color 0.5s var(--ease-apple),
+                        color 0.5s var(--ease-apple),
+                        box-shadow 0.5s var(--ease-apple),
+                        opacity 0.5s var(--ease-apple),
+                        transform 0.5s var(--ease-apple);
+        }
+
+        /* Hiérarchie et Contrastes des Titres */
+        body.clean-mode h1, body.clean-mode h2, body.clean-mode h3, body.clean-mode h4, body.clean-mode .win-title {
+            font-weight: 600 !important;
+            letter-spacing: -0.01em !important;
+            color: #FFFFFF !important;
+        }
+
+        /* Textes secondaires, sous-titres et icônes */
+        body.clean-mode p, body.clean-mode span, body.clean-mode a {
+            font-weight: 300 !important;
+        }
+        body.clean-mode .text-gray-400, body.clean-mode .text-gray-500, body.clean-mode .text-gray-600, 
+        body.clean-mode .opacity-50, body.clean-mode .opacity-60, body.clean-mode .opacity-70 {
+            color: #86868B !important;
+            opacity: 1 !important; /* On annule l'opacité CSS pour utiliser une couleur franche */
+        }
+
+        /* Conservation de l'aspect technique pour le code/timeline */
+        body.clean-mode .font-mono, body.clean-mode .font-tech, body.clean-mode .font-mono * {
+            font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace !important;
+            letter-spacing: 0.03em !important;
+        }
+
+        /* Suppression des effets de fond intrusifs DAW */
+        body.clean-mode #theme-bg, 
+        body.clean-mode .scanlines,
+        body.clean-mode #skills::before,
+        body.clean-mode #sequencer-inner::before {
+            opacity: 0 !important;
+        }
+
+        /* Rendu Verre Dépoli Premium sur les conteneurs */
+        body.clean-mode .glass-panel {
+            background: var(--glass-surface) !important;
+            backdrop-filter: blur(20px) saturate(120%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(120%) !important;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: var(--glass-shadow) !important;
+            border-radius: 28px !important;
+        }
+
+        /* Modification du Dock (Flottant + Effet Premium) */
+        body.clean-mode .dock-container {
+            background: rgba(30, 30, 30, 0.4) !important;
+            backdrop-filter: blur(25px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+            border-radius: 40px !important;
+            padding: 12px 32px !important;
+        }
+
+        /* Focus Mode : Opacité réduite du dock au survol du contenu */
         @media (hover: hover) {
             body.clean-mode main:hover ~ .dock-container {
-                opacity: 0.2;
-                transform: translateX(-50%) translateY(10px) scale(0.98);
+                opacity: 0.2 !important;
+                transform: translateX(-50%) translateY(10px) scale(0.98) !important;
             }
             body.clean-mode .dock-container:hover {
                 opacity: 1 !important;
@@ -111,19 +170,43 @@
             }
         }
 
-        /* Bouton Clean Mode actif */
-        #clean-toggle svg { transition: all 0.3s ease; }
-        #clean-toggle.active svg { fill: rgba(255,255,255,0.15); stroke: var(--accent-color); }
+        /* --- Écrasement Chirurgical des couleurs de pistes PTX/Lab --- */
+        body.clean-mode .ptx-waveform, body.clean-mode #ptx-timeline div { filter: grayscale(100%) brightness(1.5) !important; }
+        body.clean-mode .bg-blue-500\/20, body.clean-mode .bg-green-500\/20, body.clean-mode .bg-purple-500\/20, body.clean-mode .bg-orange-500\/20 {
+            background-color: rgba(255, 255, 255, 0.04) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.clean-mode .bg-red-500 { background-color: #FFFFFF !important; } /* Leds */
+        body.clean-mode .border-red-500 { border-color: #FFFFFF !important; }
 
-        /* --- GLASS PANELS --- */
+        /* Éléments Actifs (Boutons, Séquenceur, Pads) en mode Clean */
+        body.clean-mode .theme-pill.active, body.clean-mode .transport-btn.playing, 
+        body.clean-mode .step-btn.active, body.clean-mode .piano-cell.active, 
+        body.clean-mode .drum-pad.hit, body.clean-mode .drum-pad:active,
+        body.clean-mode .seq-tab-btn.active-tab {
+            background: #FFFFFF !important;
+            color: #000000 !important;
+            border-color: transparent !important;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2) !important;
+        }
+        body.clean-mode .pie-chart {
+            background: conic-gradient(#FFFFFF calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0) !important;
+        }
+        
+        /* Bouton Toggle actif */
+        #clean-toggle svg { transition: all 0.5s var(--ease-apple); stroke: rgba(255,255,255,0.4); }
+        body.clean-mode #clean-toggle { border-color: rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1); }
+        body.clean-mode #clean-toggle svg { fill: #FFFFFF; stroke: #FFFFFF; }
+
+
+        /* --- GLASS PANELS CLASSIC --- */
         .glass-panel {
             background: linear-gradient(145deg, var(--glass-surface) 0%, rgba(255,255,255,0.02) 100%);
             backdrop-filter: blur(50px) saturate(140%); -webkit-backdrop-filter: blur(50px) saturate(140%);
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-highlight), inset 0 0 20px rgba(255,255,255,0.02);
             border-radius: 32px; overflow: hidden;
-            /* Transition globale pour le switch de modes */
-            transition: all 0.5s ease-in-out, transform 0.5s var(--ease-ios);
+            transition: transform 0.5s var(--ease-ios), border-color 0.4s ease, box-shadow 0.4s ease;
             position: relative; width: 100%;
         }
         @media (hover: hover) {
@@ -136,15 +219,15 @@
 
         /* --- LAYOUT & WIDGETS --- */
         .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: 100px 24px 140px; max-width: 1600px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-        .win-header { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); flex-shrink: 0; transition: border-color 0.5s ease; }
-        .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; transition: letter-spacing 0.5s ease; }
+        .win-header { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); flex-shrink: 0; }
+        .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
         
         .stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; transition: transform 0.3s var(--ease-ios); padding: 10px; border-radius: 20px; }
         @media (min-width: 1024px) { .stat-item:hover { transform: translateY(-10px) scale(1.05); background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); } }
 
         .pie-chart { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0); display: grid; place-items: center; flex-shrink: 0; margin: 0 auto 1rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3); position: relative; z-index: 10; }
         @media (min-width: 1024px) { .pie-chart { width: 130px; height: 130px; margin-bottom: 1.5rem; } .pie-chart span { font-size: 24px !important; } }
-        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; z-index: 1; box-shadow: inset 0 5px 15px rgba(0,0,0,0.5); transition: background 0.5s ease; }
+        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; z-index: 1; box-shadow: inset 0 5px 15px rgba(0,0,0,0.5); }
         body.light-mode .pie-chart::after { background: #dcdcdc; box-shadow: inset 0 5px 15px rgba(0,0,0,0.1); }
         body[data-theme='protools'] .pie-chart::after { background: #262626; } 
         body.clean-mode .pie-chart::after { background: #0a0a0a; }
@@ -152,8 +235,8 @@
 
         .project-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; cursor: pointer; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.4s; }
         @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
-        .project-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
-        body.light-mode .project-card img { filter: brightness(1); }
+        .project-card img, .project-card video { width: 100%; height: 100%; object-fit: cover; transition: 0.6s var(--ease-ios); filter: brightness(0.8); }
+        body.light-mode .project-card img, body.light-mode .project-card video { filter: brightness(1); }
         .project-info { opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.4), transparent); }
         @media (min-width: 768px) { .project-info { padding: 24px; } }
 
@@ -708,8 +791,6 @@
             
             <div class="p-6 bg-[#1a1a1a] font-protools text-xs rounded-b-[32px]">
                 
-                <div class="p-6 bg-[#1a1a1a] font-protools text-xs rounded-b-[32px]">
-                
                 <h3 class="text-lg md:text-xl font-bold text-white mb-6 border-b border-[#333] pb-3 tracking-wide">
                     <span class="text-[var(--accent-color)]">///</span> One Battle After Another - Session Reconstruction
                 </h3>
@@ -1044,8 +1125,15 @@
         // --- CLEAN MODE TOGGLE ---
         function toggleCleanMode() {
             document.body.classList.toggle('clean-mode');
-            const btn = document.getElementById('clean-toggle');
-            btn.classList.toggle('active');
+            const isActive = document.body.classList.contains('clean-mode');
+            
+            const currentTheme = document.body.getAttribute('data-theme');
+            const themeColor = themes[currentTheme].accent;
+            const targetColor = isActive ? '#FFFFFF' : themeColor;
+            
+            Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: targetColor }); });
+            Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: targetColor }); });
+            
             playClickSound();
         }
 
@@ -1430,17 +1518,35 @@
             protools: { bg: 'protools.png', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } 
         };
         function setTheme(name) { 
-            playThemeSwitchSound(); document.body.classList.add('switching-theme'); setTimeout(() => document.body.classList.remove('switching-theme'), 300); const t = themes[name]; document.body.className = `${t.font} selection:bg-white selection:text-black`; if(t.mode === 'light') document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode'); document.body.setAttribute('data-theme', name); document.documentElement.style.setProperty('--accent-color', t.accent); 
+            playThemeSwitchSound(); 
+            document.body.classList.add('switching-theme'); 
+            setTimeout(() => document.body.classList.remove('switching-theme'), 300); 
+            const t = themes[name]; 
+            
+            document.body.className = `${t.font} selection:bg-white selection:text-black`; 
+            if(t.mode === 'light') document.body.classList.add('light-mode'); 
+            else document.body.classList.remove('light-mode'); 
+            
+            // Conserver l'état du clean mode
+            const isClean = document.getElementById('clean-toggle').classList.contains('active');
+            if (isClean) document.body.classList.add('clean-mode');
+            
+            document.body.setAttribute('data-theme', name); 
+            
+            // Remplacer l'injection directe pour permettre au Clean Mode de l'écraser
+            document.documentElement.style.setProperty('--theme-accent', t.accent); 
+            
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`; 
             document.getElementById('theme-widget').style.backgroundImage = `url('${t.bar}')`;
-            document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
+            document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); 
+            document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
+            if (isClean) document.getElementById('clean-toggle').classList.add('active');
             
-            Object.values(wavesurfers).forEach(ws => {
-                if(ws) ws.setOptions({ progressColor: t.accent });
-            });
-            Object.values(ptxWaveSurfers).forEach(ws => {
-                if(ws) ws.setOptions({ progressColor: t.accent });
-            });
+            // Ne mettre à jour les couleurs WaveSurfer que si on n'est pas en mode épuré
+            if (!isClean) {
+                Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
+                Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
+            }
         }
 
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); }); }, {threshold: 0.1}); document.querySelectorAll('.scroll-float').forEach(el => observer.observe(el));
@@ -1678,7 +1784,7 @@
             if (!ptxIsLoaded) return;
             const timeline = document.getElementById('ptx-timeline');
             const rect = timeline.getBoundingClientRect();
-            // Prise en charge Desktop et Mobile pour le clic sur la timeline
+            // Prise en charge Desktop et Mobile
             const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
             const clickX = clientX - rect.left;
             const pct = Math.max(0, Math.min(1, clickX / rect.width));
