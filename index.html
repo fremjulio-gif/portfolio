@@ -196,6 +196,9 @@
             transition: filter 0.5s var(--ease-apple) !important;
         }
 
+        /* Lab waveform en clean mode : partie jouée assombrie */
+        body.clean-mode .wavesurfer-wrapper canvas { opacity: 0.9; }
+
         /* Éléments Actifs (Boutons, Séquenceur, Pads) en mode Clean */
         body.clean-mode .theme-pill.active, body.clean-mode .transport-btn.playing, 
         body.clean-mode .step-btn.active, body.clean-mode .piano-cell.active, 
@@ -377,6 +380,12 @@
         
         #vision-modal { transition: opacity 0.3s ease; }
         #vision-modal.hidden { opacity: 0; pointer-events: none; display: none; }
+
+        /* Bouton Vision flottant */
+        #vision-float-btn:hover {
+            transform: translateY(-4px) !important;
+            box-shadow: 0 0 60px -8px color-mix(in srgb, var(--accent-color) 55%, transparent), 0 30px 80px -20px rgba(0,0,0,0.7) !important;
+        }
         .vision-bar-container { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; width: 100%; }
         .vision-bar-fill { height: 100%; background: var(--accent-color); width: 0%; transition: width 1s ease-out; }
         body.light-mode .vision-bar-container { background: rgba(0,0,0,0.1); }
@@ -481,26 +490,38 @@
             </div>
         </section>
 
-        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float flex flex-col z-50 relative min-h-[50vh] md:min-h-0">
+        <section id="skills" class="col-span-12 lg:col-span-5 glass-panel scroll-float flex flex-col z-50 relative">
             <div class="win-header shrink-0">
                 <span class="win-title">Stats & Skills.sys</span>
                 <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
             </div>
-            <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-10 items-start justify-items-center grow relative z-10">
+            <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-8 items-start justify-items-center relative z-10">
                 <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 75"><span>75%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Écoute active, prise de décision, Pro Tools.</p></div>
                 <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Créativité, Organisation, Live 12.</p></div>
                 <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Nettoyage Audio, RX 10, Ozone.</p></div>
                 <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 75"><span>75%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">SoundDevice, Couple micro.</p></div>
-                
-                <button onclick="openVision()" class="col-span-2 mt-4 px-6 py-4 rounded-2xl border border-[var(--glass-border)] bg-white/5 hover:bg-white/10 transition group flex flex-col md:flex-row items-center justify-center gap-4 w-full cursor-pointer relative overflow-hidden shadow-lg hover:border-[var(--accent-color)]">
-                    <div class="absolute inset-0 bg-[var(--accent-color)]/5 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                      <span class="text-xs font-mono uppercase tracking-widest text-[var(--accent-color)] z-10 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                        Ouvrir Vision.dmg & Setup
-                      </span>
-                </button>
             </div>
         </section>
+
+        <!-- Bouton Vision.dmg flottant indépendant -->
+        <div class="col-span-12 lg:col-span-5 scroll-float flex items-center justify-center" style="margin-top: -12px;">
+            <button id="vision-float-btn" onclick="openVision()" class="click-sound touch-manipulation group relative overflow-hidden w-full"
+                style="background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%); border: 1px solid var(--accent-color); border-radius: 24px; padding: 20px 32px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 0 40px -8px color-mix(in srgb, var(--accent-color) 40%, transparent), 0 20px 60px -20px rgba(0,0,0,0.6); transition: transform 0.4s var(--ease-ios), box-shadow 0.4s ease;">
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500" style="background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent-color) 12%, transparent) 0%, transparent 70%);"></div>
+                <div class="relative z-10 flex items-center justify-between gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-xl" style="background: color-mix(in srgb, var(--accent-color) 15%, transparent); border: 1px solid color-mix(in srgb, var(--accent-color) 30%, transparent);">
+                            <svg class="w-5 h-5 text-[var(--accent-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="font-mono text-[var(--accent-color)] font-bold tracking-widest text-sm uppercase">Ouvrir Vision.dmg</div>
+                            <div class="font-mono text-[10px] opacity-50 uppercase tracking-wider mt-0.5">Setup · Outils · Références</div>
+                        </div>
+                    </div>
+                    <svg class="w-5 h-5 text-[var(--accent-color)] opacity-60 group-hover:translate-x-1 group-hover:opacity-100 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </div>
+            </button>
+        </div>
 
        <section id="parcours" class="col-span-12 lg:col-span-7 glass-panel scroll-float z-10 relative min-h-[60vh] md:min-h-0">
             <div class="win-header">
@@ -1185,7 +1206,21 @@
             const themeColor = themes[currentTheme].accent;
             const targetColor = isActive ? '#FFFFFF' : themeColor;
             
-            Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: targetColor }); });
+            // Déselectionner / réactiver les pills de thème
+            document.querySelectorAll('.theme-pill:not(#clean-toggle)').forEach(p => {
+                p.classList.toggle('active', !isActive);
+            });
+            // Garder seulement le pill du thème actif quand on sort du clean mode
+            if (!isActive) {
+                document.querySelectorAll('.theme-pill:not(#clean-toggle)').forEach(p => p.classList.remove('active'));
+                const activePill = document.querySelector(`.theme-pill[onclick*="'${currentTheme}'"]`);
+                if (activePill) activePill.classList.add('active');
+            }
+            
+            // Fond de la theme island : noir en clean mode, transparent sinon
+            document.getElementById('theme-widget').style.backgroundColor = isActive ? 'rgba(0,0,0,0.85)' : '';
+            
+            Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: isActive ? 'rgba(255,255,255,0.12)' : targetColor, waveColor: isActive ? 'rgba(255,255,255,0.5)' : 'rgba(255, 255, 255, 0.3)' }); });
             Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: targetColor }); });
             
             playClickSound();
