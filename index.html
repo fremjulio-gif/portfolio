@@ -522,43 +522,32 @@
 
 
 
-    /* --- GESTION DES FENÊTRES (DAW OS) --- */
-/* Style des boutons de la barre de titre */
-.win-btn {
-    width: 12px; height: 12px; border-radius: 50%; cursor: pointer; transition: 0.2s; 
-    display: flex; align-items: center; justify-content: center;
-}
-.win-btn svg { width: 7px; height: 7px; opacity: 0; transition: 0.2s; stroke: #000; stroke-width: 2.5; }
-.win-header:hover .win-btn svg { opacity: 0.5; }
-.win-btn:hover svg { opacity: 1 !important; }
-.btn-close { background-color: #ff5f56; } /* Rouge */
-.btn-min { background-color: #ffbd2e; }   /* Jaune */
-.btn-max { background-color: #27c93f; }   /* Vert */
-
-/* Curseur sur les headers */
-.win-header { cursor: grab; user-select: none; }
-.win-header:active { cursor: grabbing; }
+   /* --- GESTION DES FENÊTRES (FIXÉ) --- */
+.win-header { touch-action: none; }
+.win-header:active { cursor: grabbing !important; }
 
 /* État "Réduit" (Roll-up) */
+.glass-panel.window-collapsed {
+    height: 44px !important; 
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
 .glass-panel.window-collapsed > *:not(.win-header) {
-    display: none !important;
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* État "Flottant / Déplacé" */
 .glass-panel.window-floating {
     position: fixed !important;
-    z-index: 100;
+    z-index: 999;
     margin: 0 !important;
+    transform: none !important; /* TRÈS IMPORTANT : Annule le bug du saut dans l'espace */
     backdrop-filter: blur(60px) saturate(160%);
     box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px var(--accent-color) !important;
 }
-.glass-panel.window-dragging {
-    transition: none !important;
-    transform: scale(1.02) !important;
-    z-index: 9999 !important;
-}
 
-/* Placeholder invisible pour maintenir la grille quand on arrache une fenêtre */
+/* Emplacement vide laissé dans la grille */
 .window-placeholder {
     background: rgba(255,255,255,0.02);
     border: 1px dashed rgba(255,255,255,0.1);
@@ -2407,8 +2396,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let hasDragged = false;
     let startX, startY, initialLeft, initialTop;
 
-    // 1. Début du drag
+           // 1. Début du drag
     island.addEventListener('pointerdown', (e) => {
+        // SÉCURITÉ : Si on clique sur un bouton, on ne déclenche pas le drag
+        if (e.target.closest('button')) return; 
+        
         isDragging = true;
         hasDragged = false;
         
@@ -2497,113 +2489,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-        // --- OS WINDOW MANAGER (DRAG, DROP, MINIMIZE) ---
+       // --- OS WINDOW MANAGER 2.0 (FIXÉ) ---
 document.addEventListener("DOMContentLoaded", () => {
-    const panels = document.querySelectorAll('.glass-panel');
     let highestZIndex = 100;
 
-    panels.forEach(panel => {
+    document.querySelectorAll('.glass-panel').forEach(panel => {
         const header = panel.querySelector('.win-header');
         if (!header) return;
 
-        // 1. Injection automatique des boutons OS (Traffic Lights)
-        const controlsContainer = header.querySelector('.flex.gap-2');
-        if (controlsContainer) {
-            controlsContainer.innerHTML = `
-                <div class="win-btn btn-close click-sound touch-manipulation" title="Shake (Erreur)"><svg viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10m0-10L2 12" stroke="currentColor" stroke-linecap="round"/></svg></div>
-                <div class="win-btn btn-min click-sound touch-manipulation" title="Réduire (Roll-up)"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7h10" stroke="currentColor" stroke-linecap="round"/></svg></div>
-                <div class="win-btn btn-max click-sound touch-manipulation" title="Détacher / Ancrer"><svg viewBox="0 0 14 14" fill="none"><path d="M2 5v4m10-4v4" stroke="currentColor" stroke-linecap="round"/></svg></div>
+        // 1. Création des boutons Traffic Lights avec couleurs natives Tailwind
+        const controls = header.querySelector('.flex.gap-2');
+        if (controls) {
+            controls.innerHTML = `
+                <div class="w-3 h-3 rounded-full bg-[#ff5f56] flex items-center justify-center cursor-pointer group btn-close touch-manipulation">
+                    <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 2l10 10m0-10L2 12"/></svg>
+                </div>
+                <div class="w-3 h-3 rounded-full bg-[#ffbd2e] flex items-center justify-center cursor-pointer group btn-min touch-manipulation">
+                    <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 7h10"/></svg>
+                </div>
+                <div class="w-3 h-3 rounded-full bg-[#27c93f] flex items-center justify-center cursor-pointer group btn-max touch-manipulation">
+                    <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 5v4m10-4v4"/></svg>
+                </div>
             `;
         }
 
         // --- Logique des Boutons ---
         
-        // Bouton Jaune : Réduire / Dérouler
+        // BOUTON JAUNE : Réduire (Roll-up)
         const btnMin = panel.querySelector('.btn-min');
         if (btnMin) {
-            btnMin.addEventListener('click', (e) => {
-                e.stopPropagation(); // Évite de déclencher le drag
+            btnMin.addEventListener('pointerdown', (e) => {
+                e.stopPropagation();
                 panel.classList.toggle('window-collapsed');
                 if(typeof playClickSound === 'function') playClickSound();
             });
         }
 
-        // Bouton Rouge : Fausse erreur (secousse) pour le fun
+        // BOUTON ROUGE : Erreur (secousse visuelle)
         const btnClose = panel.querySelector('.btn-close');
         if (btnClose) {
-            btnClose.addEventListener('click', (e) => {
+            btnClose.addEventListener('pointerdown', (e) => {
                 e.stopPropagation();
+                panel.style.transition = "transform 0.1s";
                 panel.style.transform = "translateX(10px)";
                 setTimeout(() => panel.style.transform = "translateX(-10px)", 50);
                 setTimeout(() => panel.style.transform = "translateX(10px)", 100);
-                setTimeout(() => panel.style.transform = "translateX(0)", 150);
+                setTimeout(() => { panel.style.transform = "none"; panel.style.transition = ""; }, 150);
                 if(typeof playClickSound === 'function') playClickSound();
             });
         }
 
-        // Bouton Vert : Ré-ancrer dans la grille
-        const btnMax = panel.querySelector('.btn-max');
-        let placeholder = null; // Élément fantôme pour garder la place dans la grille
-
-        if (btnMax) {
-            btnMax.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (panel.classList.contains('window-floating')) {
-                    // Si elle flotte, on la remet à sa place
-                    panel.classList.remove('window-floating', 'window-dragging');
-                    panel.style.position = '';
-                    panel.style.left = '';
-                    panel.style.top = '';
-                    panel.style.width = '';
-                    panel.style.zIndex = '';
-                    if (placeholder && placeholder.parentNode) {
-                        placeholder.parentNode.replaceChild(panel, placeholder);
-                    }
-                }
-                if(typeof playClickSound === 'function') playClickSound();
-            });
-        }
-
-        // Mettre la fenêtre au premier plan si on clique n'importe où dessus
-        panel.addEventListener('pointerdown', () => {
-            if (panel.classList.contains('window-floating')) {
-                panel.style.zIndex = ++highestZIndex;
-            }
-        });
-
-        // --- Logique de Drag & Drop Magnétique ---
-        let isDragging = false;
-        let startX, startY, initialLeft, initialTop;
+        // --- Logique du Drag & Drop ---
+        let isDragging = false, startX, startY, initialLeft, initialTop, placeholder;
 
         header.addEventListener('pointerdown', (e) => {
-            // Ignorer si on clique sur les boutons
-            if (e.target.closest('.win-btn')) return;
+            if (e.target.closest('.w-3')) return; // Ne pas drag si on clique sur un bouton
+            
+            // SÉCURITÉ : On désactive le drag sur smartphone pour ne pas bloquer le scroll
+            if (window.innerWidth < 1024) return; 
 
             isDragging = true;
             const rect = panel.getBoundingClientRect();
             
-            // Si la fenêtre est ancrée dans la grille, on la détache en créant un clone fantôme
+            // Si la fenêtre est dans la grille, on la détache proprement
             if (!panel.classList.contains('window-floating')) {
                 placeholder = document.createElement('div');
-                placeholder.className = `window-placeholder ${panel.className.match(/col-span-[0-9]+/)?.[0] || ''} w-full`;
+                placeholder.className = `window-placeholder ${panel.className.match(/col-span-[0-9]+/)?.[0] || ''}`;
                 placeholder.style.height = rect.height + 'px';
-                
-                // Insérer le placeholder
                 panel.parentNode.insertBefore(placeholder, panel);
                 
-                // Passer en mode flottant avec les dimensions strictes
-                panel.classList.add('window-floating');
                 panel.style.width = rect.width + 'px';
-                document.body.appendChild(panel); // Déplacer au niveau du body pour éviter les conflits CSS Grid
+                panel.classList.remove('scroll-float'); // On désactive l'animation de scroll
+                panel.classList.add('window-floating');
+                document.body.appendChild(panel); // On la place par-dessus tout
             }
 
+            // Mise au premier plan
+            panel.style.zIndex = ++highestZIndex;
             panel.style.left = rect.left + 'px';
             panel.style.top = rect.top + 'px';
-            panel.style.zIndex = ++highestZIndex;
 
-            panel.classList.add('window-dragging');
             header.setPointerCapture(e.pointerId);
-
+            header.style.cursor = 'grabbing';
             startX = e.clientX;
             startY = e.clientY;
             initialLeft = rect.left;
@@ -2622,34 +2589,42 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!isDragging) return;
             isDragging = false;
             header.releasePointerCapture(e.pointerId);
-            panel.classList.remove('window-dragging');
+            header.style.cursor = 'grab';
 
-            // --- L'Aimant (Magnétisme) ---
-            panel.style.transition = 'left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            
             const rect = panel.getBoundingClientRect();
             const margin = 20;
             let finalLeft = rect.left;
             let finalTop = rect.top;
 
-            // Snap sur les bords de l'écran si on s'approche à moins de 60px
-            if (rect.left < 60) finalLeft = margin;
-            if (rect.right > window.innerWidth - 60) finalLeft = window.innerWidth - rect.width - margin;
-            if (rect.top < 60) finalTop = margin;
-            if (rect.bottom > window.innerHeight - 60) finalTop = window.innerHeight - rect.height - margin;
-            
-            // Sécurité : forcer à rester dans l'écran
-            finalLeft = Math.max(margin, Math.min(finalLeft, window.innerWidth - rect.width - margin));
-            finalTop = Math.max(margin, Math.min(finalTop, window.innerHeight - rect.height - margin));
+            // Sécurité : On empêche la fenêtre de sortir de l'écran
+            if (finalLeft < margin) finalLeft = margin;
+            if (finalLeft + rect.width > window.innerWidth - margin) finalLeft = window.innerWidth - rect.width - margin;
+            if (finalTop < margin) finalTop = margin;
+            if (finalTop + rect.height > window.innerHeight - margin) finalTop = window.innerHeight - rect.height - margin;
 
+            panel.style.transition = 'left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)';
             panel.style.left = finalLeft + 'px';
             panel.style.top = finalTop + 'px';
 
-            // Nettoyage de la transition
-            setTimeout(() => {
-                if (!isDragging) panel.style.transition = '';
-            }, 400);
+            setTimeout(() => panel.style.transition = '', 300);
         });
+
+        // BOUTON VERT : Remettre la fenêtre dans sa grille d'origine
+        const btnMax = panel.querySelector('.btn-max');
+        if (btnMax) {
+            btnMax.addEventListener('pointerdown', (e) => {
+                e.stopPropagation();
+                if (panel.classList.contains('window-floating')) {
+                    panel.classList.remove('window-floating');
+                    panel.classList.add('scroll-float', 'visible');
+                    panel.style = ''; // Reset de toutes les positions CSS inline
+                    if (placeholder && placeholder.parentNode) {
+                        placeholder.parentNode.replaceChild(panel, placeholder);
+                    }
+                }
+                if(typeof playClickSound === 'function') playClickSound();
+            });
+        }
     });
 });
         
