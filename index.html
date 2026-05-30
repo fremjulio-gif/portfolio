@@ -308,6 +308,22 @@
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+
+        /* --- DRAG & DROP THEME ISLAND --- */
+.theme-island {
+    cursor: grab;
+    touch-action: none; /* Empêche le scroll mobile pendant le glisser */
+    will-change: left, top, transform;
+}
+.theme-island:active {
+    cursor: grabbing;
+}
+.theme-island.is-dragging {
+    transition: none !important; /* Retire l'inertie pour coller parfaitement au curseur */
+    transform: scale(1.03) !important; /* Effet de soulèvement 3D */
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 0 var(--glass-highlight) !important;
+}
+
         /* --- ACCORDION PERFORMANCE MODE --- */
         .accordion-grid {
             display: grid;
@@ -2334,6 +2350,105 @@ function filterProjects(tag, btnElement) {
         }
     });
 }
+
+
+
+        // --- DRAG & DROP MAGNÉTIQUE (THEME ISLAND) ---
+document.addEventListener("DOMContentLoaded", () => {
+    const island = document.getElementById('theme-widget');
+    if (!island) return;
+
+    let isDragging = false;
+    let hasDragged = false;
+    let startX, startY, initialLeft, initialTop;
+
+    // 1. Début du drag
+    island.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        hasDragged = false;
+        
+        // On récupère la position exacte calculée par le navigateur
+        const rect = island.getBoundingClientRect();
+        
+        // On fige la position en pixels absolus et on casse le centrage CSS (transform)
+        island.style.left = rect.left + 'px';
+        island.style.top = rect.top + 'px';
+        island.style.transform = 'none';
+        
+        island.classList.add('is-dragging');
+        island.setPointerCapture(e.pointerId); // Force le curseur à rester lié à l'élément
+        
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = rect.left;
+        initialTop = rect.top;
+    });
+
+    // 2. Mouvement
+    island.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        
+        // Seuil de tolérance : on considère qu'il y a "glissement" après 5 pixels
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasDragged = true;
+        
+        island.style.left = (initialLeft + dx) + 'px';
+        island.style.top = (initialTop + dy) + 'px';
+    });
+
+    // 3. Fin du drag et Aimant (Magnétisme)
+    island.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        island.releasePointerCapture(e.pointerId);
+        island.classList.remove('is-dragging');
+        
+        // On réactive une transition douce pour l'effet magnétique
+        island.style.transition = 'left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s';
+        
+        const rect = island.getBoundingClientRect();
+        const margin = 20; // Marge de l'aimant par rapport aux bords
+        
+        let finalLeft = rect.left;
+        let finalTop = rect.top;
+        
+        // Logique de l'aimant
+        // Si on est dans le tiers central haut, on recentre le widget
+        if (rect.top < 150 && rect.left > window.innerWidth * 0.2 && rect.left < window.innerWidth * 0.8) {
+            finalLeft = (window.innerWidth / 2) - (rect.width / 2);
+            finalTop = 20; // Ou 30px selon tes media queries
+        } else {
+            // Sinon, on plaque à gauche ou à droite
+            if (rect.left < window.innerWidth / 2) {
+                finalLeft = margin; // Aimant gauche
+            } else {
+                finalLeft = window.innerWidth - rect.width - margin; // Aimant droit
+            }
+            // Sécurité pour ne pas sortir de l'écran en hauteur
+            if (rect.top < margin) finalTop = margin;
+            if (rect.bottom > window.innerHeight - margin) finalTop = window.innerHeight - rect.height - margin;
+        }
+
+        island.style.left = finalLeft + 'px';
+        island.style.top = finalTop + 'px';
+
+        // Nettoyage de la transition une fois l'aimant terminé pour ne pas gêner le prochain drag
+        setTimeout(() => {
+            if(!isDragging) island.style.transition = '';
+        }, 400);
+    });
+
+    // 4. Interception des clics (Anti-misclick)
+    // Si on a glissé le widget, on annule les clics sur les boutons enfants (Capture phase)
+    island.addEventListener('click', (e) => {
+        if (hasDragged) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, { capture: true });
+});
         
         // Initialisation de la page
         setTheme('fl');
