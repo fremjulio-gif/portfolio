@@ -522,8 +522,8 @@
 
 
 
-   /* --- GESTION DES FENÊTRES (FIXÉ) --- */
-.win-header { touch-action: none; }
+  /* --- GESTION DES FENÊTRES (BLINDAGE V4) --- */
+.win-header { touch-action: none; user-select: none; }
 .win-header:active { cursor: grabbing !important; }
 
 /* État "Réduit" (Roll-up) */
@@ -537,22 +537,20 @@
     pointer-events: none;
 }
 
-/* État "Flottant / Déplacé" */
-.glass-panel.window-floating {
-    position: fixed !important;
-    z-index: 999;
-    margin: 0 !important;
-    transform: none !important; /* TRÈS IMPORTANT : Annule le bug du saut dans l'espace */
-    backdrop-filter: blur(60px) saturate(160%);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px var(--accent-color) !important;
-}
-
 /* Emplacement vide laissé dans la grille */
 .window-placeholder {
     background: rgba(255,255,255,0.02);
     border: 1px dashed rgba(255,255,255,0.1);
     border-radius: 32px;
 }
+
+/* SÉCURITÉ ANTI-SAUT : Interdire l'effet de hover sur les fenêtres détachées */
+.glass-panel[data-floating="true"] { 
+    backdrop-filter: blur(60px) saturate(160%);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px var(--accent-color) !important;
+}
+.glass-panel[data-floating="true"]:hover {
+    transform: none !important;
 }
     </style>
 
@@ -2489,7 +2487,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-       // --- OS WINDOW MANAGER 3.0 (STABLE) ---
+       // --- OS WINDOW MANAGER 4.0 (ULTRA-STABLE) ---
 document.addEventListener("DOMContentLoaded", () => {
     let highestZIndex = 100;
 
@@ -2497,7 +2495,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const header = panel.querySelector('.win-header');
         if (!header) return;
 
-        // 1. Boutons (Jaune et Vert uniquement)
+        // 1. Boutons (Jaune=Réduire, Vert=Ancrer) - Plus de bouton rouge
         const controls = header.querySelector('.flex.gap-2');
         if (controls) {
             controls.innerHTML = `
@@ -2526,16 +2524,18 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btnMax) {
             btnMax.addEventListener('pointerdown', (e) => {
                 e.stopPropagation();
-                if (panel.classList.contains('window-floating')) {
-                    // Retour à la grille normale
-                    panel.classList.remove('window-floating');
-                    panel.classList.add('scroll-float', 'visible');
-                    panel.style.position = '';
-                    panel.style.left = '';
-                    panel.style.top = '';
-                    panel.style.width = '';
-                    panel.style.zIndex = '';
-                    panel.style.transform = '';
+                if (panel.getAttribute('data-floating') === 'true') {
+                    panel.removeAttribute('data-floating');
+                    
+                    // Nettoyage total des styles injectés par le drag
+                    panel.style.removeProperty('position');
+                    panel.style.removeProperty('left');
+                    panel.style.removeProperty('top');
+                    panel.style.removeProperty('width');
+                    panel.style.removeProperty('margin');
+                    panel.style.removeProperty('z-index');
+                    panel.style.removeProperty('transform');
+                    
                     if (placeholder && placeholder.parentNode) {
                         placeholder.parentNode.replaceChild(panel, placeholder);
                     }
@@ -2548,29 +2548,36 @@ document.addEventListener("DOMContentLoaded", () => {
         let isDragging = false, offsetX = 0, offsetY = 0;
 
         header.addEventListener('pointerdown', (e) => {
-            if (e.target.closest('.w-3')) return; 
-            if (window.innerWidth < 1024) return; // Désactivé sur mobile pour sauver le scroll
+            if (e.target.closest('.w-3')) return; // Ignore le clic sur les boutons
+            if (window.innerWidth < 1024) return; // Désactivé sur mobile
 
             isDragging = true;
-            const rect = panel.getBoundingClientRect();
             
-            // LE SECRET ICI : On calcule l'écart exact entre le clic et le coin de la fenêtre
+            // BLOQUER l'animation CSS de hover AVANT de calculer les maths
+            panel.style.setProperty('transition', 'none', 'important');
+            panel.style.setProperty('transform', 'none', 'important');
+
+            const rect = panel.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
 
-            if (!panel.classList.contains('window-floating')) {
+            if (panel.getAttribute('data-floating') !== 'true') {
                 placeholder = document.createElement('div');
                 placeholder.className = `window-placeholder ${panel.className.match(/col-span-[0-9]+/)?.[0] || ''}`;
                 placeholder.style.height = rect.height + 'px';
+                placeholder.style.width = rect.width + 'px';
                 panel.parentNode.insertBefore(placeholder, panel);
                 
-                panel.style.width = rect.width + 'px';
-                panel.classList.remove('scroll-float');
-                panel.classList.add('window-floating');
                 document.body.appendChild(panel); 
+                panel.setAttribute('data-floating', 'true');
             }
 
-            panel.style.zIndex = ++highestZIndex;
+            // INJECTION DIRECTE EN JS : Impossible à écraser par le CSS global
+            panel.style.setProperty('position', 'fixed', 'important');
+            panel.style.setProperty('margin', '0', 'important');
+            panel.style.setProperty('z-index', ++highestZIndex, 'important');
+            panel.style.width = rect.width + 'px';
+            
             panel.style.left = (e.clientX - offsetX) + 'px';
             panel.style.top = (e.clientY - offsetY) + 'px';
 
@@ -2580,7 +2587,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         header.addEventListener('pointermove', (e) => {
             if (!isDragging) return;
-            // La fenêtre suit exactement la souris, sans saut mathématique
             panel.style.left = (e.clientX - offsetX) + 'px';
             panel.style.top = (e.clientY - offsetY) + 'px';
         });
@@ -2591,7 +2597,7 @@ document.addEventListener("DOMContentLoaded", () => {
             header.releasePointerCapture(e.pointerId);
             header.style.cursor = 'grab';
 
-            // Magnétisme
+            // Magnétisme aux bords
             const rect = panel.getBoundingClientRect();
             const margin = 20;
             let finalLeft = rect.left;
@@ -2602,12 +2608,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (finalTop < margin) finalTop = margin;
             if (finalTop + rect.height > window.innerHeight - margin) finalTop = window.innerHeight - rect.height - margin;
 
-            // Transition ultra-courte (0.2s) pour ne pas créer de bug visuel
-            panel.style.transition = 'left 0.2s ease-out, top 0.2s ease-out';
+            panel.style.setProperty('transition', 'left 0.2s ease-out, top 0.2s ease-out', 'important');
             panel.style.left = finalLeft + 'px';
             panel.style.top = finalTop + 'px';
 
-            setTimeout(() => panel.style.transition = '', 200);
+            setTimeout(() => panel.style.removeProperty('transition'), 200);
         });
     });
 });
