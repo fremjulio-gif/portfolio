@@ -2111,34 +2111,35 @@ document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
   });
 });
 
-// --- DÉCLENCHEUR DES JAUGES SKILLS (À placer à la fin du <script>) ---
+// --- DÉCLENCHEUR DES JAUGES SKILLS ---
 document.addEventListener("DOMContentLoaded", () => {
-    // Configuration : l'animation se lance quand 50% de la jauge est visible
-    const gaugeOptions = { threshold: 0.5 };
+    // Un threshold à 0.2 assure le déclenchement dès que 20% du conteneur est visible
+    const gaugeOptions = { threshold: 0.2 };
 
     const gaugeObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
-            // Si la jauge entre dans le champ de vision
             if (entry.isIntersecting) {
-                const gauge = entry.target;
+                const container = entry.target; // On cible maintenant la <div> HTML
+                const gauge = container.querySelector('.gauge-progress');
+                const counterElement = container.querySelector('.skill-percent');
+                
+                if (!gauge || !counterElement) return; // Sécurité
+
                 const targetPercent = parseInt(gauge.getAttribute('data-percent'));
                 
-                // 1. Déclenchement de l'animation CSS (le trait qui se remplit)
+                // 1. Déclenchement de l'animation CSS
                 const targetOffset = 100 - targetPercent;
                 gauge.style.setProperty('--target-offset', targetOffset);
                 gauge.classList.add('gauge-animate');
 
-                // 2. Animation du compteur numérique (0 -> X%)
-                const container = gauge.closest('.skill-gauge');
-                const counterElement = container.querySelector('.skill-percent');
+                // 2. Animation du compteur numérique
                 let startTime = null;
-                const duration = 1500; // 1.5 secondes (synchronisé avec le CSS)
+                const duration = 1500; 
 
                 const updateCounter = (currentTime) => {
                     if (!startTime) startTime = currentTime;
                     const progress = Math.min((currentTime - startTime) / duration, 1);
                     
-                    // Easing pour un effet naturel (ralentit sur la fin)
                     const easeProgress = 1 - Math.pow(1 - progress, 4);
                     counterElement.textContent = Math.floor(easeProgress * targetPercent) + "%";
 
@@ -2151,15 +2152,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 requestAnimationFrame(updateCounter);
 
-                // 3. On coupe l'observation pour cette jauge (elle ne s'animera qu'une fois)
-                observer.unobserve(gauge);
+                // 3. On coupe l'observation pour optimiser les performances
+                observer.unobserve(container);
             }
         });
     }, gaugeOptions);
 
-    // On cible toutes les jauges et on lance l'observation
-    document.querySelectorAll('.gauge-progress').forEach(gauge => {
-        gaugeObserver.observe(gauge);
+    // LA CORRECTION : On observe les <div> (.skill-gauge) et non plus les <path>
+    document.querySelectorAll('.skill-gauge').forEach(container => {
+        gaugeObserver.observe(container);
     });
 });
         
