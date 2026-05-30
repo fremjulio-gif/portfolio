@@ -2061,48 +2061,6 @@ const scrollObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.scroll-float').forEach(el => scrollObserver.observe(el));
 
 
-        // A placer dans la callback de ton IntersectionObserver existant
-// Lorsque la section des skills devient visible :
-
-const gauges = entry.target.querySelectorAll('.gauge-progress');
-
-gauges.forEach(gauge => {
-  // 1. Déclenchement de l'animation SVG
-  const targetPercent = parseInt(gauge.getAttribute('data-percent'));
-  const targetOffset = 100 - targetPercent;
-  
-  // On passe la valeur calculée au CSS
-  gauge.style.setProperty('--target-offset', targetOffset);
-  gauge.classList.add('gauge-animate');
-
-  // 2. Animation du compteur numérique (0 -> X%)
-  const counterElement = gauge.closest('.skill-gauge').querySelector('.skill-percent');
-  let startTime = null;
-  const duration = 1500; // Synchro avec la durée du CSS (1.5s)
-
-  const updateCounter = (currentTime) => {
-    if (!startTime) startTime = currentTime;
-    const progress = Math.min((currentTime - startTime) / duration, 1);
-    
-    // Easing "easeOutQuart" pour ralentir l'incrémentation sur la fin
-    const easeProgress = 1 - Math.pow(1 - progress, 4);
-    
-    counterElement.textContent = Math.floor(easeProgress * targetPercent) + "%";
-
-    if (progress < 1) {
-      requestAnimationFrame(updateCounter);
-    } else {
-      counterElement.textContent = targetPercent + "%"; // Assure la valeur finale
-    }
-  };
-
-  requestAnimationFrame(updateCounter);
-});
-
-// Important : penser à retirer l'observation une fois animé pour éviter de re-trigger
-// observer.unobserve(entry.target); 
-
-
 
 
         // ── PIE CHART ANIMATION AU SCROLL ─────────────────────────────
