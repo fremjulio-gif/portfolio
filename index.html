@@ -2487,7 +2487,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-       // --- OS WINDOW MANAGER 4.0 (ULTRA-STABLE) ---
+      // --- OS WINDOW MANAGER 5.0 (FREE DRAG & iOS BOUNCE) ---
 document.addEventListener("DOMContentLoaded", () => {
     let highestZIndex = 100;
 
@@ -2495,7 +2495,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const header = panel.querySelector('.win-header');
         if (!header) return;
 
-        // 1. Boutons (Jaune=Réduire, Vert=Ancrer) - Plus de bouton rouge
+        // 1. Boutons (Jaune=Réduire, Vert=Ancrer)
         const controls = header.querySelector('.flex.gap-2');
         if (controls) {
             controls.innerHTML = `
@@ -2527,7 +2527,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (panel.getAttribute('data-floating') === 'true') {
                     panel.removeAttribute('data-floating');
                     
-                    // Nettoyage total des styles injectés par le drag
                     panel.style.removeProperty('position');
                     panel.style.removeProperty('left');
                     panel.style.removeProperty('top');
@@ -2535,6 +2534,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     panel.style.removeProperty('margin');
                     panel.style.removeProperty('z-index');
                     panel.style.removeProperty('transform');
+                    panel.style.removeProperty('transition');
                     
                     if (placeholder && placeholder.parentNode) {
                         placeholder.parentNode.replaceChild(panel, placeholder);
@@ -2544,16 +2544,16 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // --- Logique du Drag & Drop ---
+        // --- Logique du Drag & Drop iOS Style ---
         let isDragging = false, offsetX = 0, offsetY = 0;
 
         header.addEventListener('pointerdown', (e) => {
-            if (e.target.closest('.w-3')) return; // Ignore le clic sur les boutons
+            if (e.target.closest('.w-3')) return; 
             if (window.innerWidth < 1024) return; // Désactivé sur mobile
 
             isDragging = true;
             
-            // BLOQUER l'animation CSS de hover AVANT de calculer les maths
+            // On coupe les animations pour un suivi 1:1 parfait de la souris
             panel.style.setProperty('transition', 'none', 'important');
             panel.style.setProperty('transform', 'none', 'important');
 
@@ -2572,7 +2572,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 panel.setAttribute('data-floating', 'true');
             }
 
-            // INJECTION DIRECTE EN JS : Impossible à écraser par le CSS global
             panel.style.setProperty('position', 'fixed', 'important');
             panel.style.setProperty('margin', '0', 'important');
             panel.style.setProperty('z-index', ++highestZIndex, 'important');
@@ -2587,6 +2586,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         header.addEventListener('pointermove', (e) => {
             if (!isDragging) return;
+            // Déplacement libre absolu
             panel.style.left = (e.clientX - offsetX) + 'px';
             panel.style.top = (e.clientY - offsetY) + 'px';
         });
@@ -2597,22 +2597,45 @@ document.addEventListener("DOMContentLoaded", () => {
             header.releasePointerCapture(e.pointerId);
             header.style.cursor = 'grab';
 
-            // Magnétisme aux bords
+            // --- iOS BOUNCE (L'élastique) ---
             const rect = panel.getBoundingClientRect();
-            const margin = 20;
+            const safeMargin = 16;
+            
             let finalLeft = rect.left;
             let finalTop = rect.top;
+            let needsBounce = false;
 
-            if (finalLeft < margin) finalLeft = margin;
-            if (finalLeft + rect.width > window.innerWidth - margin) finalLeft = window.innerWidth - rect.width - margin;
-            if (finalTop < margin) finalTop = margin;
-            if (finalTop + rect.height > window.innerHeight - margin) finalTop = window.innerHeight - rect.height - margin;
+            // 1. Protection du haut (On ne perd JAMAIS la barre de titre)
+            if (finalTop < safeMargin) {
+                finalTop = safeMargin;
+                needsBounce = true;
+            }
+            
+            // 2. Protection du bas (Garder au moins le header visible)
+            if (finalTop > window.innerHeight - 50) {
+                finalTop = window.innerHeight - 50;
+                needsBounce = true;
+            }
 
-            panel.style.setProperty('transition', 'left 0.2s ease-out, top 0.2s ease-out', 'important');
-            panel.style.left = finalLeft + 'px';
-            panel.style.top = finalTop + 'px';
+            // 3. Protection des côtés (Garder au moins un bout de la fenêtre accessible)
+            if (finalLeft < -(rect.width - 60)) {
+                finalLeft = -(rect.width - 60);
+                needsBounce = true;
+            }
+            if (finalLeft > window.innerWidth - 60) {
+                finalLeft = window.innerWidth - 60;
+                needsBounce = true;
+            }
 
-            setTimeout(() => panel.style.removeProperty('transition'), 200);
+            // S'il y a eu dépassement, on déclenche l'animation de rebond fluide
+            if (needsBounce) {
+                // Courbe de Bézier pour l'effet "Spring/Rebond" d'Apple
+                panel.style.setProperty('transition', 'left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15), top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15)', 'important');
+                panel.style.left = finalLeft + 'px';
+                panel.style.top = finalTop + 'px';
+
+                setTimeout(() => panel.style.removeProperty('transition'), 400);
+            }
         });
     });
 });
