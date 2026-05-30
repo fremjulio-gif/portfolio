@@ -2132,6 +2132,27 @@ function animatePieCharts() {
   });
 }
 
+// Déclenche quand #skills entre dans le viewport
+const pieObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    animatePieCharts();
+    pieObserver.disconnect();
+  }
+}, { threshold: 0.2 });
+
+const skillsEl = document.getElementById('skills');
+if (skillsEl) pieObserver.observe(skillsEl);
+
+// Relance l'animation si on change de thème (pour le glow)
+document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pie-chart').forEach(c => {
+      c.classList.remove('animated');
+      setTimeout(() => c.classList.add('animated'), 500);
+    });
+  });
+});
+
 // --- DÉCLENCHEUR DES JAUGES SKILLS (À placer à la fin du <script>) ---
 document.addEventListener("DOMContentLoaded", () => {
     // Configuration : l'animation se lance quand 50% de la jauge est visible
