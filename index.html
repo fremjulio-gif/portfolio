@@ -45,8 +45,8 @@
 
         /* --- FONTS --- */
         .font-fl { font-family: 'Arial', sans-serif; }
-        .font-ableton { font-family: 'Jost', sans-serif; letter-spacing: 0.02em; }
-        .font-protools { font-family: 'Avenir Next', 'Helvetica Neue', sans-serif; font-weight: 500; }
+        .font-ableton { font-family: 'Jost', sans-serif; }
+        .font-protools { font-family: 'Avenir Next', 'Helvetica Neue', sans-serif; }
         .font-tech { font-family: 'Share Tech Mono', monospace; }
 
         /* --- GLOBAL --- */
@@ -56,6 +56,13 @@
             transition: background-color 0.6s ease, color 0.4s ease;
             -webkit-text-size-adjust: 100%; margin: 0; padding: 0;
         }
+
+
+       /* pour harmoniser toutes les polices : */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    letter-spacing: normal;
 
         /* Curseur personnalisé */
         a, button, input, .click-sound, .project-card, .lab-row, canvas, .step-btn, .piano-cell, .drum-pad, #ptx-timeline { 
@@ -82,6 +89,10 @@
         body.light-mode:not(.clean-mode) #theme-label { color: #1a1a1a; font-weight: 800; text-shadow: none; opacity: 1; }
         body[data-theme='protools']:not(.clean-mode) { background-color: #262626; }
 
+
+        
+
+        
         /* =========================================
            CLEAN MODE : ESTHÉTIQUE APPLE / LIQUID GLASS 
            ========================================= */
