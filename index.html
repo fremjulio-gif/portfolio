@@ -256,13 +256,27 @@
         .stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; transition: transform 0.3s var(--ease-ios); padding: 10px; border-radius: 20px; }
         @media (min-width: 1024px) { .stat-item:hover { transform: translateY(-10px) scale(1.05); background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); } }
 
-        .pie-chart { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-color) calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0); display: grid; place-items: center; flex-shrink: 0; margin: 0 auto 1rem; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3); position: relative; z-index: 10; }
-        @media (min-width: 1024px) { .pie-chart { width: 130px; height: 130px; margin-bottom: 1.5rem; } .pie-chart span { font-size: 24px !important; } }
-        .pie-chart::after { content: ''; position: absolute; inset: 8px; background: #111; border-radius: 50%; z-index: 1; box-shadow: inset 0 5px 15px rgba(0,0,0,0.5); transition: background 0.5s ease; }
-        body.light-mode .pie-chart::after { background: #dcdcdc; box-shadow: inset 0 5px 15px rgba(0,0,0,0.1); }
-        body[data-theme='protools'] .pie-chart::after { background: #262626; } 
-        body.clean-mode .pie-chart::after { background: #0a0a0a; }
-        .pie-chart span { position: relative; z-index: 20; font-family: 'Share Tech Mono'; font-size: 16px; font-weight: bold; }
+       .pie-chart {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: conic-gradient(var(--accent-color) calc(var(--drawn-percent, 0) * 1%), rgba(255,255,255,0.05) 0);
+  display: grid; place-items: center; flex-shrink: 0;
+  margin: 0 auto 1rem;
+  box-shadow: 0 0 0px transparent;
+  position: relative; z-index: 10;
+  transition: box-shadow 0.4s ease, transform 0.4s var(--ease-ios);
+}
+@media (min-width: 1024px) {
+  .pie-chart { width: 130px; height: 130px; margin-bottom: 1.5rem; }
+  .pie-chart span { font-size: 24px !important; }
+}
+.pie-chart.animated {
+  box-shadow: 0 0 28px -4px color-mix(in srgb, var(--accent-color) 60%, transparent);
+}
+.stat-item:hover .pie-chart {
+  transform: scale(1.08);
+  box-shadow: 0 0 40px -6px color-mix(in srgb, var(--accent-color) 70%, transparent);
+}
+.stat-item:hover p { opacity: 1 !important; }
 
         .project-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; cursor: pointer; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.4s; }
         @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
@@ -2088,6 +2102,56 @@ document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
     }, 400);
   });
 });
+
+
+// ── PIE CHART ANIMATION AU SCROLL ─────────────────────────────
+function animatePieCharts() {
+  document.querySelectorAll('.pie-chart').forEach(chart => {
+    const target = parseFloat(chart.style.getPropertyValue('--percent') || chart.getAttribute('style').match(/--percent:\s*([\d.]+)/)?.[1] || 0);
+    const duration = 900;
+    const start = performance.now();
+
+    function step(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Easing : ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = target * eased;
+      chart.style.setProperty('--drawn-percent', current);
+      // Met à jour le texte
+      const span = chart.querySelector('span');
+      if (span) span.textContent = Math.round(current) + '%';
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        chart.classList.add('animated');
+      }
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// Déclenche quand #skills entre dans le viewport
+const pieObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    animatePieCharts();
+    pieObserver.disconnect();
+  }
+}, { threshold: 0.2 });
+
+const skillsEl = document.getElementById('skills');
+if (skillsEl) pieObserver.observe(skillsEl);
+
+// Relance l'animation si on change de thème (pour le glow)
+document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pie-chart').forEach(c => {
+      c.classList.remove('animated');
+      setTimeout(() => c.classList.add('animated'), 500);
+    });
+  });
+});
+        
         
         // Initialisation de la page
         setTheme('fl');
