@@ -397,6 +397,29 @@
         .ptx-region { opacity: 0.3; transition: opacity 0.3s; }
         .ptx-region.region-active { opacity: 1; }
 
+
+        /* Animation du remplissage avec un effet 'ease-out' façon potard physique */
+@keyframes drawGauge {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: var(--target-offset); }
+}
+
+/* Pulsation lumineuse subtile pour le côté "Software Actif" */
+@keyframes pulseGlow {
+  0%, 100% { filter: drop-shadow(0 0 2px currentColor); }
+  50% { filter: drop-shadow(0 0 8px currentColor); }
+}
+
+.gauge-animate {
+  /* On combine le remplissage unique et le glow infini */
+  animation: drawGauge 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards, 
+             pulseGlow 3s infinite ease-in-out;
+}
+
+.gauge-bg {
+   stroke: rgba(255, 255, 255, 0.08); /* Transparence pour le fond Glassmorphism */
+}
+
         /* --- MISC --- */
         #skills { position: relative; overflow: hidden; }
         #skills::before { content: ''; position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.1; z-index: 0; pointer-events: none; mix-blend-mode: overlay; }
@@ -534,12 +557,77 @@
                         <span class="win-title">Stats & Skills.sys</span>
                         <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
                     </div>
-                    <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-8 items-start justify-items-center relative z-10">
-                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 75"><span>75%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Écoute active, prise de décision, Pro Tools.</p></div>
-                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Créativité, Organisation, Live 12.</p></div>
-                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Nettoyage Audio, RX 10, Ozone.</p></div>
-                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 75"><span>75%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">SoundDevice, Couple micro.</p></div>
-                    </div>
+                    <div class="stat-item flex flex-col items-center text-center">
+    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                  stroke-dasharray="100, 100" stroke-dashoffset="100" stroke-linecap="round" data-percent="75"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">0%</span>
+        </div>
+    </div>
+    <div class="h-8 flex items-center justify-center">
+        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4>
+    </div>
+    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Écoute active, prise de décision, Pro Tools.</p>
+</div>
+
+<div class="stat-item flex flex-col items-center text-center">
+    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                  stroke-dasharray="100, 100" stroke-dashoffset="100" stroke-linecap="round" data-percent="70"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">0%</span>
+        </div>
+    </div>
+    <div class="h-8 flex items-center justify-center">
+        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4>
+    </div>
+    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Créativité, Organisation, Live 12.</p>
+</div>
+
+<div class="stat-item flex flex-col items-center text-center">
+    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                  stroke-dasharray="100, 100" stroke-dashoffset="100" stroke-linecap="round" data-percent="70"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">0%</span>
+        </div>
+    </div>
+    <div class="h-8 flex items-center justify-center">
+        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4>
+    </div>
+    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Nettoyage Audio, RX 10, Ozone.</p>
+</div>
+
+<div class="stat-item flex flex-col items-center text-center">
+    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                  stroke-dasharray="100, 100" stroke-dashoffset="100" stroke-linecap="round" data-percent="75"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">0%</span>
+        </div>
+    </div>
+    <div class="h-8 flex items-center justify-center">
+        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4>
+    </div>
+    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">SoundDevice, Couple micro.</p>
+</div>
                 </section>
 
                 <!-- Bouton Vision.dmg flottant -->
@@ -1971,6 +2059,48 @@ const scrollObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
 document.querySelectorAll('.scroll-float').forEach(el => scrollObserver.observe(el));
+
+
+        // A placer dans la callback de ton IntersectionObserver existant
+// Lorsque la section des skills devient visible :
+
+const gauges = entry.target.querySelectorAll('.gauge-progress');
+
+gauges.forEach(gauge => {
+  // 1. Déclenchement de l'animation SVG
+  const targetPercent = parseInt(gauge.getAttribute('data-percent'));
+  const targetOffset = 100 - targetPercent;
+  
+  // On passe la valeur calculée au CSS
+  gauge.style.setProperty('--target-offset', targetOffset);
+  gauge.classList.add('gauge-animate');
+
+  // 2. Animation du compteur numérique (0 -> X%)
+  const counterElement = gauge.closest('.skill-gauge').querySelector('.skill-percent');
+  let startTime = null;
+  const duration = 1500; // Synchro avec la durée du CSS (1.5s)
+
+  const updateCounter = (currentTime) => {
+    if (!startTime) startTime = currentTime;
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    
+    // Easing "easeOutQuart" pour ralentir l'incrémentation sur la fin
+    const easeProgress = 1 - Math.pow(1 - progress, 4);
+    
+    counterElement.textContent = Math.floor(easeProgress * targetPercent) + "%";
+
+    if (progress < 1) {
+      requestAnimationFrame(updateCounter);
+    } else {
+      counterElement.textContent = targetPercent + "%"; // Assure la valeur finale
+    }
+  };
+
+  requestAnimationFrame(updateCounter);
+});
+
+// Important : penser à retirer l'observation une fois animé pour éviter de re-trigger
+// observer.unobserve(entry.target); 
 
 
 
