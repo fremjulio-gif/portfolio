@@ -256,7 +256,7 @@
         .stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; transition: transform 0.3s var(--ease-ios); padding: 10px; border-radius: 20px; }
         @media (min-width: 1024px) { .stat-item:hover { transform: translateY(-10px) scale(1.05); background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); } }
 
-       .pie-chart {
+        .pie-chart {
   width: 80px; height: 80px; border-radius: 50%;
   background: conic-gradient(var(--accent-color) calc(var(--drawn-percent, 0) * 1%), rgba(255,255,255,0.05) 0);
   display: grid; place-items: center; flex-shrink: 0;
@@ -441,7 +441,8 @@
         
         #start-screen { position: fixed; inset: 0; z-index: 100; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
-        .scroll-float {
+
+.scroll-float {
   opacity: 0;
   transform: translateY(32px);
   transition: opacity 0.7s var(--ease-ios), transform 0.7s var(--ease-ios);
@@ -533,42 +534,12 @@
                         <span class="win-title">Stats & Skills.sys</span>
                         <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
                     </div>
-                   <div class="p-6 md:p-8 flex flex-col items-center gap-8 relative z-10 w-full">
-  <!-- Radar SVG -->
-  <div class="w-full max-w-xs mx-auto">
-    <svg id="radar-chart" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-      <!-- Grilles de fond -->
-      <g id="radar-grid" opacity="0.15" stroke="white" fill="none" stroke-width="1"></g>
-      <!-- Zone remplie -->
-      <polygon id="radar-fill" points="" fill="var(--accent-color)" opacity="0.25"/>
-      <!-- Contour -->
-      <polygon id="radar-outline" points="" fill="none" stroke="var(--accent-color)" stroke-width="2.5" stroke-linejoin="round"/>
-      <!-- Points -->
-      <g id="radar-dots"></g>
-      <!-- Labels -->
-      <g id="radar-labels" font-family="'Share Tech Mono', monospace" font-size="11" fill="white" text-anchor="middle"></g>
-    </svg>
-  </div>
-  <!-- Légende -->
-  <div class="grid grid-cols-2 gap-3 w-full text-center">
-    <div class="text-xs font-mono">
-      <span class="text-[var(--accent-color)] font-bold text-lg">75%</span>
-      <p class="opacity-60 mt-0.5 uppercase tracking-widest text-[10px]">Mixage</p>
-    </div>
-    <div class="text-xs font-mono">
-      <span class="text-[var(--accent-color)] font-bold text-lg">70%</span>
-      <p class="opacity-60 mt-0.5 uppercase tracking-widest text-[10px]">Composition</p>
-    </div>
-    <div class="text-xs font-mono">
-      <span class="text-[var(--accent-color)] font-bold text-lg">70%</span>
-      <p class="opacity-60 mt-0.5 uppercase tracking-widest text-[10px]">Repair</p>
-    </div>
-    <div class="text-xs font-mono">
-      <span class="text-[var(--accent-color)] font-bold text-lg">75%</span>
-      <p class="opacity-60 mt-0.5 uppercase tracking-widest text-[10px]">Recording</p>
-    </div>
-  </div>
-</div>
+                    <div class="p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-8 items-start justify-items-center relative z-10">
+                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 75"><span>75%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Écoute active, prise de décision, Pro Tools.</p></div>
+                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Créativité, Organisation, Live 12.</p></div>
+                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 70"><span>70%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Nettoyage Audio, RX 10, Ozone.</p></div>
+                        <div class="stat-item"><div class="pie-chart mb-3" style="--percent: 75"><span>75%</span></div><div class="h-8 flex items-center justify-center"><h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4></div><p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">SoundDevice, Couple micro.</p></div>
+                    </div>
                 </section>
 
                 <!-- Bouton Vision.dmg flottant -->
@@ -2004,107 +1975,7 @@ document.querySelectorAll('.scroll-float').forEach(el => scrollObserver.observe(
 
 
 
-
-        // ── RADAR CHART ────────────────────────────────────────────────
-function drawRadar() {
-  const skills = [
-    { label: 'Mixage',      value: 75 },
-    { label: 'Composition', value: 70 },
-    { label: 'Repair',      value: 70 },
-    { label: 'Recording',   value: 75 },
-  ];
-
-  const cx = 150, cy = 150, maxR = 100;
-  const n = skills.length;
-  const angleStep = (2 * Math.PI) / n;
-  const levels = 4;
-
-  // Grilles
-  const gridEl = document.getElementById('radar-grid');
-  if (!gridEl) return;
-  for (let l = 1; l <= levels; l++) {
-    const r = (maxR / levels) * l;
-    const pts = skills.map((_, i) => {
-      const a = angleStep * i - Math.PI / 2;
-      return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
-    }).join(' ');
-    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    poly.setAttribute('points', pts);
-    gridEl.appendChild(poly);
-  }
-
-  // Points de données
-  const dataPoints = skills.map((s, i) => {
-    const r = (s.value / 100) * maxR;
-    const a = angleStep * i - Math.PI / 2;
-    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
-  });
-
-  const ptsStr = dataPoints.map(p => `${p.x},${p.y}`).join(' ');
-  document.getElementById('radar-fill').setAttribute('points', ptsStr);
-  document.getElementById('radar-outline').setAttribute('points', ptsStr);
-
-  // Dots + animation d'apparition
-  const dotsEl = document.getElementById('radar-dots');
-  dataPoints.forEach(p => {
-    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    c.setAttribute('cx', p.x); c.setAttribute('cy', p.y);
-    c.setAttribute('r', '5'); c.setAttribute('fill', 'var(--accent-color)');
-    c.setAttribute('opacity', '0.9');
-    dotsEl.appendChild(c);
-  });
-
-  // Labels
-  const labelsEl = document.getElementById('radar-labels');
-  skills.forEach((s, i) => {
-    const r = maxR + 22;
-    const a = angleStep * i - Math.PI / 2;
-    const x = cx + r * Math.cos(a);
-    const y = cy + r * Math.sin(a);
-    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    t.setAttribute('x', x); t.setAttribute('y', y + 4);
-    t.setAttribute('opacity', '0.7');
-    t.textContent = s.label;
-    labelsEl.appendChild(t);
-  });
-
-  // Animation : scale 0 → 1 sur la zone remplie
-  const fill = document.getElementById('radar-fill');
-  const outline = document.getElementById('radar-outline');
-  fill.style.transition = 'opacity 1s ease';
-  fill.style.opacity = '0';
-  outline.style.transition = 'opacity 1s ease';
-  outline.style.opacity = '0';
-  setTimeout(() => {
-    fill.style.opacity = '0.25';
-    outline.style.opacity = '1';
-  }, 300);
-}
-
-// Lance le radar quand la section est visible
-const radarObserver = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) {
-    drawRadar();
-    radarObserver.disconnect();
-  }
-}, { threshold: 0.2 });
-const skillsSection = document.getElementById('skills');
-if (skillsSection) radarObserver.observe(skillsSection);
-
-// Redessine si le thème change (couleur accent)
-document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    setTimeout(() => {
-      document.getElementById('radar-grid').innerHTML = '';
-      document.getElementById('radar-dots').innerHTML = '';
-      document.getElementById('radar-labels').innerHTML = '';
-      drawRadar();
-    }, 400);
-  });
-});
-
-
-// ── PIE CHART ANIMATION AU SCROLL ─────────────────────────────
+        // ── PIE CHART ANIMATION AU SCROLL ─────────────────────────────
 function animatePieCharts() {
   document.querySelectorAll('.pie-chart').forEach(chart => {
     const target = parseFloat(chart.style.getPropertyValue('--percent') || chart.getAttribute('style').match(/--percent:\s*([\d.]+)/)?.[1] || 0);
@@ -2151,7 +2022,6 @@ document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
     });
   });
 });
-        
         
         // Initialisation de la page
         setTheme('fl');
