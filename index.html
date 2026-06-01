@@ -2516,27 +2516,32 @@ function filterProjects(tag, btnElement) {
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- 1. OS WINDOW MANAGER (Fenêtres flottantes) ---
+        // --- 1. OS WINDOW MANAGER (Système de Grille Magnétique iOS) ---
     let highestZIndex = 100;
     
+    // Fonction utilitaire pour échanger deux éléments dans le DOM
+    function swapDOM(nodeA, nodeB) {
+        const parentA = nodeA.parentNode;
+        const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
+        nodeB.parentNode.insertBefore(nodeA, nodeB);
+        parentA.insertBefore(nodeB, siblingA);
+    }
+
     document.querySelectorAll('.glass-panel').forEach(panel => {
         const header = panel.querySelector('.win-header');
         if (!header) return;
         
-        // Génération des boutons Mac (sauf sur la barre défilante)
+        // --- Génération du bouton Mac (Uniquement Réduire) ---
         const controls = header.querySelector('.flex.gap-2:not(.gpu-accelerated-marquee)');
         if (controls) {
             controls.innerHTML = `
                 <div class="w-3 h-3 rounded-full bg-[#ffbd2e] flex items-center justify-center cursor-pointer group btn-min touch-manipulation" title="Réduire">
                     <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 7h10"/></svg>
                 </div>
-                <div class="w-3 h-3 rounded-full bg-[#27c93f] flex items-center justify-center cursor-pointer group btn-max touch-manipulation" title="Ancrer/Détacher">
-                    <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 5v4m10-4v4"/></svg>
-                </div>
             `;
         }
 
-        // Bouton Réduire
+        // --- Logique du Bouton Réduire ---
         const btnMin = panel.querySelector('.btn-min');
         if (btnMin) {
             btnMin.addEventListener('pointerdown', (e) => {
@@ -2546,59 +2551,74 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // Bouton Agrandir/Détacher
-        const btnMax = panel.querySelector('.btn-max');
-        let placeholder = null;
-        if (btnMax) {
-            btnMax.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
-                if (panel.getAttribute('data-floating') === 'true') {
-                    panel.removeAttribute('data-floating');
-                    panel.style.cssText = ''; 
-                    if (placeholder && placeholder.parentNode) {
-                        placeholder.parentNode.replaceChild(panel, placeholder);
-                    }
-                }
-                if(typeof playClickSound === 'function') playClickSound();
-            });
-        }
-
-        // Drag & Drop iOS Style
+        // --- Logique Drag & Drop (Remplacement Magnétique) ---
         let isDraggingWindow = false, offsetX = 0, offsetY = 0;
+        let placeholder = null, currentHoveredPanel = null;
+
         header.addEventListener('pointerdown', (e) => {
             if (e.target.closest('.w-3') || window.innerWidth < 1024) return; 
             isDraggingWindow = true;
-            panel.style.setProperty('transition', 'none', 'important');
-            panel.style.setProperty('transform', 'none', 'important');
 
             const rect = panel.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
 
-            if (panel.getAttribute('data-floating') !== 'true') {
-                placeholder = document.createElement('div');
-                placeholder.className = `window-placeholder ${panel.className.match(/col-span-[0-9]+/)?.[0] || ''}`;
-                placeholder.style.height = rect.height + 'px';
-                placeholder.style.width = rect.width + 'px';
-                panel.parentNode.insertBefore(placeholder, panel);
-                document.body.appendChild(panel); 
-                panel.setAttribute('data-floating', 'true');
-            }
+            // 1. Création d'un emplacement fantôme dans la grille
+            placeholder = document.createElement('div');
+            placeholder.className = panel.className; // Copie les classes (tailles, colonnes...)
+            placeholder.style.opacity = '0';
+            placeholder.style.height = rect.height + 'px';
+            panel.parentNode.insertBefore(placeholder, panel);
 
+            // 2. Détachement visuel de la fenêtre
             panel.style.setProperty('position', 'fixed', 'important');
-            panel.style.setProperty('margin', '0', 'important');
             panel.style.setProperty('z-index', ++highestZIndex, 'important');
             panel.style.width = rect.width + 'px';
+            panel.style.height = rect.height + 'px';
+            panel.style.margin = '0';
             panel.style.left = (e.clientX - offsetX) + 'px';
             panel.style.top = (e.clientY - offsetY) + 'px';
+            
+            // 3. Effet de soulèvement 3D
+            panel.style.transition = 'transform 0.2s, box-shadow 0.2s';
+            panel.style.transform = 'scale(1.02)';
+            panel.style.boxShadow = '0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px var(--accent-color)';
+
             header.setPointerCapture(e.pointerId);
             header.style.cursor = 'grabbing';
+            document.body.style.pointerEvents = 'none'; // Empêche les clics accidentels pendant le drag
         });
 
         header.addEventListener('pointermove', (e) => {
             if (!isDraggingWindow) return;
+            
+            // Suivi instantané de la souris
+            panel.style.transition = 'none'; 
             panel.style.left = (e.clientX - offsetX) + 'px';
             panel.style.top = (e.clientY - offsetY) + 'px';
+
+            // Détection de la fenêtre survolée en ignorant la fenêtre en cours de déplacement
+            panel.style.pointerEvents = 'none';
+            const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+            panel.style.pointerEvents = 'auto';
+
+            const targetPanel = elemBelow ? elemBelow.closest('.glass-panel:not(.window-collapsed)') : null;
+
+            // Interaction magnétique avec la grille
+            if (targetPanel && targetPanel !== panel && targetPanel !== placeholder) {
+                if (currentHoveredPanel !== targetPanel) {
+                    if (currentHoveredPanel) currentHoveredPanel.style.transform = ''; 
+                    currentHoveredPanel = targetPanel;
+                    // Effet de recul (aspiration)
+                    targetPanel.style.transition = 'transform 0.2s var(--ease-apple)';
+                    targetPanel.style.transform = 'scale(0.96)'; 
+                }
+            } else {
+                if (currentHoveredPanel) {
+                    currentHoveredPanel.style.transform = '';
+                    currentHoveredPanel = null;
+                }
+            }
         });
 
         header.addEventListener('pointerup', (e) => {
@@ -2606,23 +2626,30 @@ document.addEventListener("DOMContentLoaded", () => {
             isDraggingWindow = false;
             header.releasePointerCapture(e.pointerId);
             header.style.cursor = 'grab';
+            document.body.style.pointerEvents = 'auto';
 
-            const rect = panel.getBoundingClientRect();
-            let finalLeft = rect.left;
-            let finalTop = rect.top;
-            let needsBounce = false;
-
-            if (finalTop < 16) { finalTop = 16; needsBounce = true; }
-            if (finalTop > window.innerHeight - 50) { finalTop = window.innerHeight - 50; needsBounce = true; }
-            if (finalLeft < -(rect.width - 60)) { finalLeft = -(rect.width - 60); needsBounce = true; }
-            if (finalLeft > window.innerWidth - 60) { finalLeft = window.innerWidth - 60; needsBounce = true; }
-
-            if (needsBounce) {
-                panel.style.setProperty('transition', 'left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15), top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15)', 'important');
-                panel.style.left = finalLeft + 'px';
-                panel.style.top = finalTop + 'px';
-                setTimeout(() => panel.style.removeProperty('transition'), 400);
+            // Si lâché sur une autre fenêtre : on échange leurs places HTML
+            if (currentHoveredPanel) {
+                swapDOM(placeholder, currentHoveredPanel);
+                currentHoveredPanel.style.transform = '';
+                currentHoveredPanel = null;
             }
+
+            // Calcul des coordonnées du placeholder pour l'animation de retour
+            const destRect = placeholder.getBoundingClientRect();
+            
+            panel.style.transition = 'all 0.4s var(--ease-ios)';
+            panel.style.transform = 'scale(1)';
+            panel.style.boxShadow = '';
+            panel.style.left = destRect.left + 'px';
+            panel.style.top = destRect.top + 'px';
+
+            // Une fois l'animation terminée, on réintègre la fenêtre solidement dans le DOM
+            setTimeout(() => {
+                panel.style.cssText = ''; 
+                placeholder.parentNode.replaceChild(panel, placeholder);
+                placeholder = null;
+            }, 400);
         });
     });
 
