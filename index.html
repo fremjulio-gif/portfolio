@@ -364,19 +364,23 @@ body.clean-mode .dock-container {
 
         /* --- ACCORDION PERFORMANCE MODE --- */
         .accordion-grid {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.6s var(--ease-apple);
-        }
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows 0.6s var(--ease-apple);
+          will-change: grid-template-rows; /* Nouveau */
+          transform: translateZ(0); /* Nouveau : Force le calcul par le GPU */
+    }
+
+        .accordion-inner {
+          min-height: 0;
+          overflow: hidden;
+          transition: opacity 0.6s var(--ease-apple);
+          opacity: 0;
+          pointer-events: none;
+          will-change: opacity; /* Nouveau */
+    }
         .accordion-grid.open {
             grid-template-rows: 1fr;
-        }
-        .accordion-inner {
-            min-height: 0; /* Obligatoire pour la transition CSS Grid */
-            overflow: hidden;
-            transition: opacity 0.6s var(--ease-apple);
-            opacity: 0;
-            pointer-events: none;
         }
         .accordion-grid.open .accordion-inner {
             opacity: 1;
@@ -602,6 +606,13 @@ body.clean-mode .dock-container {
 }
 .glass-panel[data-floating="true"]:hover {
     transform: none !important;
+}
+
+
+    .scroll-float, .theme-island, .seq-tabs-container {
+  will-change: transform, backdrop-filter;
+  transform: translateZ(0);
+  /* (Conserver le reste de vos styles existants pour ces classes) */
 }
     </style>
 
@@ -901,7 +912,7 @@ body.clean-mode .dock-container {
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" id="projects-grid">
     
     <a href="https://youtu.be/9UOw2Qhdke0" target="_blank" data-tags="prise-de-son,post-prod" class="project-card group click-sound touch-manipulation">
-        <video src="preview_fumee.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
+        <video src="preview_fumee.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
         <div class="project-info">
             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Court-Métrage</span>
@@ -916,7 +927,7 @@ body.clean-mode .dock-container {
     </a>
 
     <a href="https://www.instagram.com/p/DWjtkh5jTH2" target="_blank" data-tags="compo" class="project-card group click-sound touch-manipulation">
-        <video src="preview_etranger.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
+        <video src="preview_etranger.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
         <div class="project-info">
             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Teaser Théâtre</span>
@@ -930,7 +941,7 @@ body.clean-mode .dock-container {
     </a>
 
     <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" data-tags="post-prod,prise-de-son" class="project-card group click-sound touch-manipulation">
-        <video src="preview_inst.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
+        <video src="preview_inst.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
         <div class="project-info">
             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Websérie</span>
@@ -945,7 +956,7 @@ body.clean-mode .dock-container {
     </a>
 
     <a href="https://www.instagram.com/p/DFVFY0EtxAQ/" target="_blank" data-tags="mix-master,post-prod" class="project-card group click-sound touch-manipulation">
-        <video src="preview_oura.mov" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
+        <video src="preview_oura.mov" loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
         <div class="project-info">
             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Résidence</span>
@@ -974,7 +985,7 @@ body.clean-mode .dock-container {
     </a>
 
     <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" data-tags="prise-de-son,mix-master,post-prod" class="project-card group click-sound touch-manipulation">
-        <video src="preview_capha.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
+        <video src="preview_capha.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
         <div class="project-info">
             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Court-Métrage</span>
@@ -990,7 +1001,7 @@ body.clean-mode .dock-container {
     </a>
 
     <a href="https://www.youtube.com/watch?v=TiqWW0e6RSg" target="_blank" data-tags="mix-master,prise-de-son" class="project-card group click-sound touch-manipulation">
-        <video src="preview_desac.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
+        <video src="preview_desac.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
         <div class="project-info">
             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Émission TV Direct</span>
@@ -1005,7 +1016,7 @@ body.clean-mode .dock-container {
     </a>
 
     <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" data-tags="montage,compo" class="project-card group click-sound touch-manipulation">
-        <video src="preview_longday.mp4" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
+        <video src="preview_longday.mp4" loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500"></video>
         <div class="project-info">
             <div class="mb-auto opacity-0 group-hover:opacity-100 transition duration-500 hidden md:block">
                 <span class="border border-[var(--accent-color)] text-[var(--accent-color)] px-3 py-1.5 text-xs md:text-sm uppercase font-extrabold tracking-widest rounded-md bg-black/50 backdrop-blur-sm">Clip Musical</span>
@@ -2702,6 +2713,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+});
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const videos = document.querySelectorAll("video[loop]");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.play(); // Lance la vidéo quand elle apparaît
+      } else {
+        entry.target.pause(); // Met en pause quand elle disparaît
+      }
+    });
+  }, { threshold: 0.1 }); // Se déclenche quand 10% de la vidéo est visible
+
+  videos.forEach(video => observer.observe(video));
 });
         
         // Initialisation de la page
