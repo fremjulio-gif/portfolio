@@ -558,6 +558,9 @@ body.clean-mode .dock-container {
         }
 
 
+        
+
+
 
         /* --- FILTRES PROJETS (DAW ROUTING) --- */
 .filter-btn {
@@ -613,6 +616,63 @@ body.clean-mode .dock-container {
   will-change: transform, backdrop-filter;
   transform: translateZ(0);
   /* (Conserver le reste de vos styles existants pour ces classes) */
+
+
+
+        /* --- RESPONSIVE SOLS: STATS & VISION.DMG (MOBILE ONLY) --- */
+@media (max-width: 767px) {
+  /* 1. Harmonisation parfaite de la taille et du design des fenêtres */
+  #stats-skills-panel, 
+  #vision-float-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 20px !important;       /* Même espace interne */
+    border-radius: 20px !important;  /* Même arrondi de coin */
+    box-sizing: border-box !important;
+  }
+
+  /* Ajustement du conteneur flottant du bouton pour suivre la largeur du flux */
+  .scroll-float {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin-top: 20px !important;    /* Espace régulier entre les blocs */
+  }
+
+  /* 2. Grille de compétences en 2x2 parfait */
+  .skills-grid-mobile {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* 2 colonnes égales */
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  /* Transformation des items en carrés */
+  .skills-grid-mobile .stat-item {
+    aspect-ratio: 1 / 1 !important; /* Force la forme carrée */
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 10px !important;
+    background: rgba(255, 255, 255, 0.02) !important; /* Léger fond pour marquer le carré */
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  }
+
+  /* Réduction proportionnelle des graphiques pour le format 2x2 mobile */
+  .skills-grid-mobile .pie-chart {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 0.5rem !important;
+  }
+  
+  .skills-grid-mobile .pie-chart span {
+    font-size: 14px !important;
+  }
+}
 }
     </style>
 
@@ -688,13 +748,13 @@ body.clean-mode .dock-container {
             <!-- Colonne gauche : Stats & Skills + bouton Vision -->
             <div class="lg:col-span-5 flex flex-col gap-6">
 
-                <section id="skills" class="glass-panel scroll-float flex flex-col z-50 relative">
+                <section id="skills" class="glass-panel skills-grid-mobile scroll-float flex flex-col z-50 relative">
                     <div class="win-header shrink-0">
                         <span class="win-title">Stats & Skills.sys</span>
                         <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
                     </div>
                     <div class="stat-item flex flex-col items-center text-center">
-    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
+    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group ">
        <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
             <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
