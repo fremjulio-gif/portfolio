@@ -2453,7 +2453,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let hasDragged = false;
     let startX, startY, initialLeft, initialTop;
 
-           // 1. Début du drag
+    // 1. Début du drag
     island.addEventListener('pointerdown', (e) => {
         // SÉCURITÉ : Si on clique sur un bouton, on ne déclenche pas le drag
         if (e.target.closest('button')) return; 
@@ -2492,14 +2492,23 @@ document.addEventListener("DOMContentLoaded", () => {
         island.style.top = (initialTop + dy) + 'px';
     });
 
-
-    const rect = island.getBoundingClientRect();
+    // 3. Fin du drag et Aimant (Magnétisme) -> RÉINTÉGRÉ ICI
+    island.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        island.releasePointerCapture(e.pointerId);
+        island.classList.remove('is-dragging');
+        
+        // On réactive une transition douce pour l'effet magnétique
+        island.style.transition = 'left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s';
+        
+        const rect = island.getBoundingClientRect();
         const margin = 20; 
         
         let finalLeft = rect.left;
-        let finalTop = rect.to
+        let finalTop = rect.top; // CORRIGÉ ICI (rect.top)
 
-    // NOUVEL AIMANT : Si le widget est relâché dans la zone inférieure centrale
+        // NOUVEL AIMANT : Si le widget est relâché dans la zone inférieure centrale
         if (rect.bottom > window.innerHeight - 150 && rect.left > window.innerWidth * 0.1 && rect.left < window.innerWidth * 0.9) {
             // Recouvrement parfait au centre horizontal et calé à 20px du bas
             finalLeft = (window.innerWidth / 2) - (rect.width / 2);
@@ -2518,6 +2527,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         island.style.left = finalLeft + 'px';
         island.style.top = finalTop + 'px';
+        
         // Nettoyage de la transition une fois l'aimant terminé pour ne pas gêner le prochain drag
         setTimeout(() => {
             if(!isDragging) island.style.transition = '';
@@ -2525,7 +2535,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 4. Interception des clics (Anti-misclick)
-    // Si on a glissé le widget, on annule les clics sur les boutons enfants (Capture phase)
     island.addEventListener('click', (e) => {
         if (hasDragged) {
             e.preventDefault();
