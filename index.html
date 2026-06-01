@@ -2479,58 +2479,7 @@ document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
   });
 });
 
-// --- DÉCLENCHEUR DES JAUGES SKILLS ---
-document.addEventListener("DOMContentLoaded", () => {
-    // Un threshold à 0.2 assure le déclenchement dès que 20% du conteneur est visible
-    const gaugeOptions = { threshold: 0.2 };
 
-    const gaugeObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const container = entry.target; // On cible maintenant la <div> HTML
-                const gauge = container.querySelector('.gauge-progress');
-                const counterElement = container.querySelector('.skill-percent');
-                
-                if (!gauge || !counterElement) return; // Sécurité
-
-                const targetPercent = parseInt(gauge.getAttribute('data-percent'));
-                
-                // 1. Déclenchement de l'animation CSS
-                const targetOffset = 100 - targetPercent;
-                gauge.style.setProperty('--target-offset', targetOffset);
-                gauge.classList.add('gauge-animate');
-
-                // 2. Animation du compteur numérique
-                let startTime = null;
-                const duration = 1500; 
-
-                const updateCounter = (currentTime) => {
-                    if (!startTime) startTime = currentTime;
-                    const progress = Math.min((currentTime - startTime) / duration, 1);
-                    
-                    const easeProgress = 1 - Math.pow(1 - progress, 4);
-                    counterElement.textContent = Math.floor(easeProgress * targetPercent) + "%";
-
-                    if (progress < 1) {
-                        requestAnimationFrame(updateCounter);
-                    } else {
-                        counterElement.textContent = targetPercent + "%";
-                    }
-                };
-
-                requestAnimationFrame(updateCounter);
-
-                // 3. On coupe l'observation pour optimiser les performances
-                observer.unobserve(container);
-            }
-        });
-    }, gaugeOptions);
-
-    // LA CORRECTION : On observe les <div> (.skill-gauge) et non plus les <path>
-    document.querySelectorAll('.skill-gauge').forEach(container => {
-        gaugeObserver.observe(container);
-    });
-});
 
 
     // --- FILTRAGE DES PROJETS (ROUTING VUE) ---
@@ -2573,128 +2522,8 @@ function filterProjects(tag, btnElement) {
 
 
 
-        // --- DRAG & DROP MAGNÉTIQUE (THEME ISLAND) ---
-document.addEventListener("DOMContentLoaded", () => {
-    const island = document.getElementById('theme-widget');
-    if (!island) return;
+       
 
-    let isDragging = false;
-    let hasDragged = false;
-    let startX, startY, initialLeft, initialTop;
-
-    // 1. Début du drag
-    island.addEventListener('pointerdown', (e) => {
-        // SÉCURITÉ : Si on clique sur un bouton, on ne déclenche pas le drag
-        if (e.target.closest('button')) return; 
-        
-        isDragging = true;
-        hasDragged = false;
-        
-        // On récupère la position exacte calculée par le navigateur
-        const rect = island.getBoundingClientRect();
-        
-        // On fige la position en pixels absolus et on casse le centrage CSS (transform)
-        island.style.left = rect.left + 'px';
-        island.style.top = rect.top + 'px';
-        island.style.transform = 'none';
-        
-        island.classList.add('is-dragging');
-        island.setPointerCapture(e.pointerId); // Force le curseur à rester lié à l'élément
-        
-        startX = e.clientX;
-        startY = e.clientY;
-        initialLeft = rect.left;
-        initialTop = rect.top;
-    });
-
-    // 2. Mouvement
-    island.addEventListener('pointermove', (e) => {
-        if (!isDragging) return;
-        
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        
-        // Seuil de tolérance : on considère qu'il y a "glissement" après 5 pixels
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasDragged = true;
-        
-        island.style.left = (initialLeft + dx) + 'px';
-        island.style.top = (initialTop + dy) + 'px';
-    });
-
-    // 3. Fin du drag et Aimant (Magnétisme) -> RÉINTÉGRÉ ICI
-    island.addEventListener('pointerup', (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        island.releasePointerCapture(e.pointerId);
-        island.classList.remove('is-dragging');
-        
-        // On réactive une transition douce pour l'effet magnétique
-        island.style.transition = 'left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s';
-        
-        const rect = island.getBoundingClientRect();
-        const margin = 20; 
-        
-        let finalLeft = rect.left;
-        let finalTop = rect.top; // CORRIGÉ ICI (rect.top)
-
-        // NOUVEL AIMANT : Si le widget est relâché dans la zone inférieure centrale
-        if (rect.bottom > window.innerHeight - 150 && rect.left > window.innerWidth * 0.1 && rect.left < window.innerWidth * 0.9) {
-            // Recouvrement parfait au centre horizontal et calé à 20px du bas
-            finalLeft = (window.innerWidth / 2) - (rect.width / 2);
-            finalTop = window.innerHeight - rect.height - 20;
-        } else {
-            // Sinon, aimantage classique sur les bords gauche ou droite
-            if (rect.left < window.innerWidth / 2) {
-                finalLeft = margin; 
-            } else {
-                finalLeft = window.innerWidth - rect.width - margin; 
-            }
-            // Sécurités de hauteur pour éviter de masquer la barre de menus du haut
-            if (rect.top < 40) finalTop = 40;
-            if (rect.bottom > window.innerHeight - margin) finalTop = window.innerHeight - rect.height - margin;
-        }
-        
-
-        island.style.left = finalLeft + 'px';
-        island.style.top = finalTop + 'px';
-        
-        // Nettoyage de la transition une fois l'aimant terminé pour ne pas gêner le prochain drag
-        setTimeout(() => {
-            if(!isDragging) island.style.transition = '';
-        }, 400);
-    });
-
-    // 4. Interception des clics (Anti-misclick)
-    island.addEventListener('click', (e) => {
-        if (hasDragged) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }, { capture: true });
-});
-
-
-
-      // --- OS WINDOW MANAGER 5.0 (FREE DRAG & iOS BOUNCE) ---
-document.addEventListener("DOMContentLoaded", () => {
-    let highestZIndex = 100;
-
-    document.querySelectorAll('.glass-panel').forEach(panel => {
-        const header = panel.querySelector('.win-header');
-        if (!header) return;
-
-        // 1. Boutons (Jaune=Réduire, Vert=Ancrer)
-        const controls = header.querySelector('.flex.gap-2');
-        if (controls) {
-            controls.innerHTML = `
-                <div class="w-3 h-3 rounded-full bg-[#ffbd2e] flex items-center justify-center cursor-pointer group btn-min touch-manipulation" title="Réduire">
-                    <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 7h10"/></svg>
-                </div>
-                <div class="w-3 h-3 rounded-full bg-[#27c93f] flex items-center justify-center cursor-pointer group btn-max touch-manipulation" title="Ancrer/Détacher">
-                    <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 5v4m10-4v4"/></svg>
-                </div>
-            `;
-        }
 
         // --- Logique des Boutons ---
         const btnMin = panel.querySelector('.btn-min');
@@ -2829,60 +2658,165 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  // --- DÉCLENCHEUR DES JAUGES SKILLS ---
+  const gaugeOptions = { threshold: 0.2 };
+  const gaugeObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const container = entry.target;
+        const gauge = container.querySelector('.gauge-progress');
+        const counterElement = container.querySelector('.skill-percent');
+        if (!gauge || !counterElement) return;
+        const targetPercent = parseInt(gauge.getAttribute('data-percent'));
+        const targetOffset = 100 - targetPercent;
+        gauge.style.setProperty('--target-offset', targetOffset);
+        gauge.classList.add('gauge-animate');
+        let startTime = null;
+        const duration = 1500;
+        const updateCounter = (currentTime) => {
+          if (!startTime) startTime = currentTime;
+          const progress = Math.min((currentTime - startTime) / duration, 1);
+          const easeProgress = 1 - Math.pow(1 - progress, 4);
+          counterElement.textContent = Math.floor(easeProgress * targetPercent) + "%";
+          if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+          } else {
+            counterElement.textContent = targetPercent + "%";
+          }
+        };
+        requestAnimationFrame(updateCounter);
+        observer.unobserve(container);
+      }
+    });
+  }, gaugeOptions);
+  document.querySelectorAll('.skill-gauge').forEach(container => {
+    gaugeObserver.observe(container);
+  });
+
+  // --- DRAG & DROP MAGNÉTIQUE (THEME ISLAND) ---
+  const island = document.getElementById('theme-widget');
+  if (island) {
+    let isDragging = false;
+    let hasDragged = false;
+    let startX, startY, initialLeft, initialTop;
+
+    island.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('button')) return;
+      isDragging = true;
+      hasDragged = false;
+      const rect = island.getBoundingClientRect();
+      island.style.left = rect.left + 'px';
+      island.style.top = rect.top + 'px';
+      island.style.transform = 'none';
+      island.classList.add('is-dragging');
+      island.setPointerCapture(e.pointerId);
+      startX = e.clientX;
+      startY = e.clientY;
+      initialLeft = rect.left;
+      initialTop = rect.top;
+    });
+
+    island.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasDragged = true;
+      island.style.left = (initialLeft + dx) + 'px';
+      island.style.top = (initialTop + dy) + 'px';
+    });
+
+    island.addEventListener('pointerup', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      island.releasePointerCapture(e.pointerId);
+      island.classList.remove('is-dragging');
+      island.style.transition = 'left 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s';
+      const rect = island.getBoundingClientRect();
+      const margin = 20;
+      let finalLeft = rect.left;
+      let finalTop = rect.top;
+      if (rect.bottom > window.innerHeight - 150 && rect.left > window.innerWidth * 0.1 && rect.left < window.innerWidth * 0.9) {
+        finalLeft = (window.innerWidth / 2) - (rect.width / 2);
+        finalTop = window.innerHeight - rect.height - 20;
+      } else {
+        finalLeft = rect.left < window.innerWidth / 2 ? margin : window.innerWidth - rect.width - margin;
+        if (rect.top < 40) finalTop = 40;
+        if (rect.bottom > window.innerHeight - margin) finalTop = window.innerHeight - rect.height - margin;
+      }
+      island.style.left = finalLeft + 'px';
+      island.style.top = finalTop + 'px';
+      setTimeout(() => {
+        if (!isDragging) island.style.transition = '';
+      }, 400);
+    });
+
+    island.addEventListener('click', (e) => {
+      if (hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, { capture: true });
+  }
+
+  // --- OS WINDOW MANAGER ---
+  let highestZIndex = 100;
+  document.querySelectorAll('.glass-panel').forEach(panel => {
+    const header = panel.querySelector('.win-header');
+    if (!header) return;
+    const controls = header.querySelector('.flex.gap-2');
+    if (controls) {
+      controls.innerHTML = `
+        <div class="w-3 h-3 rounded-full bg-[#ffbd2e] flex items-center justify-center cursor-pointer group btn-min touch-manipulation" title="Réduire">
+          <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 7h10"/></svg>
+        </div>
+        <div class="w-3 h-3 rounded-full bg-[#27c93f] flex items-center justify-center cursor-pointer group btn-max touch-manipulation" title="Ancrer/Détacher">
+          <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 5v4m10-4v4"/></svg>
+        </div>
+      `;
+    }
+  });
+
+  // --- PROJECT CARDS (vidéos) ---
   const projectCards = document.querySelectorAll('.project-card');
-
-  // Détection du type d'interface : tactile (coarse) vs souris
   const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-
   if (!isTouchDevice) {
-    // --- MODE DESKTOP : Lecture au survol ---
     projectCards.forEach(card => {
       const video = card.querySelector('video');
       if (video) {
-        // Optionnel : s'assurer que la vidéo est bien à zéro
-        video.currentTime = 0; 
-
+        video.currentTime = 0;
         card.addEventListener('mouseenter', () => {
-          // Le .catch évite les erreurs dans la console si l'utilisateur bouge la souris très vite
-          video.play().catch(error => console.log("Lecture interrompue par un survol rapide."));
+          video.play().catch(() => {});
         });
-
         card.addEventListener('mouseleave', () => {
           video.pause();
-          // Décommenter la ligne ci-dessous pour que la vidéo reparte du début à chaque survol
-          // video.currentTime = 0; 
         });
       }
     });
   } else {
-    // --- MODE MOBILE : Lecture au scroll (Intersection Observer) ---
     const observerOptions = {
       root: null,
-      // Déclenche la lecture uniquement quand la vidéo est bien au centre de l'écran (marge haut/bas de 20%)
-      rootMargin: '-20% 0px -20% 0px', 
+      rootMargin: '-20% 0px -20% 0px',
       threshold: 0.1
     };
-
     const scrollObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const video = entry.target.querySelector('video');
         if (video) {
           if (entry.isIntersecting) {
-            video.play().catch(error => console.log("Lecture interrompue au scroll."));
+            video.play().catch(() => {});
           } else {
             video.pause();
           }
         }
       });
     }, observerOptions);
-
-    projectCards.forEach(card => {
-      scrollObserver.observe(card);
-    });
+    projectCards.forEach(card => scrollObserver.observe(card));
   }
-});
+
+}); // ← FIN UNIQUE DU DOMContentLoaded
+
         
         // Initialisation de la page
         setTheme('fl');
