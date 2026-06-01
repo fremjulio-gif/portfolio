@@ -221,17 +221,7 @@ body.clean-mode .dock-container {
     border-radius: 0 !important; padding: 0 16px !important; height: 32px !important;
 }
 
-        /* Focus Mode : Opacité réduite du dock au survol du contenu */
-        @media (hover: hover) {
-            body.clean-mode main:hover ~ .dock-container {
-                opacity: 0.2 !important;
-                transform: translateX(-50%) translateY(10px) scale(0.98) !important;
-            }
-            body.clean-mode .dock-container:hover {
-                opacity: 1 !important;
-                transform: translateX(-50%) translateY(0) scale(1) !important;
-            }
-        }
+       
 
         /* --- Écrasement Chirurgical des couleurs de pistes PTX/Lab --- */
         body.clean-mode .ptx-waveform, body.clean-mode #ptx-timeline div { filter: grayscale(100%) brightness(1.5) !important; }
