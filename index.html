@@ -2516,10 +2516,9 @@ function filterProjects(tag, btnElement) {
 
 document.addEventListener("DOMContentLoaded", () => {
     
-        // --- 1. OS WINDOW MANAGER (Système de Grille Magnétique iOS) ---
+           // --- 1. OS WINDOW MANAGER (Système Magnétique + Roll-up Fixé) ---
     let highestZIndex = 100;
-    
-    // Fonction utilitaire pour échanger deux éléments dans le DOM
+
     function swapDOM(nodeA, nodeB) {
         const parentA = nodeA.parentNode;
         const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
@@ -2530,88 +2529,101 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.glass-panel').forEach(panel => {
         const header = panel.querySelector('.win-header');
         if (!header) return;
-        
-        // --- Génération du bouton Mac (Uniquement Réduire) ---
+
+        // --- Génération des boutons Mac (Jaune = Réduire, Vert = Restaurer) ---
         const controls = header.querySelector('.flex.gap-2:not(.gpu-accelerated-marquee)');
         if (controls) {
             controls.innerHTML = `
                 <div class="w-3 h-3 rounded-full bg-[#ffbd2e] flex items-center justify-center cursor-pointer group btn-min touch-manipulation" title="Réduire">
                     <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 7h10"/></svg>
                 </div>
+                <div class="w-3 h-3 rounded-full bg-[#27c93f] flex items-center justify-center cursor-pointer group btn-max touch-manipulation" title="Restaurer">
+                    <svg class="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 text-black" stroke="currentColor" stroke-width="3" viewBox="0 0 14 14"><path d="M2 5v4m10-4v4"/></svg>
+                </div>
             `;
         }
 
-        // --- Logique du Bouton Réduire ---
-        const btnMin = panel.querySelector('.btn-min');
-        if (btnMin) {
-            btnMin.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
-                panel.classList.toggle('window-collapsed');
-                if(typeof playClickSound === 'function') playClickSound();
-            });
-        }
+        // --- Logique Réduire / Restaurer (Roll-up Parfait) ---
+        const toggleWindow = (e) => {
+            e.stopPropagation();
+            panel.classList.toggle('window-collapsed');
+            
+            // Fix : On écrase le padding dynamiquement pour que la fenêtre fasse exactement 44px de haut
+            if (panel.classList.contains('window-collapsed')) {
+                panel.dataset.originalPadding = panel.style.padding || getComputedStyle(panel).padding;
+                panel.style.setProperty('padding', '0', 'important');
+            } else {
+                panel.style.padding = panel.dataset.originalPadding || '';
+            }
+            if(typeof playClickSound === 'function') playClickSound();
+        };
 
-        // --- Logique Drag & Drop (Remplacement Magnétique) ---
-        let isDraggingWindow = false, offsetX = 0, offsetY = 0;
+        const btnMin = panel.querySelector('.btn-min');
+        const btnMax = panel.querySelector('.btn-max');
+        if (btnMin) btnMin.addEventListener('pointerdown', toggleWindow);
+        if (btnMax) btnMax.addEventListener('pointerdown', toggleWindow);
+
+        // --- Logique Drag & Drop (Correction Absolute + Scroll) ---
+        let isDraggingWindow = false, startX = 0, startY = 0;
         let placeholder = null, currentHoveredPanel = null;
 
         header.addEventListener('pointerdown', (e) => {
-            if (e.target.closest('.w-3') || window.innerWidth < 1024) return; 
+            if (e.target.closest('.w-3') || window.innerWidth < 1024) return;
             isDraggingWindow = true;
 
             const rect = panel.getBoundingClientRect();
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
+            
+            // Calcul par rapport au document (et non l'écran) pour éviter le bug du scroll
+            startX = e.pageX - (rect.left + window.scrollX);
+            startY = e.pageY - (rect.top + window.scrollY);
 
-            // 1. Création d'un emplacement fantôme dans la grille
             placeholder = document.createElement('div');
-            placeholder.className = panel.className; // Copie les classes (tailles, colonnes...)
+            placeholder.className = panel.className;
             placeholder.style.opacity = '0';
             placeholder.style.height = rect.height + 'px';
+            placeholder.style.width = rect.width + 'px';
+            placeholder.style.margin = '0';
             panel.parentNode.insertBefore(placeholder, panel);
 
-            // 2. Détachement visuel de la fenêtre
-            panel.style.setProperty('position', 'fixed', 'important');
-            panel.style.setProperty('z-index', ++highestZIndex, 'important');
+            // On utilise "absolute" attaché au body pour suivre le scroll naturellement
+            panel.style.position = 'absolute';
+            panel.style.zIndex = ++highestZIndex;
             panel.style.width = rect.width + 'px';
             panel.style.height = rect.height + 'px';
             panel.style.margin = '0';
-            panel.style.left = (e.clientX - offsetX) + 'px';
-            panel.style.top = (e.clientY - offsetY) + 'px';
-            
-            // 3. Effet de soulèvement 3D
             panel.style.transition = 'transform 0.2s, box-shadow 0.2s';
             panel.style.transform = 'scale(1.02)';
             panel.style.boxShadow = '0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px var(--accent-color)';
 
+            document.body.appendChild(panel);
+
+            panel.style.left = (e.pageX - startX) + 'px';
+            panel.style.top = (e.pageY - startY) + 'px';
+
             header.setPointerCapture(e.pointerId);
             header.style.cursor = 'grabbing';
-            document.body.style.pointerEvents = 'none'; // Empêche les clics accidentels pendant le drag
+            document.body.style.pointerEvents = 'none';
         });
 
         header.addEventListener('pointermove', (e) => {
             if (!isDraggingWindow) return;
-            
-            // Suivi instantané de la souris
-            panel.style.transition = 'none'; 
-            panel.style.left = (e.clientX - offsetX) + 'px';
-            panel.style.top = (e.clientY - offsetY) + 'px';
 
-            // Détection de la fenêtre survolée en ignorant la fenêtre en cours de déplacement
+            panel.style.transition = 'none';
+            panel.style.left = (e.pageX - startX) + 'px';
+            panel.style.top = (e.pageY - startY) + 'px';
+
             panel.style.pointerEvents = 'none';
             const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
             panel.style.pointerEvents = 'auto';
 
             const targetPanel = elemBelow ? elemBelow.closest('.glass-panel:not(.window-collapsed)') : null;
 
-            // Interaction magnétique avec la grille
             if (targetPanel && targetPanel !== panel && targetPanel !== placeholder) {
                 if (currentHoveredPanel !== targetPanel) {
-                    if (currentHoveredPanel) currentHoveredPanel.style.transform = ''; 
+                    if (currentHoveredPanel) currentHoveredPanel.style.transform = '';
                     currentHoveredPanel = targetPanel;
-                    // Effet de recul (aspiration)
                     targetPanel.style.transition = 'transform 0.2s var(--ease-apple)';
-                    targetPanel.style.transform = 'scale(0.96)'; 
+                    targetPanel.style.transform = 'scale(0.96)';
                 }
             } else {
                 if (currentHoveredPanel) {
@@ -2628,27 +2640,39 @@ document.addEventListener("DOMContentLoaded", () => {
             header.style.cursor = 'grab';
             document.body.style.pointerEvents = 'auto';
 
-            // Si lâché sur une autre fenêtre : on échange leurs places HTML
             if (currentHoveredPanel) {
                 swapDOM(placeholder, currentHoveredPanel);
                 currentHoveredPanel.style.transform = '';
                 currentHoveredPanel = null;
             }
 
-            // Calcul des coordonnées du placeholder pour l'animation de retour
             const destRect = placeholder.getBoundingClientRect();
             
             panel.style.transition = 'all 0.4s var(--ease-ios)';
             panel.style.transform = 'scale(1)';
             panel.style.boxShadow = '';
-            panel.style.left = destRect.left + 'px';
-            panel.style.top = destRect.top + 'px';
+            
+            // Le retour magnétique prend aussi en compte le scroll
+            panel.style.left = (destRect.left + window.scrollX) + 'px';
+            panel.style.top = (destRect.top + window.scrollY) + 'px';
 
-            // Une fois l'animation terminée, on réintègre la fenêtre solidement dans le DOM
             setTimeout(() => {
-                panel.style.cssText = ''; 
-                placeholder.parentNode.replaceChild(panel, placeholder);
-                placeholder = null;
+                // Nettoyage complet
+                panel.style.position = '';
+                panel.style.zIndex = '';
+                panel.style.width = '';
+                panel.style.height = '';
+                panel.style.margin = '';
+                panel.style.left = '';
+                panel.style.top = '';
+                panel.style.transform = '';
+                panel.style.transition = '';
+                panel.style.boxShadow = '';
+
+                if (placeholder && placeholder.parentNode) {
+                    placeholder.parentNode.replaceChild(panel, placeholder);
+                    placeholder = null;
+                }
             }, 400);
         });
     });
