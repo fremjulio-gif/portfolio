@@ -6,7 +6,7 @@
     <title>Jules Frémondière — Ingénieur du son & Sound Designer</title>
     <meta name="description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio. En recherche de stage 2026.">
     <meta name="author" content="Jules Frémondière">
-    <meta property="og:title" content="Jules Frémondière — Ingénieur du son & Sound Designer">
+    <meta property="og:title" content="Jules Frémondière — Étudiant Ingénieur du son & Sound Designer">
     <meta property="og:description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio.">
     <meta property="og:image" content="https://fremjulio-gif.github.io/portfolio/moi.png">
     <meta property="og:url" content="https://fremjulio-gif.github.io/portfolio/">
@@ -95,7 +95,14 @@ html, body {
         body.light-mode:not(.clean-mode) #theme-label { color: #1a1a1a; font-weight: 800; text-shadow: none; opacity: 1; }
         body[data-theme='protools']:not(.clean-mode) { background-color: #262626; }
 
-
+/* --- OPTIMISATION GPU POUR LE BANDEAU DEFILANT --- */
+.gpu-accelerated-marquee {
+  will-change: transform;
+  transform: translateZ(0); /* Force la création d'un calque GPU dédié */
+  backface-visibility: hidden; /* Supprime les micro-saccades et le flou sur le texte */
+  perspective: 1000px;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
 
 
         /* --- BARRE DE MENUS SUPÉRIEURE (APPLE STYLE FIXÉ) --- */
@@ -1551,7 +1558,7 @@ body.clean-mode .dock-container {
 
             <div class="win-header w-full relative z-10">
                 <span class="win-title">Contact.app</span>
-                <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                <div class="flex gap-2 gpu-accelerated-marquee"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
             </div>
 
             <div class="w-full bg-[var(--accent-color)]/10 border-b border-[var(--accent-color)]/20 py-3 overflow-hidden relative z-10 flex">
