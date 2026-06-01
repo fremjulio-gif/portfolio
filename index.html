@@ -2492,6 +2492,13 @@ document.addEventListener("DOMContentLoaded", () => {
         island.style.top = (initialTop + dy) + 'px';
     });
 
+
+    const rect = island.getBoundingClientRect();
+        const margin = 20; 
+        
+        let finalLeft = rect.left;
+        let finalTop = rect.to
+
     // NOUVEL AIMANT : Si le widget est relâché dans la zone inférieure centrale
         if (rect.bottom > window.innerHeight - 150 && rect.left > window.innerWidth * 0.1 && rect.left < window.innerWidth * 0.9) {
             // Recouvrement parfait au centre horizontal et calé à 20px du bas
