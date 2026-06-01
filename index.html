@@ -2785,18 +2785,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  const videos = document.querySelectorAll("video[loop]");
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.play(); // Lance la vidéo quand elle apparaît
-      } else {
-        entry.target.pause(); // Met en pause quand elle disparaît
+  const projectCards = document.querySelectorAll('.project-card');
+
+  // Détection du type d'interface : tactile (coarse) vs souris
+  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+  if (!isTouchDevice) {
+    // --- MODE DESKTOP : Lecture au survol ---
+    projectCards.forEach(card => {
+      const video = card.querySelector('video');
+      if (video) {
+        // Optionnel : s'assurer que la vidéo est bien à zéro
+        video.currentTime = 0; 
+
+        card.addEventListener('mouseenter', () => {
+          // Le .catch évite les erreurs dans la console si l'utilisateur bouge la souris très vite
+          video.play().catch(error => console.log("Lecture interrompue par un survol rapide."));
+        });
+
+        card.addEventListener('mouseleave', () => {
+          video.pause();
+          // Décommenter la ligne ci-dessous pour que la vidéo reparte du début à chaque survol
+          // video.currentTime = 0; 
+        });
       }
     });
-  }, { threshold: 0.1 }); // Se déclenche quand 10% de la vidéo est visible
+  } else {
+    // --- MODE MOBILE : Lecture au scroll (Intersection Observer) ---
+    const observerOptions = {
+      root: null,
+      // Déclenche la lecture uniquement quand la vidéo est bien au centre de l'écran (marge haut/bas de 20%)
+      rootMargin: '-20% 0px -20% 0px', 
+      threshold: 0.1
+    };
 
-  videos.forEach(video => observer.observe(video));
+    const scrollObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const video = entry.target.querySelector('video');
+        if (video) {
+          if (entry.isIntersecting) {
+            video.play().catch(error => console.log("Lecture interrompue au scroll."));
+          } else {
+            video.pause();
+          }
+        }
+      });
+    }, observerOptions);
+
+    projectCards.forEach(card => {
+      scrollObserver.observe(card);
+    });
+  }
 });
         
         // Initialisation de la page
