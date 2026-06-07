@@ -57,6 +57,18 @@
 html, body { 
     max-width: 100vw; overflow-x: hidden; user-select: none; -webkit-user-select: none; cursor: crosshair; 
 }
+
+        /* --- CURSOR TRAIL STYLE --- */
+        .cursor-trail-char {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 999999;
+            will-change: transform, opacity;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease-out;
+        }
+
         body { 
             background-color: #050505; color: var(--glass-text); 
             transition: background-color 0.6s ease, color 0.4s ease;
@@ -2735,6 +2747,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- 5. INITIALISATION DU THÈME AU DÉMARRAGE ---
     if (typeof setTheme === 'function') setTheme('fl');
+
+    // --- 6. CURSOR TEXT TRAIL (GLASS-PANEL ONLY) ---
+    const TRAIL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$*%/+X_-";
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    const spawnDistance = 15; // Distance en px entre chaque caractère
+
+    document.addEventListener('mousemove', (e) => {
+        // Vérification de la zone d'effet : uniquement sur .glass-panel
+        const isOverPanel = e.target.closest('.glass-panel');
+        if (!isOverPanel) return;
+
+        // Calcul de la distance parcourue pour limiter le nombre de spawns (performance)
+        const deltaX = e.clientX - lastMouseX;
+        const deltaY = e.clientY - lastMouseY;
+        const distance = Math.hypot(deltaX, deltaY);
+
+        if (distance > spawnDistance) {
+            spawnTrailChar(e.clientX, e.clientY);
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        }
+    });
+
+    function spawnTrailChar(x, y) {
+        const span = document.createElement('span');
+        const char = TRAIL_CHARS[Math.floor(Math.random() * TRAIL_CHARS.length)];
+        const rotation = Math.random() * 40 - 20; // Angle aléatoire entre -20 et 20 deg
+        
+        // Style et contenu
+        span.className = 'cursor-trail-char font-tech text-xs';
+        span.style.color = 'var(--accent-color)';
+        span.style.opacity = '0.7';
+        span.innerText = char;
+        
+        // Positionnement initial
+        span.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+        document.body.appendChild(span);
+
+        // Animation de sortie via RAF pour garantir le déclenchement du transition CSS
+        requestAnimationFrame(() => {
+            span.style.transform = `translate(${x}px, ${y - 30}px) rotate(${rotation + (Math.random() * 20 - 10)}deg)`;
+            span.style.opacity = '0';
+        });
+
+        // Nettoyage immédiat après la fin de l'animation
+        setTimeout(() => span.remove(), 800);
+    }
 
 });
 
