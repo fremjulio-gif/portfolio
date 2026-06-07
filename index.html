@@ -2748,51 +2748,65 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 5. INITIALISATION DU THÈME AU DÉMARRAGE ---
     if (typeof setTheme === 'function') setTheme('fl');
 
-    // --- 6. CURSOR TEXT TRAIL (GLASS-PANEL ONLY) ---
-    const TRAIL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$*%/+X_-";
+    // --- 6. DYNAMIC CURSOR TEXT TRAIL ---
+    const CHARACTER_BANKS = {
+        tech: "@#$%*/+_-010101",
+        log: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+        audio: "♩♪♫♬♭♮♯𝄢𝄞",
+        default: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$*%/+X_-"
+    };
+
     let lastMouseX = 0;
     let lastMouseY = 0;
-    const spawnDistance = 15; // Distance en px entre chaque caractère
+    const SPAWN_THRESHOLD = 15; // Pixels minimum entre deux spawns
 
     document.addEventListener('mousemove', (e) => {
-        // Vérification de la zone d'effet : uniquement sur .glass-panel
-        const isOverPanel = e.target.closest('.glass-panel');
-        if (!isOverPanel) return;
+        const panel = e.target.closest('.glass-panel');
+        if (!panel) return;
 
-        // Calcul de la distance parcourue pour limiter le nombre de spawns (performance)
-        const deltaX = e.clientX - lastMouseX;
-        const deltaY = e.clientY - lastMouseY;
-        const distance = Math.hypot(deltaX, deltaY);
+        // Calcul de la distance pour limiter les ressources
+        const distance = Math.hypot(e.clientX - lastMouseX, e.clientY - lastMouseY);
+        if (distance < SPAWN_THRESHOLD) return;
 
-        if (distance > spawnDistance) {
-            spawnTrailChar(e.clientX, e.clientY);
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
+        // Détection du contexte pour choisir la banque de caractères
+        let activeBank = CHARACTER_BANKS.default;
+        
+        if (panel.closest('#skills, #performance-accordion')) {
+            activeBank = CHARACTER_BANKS.tech;
+        } else if (panel.closest('#parcours, #inspirations')) {
+            activeBank = CHARACTER_BANKS.log;
+        } else if (panel.closest('#projets, #lab')) {
+            activeBank = CHARACTER_BANKS.audio;
         }
+
+        spawnTrailChar(e.clientX, e.clientY, activeBank);
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
     });
 
-    function spawnTrailChar(x, y) {
+    function spawnTrailChar(x, y, bank) {
         const span = document.createElement('span');
-        const char = TRAIL_CHARS[Math.floor(Math.random() * TRAIL_CHARS.length)];
-        const rotation = Math.random() * 40 - 20; // Angle aléatoire entre -20 et 20 deg
+        const char = bank[Math.floor(Math.random() * bank.length)];
+        const rotation = Math.random() * 40 - 20;
         
-        // Style et contenu
         span.className = 'cursor-trail-char font-tech text-xs';
         span.style.color = 'var(--accent-color)';
         span.style.opacity = '0.7';
         span.innerText = char;
         
-        // Positionnement initial
+        // Positionnement initial via translate pour performance GPU
         span.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
         document.body.appendChild(span);
 
-        // Animation de sortie via RAF pour garantir le déclenchement du transition CSS
+        // Déclenchement de l'animation au frame suivant
         requestAnimationFrame(() => {
-            span.style.transform = `translate(${x}px, ${y - 30}px) rotate(${rotation + (Math.random() * 20 - 10)}deg)`;
+            // Léger décalage aléatoire supplémentaire sur la rotation finale pour plus de naturel
+            const extraRot = Math.random() * 20 - 10;
+            span.style.transform = `translate(${x}px, ${y - 30}px) rotate(${rotation + extraRot}deg)`;
             span.style.opacity = '0';
         });
 
-        // Nettoyage immédiat après la fin de l'animation
+        // Suppression du DOM après la transition (0.8s définie dans le CSS)
         setTimeout(() => span.remove(), 800);
     }
 
