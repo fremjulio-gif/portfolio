@@ -45,7 +45,7 @@
 
         /* --- FONTS --- */
         .font-fl { font-family: 'Arial', sans-serif; }
-        .font-ableton { font-family: 'Jost', sans-serif; }
+        .font-ableton { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         .font-protools { font-family: 'Avenir Next', 'Helvetica Neue', sans-serif; }
         .font-tech { font-family: 'Share Tech Mono', monospace; }
 
@@ -101,17 +101,17 @@ html, body {
         body.switching-theme #theme-bg { animation: slideReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
         /* Light Mode (Themes Classiques) */
-        body.light-mode:not(.clean-mode) {
+        body.light-mode:not([data-theme="ableton"]) {
             --glass-surface: rgba(255, 255, 255, 0.2); 
             --glass-border: rgba(255, 255, 255, 0.3);
             --glass-highlight: rgba(255, 255, 255, 0.5);
             --glass-text: #1a1a1a;
             background-color: #A0A0A0;
         }
-        body.light-mode:not(.clean-mode) .scanlines { opacity: 0.02; }
-        body.light-mode:not(.clean-mode) .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.7), transparent); color: black; }
-        body.light-mode:not(.clean-mode) #theme-label { color: #1a1a1a; font-weight: 800; text-shadow: none; opacity: 1; }
-        body[data-theme='protools']:not(.clean-mode) { background-color: #262626; }
+        body.light-mode:not([data-theme="ableton"]) .scanlines { opacity: 0.02; }
+        body.light-mode:not([data-theme="ableton"]) .project-info { background: linear-gradient(to top, rgba(200,200,200,0.95), rgba(200,200,200,0.7), transparent); color: black; }
+        body.light-mode:not([data-theme="ableton"]) #theme-label { color: #1a1a1a; font-weight: 800; text-shadow: none; opacity: 1; }
+        body[data-theme='protools']:not([data-theme="ableton"]) { background-color: #262626; }
 
 /* --- OPTIMISATION GPU POUR LE BANDEAU DEFILANT --- */
 .gpu-accelerated-marquee {
@@ -156,12 +156,6 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 .apple-menu-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
 body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color: #000; }
 
-/* Clean Mode Apple */
-body.clean-mode .dock-container {
-    background: rgba(30, 30, 30, 0.6) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
 /* Classe utilitaire pour tuer la barre de défilement blanche disgracieuse */
 .hide-scroll::-webkit-scrollbar { display: none; }
 .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -169,10 +163,10 @@ body.clean-mode .dock-container {
 
         
         /* =========================================
-           CLEAN MODE : ESTHÉTIQUE APPLE / LIQUID GLASS 
+           ABLETON MODE (EX-CLEAN) : ESTHÉTIQUE APPLE / LIQUID GLASS 
            ========================================= */
         
-        body.clean-mode {
+        body[data-theme="ableton"] {
             background-color: #000000 !important;
             
             /* Verrouillage absolu des variables de couleur et effets verre */
@@ -192,7 +186,7 @@ body.clean-mode .dock-container {
         }
 
         /* Application globale des transitions fluides Apple */
-        body.clean-mode * {
+        body[data-theme="ableton"] * {
             font-family: inherit;
             transition: background-color 0.5s var(--ease-apple), 
                         border-color 0.5s var(--ease-apple),
@@ -203,38 +197,38 @@ body.clean-mode .dock-container {
         }
 
         /* Hiérarchie et Contrastes des Titres */
-        body.clean-mode h1, body.clean-mode h2, body.clean-mode h3, body.clean-mode h4, body.clean-mode .win-title {
+        body[data-theme="ableton"] h1, body[data-theme="ableton"] h2, body[data-theme="ableton"] h3, body[data-theme="ableton"] h4, body[data-theme="ableton"] .win-title {
             font-weight: 600 !important;
             letter-spacing: -0.01em !important;
             color: #FFFFFF !important;
         }
 
         /* Textes secondaires, sous-titres et icônes */
-        body.clean-mode p, body.clean-mode span, body.clean-mode a {
+        body[data-theme="ableton"] p, body[data-theme="ableton"] span, body[data-theme="ableton"] a {
             font-weight: 300 !important;
         }
-        body.clean-mode .text-gray-400, body.clean-mode .text-gray-500, body.clean-mode .text-gray-600, 
-        body.clean-mode .opacity-50, body.clean-mode .opacity-60, body.clean-mode .opacity-70 {
+        body[data-theme="ableton"] .text-gray-400, body[data-theme="ableton"] .text-gray-500, body[data-theme="ableton"] .text-gray-600, 
+        body[data-theme="ableton"] .opacity-50, body[data-theme="ableton"] .opacity-60, body[data-theme="ableton"] .opacity-70 {
             color: #86868B !important;
             opacity: 1 !important; /* On annule l'opacité CSS pour utiliser une couleur franche */
         }
 
         /* Conservation de l'aspect technique pour le code/timeline */
-        body.clean-mode .font-mono, body.clean-mode .font-tech, body.clean-mode .font-mono * {
+        body[data-theme="ableton"] .font-mono, body[data-theme="ableton"] .font-tech, body[data-theme="ableton"] .font-mono * {
             font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace !important;
             letter-spacing: 0.03em !important;
         }
 
         /* Suppression des effets de fond intrusifs DAW */
-        body.clean-mode #theme-bg, 
-        body.clean-mode .scanlines,
-        body.clean-mode #skills::before,
-        body.clean-mode #sequencer-inner::before {
+        body[data-theme="ableton"] #theme-bg, 
+        body[data-theme="ableton"] .scanlines,
+        body[data-theme="ableton"] #skills::before,
+        body[data-theme="ableton"] #sequencer-inner::before {
             opacity: 0 !important;
         }
 
         /* Rendu Verre Dépoli Premium sur les conteneurs */
-        body.clean-mode .glass-panel {
+        body[data-theme="ableton"] .glass-panel {
             background: var(--glass-surface) !important;
             backdrop-filter: blur(20px) saturate(120%) !important;
             -webkit-backdrop-filter: blur(20px) saturate(120%) !important;
@@ -244,7 +238,7 @@ body.clean-mode .dock-container {
         }
 
         /* Modification du Dock (Flottant + Effet Premium) */
-        body.clean-mode .dock-container {
+        body[data-theme="ableton"] .dock-container {
     background: rgba(30, 30, 30, 0.6) !important;
     backdrop-filter: blur(30px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
@@ -255,42 +249,37 @@ body.clean-mode .dock-container {
        
 
         /* --- Écrasement Chirurgical des couleurs de pistes PTX/Lab --- */
-        body.clean-mode .ptx-waveform, body.clean-mode #ptx-timeline div { filter: grayscale(100%) brightness(1.5) !important; }
-        body.clean-mode .bg-blue-500\/20, body.clean-mode .bg-green-500\/20, body.clean-mode .bg-purple-500\/20, body.clean-mode .bg-orange-500\/20 {
+        body[data-theme="ableton"] .ptx-waveform, body[data-theme="ableton"] #ptx-timeline div { filter: grayscale(100%) brightness(1.5) !important; }
+        body[data-theme="ableton"] .bg-blue-500\/20, body[data-theme="ableton"] .bg-green-500\/20, body[data-theme="ableton"] .bg-purple-500\/20, body[data-theme="ableton"] .bg-orange-500\/20 {
             background-color: rgba(255, 255, 255, 0.04) !important;
             border-color: rgba(255, 255, 255, 0.08) !important;
         }
-        body.clean-mode .bg-red-500 { background-color: #FFFFFF !important; } /* Leds */
-        body.clean-mode .border-red-500 { border-color: #FFFFFF !important; }
+        body[data-theme="ableton"] .bg-red-500 { background-color: #FFFFFF !important; } /* Leds */
+        body[data-theme="ableton"] .border-red-500 { border-color: #FFFFFF !important; }
 
         /* Images & miniatures en noir et blanc en mode Épuré */
-        body.clean-mode img,
-        body.clean-mode video {
+        body[data-theme="ableton"] img,
+        body[data-theme="ableton"] video {
             filter: grayscale(100%) !important;
             transition: filter 0.5s var(--ease-apple) !important;
         }
 
         /* Lab waveform en clean mode : partie jouée assombrie */
-        body.clean-mode .wavesurfer-wrapper canvas { opacity: 0.9; }
+        body[data-theme="ableton"] .wavesurfer-wrapper canvas { opacity: 0.9; }
 
         /* Éléments Actifs (Boutons, Séquenceur, Pads) en mode Clean */
-        body.clean-mode .theme-pill.active, body.clean-mode .transport-btn.playing, 
-        body.clean-mode .step-btn.active, body.clean-mode .piano-cell.active, 
-        body.clean-mode .drum-pad.hit, body.clean-mode .drum-pad:active,
-        body.clean-mode .seq-tab-btn.active-tab {
+        body[data-theme="ableton"] .theme-pill.active, body[data-theme="ableton"] .transport-btn.playing, 
+        body[data-theme="ableton"] .step-btn.active, body[data-theme="ableton"] .piano-cell.active, 
+        body[data-theme="ableton"] .drum-pad.hit, body[data-theme="ableton"] .drum-pad:active,
+        body[data-theme="ableton"] .seq-tab-btn.active-tab {
             background: #FFFFFF !important;
             color: #000000 !important;
             border-color: transparent !important;
             box-shadow: 0 0 15px rgba(255,255,255,0.2) !important;
         }
-        body.clean-mode .pie-chart {
+        body[data-theme="ableton"] .pie-chart {
             background: conic-gradient(#FFFFFF calc(var(--percent) * 1%), rgba(255,255,255,0.05) 0) !important;
         }
-        
-        /* Bouton Toggle actif */
-        #clean-toggle svg { transition: all 0.5s var(--ease-apple); stroke: rgba(255,255,255,0.4); }
-        body.clean-mode #clean-toggle { border-color: rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.1); }
-        body.clean-mode #clean-toggle svg { fill: #FFFFFF; stroke: #FFFFFF; }
 
 
         /* --- GLASS PANELS CLASSIC --- */
@@ -798,15 +787,8 @@ body.clean-mode .dock-container {
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools">
                 <img src="logo_protools.png" alt="PT" class="w-full h-full object-contain p-1">
             </button>
-            
-            <div class="w-[1px] h-[24px] bg-white/20 mx-1"></div>
-            
-            <button class="theme-pill click-sound touch-manipulation" id="clean-toggle" onclick="toggleCleanMode()" title="Mode Épuré">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2L2 12l10 10 10-10L12 2z"></path>
-                </svg>
-            </button>
-                <div class="w-[1px] h-[24px] bg-white/20 mx-1"></div>
+
+        <div class="w-[1px] h-[24px] bg-white/20 mx-1"></div>
         <div class="bg-black/50 border border-white/10 rounded-md px-3 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0">
             <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 min-w-[85px] whitespace-nowrap text-center tracking-widest pointer-events-none">00:00:00</div>
         </div>
@@ -1743,38 +1725,6 @@ body.clean-mode .dock-container {
         document.body.addEventListener('touchstart', unlockAudioContext);
         document.body.addEventListener('keydown', unlockAudioContext);
 
-        // --- CLEAN MODE TOGGLE ---
-        function toggleCleanMode() {
-            document.body.classList.toggle('clean-mode');
-            const isActive = document.body.classList.contains('clean-mode');
-            
-            const currentTheme = document.body.getAttribute('data-theme');
-            const themeColor = themes[currentTheme].accent;
-            const targetColor = isActive ? '#FFFFFF' : themeColor;
-            
-            // Déselectionner / réactiver les pills de thème
-            document.querySelectorAll('.theme-pill:not(#clean-toggle)').forEach(p => {
-                p.classList.toggle('active', !isActive);
-            });
-            // Garder seulement le pill du thème actif quand on sort du clean mode
-            if (!isActive) {
-                document.querySelectorAll('.theme-pill:not(#clean-toggle)').forEach(p => p.classList.remove('active'));
-                const activePill = document.querySelector(`.theme-pill[onclick*="'${currentTheme}'"]`);
-                if (activePill) activePill.classList.add('active');
-            }
-            
-            // Fond de la theme island : noir en clean mode, transparent sinon
-            document.getElementById('theme-widget').style.backgroundColor = isActive ? 'rgba(0,0,0,0.85)' : '';
-            // Background image : masquée en clean mode, restaurée sinon
-            const currentBar = themes[currentTheme].bar;
-            document.getElementById('theme-widget').style.setProperty('--island-bg', isActive ? 'none' : `url('${currentBar}')`);
-            
-            Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: isActive ? 'rgba(255,255,255,0.12)' : targetColor, waveColor: isActive ? 'rgba(255,255,255,0.5)' : 'rgba(255, 255, 255, 0.3)' }); });
-            Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: targetColor }); });
-            
-            playClickSound();
-        }
-        
         // --- PERFORMANCE ACCORDION TOGGLE ---
         function togglePerformanceMode() {
             const content = document.getElementById('performance-content');
@@ -2177,7 +2127,7 @@ body.clean-mode .dock-container {
         // --- 4. THEME & VISION ---
         const themes = { 
             fl: { bg: 'flstudio.png', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' }, 
-            ableton: { bg: 'ableton.png', bar: 'bar_ableton.png', accent: '#fb923c', font: 'font-ableton', mode: 'light' }, 
+            ableton: { bg: '', bar: '', accent: '#FFFFFF', font: 'font-ableton', mode: 'dark' }, 
             protools: { bg: 'protools.png', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } 
         };
         function setTheme(name) { 
@@ -2190,27 +2140,20 @@ body.clean-mode .dock-container {
             if(t.mode === 'light') document.body.classList.add('light-mode'); 
             else document.body.classList.remove('light-mode'); 
             
-            // Conserver l'état du clean mode
-            const isClean = document.getElementById('clean-toggle').classList.contains('active');
-            if (isClean) document.body.classList.add('clean-mode');
-            
             document.body.setAttribute('data-theme', name); 
             
             // Modifier la variable thème de base
             document.documentElement.style.setProperty('--theme-accent', t.accent); 
             
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`; 
-            const isCleanNow = document.body.classList.contains('clean-mode');
-            document.getElementById('theme-widget').style.setProperty('--island-bg', isCleanNow ? 'none' : `url('${t.bar}')`);
+            const isAbleton = name === 'ableton';
+            document.getElementById('theme-widget').style.backgroundColor = isAbleton ? 'rgba(0,0,0,0.85)' : '';
+            document.getElementById('theme-widget').style.setProperty('--island-bg', isAbleton ? 'none' : `url('${t.bar}')`);
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); 
             document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
-            if (isClean) document.getElementById('clean-toggle').classList.add('active');
             
-            // Ne mettre à jour les couleurs WaveSurfer que si on n'est pas en mode épuré
-            if (!isClean) {
-                Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
-                Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
-            }
+            Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
+            Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
         }
 
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); }); }, {threshold: 0.1}); document.querySelectorAll('.scroll-float').forEach(el => observer.observe(el));
@@ -2516,7 +2459,7 @@ const skillsEl = document.getElementById('skills');
 if (skillsEl) pieObserver.observe(skillsEl);
 
 // Relance l'animation si on change de thème (pour le glow)
-document.querySelectorAll('.theme-pill, #clean-toggle').forEach(btn => {
+    document.querySelectorAll('.theme-pill').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.pie-chart').forEach(c => {
       c.classList.remove('animated');
