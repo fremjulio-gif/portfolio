@@ -2690,17 +2690,49 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- 2. LECTURE INTELLIGENTE DES VIDÉOS ---
+    // --- 2. LECTURE INTELLIGENTE DES VIDÉOS (Delayed Audio Preview) ---
     const projectCards = document.querySelectorAll('.project-card');
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     
     if (!isTouchDevice) {
         projectCards.forEach(card => {
             const video = card.querySelector('video');
+            let hoverTimeout;
+            let fadeInterval;
+
             if (video) {
                 video.currentTime = 0;
-                card.addEventListener('mouseenter', () => video.play().catch(() => {}));
-                card.addEventListener('mouseleave', () => video.pause());
+                card.addEventListener('mouseenter', () => {
+                    video.play().catch(() => {});
+                    
+                    // Démarre le décompte de 2 secondes avant d'activer le son
+                    hoverTimeout = setTimeout(() => {
+                        video.muted = false;
+                        video.volume = 0;
+                        
+                        // Fondu progressif (Fade-in) jusqu'à 50% du volume
+                        const targetVol = 0.5;
+                        const step = 0.05; // Incrément de volume
+                        fadeInterval = setInterval(() => {
+                            if (video.volume < targetVol) {
+                                video.volume = Math.min(targetVol, video.volume + step);
+                            } else {
+                                clearInterval(fadeInterval);
+                            }
+                        }, 50); // Environ 0.5s pour atteindre le volume cible
+                    }, 2000);
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    video.pause();
+                    
+                    // Annule le timer et l'intervalle si la souris sort
+                    clearTimeout(hoverTimeout);
+                    clearInterval(fadeInterval);
+                    // Remise à zéro pour le prochain survol
+                    video.muted = true;
+                    video.volume = 0;
+                });
             }
         });
     } else {
