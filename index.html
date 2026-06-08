@@ -55,7 +55,7 @@
     scroll-behavior: smooth; /* Ajoute un défilement fluide au clic (optionnel mais très pro) */
 }
 html, body { 
-    max-width: 100vw; overflow-x: hidden; user-select: none; -webkit-user-select: none; cursor: crosshair; 
+    max-width: 100vw; overflow-x: hidden; user-select: none; -webkit-user-select: none; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='16' y1='6' x2='16' y2='26' stroke='white' stroke-width='2'/%3E%3Cline x1='6' y1='16' x2='26' y2='16' stroke='white' stroke-width='2'/%3E%3C/svg%3E") 16 16, crosshair; 
 }
 
         /* --- CURSOR TRAIL STYLE --- */
@@ -65,6 +65,7 @@ html, body {
             left: 0;
             pointer-events: none;
             z-index: 999999;
+            font-family: 'Share Tech Mono', 'Apple Symbols', 'Segoe UI Symbol', 'Symbola', 'Arial Unicode MS', sans-serif;
             will-change: transform, opacity;
             transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease-out;
         }
@@ -84,7 +85,7 @@ html, body {
 
         /* Curseur personnalisé */
         a, button, input, .click-sound, .project-card, .lab-row, canvas, .step-btn, .piano-cell, .drum-pad, #ptx-timeline { 
-            cursor: crosshair !important; 
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='16' y1='6' x2='16' y2='26' stroke='white' stroke-width='2'/%3E%3Cline x1='6' y1='16' x2='26' y2='16' stroke='white' stroke-width='2'/%3E%3C/svg%3E") 16 16, crosshair !important; 
         }
 
         /* Theme Animation */
@@ -542,7 +543,22 @@ body.clean-mode .dock-container {
     border-radius: 100px; padding: 6px; 
     display: flex; align-items: center; gap: 12px; 
     box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 0 var(--glass-highlight);
+    overflow: hidden;
 }
+        /* Pseudo-élément pour le flou des images bar_daw */
+        .theme-island::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: var(--island-bg);
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px);
+            opacity: 0.7;
+            z-index: -1;
+            border-radius: inherit;
+            pointer-events: none;
+        }
         @media (min-width: 768px) { .theme-island { top: 30px; padding: 8px 16px; gap: 16px; } }
         .theme-island::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.3); border-radius: 100px; z-index: -1; }
         .theme-pill { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(255,255,255,0.05); }
@@ -742,13 +758,13 @@ body.clean-mode .dock-container {
         <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300">Pick your theme</span>
         <div class="flex gap-2 items-center">
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio">
-                <img src="logo_flstudio.png" alt="FL" class="object-contain">
+                <img src="logo_flstudio.png" alt="FL" class="w-full h-full object-contain p-1">
             </button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton">
-                <img src="logo_ableton.png" alt="Live" class="object-contain">
+                <img src="logo_ableton.png" alt="Live" class="w-full h-full object-contain p-2">
             </button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools">
-                <img src="logo_protools.png" alt="PT" class="object-contain">
+                <img src="logo_protools.png" alt="PT" class="w-full h-full object-contain p-1">
             </button>
             
             <div class="w-[1px] h-[24px] bg-white/20 mx-1"></div>
@@ -1719,7 +1735,7 @@ body.clean-mode .dock-container {
             document.getElementById('theme-widget').style.backgroundColor = isActive ? 'rgba(0,0,0,0.85)' : '';
             // Background image : masquée en clean mode, restaurée sinon
             const currentBar = themes[currentTheme].bar;
-            document.getElementById('theme-widget').style.backgroundImage = isActive ? 'none' : `url('${currentBar}')`;
+            document.getElementById('theme-widget').style.setProperty('--island-bg', isActive ? 'none' : `url('${currentBar}')`);
             
             Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: isActive ? 'rgba(255,255,255,0.12)' : targetColor, waveColor: isActive ? 'rgba(255,255,255,0.5)' : 'rgba(255, 255, 255, 0.3)' }); });
             Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: targetColor }); });
@@ -2153,7 +2169,7 @@ body.clean-mode .dock-container {
             
             document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`; 
             const isCleanNow = document.body.classList.contains('clean-mode');
-            document.getElementById('theme-widget').style.backgroundImage = isCleanNow ? 'none' : `url('${t.bar}')`;
+            document.getElementById('theme-widget').style.setProperty('--island-bg', isCleanNow ? 'none' : `url('${t.bar}')`);
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); 
             document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
             if (isClean) document.getElementById('clean-toggle').classList.add('active');
@@ -2752,7 +2768,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const CHARACTER_BANKS = {
         tech: "@#$%*/+_-010101",
         log: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-        audio: "♩♪♫♬♭♮♯𝄢𝄞",
+        audio: "♩♪♫♬♭♮♯𝄞𝄢",
         default: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$*%/+X_-"
     };
 
@@ -2789,7 +2805,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const char = bank[Math.floor(Math.random() * bank.length)];
         const rotation = Math.random() * 40 - 20;
         
-        span.className = 'cursor-trail-char font-tech text-xs';
+        // Détection si c'est la banque audio pour augmenter la taille
+        const isAudio = bank === CHARACTER_BANKS.audio;
+        
+        span.className = `cursor-trail-char ${isAudio ? 'text-3xl font-bold' : 'text-sm'}`;
         span.style.color = 'var(--accent-color)';
         span.style.opacity = '0.7';
         span.innerText = char;
