@@ -65,7 +65,7 @@ html, body {
             left: 0;
             pointer-events: none;
             z-index: 999999;
-            font-family: 'Share Tech Mono', 'Apple Symbols', 'Segoe UI Symbol', 'Symbola', 'Arial Unicode MS', sans-serif;
+            font-family: 'Share Tech Mono', 'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols', 'Symbola', serif;
             will-change: transform, opacity;
             transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease-out;
         }
@@ -561,11 +561,28 @@ body.clean-mode .dock-container {
         }
         @media (min-width: 768px) { .theme-island { top: 30px; padding: 8px 16px; gap: 16px; } }
         .theme-island::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.3); border-radius: 100px; z-index: -1; }
-        .theme-pill { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; border: 1px solid transparent; opacity: 0.7; transition: 0.3s; background: rgba(255,255,255,0.05); }
-        @media (min-width: 768px) { .theme-pill { width: 48px; height: 48px; } }
-        .theme-pill.active { opacity: 1; border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-color); background: rgba(0,0,0,0.6); }
-        .theme-pill img { width: 20px; height: 20px; transform: scale(1.25); transition: transform 0.3s; }
-        @media (min-width: 768px) { .theme-pill img { width: 24px; height: 24px; } }
+        .theme-pill {
+    width: 48px;  /* Taille fixe pour tous les DAWs */
+    height: 48px;
+    border-radius: 50% !important;
+    aspect-ratio: 1 / 1 !important;
+    display: flex; /* Meilleur pour le centrage horizontal/vertical */
+    align-items: center;
+    justify-content: center;
+    place-content: center; /* En sécurité */
+    overflow: hidden; /* Nécessaire pour garder l'icône dans le rond */
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Sur mobile, on les garde à 38px, mais la logique JavaScript de zoom ci-dessus s'adapte */
+@media (max-width: 767px) {
+    .theme-pill {
+        width: 38px;
+        height: 38px;
+    }
+}
         
         #start-screen { position: fixed; inset: 0; z-index: 9999; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -710,11 +727,21 @@ body.clean-mode .dock-container {
 }
 
 
+
+
     /* Hero Apple */
 #hero {
   min-height: 70vh;
   background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,255,255,0.06) 0%, transparent 70%);
+
+
+
+  
 }
+
+
+
+
     </style>
 
 
@@ -2805,10 +2832,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const char = bank[Math.floor(Math.random() * bank.length)];
         const rotation = Math.random() * 40 - 20;
         
-        // Détection si c'est la banque audio pour augmenter la taille
         const isAudio = bank === CHARACTER_BANKS.audio;
         
-        span.className = `cursor-trail-char ${isAudio ? 'text-3xl font-bold' : 'text-sm'}`;
+        if (isAudio) {
+            // Pour l'audio, on force une police symbole et on retire la police tech qui cause le "?"
+            span.className = 'cursor-trail-char text-3xl font-bold';
+            span.style.fontFamily = "'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols', 'Symbola', serif";
+            span.style.textShadow = `0 0 8px var(--accent-color)`; // Effet de lueur musicale
+        } else {
+            span.className = 'cursor-trail-char text-sm font-tech';
+        }
+
         span.style.color = 'var(--accent-color)';
         span.style.opacity = '0.7';
         span.innerText = char;
@@ -2829,6 +2863,38 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => span.remove(), 800);
     }
 
+});
+
+
+// =======================================================================
+// --- AJUSTEMENT CHIRURGICAL DES LOGOS DAW (Correction Zoom/Taille)
+// =======================================================================
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // 1. Zoomer sur Ableton (Les 4 barres) qui est toujours trop petit
+    const abletonImg = document.querySelector('button[onclick="setTheme(\'ableton\')"] img');
+    if (abletonImg) {
+        abletonImg.style.setProperty('width', '58px', 'important'); // Force une largeur plus grande
+        abletonImg.style.setProperty('height', '58px', 'important'); // Force une hauteur plus grande
+        abletonImg.style.setProperty('object-fit', 'contain', 'important'); // Centre l'image zoomée
+        abletonImg.style.setProperty('padding', '0px', 'important'); // Enlève toute marge
+    }
+
+    // 2. Ajustement léger de zoom sur FL et Pro Tools pour l'équilibre
+    const flImg = document.querySelector('button[onclick="setTheme(\'fl\')"] img');
+    const ptImg = document.querySelector('button[onclick="setTheme(\'protools\')"] img');
+    
+    if (flImg) {
+        flImg.style.setProperty('width', '48px', 'important');
+        flImg.style.setProperty('height', '48px', 'important');
+        flImg.style.setProperty('padding', '0px', 'important');
+    }
+    
+    if (ptImg) {
+        ptImg.style.setProperty('width', '48px', 'important');
+        ptImg.style.setProperty('height', '48px', 'important');
+        ptImg.style.setProperty('padding', '0px', 'important');
+    }
 });
 
     </script>
