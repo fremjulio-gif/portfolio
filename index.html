@@ -70,6 +70,11 @@ html, body {
             transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease-out;
         }
 
+        @keyframes noteFlicker {
+            0%, 100% { filter: opacity(1); }
+            50% { filter: opacity(0.3); }
+        }
+
         body { 
             background-color: #050505; color: var(--glass-text); 
             transition: background-color 0.6s ease, color 0.4s ease;
@@ -2789,7 +2794,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     // --- 5. INITIALISATION DU THÈME AU DÉMARRAGE ---
-    if (typeof setTheme === 'function') setTheme('fl');
+    if (typeof setTheme === 'function') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // Dark mode -> FL Studio | Light mode -> Ableton
+        setTheme(prefersDark ? 'fl' : 'ableton');
+    }
 
     // --- 6. DYNAMIC CURSOR TEXT TRAIL ---
     const CHARACTER_BANKS = {
@@ -2839,6 +2848,8 @@ document.addEventListener("DOMContentLoaded", () => {
             span.className = 'cursor-trail-char text-3xl font-bold';
             span.style.fontFamily = "'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols', 'Symbola', serif";
             span.style.textShadow = `0 0 8px var(--accent-color)`; // Effet de lueur musicale
+            // Ajout du scintillement via filter pour ne pas gêner le fade-out de l'opacity
+            span.style.animation = `noteFlicker ${0.1 + Math.random() * 0.2}s infinite alternate ease-in-out`;
         } else {
             span.className = 'cursor-trail-char text-sm font-tech';
         }
