@@ -220,11 +220,16 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
         }
 
         /* Suppression des effets de fond intrusifs DAW */
-        body[data-theme="ableton"] #theme-bg, 
         body[data-theme="ableton"] .scanlines,
         body[data-theme="ableton"] #skills::before,
         body[data-theme="ableton"] #sequencer-inner::before {
             opacity: 0 !important;
+        }
+
+        /* Intégration subtile du fond Ableton (Fondu du noir) */
+        body[data-theme="ableton"] #theme-bg {
+            opacity: 0.15 !important;
+            filter: blur(15px) saturate(0.8) !important;
         }
 
         /* Rendu Verre Dépoli Premium sur les conteneurs */
@@ -263,6 +268,13 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             filter: grayscale(100%) !important;
             transition: filter 0.5s var(--ease-apple) !important;
         }
+        body[data-theme="ableton"] img:hover,
+        body[data-theme="ableton"] video:hover,
+        body[data-theme="ableton"] .project-card:hover img,
+        body[data-theme="ableton"] .project-card:hover video,
+        body[data-theme="ableton"] .inspi-card-large:hover img {
+            filter: grayscale(0%) !important;
+        }
 
         /* Lab waveform en clean mode : partie jouée assombrie */
         body[data-theme="ableton"] .wavesurfer-wrapper canvas { opacity: 0.9; }
@@ -293,7 +305,7 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             position: relative; width: 100%;
         }
         @media (hover: hover) {
-            .glass-panel:hover { border-color: var(--accent-color); transform: translateY(-8px) scale(1.01); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), inset 0 1px 0 0 var(--glass-highlight), 0 0 0 1px var(--accent-color); }
+            .glass-panel:hover { border-color: rgba(255, 255, 255, 0.5); transform: translateY(-8px) scale(1.01); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), inset 0 2px 0 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.1); }
             .project-card:hover { transform: scale(0.95); filter: brightness(1.1); border-color: var(--accent-color); }
             .dock-icon:hover { color: #fff; transform: translateY(-5px); }
             body.light-mode .dock-icon:hover { color: #000; }
@@ -2127,7 +2139,7 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
         // --- 4. THEME & VISION ---
         const themes = { 
             fl: { bg: 'flstudio.png', bar: 'bar_flstudio.png', accent: '#22c55e', font: 'font-fl', mode: 'dark' }, 
-            ableton: { bg: '', bar: '', accent: '#FFFFFF', font: 'font-ableton', mode: 'dark' }, 
+            ableton: { bg: 'ableton.png', bar: '', accent: '#FFFFFF', font: 'font-ableton', mode: 'dark' }, 
             protools: { bg: 'protools.png', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } 
         };
         function setTheme(name) { 
