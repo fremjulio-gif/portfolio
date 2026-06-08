@@ -32,13 +32,10 @@
             /* Variables d'interface (écrasables par le Clean Mode) */
             --accent-color: var(--theme-accent);
             
-            --glass-surface: rgba(5, 5, 5, 0.07);
-            --glass-blur: 32px;
-            --glass-highlight: rgba(255, 255, 255, 0.08);
+            --glass-surface: rgba(255, 255, 255, 0.03);
+            --glass-blur: 16px;
+            --glass-highlight: rgba(255, 255, 255, 0.06);
             --glass-text: #ffffff;
-            /* Éclat lumineux diffus basé sur l'accentuation */
-            --glass-glow: color-mix(in srgb, var(--accent-color) 12%, transparent);
-            
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
             --ease-apple: cubic-bezier(0.25, 0.8, 0.25, 1);
             --vh: 1vh; 
@@ -103,8 +100,8 @@ html, body {
 
         /* Light Mode (Themes Classiques) */
         body.light-mode:not([data-theme="ableton"]) {
-            --glass-surface: rgba(255, 255, 255, 0.1); 
-            --glass-highlight: rgba(255, 255, 255, 0.2);
+            --glass-surface: rgba(255, 255, 255, 0.05); 
+            --glass-highlight: rgba(255, 255, 255, 0.1);
             --glass-text: #1a1a1a;
             background-color: #A0A0A0;
         }
@@ -172,7 +169,7 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             /* Verrouillage absolu des variables de couleur et effets verre */
             --accent-color: #FFFFFF !important; 
             --glass-text: #F5F5F7 !important;
-            --glass-surface: rgba(255, 255, 255, 0.05) !important;
+            --glass-surface: rgba(255, 255, 255, 0.03) !important;
             
             color: #F5F5F7 !important;
             
@@ -284,30 +281,28 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
         /* --- GLASS PANELS CLASSIC --- */
         .glass-panel {
             background-color: var(--glass-surface);
-            backdrop-filter: blur(24px) saturate(120%);
-            -webkit-backdrop-filter: blur(24px) saturate(120%);
+            backdrop-filter: blur(var(--glass-blur)) saturate(110%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(110%);
             
-            /* Bordure Liquide : beaucoup plus fine et translucide */
-            border: 1px solid color-mix(in srgb, var(--accent-color) 15%, transparent);
+            /* Bordure fantôme quasi-transparente */
+            border: 1px solid rgba(255, 255, 255, 0.04);
 
-            /* Lueur Liquide : Ombre portée plus douce et halo organique */
+            /* Ombre diffuse profonde et reflet interne (Highlight supérieur) */
             box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                0 0 20px 0 var(--glass-glow),
-                inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+                0 30px 60px -12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 0 var(--glass-highlight);
 
             border-radius: 28px; overflow: hidden;
-            transition: transform 0.5s var(--ease-ios), box-shadow 0.4s ease, background-color 0.4s ease;
+            transition: transform 0.6s var(--ease-ios), box-shadow 0.6s ease, border-color 0.6s ease;
             position: relative; width: 100%;
         }
         @media (hover: hover) {
             .glass-panel:hover { 
-                transform: translateY(-8px) scale(1.01); 
-                border-color: color-mix(in srgb, var(--accent-color) 30%, transparent);
+                transform: translateY(-4px); 
+                border-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
                 box-shadow: 
-                    0 40px 80px -15px rgba(0,0,0,0.6), 
-                    0 0 30px 2px var(--glass-glow),
-                    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.1);
+                    0 40px 100px -15px rgba(0, 0, 0, 0.5),
+                    inset 0 1px 0 0 var(--glass-highlight);
             }
             .project-card:hover { transform: scale(0.95); filter: brightness(1.1); border-color: var(--accent-color); }
             .dock-icon:hover { color: #fff; transform: translateY(-5px); }
@@ -664,8 +659,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
 
 /* SÉCURITÉ ANTI-SAUT : Interdire l'effet de hover sur les fenêtres détachées */
 .glass-panel[data-floating="true"] { 
-    backdrop-filter: blur(60px) saturate(160%);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px var(--accent-color) !important;
+    backdrop-filter: blur(32px) saturate(120%);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.6), inset 0 1px 0 0 var(--glass-highlight) !important;
 }
 .glass-panel[data-floating="true"]:hover {
     transform: none !important;
