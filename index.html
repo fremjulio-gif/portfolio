@@ -32,11 +32,12 @@
             /* Variables d'interface (écrasables par le Clean Mode) */
             --accent-color: var(--theme-accent);
             
-            --glass-surface: rgba(18, 18, 18, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-highlight: rgba(255, 255, 255, 0.15);
-            --glass-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.8);
+            --glass-surface: rgba(5, 5, 5, 0.07);
+            --glass-blur: 32px;
+            --glass-highlight: rgba(255, 255, 255, 0.08);
             --glass-text: #ffffff;
+            /* Éclat lumineux diffus basé sur l'accentuation */
+            --glass-glow: color-mix(in srgb, var(--accent-color) 30%, transparent);
             
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
             --ease-apple: cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -102,9 +103,8 @@ html, body {
 
         /* Light Mode (Themes Classiques) */
         body.light-mode:not([data-theme="ableton"]) {
-            --glass-surface: rgba(255, 255, 255, 0.2); 
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --glass-highlight: rgba(255, 255, 255, 0.5);
+            --glass-surface: rgba(255, 255, 255, 0.1); 
+            --glass-highlight: rgba(255, 255, 255, 0.2);
             --glass-text: #1a1a1a;
             background-color: #A0A0A0;
         }
@@ -172,10 +172,7 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             /* Verrouillage absolu des variables de couleur et effets verre */
             --accent-color: #FFFFFF !important; 
             --glass-text: #F5F5F7 !important;
-            --glass-border: rgba(255, 255, 255, 0.08) !important;
             --glass-surface: rgba(255, 255, 255, 0.05) !important;
-            --glass-highlight: rgba(255, 255, 255, 0.02) !important;
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
             
             color: #F5F5F7 !important;
             
@@ -232,16 +229,6 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             filter: blur(15px) saturate(0.8) !important;
         }
 
-        /* Rendu Verre Dépoli Premium sur les conteneurs */
-        body[data-theme="ableton"] .glass-panel {
-            background: var(--glass-surface) !important;
-            backdrop-filter: blur(20px) saturate(120%) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(120%) !important;
-            border: 1px solid var(--glass-border) !important;
-            box-shadow: var(--glass-shadow) !important;
-            border-radius: 28px !important;
-        }
-
         /* Modification du Dock (Flottant + Effet Premium) */
         body[data-theme="ableton"] .dock-container {
     background: rgba(30, 30, 30, 0.6) !important;
@@ -296,16 +283,40 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
 
         /* --- GLASS PANELS CLASSIC --- */
         .glass-panel {
-            background: linear-gradient(145deg, var(--glass-surface) 0%, rgba(255,255,255,0.02) 100%);
-            backdrop-filter: blur(50px) saturate(140%); -webkit-backdrop-filter: blur(50px) saturate(140%);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-highlight), inset 0 0 20px rgba(255,255,255,0.02);
+            background-color: var(--glass-surface);
+            backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+            
+            /* Périmètre de Goutte : Bordure en dégradé ultra-fine */
+            border: 1px solid transparent;
+            background-image: 
+                linear-gradient(var(--glass-surface), var(--glass-surface)), 
+                linear-gradient(145deg, var(--accent-color), transparent);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+
+            /* Éclat lumineux externe (Drop Shadow liquide) */
+            box-shadow: 
+                0 40px 100px -20px rgba(0, 0, 0, 0.7),
+                0 0 35px -5px var(--glass-glow),
+                inset 0 1px 0 0 var(--glass-highlight);
+
             border-radius: 32px; overflow: hidden;
-            transition: transform 0.5s var(--ease-ios), border-color 0.4s ease, box-shadow 0.4s ease;
+            transition: transform 0.5s var(--ease-ios), box-shadow 0.4s ease, background-color 0.4s ease;
             position: relative; width: 100%;
         }
         @media (hover: hover) {
-            .glass-panel:hover { border-color: rgba(255, 255, 255, 0.5); transform: translateY(-8px) scale(1.01); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), inset 0 2px 0 0 rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.1); }
+            .glass-panel:hover { 
+                transform: translateY(-8px) scale(1.01); 
+                box-shadow: 
+                    0 60px 120px -20px rgba(0,0,0,0.8), 
+                    0 0 50px 0 var(--glass-glow),
+                    inset 0 2px 0 0 rgba(255, 255, 255, 0.4);
+                /* Accentuation du périmètre lumineux au survol */
+                background-image: 
+                    linear-gradient(var(--glass-surface), var(--glass-surface)), 
+                    linear-gradient(135deg, white, var(--accent-color), transparent);
+            }
             .project-card:hover { transform: scale(0.95); filter: brightness(1.1); border-color: var(--accent-color); }
             .dock-icon:hover { color: #fff; transform: translateY(-5px); }
             body.light-mode .dock-icon:hover { color: #000; }
