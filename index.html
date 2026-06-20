@@ -3048,6 +3048,102 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sections.forEach(s => spyObserver.observe(s));
 
+    // --- 8. DECORATIVE SCROLL VU-METER LOGIC ---
+    let targetVU_L = 0;
+    let targetVU_R = 0;
+    let currentVU_L = 0;
+    let currentVU_R = 0;
+    let lastScrollY = window.scrollY;
+    let lastScrollTime = Date.now();
+    let lastScrollActiveTime = Date.now();
+
+    window.addEventListener('scroll', () => {
+        const now = Date.now();
+        const dt = Math.max(now - lastScrollTime, 1);
+        lastScrollTime = now;
+        lastScrollActiveTime = now;
+
+        const currentScrollY = window.scrollY;
+        const delta = Math.abs(currentScrollY - lastScrollY);
+        lastScrollY = currentScrollY;
+
+        // Calcul de la vitesse (pixels par milliseconde)
+        const speed = delta / dt;
+        const target = Math.min(speed * 25, 100); // Mappe la vitesse à 0-100%
+
+        if (target > 0) {
+            // Légère asymétrie stéréo pour un effet plus organique et réaliste
+            const varL = 0.95 + Math.random() * 0.1;
+            const varR = 0.95 + Math.random() * 0.1;
+            targetVU_L = Math.max(targetVU_L, Math.min(target * varL, 100));
+            targetVU_R = Math.max(targetVU_R, Math.min(target * varR, 100));
+        }
+    }, { passive: true });
+
+    function updateVUMeter() {
+        // Ballistiques Canal Gauche
+        if (targetVU_L > currentVU_L) {
+            currentVU_L += (targetVU_L - currentVU_L) * 0.35; // Attaque rapide
+        } else {
+            currentVU_L += (targetVU_L - currentVU_L) * 0.07; // Décélération douce
+        }
+        targetVU_L *= 0.94; // Amortissement continu vers 0
+
+        // Ballistiques Canal Droit
+        if (targetVU_R > currentVU_R) {
+            currentVU_R += (targetVU_R - currentVU_R) * 0.35;
+        } else {
+            currentVU_R += (targetVU_R - currentVU_R) * 0.07;
+        }
+        targetVU_R *= 0.94;
+
+        // Mise à jour de l'affichage HTML
+        const vuFillL = document.getElementById('vu-fill-l');
+        const vuFillR = document.getElementById('vu-fill-r');
+        if (vuFillL) vuFillL.style.height = `${currentVU_L}%`;
+        if (vuFillR) vuFillR.style.height = `${currentVU_R}%`;
+
+        // Contrôle des LED de Peak/Clip (si > 85% de niveau)
+        const peakLedL = document.getElementById('vu-peak-led-l');
+        const peakLedR = document.getElementById('vu-peak-led-r');
+        
+        if (peakLedL) {
+            if (currentVU_L > 85) {
+                peakLedL.style.backgroundColor = '#ef4444';
+                peakLedL.style.boxShadow = '0 0 8px #ef4444';
+            } else {
+                peakLedL.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                peakLedL.style.boxShadow = 'none';
+            }
+        }
+        if (peakLedR) {
+            if (currentVU_R > 85) {
+                peakLedR.style.backgroundColor = '#ef4444';
+                peakLedR.style.boxShadow = '0 0 8px #ef4444';
+            } else {
+                peakLedR.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                peakLedR.style.boxShadow = 'none';
+            }
+        }
+
+        // Auto-fade out après inactivité
+        const vuContainer = document.getElementById('vu-meter-container');
+        if (vuContainer) {
+            const timeSinceLastScroll = Date.now() - lastScrollActiveTime;
+            if (timeSinceLastScroll < 1500) {
+                vuContainer.style.opacity = '0.9';
+                vuContainer.style.transform = 'translateY(-50%) translateX(0)';
+            } else {
+                // Reste très discret à 0.15 d'opacité, se décale légèrement
+                vuContainer.style.opacity = '0.15';
+                vuContainer.style.transform = 'translateY(-50%) translateX(8px)';
+            }
+        }
+
+        requestAnimationFrame(updateVUMeter);
+    }
+    requestAnimationFrame(updateVUMeter);
+
 });
 
 
@@ -3083,5 +3179,45 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
     </script>
+<!-- VU-mètre décoratif lié au scroll -->
+<div id="vu-meter-container" class="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center p-2.5 bg-black/75 backdrop-blur-md border border-white/10 rounded-lg shadow-2xl transition-all duration-500 w-12 h-44 border-t-2 border-t-[var(--accent-color)]" style="opacity: 0.15; transform: translateY(-50%) translateX(8px);">
+    <!-- Peak LEDs -->
+    <div class="flex gap-2.5 mb-1.5 justify-center w-full">
+        <div class="flex flex-col items-center gap-0.5">
+            <span class="text-[5px] font-mono text-white/30 font-bold">L</span>
+            <div class="w-1.5 h-1.5 rounded-full bg-red-500/20 border border-red-500/30 transition-all duration-100" id="vu-peak-led-l"></div>
+        </div>
+        <div class="flex flex-col items-center gap-0.5">
+            <span class="text-[5px] font-mono text-white/30 font-bold">R</span>
+            <div class="w-1.5 h-1.5 rounded-full bg-red-500/20 border border-red-500/30 transition-all duration-100" id="vu-peak-led-r"></div>
+        </div>
+    </div>
+    
+    <!-- VU Meter tracks and scale -->
+    <div class="flex-1 flex justify-between w-full px-0.5 gap-1.5">
+        <!-- L Track -->
+        <div class="w-1.5 bg-black/60 rounded-sm relative overflow-hidden h-full border border-white/5">
+            <div id="vu-fill-l" class="absolute bottom-0 left-0 right-0 w-full h-0 rounded-sm" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%);"></div>
+        </div>
+        
+        <!-- Scale ticks (dB markers) -->
+        <div class="flex flex-col justify-between items-center text-[6px] font-mono text-white/20 h-full py-0.5 pointer-events-none select-none">
+            <span>+3</span>
+            <span>0</span>
+            <span>-6</span>
+            <span>-12</span>
+            <span>-24</span>
+            <span>-∞</span>
+        </div>
+        
+        <!-- R Track -->
+        <div class="w-1.5 bg-black/60 rounded-sm relative overflow-hidden h-full border border-white/5">
+            <div id="vu-fill-r" class="absolute bottom-0 left-0 right-0 w-full h-0 rounded-sm" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%);"></div>
+        </div>
+    </div>
+    
+    <span class="text-[7px] font-mono font-bold text-white/40 tracking-widest mt-2 select-none uppercase">Scroll VU</span>
+</div>
+
 </body>
 </html>
