@@ -1787,6 +1787,7 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
         // --- SCROLL AUDIO LOW-PASS FILTER AUTOMATION ---
         let scrollPadNode1 = null;
         let scrollPadNode2 = null;
+        let scrollPadNode3 = null;
         let scrollFilter = null;
         let scrollGain = null;
         let isScrollSoundActive = false;
@@ -1801,25 +1802,33 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
 
             isScrollSoundActive = true;
 
-            // Création des oscillateurs (Pad soft)
+            // Création des oscillateurs (Synthèse de nappe riche et douce)
+            // Osc 1 : Triangle pour une assise chaleureuse en bas-médium
             scrollPadNode1 = audioCtx.createOscillator();
             scrollPadNode1.type = 'triangle';
             scrollPadNode1.frequency.setValueAtTime(110, audioCtx.currentTime); // La2
-            scrollPadNode1.detune.setValueAtTime(-5, audioCtx.currentTime); // Léger chorus
+            scrollPadNode1.detune.setValueAtTime(-6, audioCtx.currentTime); // Chorus
 
+            // Osc 2 : Sawtooth pour apporter des harmoniques riches dans les aigus
             scrollPadNode2 = audioCtx.createOscillator();
-            scrollPadNode2.type = 'triangle';
+            scrollPadNode2.type = 'sawtooth';
             scrollPadNode2.frequency.setValueAtTime(165, audioCtx.currentTime); // Mi3 (Quinte)
-            scrollPadNode2.detune.setValueAtTime(5, audioCtx.currentTime); // Léger chorus
+            scrollPadNode2.detune.setValueAtTime(8, audioCtx.currentTime); // Chorus
+
+            // Osc 3 : Sine pour une octave supérieure pure et ultra-smooth
+            scrollPadNode3 = audioCtx.createOscillator();
+            scrollPadNode3.type = 'sine';
+            scrollPadNode3.frequency.setValueAtTime(220, audioCtx.currentTime); // La3
+            scrollPadNode3.detune.setValueAtTime(0, audioCtx.currentTime);
 
             // Filtre Lowpass
             scrollFilter = audioCtx.createBiquadFilter();
             scrollFilter.type = 'lowpass';
             
-            // Calcul initial de la fréquence du filtre selon le scroll
+            // Calcul initial de la fréquence du filtre selon le scroll (3000 Hz à 300 Hz)
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercent = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
-            const initialFreq = 2000 - (scrollPercent * 1750);
+            const initialFreq = 3000 - (scrollPercent * 2700);
             scrollFilter.frequency.setValueAtTime(initialFreq, audioCtx.currentTime);
 
             // Gain pour le fade
@@ -1829,15 +1838,18 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             // Connexions
             scrollPadNode1.connect(scrollFilter);
             scrollPadNode2.connect(scrollFilter);
+            scrollPadNode3.connect(scrollFilter);
             scrollFilter.connect(scrollGain);
             scrollGain.connect(masterGain);
 
             // Lancement
             scrollPadNode1.start();
             scrollPadNode2.start();
+            scrollPadNode3.start();
 
-            // Fade-in progressif pour éviter les clics audio
-            scrollGain.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.15);
+            // Rendu ultra-subtile : volume cible descendu de 0.06 à 0.015
+            // Attaque légèrement plus lente (0.2s) pour être encore plus smooth
+            scrollGain.gain.linearRampToValueAtTime(0.015, audioCtx.currentTime + 0.2);
         }
 
         function stopScrollPad() {
@@ -1847,11 +1859,12 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             const currentGain = scrollGain;
             const osc1 = scrollPadNode1;
             const osc2 = scrollPadNode2;
+            const osc3 = scrollPadNode3;
 
-            // Fade-out progressif
+            // Fade-out progressif légèrement allongé (0.3s) pour plus de douceur
             if (currentGain) {
                 currentGain.gain.setValueAtTime(currentGain.gain.value, audioCtx.currentTime);
-                currentGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+                currentGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
             }
 
             // Arrêt des oscillateurs après le fade-out
@@ -1859,14 +1872,17 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
                 try {
                     osc1.stop();
                     osc2.stop();
+                    osc3.stop();
                     osc1.disconnect();
                     osc2.disconnect();
+                    osc3.disconnect();
                     currentGain.disconnect();
                 } catch(e) {}
-            }, 250);
+            }, 350);
 
             scrollPadNode1 = null;
             scrollPadNode2 = null;
+            scrollPadNode3 = null;
             scrollFilter = null;
             scrollGain = null;
         }
@@ -1875,12 +1891,11 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             // Démarrer le son si on scroll
             startScrollPad();
 
-            // Si le son est actif, mettre à jour la fréquence du filtre
+            // Si le son est actif, mettre à jour la fréquence du filtre (3000 Hz à 300 Hz)
             if (isScrollSoundActive && scrollFilter) {
                 const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
                 const scrollPercent = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
-                // De 2000 Hz (haut) à 250 Hz (bas)
-                const targetFreq = 2000 - (scrollPercent * 1750);
+                const targetFreq = 3000 - (scrollPercent * 2700);
                 scrollFilter.frequency.setTargetAtTime(targetFreq, audioCtx.currentTime, 0.05);
             }
 
