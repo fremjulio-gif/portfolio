@@ -39,6 +39,43 @@
             --ease-ios: cubic-bezier(0.25, 1, 0.5, 1);
             --ease-apple: cubic-bezier(0.25, 0.8, 0.25, 1);
             --vh: 1vh; 
+
+            /* Hiérarchie de contraste sélectif — "spotlight" */
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.55);
+            --text-tertiary: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- CONTRASTE SÉLECTIF (SPOTLIGHT) --- */
+        h2, h3, h4 {
+            color: var(--text-primary) !important;
+        }
+
+        /* Paragraphes descriptifs */
+        p.description,
+        #hero p:not(.font-mono),
+        #skills p,
+        #parcours p:not(.font-black):not(.font-mono),
+        #projets .project-card p:not(:last-child),
+        #lab p,
+        #inspirations p,
+        #contact p {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Métadonnées (dates, tags techniques, etc.) */
+        #parcours span.font-mono:not(.text-3xl),
+        #parcours p.font-mono,
+        #parcours li,
+        #projets .project-card p:last-child,
+        .text-metadata,
+        .metadata-tag {
+            color: var(--text-tertiary) !important;
+        }
+
+        /* Hover ou états actifs (les zones où l'accent est autorisé) */
+        #parcours .group:hover span.font-mono:not(.text-3xl) {
+            color: var(--accent-color) !important;
         }
 
         /* --- FONTS --- */
@@ -1713,8 +1750,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
    <nav class="apple-menubar">
     <div class="flex items-center gap-1 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
         <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2"> DAW</a>
-        <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
         <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
+        <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
         <a href="#lab" class="apple-menu-item click-sound touch-manipulation">Labo</a>
         <a href="#performance-accordion" class="apple-menu-item click-sound touch-manipulation">Séquenceur</a>
         <a href="#contact" class="apple-menu-item click-sound touch-manipulation">Aide</a>
