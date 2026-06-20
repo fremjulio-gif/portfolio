@@ -121,7 +121,7 @@ html, body {
 
 
         /* --- BARRE DE MENUS SUPÉRIEURE (APPLE STYLE FIXÉ) --- */
-.dock-container { 
+.apple-menubar { 
     position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; 
     width: 100% !important; max-width: 100% !important;
     display: flex; align-items: center; justify-content: space-between; 
@@ -136,7 +136,7 @@ html, body {
     transform: none !important;
     margin: 0 !important;
 }
-body.light-mode .dock-container { background: rgba(255, 255, 255, 0.6) !important; border-color: rgba(0,0,0,0.1) !important; }
+body.light-mode .apple-menubar { background: rgba(255, 255, 255, 0.6) !important; border-color: rgba(0,0,0,0.1) !important; }
 
 /* Styles du texte des menus (Aérés et agrandis) */
 .apple-menu-item {
@@ -153,14 +153,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 .apple-menu-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
 body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color: #000; }
 
-.dock-icon.dock-active { color: var(--accent-color) !important; transform: translateY(-3px); }
-.apple-menu-item.dock-icon {
-    display: inline-block !important;
-    flex-direction: unset !important;
-    height: unset !important;
-    width: unset !important;
-    min-width: unset !important;
-}
+.dock-icon.dock-active { color: var(--accent-color) !important; transform: translateY(-5px) scale(1.1) !important; filter: drop-shadow(0 0 8px var(--accent-color)); }
 
 /* Classe utilitaire pour tuer la barre de défilement blanche disgracieuse */
 .hide-scroll::-webkit-scrollbar { display: none; }
@@ -236,12 +229,23 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
         }
 
         /* Modification du Dock (Flottant + Effet Premium) */
-        body[data-theme="ableton"] .dock-container {
+        body[data-theme="ableton"] .apple-menubar {
     background: rgba(30, 30, 30, 0.6) !important;
     backdrop-filter: blur(30px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 0 !important; padding: 0 16px !important; height: 32px !important;
+}
+        body[data-theme="ableton"] .dock-container {
+    background: rgba(20, 20, 20, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 30px !important;
+    height: 65px !important;
+    width: 90% !important;
+    max-width: 500px !important;
+    padding: 10px 24px !important;
+    transform: translateX(-50%) !important;
+    bottom: 20px !important;
 }
 
        
@@ -831,7 +835,7 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
   En recherche de stage · 2026
                 </div>
                 <p class="text-xs md:text-sm opacity-50 font-light tracking-wide mt-6 mb-2">3iS · Promotion 2026</p>
-                <p class="text-xs md:text-sm opacity-75 font-light tracking-wide mt-6 mb-2">Du plateau au mix : captation, repair, design, composition à l'image. Une approche technique et rigoureuse du son, nourrie par une pratique artistique continue — musique, montage, création visuelle. En recherche d'un stage pour 2026.</p>
+                <p class="text-xs md:text-sm opacity-75 font-light tracking-wide mt-6 mb-2">Du plateau au mix : captation, repair, design, composition à l'image. Une approche technique et rigoureuse du son, nourrie par une pratique artistique continue — musique, montage, création visuelle.</p>
                 <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition leading-normal">jules.fremondiere@3is.fr</a>
                 <div class="mt-12 flex gap-3 justify-center flex-wrap">
           <a href="#contact"
@@ -1706,14 +1710,14 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
         </div>
     </div>
 
-   <nav class="dock-container">
+   <nav class="apple-menubar">
     <div class="flex items-center gap-1 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
-        <a href="#hero" class="apple-menu-item dock-icon font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
-        <a href="#projets" class="apple-menu-item dock-icon click-sound touch-manipulation">Projets</a>
-        <a href="#skills" class="apple-menu-item dock-icon click-sound touch-manipulation">Skills</a>
-        <a href="#lab" class="apple-menu-item dock-icon click-sound touch-manipulation">Labo</a>
-        <a href="#performance-accordion" class="apple-menu-item dock-icon click-sound touch-manipulation">Séquenceur</a>
-        <a href="#contact" class="apple-menu-item dock-icon click-sound touch-manipulation">Aide</a>
+        <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2"> DAW</a>
+        <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
+        <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
+        <a href="#lab" class="apple-menu-item click-sound touch-manipulation">Labo</a>
+        <a href="#performance-accordion" class="apple-menu-item click-sound touch-manipulation">Séquenceur</a>
+        <a href="#contact" class="apple-menu-item click-sound touch-manipulation">Aide</a>
     </div>
 
     <div class="flex items-center gap-4 shrink-0">
@@ -1722,6 +1726,29 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <span class="text-[var(--accent-color)] animate-pulse">●</span>
         </div>
     </div>
+</nav>
+
+<nav class="dock-container">
+    <a href="#hero" class="dock-icon click-sound touch-manipulation">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>DAW</span>
+    </a>
+    <a href="#skills" class="dock-icon click-sound touch-manipulation">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+        <span>Skills</span>
+    </a>
+    <a href="#projets" class="dock-icon click-sound touch-manipulation">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9l-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        <span>Projets</span>
+    </a>
+    <a href="#lab" class="dock-icon click-sound touch-manipulation">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Labo</span>
+    </a>
+    <a href="#performance-accordion" class="dock-icon click-sound touch-manipulation">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v2m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2z"/></svg>
+        <span>Séquenceur</span>
+    </a>
 </nav>
 
     <script>
@@ -1756,6 +1783,113 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
         document.body.addEventListener('click', unlockAudioContext);
         document.body.addEventListener('touchstart', unlockAudioContext);
         document.body.addEventListener('keydown', unlockAudioContext);
+
+        // --- SCROLL AUDIO LOW-PASS FILTER AUTOMATION ---
+        let scrollPadNode1 = null;
+        let scrollPadNode2 = null;
+        let scrollFilter = null;
+        let scrollGain = null;
+        let isScrollSoundActive = false;
+        let scrollTimeout = null;
+
+        function startScrollPad() {
+            if (isScrollSoundActive) return;
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(() => {});
+                if (audioCtx.state === 'suspended') return;
+            }
+
+            isScrollSoundActive = true;
+
+            // Création des oscillateurs (Pad soft)
+            scrollPadNode1 = audioCtx.createOscillator();
+            scrollPadNode1.type = 'triangle';
+            scrollPadNode1.frequency.setValueAtTime(110, audioCtx.currentTime); // La2
+            scrollPadNode1.detune.setValueAtTime(-5, audioCtx.currentTime); // Léger chorus
+
+            scrollPadNode2 = audioCtx.createOscillator();
+            scrollPadNode2.type = 'triangle';
+            scrollPadNode2.frequency.setValueAtTime(165, audioCtx.currentTime); // Mi3 (Quinte)
+            scrollPadNode2.detune.setValueAtTime(5, audioCtx.currentTime); // Léger chorus
+
+            // Filtre Lowpass
+            scrollFilter = audioCtx.createBiquadFilter();
+            scrollFilter.type = 'lowpass';
+            
+            // Calcul initial de la fréquence du filtre selon le scroll
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
+            const initialFreq = 2000 - (scrollPercent * 1750);
+            scrollFilter.frequency.setValueAtTime(initialFreq, audioCtx.currentTime);
+
+            // Gain pour le fade
+            scrollGain = audioCtx.createGain();
+            scrollGain.gain.setValueAtTime(0, audioCtx.currentTime);
+
+            // Connexions
+            scrollPadNode1.connect(scrollFilter);
+            scrollPadNode2.connect(scrollFilter);
+            scrollFilter.connect(scrollGain);
+            scrollGain.connect(masterGain);
+
+            // Lancement
+            scrollPadNode1.start();
+            scrollPadNode2.start();
+
+            // Fade-in progressif pour éviter les clics audio
+            scrollGain.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.15);
+        }
+
+        function stopScrollPad() {
+            if (!isScrollSoundActive) return;
+            isScrollSoundActive = false;
+
+            const currentGain = scrollGain;
+            const osc1 = scrollPadNode1;
+            const osc2 = scrollPadNode2;
+
+            // Fade-out progressif
+            if (currentGain) {
+                currentGain.gain.setValueAtTime(currentGain.gain.value, audioCtx.currentTime);
+                currentGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+            }
+
+            // Arrêt des oscillateurs après le fade-out
+            setTimeout(() => {
+                try {
+                    osc1.stop();
+                    osc2.stop();
+                    osc1.disconnect();
+                    osc2.disconnect();
+                    currentGain.disconnect();
+                } catch(e) {}
+            }, 250);
+
+            scrollPadNode1 = null;
+            scrollPadNode2 = null;
+            scrollFilter = null;
+            scrollGain = null;
+        }
+
+        window.addEventListener('scroll', () => {
+            // Démarrer le son si on scroll
+            startScrollPad();
+
+            // Si le son est actif, mettre à jour la fréquence du filtre
+            if (isScrollSoundActive && scrollFilter) {
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
+                // De 2000 Hz (haut) à 250 Hz (bas)
+                const targetFreq = 2000 - (scrollPercent * 1750);
+                scrollFilter.frequency.setTargetAtTime(targetFreq, audioCtx.currentTime, 0.05);
+            }
+
+            // Réinitialiser le timeout d'arrêt
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                stopScrollPad();
+            }, 150); // S'arrête si pas de scroll pendant 150ms
+        });
 
         // --- PERFORMANCE ACCORDION TOGGLE ---
         function togglePerformanceMode() {
