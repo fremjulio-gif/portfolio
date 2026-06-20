@@ -153,6 +153,15 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 .apple-menu-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
 body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color: #000; }
 
+.dock-icon.dock-active { color: var(--accent-color) !important; transform: translateY(-3px); }
+.apple-menu-item.dock-icon {
+    display: inline-block !important;
+    flex-direction: unset !important;
+    height: unset !important;
+    width: unset !important;
+    min-width: unset !important;
+}
+
 /* Classe utilitaire pour tuer la barre de défilement blanche disgracieuse */
 .hide-scroll::-webkit-scrollbar { display: none; }
 .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
@@ -1069,8 +1078,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Je suis la fumée... <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Court-métrage</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Tournage extérieur, </p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Prise de son perche + Voix off en post — gestion du bruit ambiant en captation</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Tournage extérieur, </p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Prise de son perche · Voix off en post · Gestion du bruit ambiant lors de la captation</p>
                 <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">MKH 416 · Sound Devices · ProTools</p>
             </div>
         </div>
@@ -1082,8 +1091,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">L'Étranger (A. Camus) <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Teaser Théâtre</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Création d'une identité sonore singulière pour accompagner l'absurdité de la pièce.</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Composition musicale originale et sound design immersif.</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Création d'une identité sonore pour accompagner l'absurdité de la pièce.</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Composition musicale originale · sound design immersif.</p>
                 <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Ableton Live 12 · Synthèse analogique · SUITES Arturia</p>
             </div>
         </div>
@@ -1095,9 +1104,9 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Instable <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Websérie</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Tournage urbain bruyant avec des dialogues croisés rapides.</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Supervision sonore : prise de son de plateau au micro-perche et post-production audio.</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Zoom F8n · ProTools · Nettoyage spectral et mixage dynamique</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Tournage urbain bruyant avec des dialogues croisés rapides.</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Supervision sonore : prise de son de plateau (Perche/HF) et post-production audio.</p>
+                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1"> SD Mixpre6-II· ProTools · Nettoyage spectral et mixage dynamique</p>
             </div>
         </div>
     </a>
@@ -1108,8 +1117,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Ouragan <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Résidence</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Performance artistique immersive impliquant une spatialisation en temps réel.</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Gestion de l'architecture audio : routing console complexe, patch et diffusion multicanal.</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Performance artistique immersive impliquant une spatialisation et une communication en temps réel.</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Gestion de l'architecture audio : routing console complexe, patch et diffusion multicanal.</p>
                 <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Console X32/M32 · Spatialisation multicanal · Routing de secours</p>
             </div>
         </div>
@@ -1121,8 +1130,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Srh - qutumeregardes <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Musique</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Production d'un titre rap moderne exigeant une clarté vocale parfaite et des basses précises.</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Ingénieur du son mixage et mastering final pour distribution sur plateformes.</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Mix d'un titre rap</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Ingénieur du son mixage et mastering · Digital Rap</p>
                 <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Ableton Live 12 · Traitement vocal · Balance spectrale et loudness</p>
             </div>
         </div>
@@ -1134,8 +1143,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Capharnaüm <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Court-métrage</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Court-métrage de fiction intimiste nécessitant une forte dynamique sonore.</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Prise de son plateau multicanal, sound design et mixage stéréo/5.1.</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Court-métrage de fiction intimiste nécessitant une forte dynamique sonore.</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Prise de son plateau, sound design et mixage stéréo</p>
                 <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">MixPre-6 · ProTools · Bruitage et sound design narratif</p>
             </div>
         </div>
@@ -1147,9 +1156,9 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Désaccordés <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Émission TV en direct</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Aucune deuxième prise possible.</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Ingénieur son direct, routing complet sur console X32.</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Prise de décision en temps réel · Mix multi-intervenants</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Aucune deuxième prise possible.</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Ingénieur son direct, routing complet sur console X32.</p>
+                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Prise de décision en temps réel · Mix Broadcast</p>
             </div>
         </div>
     </a>
@@ -1160,8 +1169,8 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Long Day <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Clip musical</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Réalisation d'un clip vidéo rythmé couplé à une production musicale électronique.</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Montage vidéo synchrone, composition musicale et mixage audio.</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Réalisation d'un clip couplé à une production musicale.</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Montage vidéo synchrone, composition musicale et mixage audio.</p>
                 <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Premiere Pro · FL Studio 21 · Synchronisation image/rythme</p>
             </div>
         </div>
@@ -1173,9 +1182,9 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
             <div class="mb-auto"></div>
             <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Sacré Graal <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Court-métrage</span></h4>
             <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[10px] text-white/60 leading-relaxed">Teaser du 50ème anniversaire de Sacré Graal (au Cinema St-Paul).</p>
-                <p class="font-mono text-[10px] text-white/90 leading-relaxed">Ingénieur du son (Prise de son).</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Prise de son en ville · Beaucoup de passage · Sound Devices · MKH 416</p>
+                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Teaser du 50ème anniversaire de Sacré Graal (au Cinema St-Paul).</p>
+                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Ingénieur du son (Prise de son).</p>
+                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Prise de son en ville · Beaucoup de passage · Zoom F8n · MKH 416</p>
             </div>
         </div>
     </a>
@@ -1685,12 +1694,12 @@ body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color:
 
    <nav class="dock-container">
     <div class="flex items-center gap-1 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
-        <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation text-[var(--accent-color)] mr-2"> DAW</a>
-        <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
-        <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
-        <a href="#lab" class="apple-menu-item click-sound touch-manipulation">Labo</a>
-        <a href="#performance-accordion" class="apple-menu-item click-sound touch-manipulation">Séquenceur</a>
-        <a href="#contact" class="apple-menu-item click-sound touch-manipulation">Aide</a>
+        <a href="#hero" class="apple-menu-item dock-icon font-bold tracking-wide click-sound touch-manipulation mr-2"> DAW</a>
+        <a href="#projets" class="apple-menu-item dock-icon click-sound touch-manipulation">Projets</a>
+        <a href="#skills" class="apple-menu-item dock-icon click-sound touch-manipulation">Skills</a>
+        <a href="#lab" class="apple-menu-item dock-icon click-sound touch-manipulation">Labo</a>
+        <a href="#performance-accordion" class="apple-menu-item dock-icon click-sound touch-manipulation">Séquenceur</a>
+        <a href="#contact" class="apple-menu-item dock-icon click-sound touch-manipulation">Aide</a>
     </div>
 
     <div class="flex items-center gap-4 shrink-0">
@@ -2857,6 +2866,24 @@ document.addEventListener("DOMContentLoaded", () => {
         // Suppression du DOM après la transition (0.8s définie dans le CSS)
         setTimeout(() => span.remove(), 1200);
     }
+
+    // --- 7. SCROLLSPY DOCK ACTIVE STATE ---
+    const sections = document.querySelectorAll('main section[id], #performance-accordion');
+    const dockIcons = document.querySelectorAll('.dock-icon');
+
+    const spyObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const activeIcon = document.querySelector(`.dock-icon[href="#${entry.target.id}"]`);
+                if (activeIcon) {
+                    dockIcons.forEach(icon => icon.classList.remove('dock-active'));
+                    activeIcon.classList.add('dock-active');
+                }
+            }
+        });
+    }, { rootMargin: '-40% 0px -40% 0px' });
+
+    sections.forEach(s => spyObserver.observe(s));
 
 });
 
