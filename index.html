@@ -2350,10 +2350,19 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             document.getElementById('scope-canvas-pads'),
             document.getElementById('scope-canvas-large')
         ];
-        const timeDomainData = new Uint8Array(analyser.frequencyBinCount);
+        let timeDomainData = null;
 
         function drawScope() {
             requestAnimationFrame(drawScope);
+            
+            // Sécurité : l'AudioContext est désormais lazy-loaded
+            if (!analyser) return;
+            
+            // Initialisation différée du tableau
+            if (!timeDomainData) {
+                timeDomainData = new Uint8Array(analyser.frequencyBinCount);
+            }
+            
             analyser.getByteTimeDomainData(timeDomainData);
 
             scopeCanvases.forEach(canvas => {
