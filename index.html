@@ -3145,14 +3145,17 @@ document.addEventListener("DOMContentLoaded", () => {
     sections.forEach(s => spyObserver.observe(s));
 
     // --- 8. DECORATIVE SCROLL VU-METER LOGIC ---
-    let targetVU_L = 0;
-    let targetVU_R = 0;
-    let currentVU_L = 0;
-    let currentVU_R = 0;
-    window.addEventListener('scroll', () => {
+    let targetVU_L = 105;
+    let targetVU_R = 105;
+    let currentVU_L = 105;
+    let currentVU_R = 105;
+
+    function calcTargetVU() {
         // Calcul du pourcentage de scroll (0 = haut, 1 = bas)
         const maxScroll = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-        const scrollPercent = maxScroll > 0 ? (window.scrollY / maxScroll) : 0;
+        // Fallback sécurisé : si le scroll n'est pas détecté via window.scrollY, utiliser document.documentElement.scrollTop
+        const currentScroll = window.scrollY || document.documentElement.scrollTop;
+        const scrollPercent = maxScroll > 0 ? (currentScroll / maxScroll) : 0;
         
         // Cible de base INVERSÉE : 105% en haut, 0% en bas. 
         // L'animation "juice clipping" (Peak) est déclenchée tout en haut de la page.
@@ -3164,20 +3167,26 @@ document.addEventListener("DOMContentLoaded", () => {
         
         targetVU_L = baseTarget * varL;
         targetVU_R = baseTarget * varR;
-    }, { passive: true });
+    }
+
+    // Calcul initial immédiat au chargement
+    calcTargetVU();
+
+    // Attachement de l'événement scroll
+    window.addEventListener('scroll', calcTargetVU, { passive: true });
 
     function updateVUMeter() {
         // Ballistiques avec une légère inertie pour adoucir le mouvement
         currentVU_L += (targetVU_L - currentVU_L) * 0.15;
         currentVU_R += (targetVU_R - currentVU_R) * 0.15;
 
-        // Mise à jour de l'affichage HTML (limité à 100% visuellement)
+        // Mise à jour de l'affichage HTML via Transform: scaleY() pour une fluidité absolue (GPU)
         const vuFillL = document.getElementById('vu-fill-l');
         const vuFillR = document.getElementById('vu-fill-r');
-        if (vuFillL) vuFillL.style.height = `${Math.min(currentVU_L, 100)}%`;
-        if (vuFillR) vuFillR.style.height = `${Math.min(currentVU_R, 100)}%`;
+        if (vuFillL) vuFillL.style.transform = `scaleY(${Math.min(currentVU_L, 100) / 100})`;
+        if (vuFillR) vuFillR.style.transform = `scaleY(${Math.min(currentVU_R, 100) / 100})`;
 
-        // Contrôle des LED de Peak/Clip (si on dépasse 98% -> on est tout en bas)
+        // Contrôle des LED de Peak/Clip (si on dépasse 98%)
         const peakLedL = document.getElementById('vu-peak-led-l');
         const peakLedR = document.getElementById('vu-peak-led-r');
         
@@ -3200,7 +3209,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Le VU-mètre reste fixe et visible en permanence comme un indicateur de progression (scrollbar)
+        // Le VU-mètre reste fixe et visible en permanence comme un indicateur de progression
         const vuContainer = document.getElementById('vu-meter-container');
         if (vuContainer) {
             vuContainer.style.opacity = '0.9';
@@ -3253,11 +3262,11 @@ document.addEventListener("DOMContentLoaded", () => {
     <div class="flex-1 flex justify-center gap-1 w-full">
         <!-- L Track -->
         <div class="w-1 bg-black/60 rounded-sm relative overflow-hidden h-full border border-white/5">
-            <div id="vu-fill-l" class="absolute bottom-0 left-0 right-0 w-full h-0 rounded-sm" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%);"></div>
+            <div id="vu-fill-l" class="absolute bottom-0 left-0 right-0 w-full h-full rounded-sm origin-bottom will-change-transform" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%); transform: scaleY(0);"></div>
         </div>
         <!-- R Track -->
         <div class="w-1 bg-black/60 rounded-sm relative overflow-hidden h-full border border-white/5">
-            <div id="vu-fill-r" class="absolute bottom-0 left-0 right-0 w-full h-0 rounded-sm" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%);"></div>
+            <div id="vu-fill-r" class="absolute bottom-0 left-0 right-0 w-full h-full rounded-sm origin-bottom will-change-transform" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%); transform: scaleY(0);"></div>
         </div>
     </div>
 </div>
