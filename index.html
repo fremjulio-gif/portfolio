@@ -3149,19 +3149,21 @@ document.addEventListener("DOMContentLoaded", () => {
     let targetVU_R = 105;
     let currentVU_L = 105;
     let currentVU_R = 105;
+    
+    // Variables pour le "Peaking" physique
+    let targetScrollPercent = 0;
+    let currentScrollPercent = 0;
 
     function calcTargetVU() {
-        // Calcul du pourcentage de scroll (0 = haut, 1 = bas)
         const maxScroll = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-        // Fallback sécurisé : si le scroll n'est pas détecté via window.scrollY, utiliser document.documentElement.scrollTop
         const currentScroll = window.scrollY || document.documentElement.scrollTop;
         const scrollPercent = maxScroll > 0 ? (currentScroll / maxScroll) : 0;
         
-        // Cible de base INVERSÉE : 105% en haut, 0% en bas. 
-        // L'animation "juice clipping" (Peak) est déclenchée tout en haut de la page.
+        // Stockage strict du pourcentage (0 à 100) pour le Peak physique
+        targetScrollPercent = scrollPercent * 100;
+        
+        // Logique "Audio" pour le remplissage de fond
         const baseTarget = Math.max(105 - (scrollPercent * 105), 0);
-
-        // Légère asymétrie stéréo pour conserver un côté organique analogique
         const varL = 0.95 + Math.random() * 0.1;
         const varR = 0.95 + Math.random() * 0.1;
         
@@ -3176,40 +3178,33 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('scroll', calcTargetVU, { passive: true });
 
     function updateVUMeter() {
-        // Ballistiques avec une légère inertie pour adoucir le mouvement
+        // Ballistiques
         currentVU_L += (targetVU_L - currentVU_L) * 0.15;
         currentVU_R += (targetVU_R - currentVU_R) * 0.15;
+        currentScrollPercent += (targetScrollPercent - currentScrollPercent) * 0.15;
 
-        // Mise à jour de l'affichage HTML via Transform: scaleY() pour une fluidité absolue (GPU)
+        // Mise à jour de l'affichage HTML du fond (VU Fill)
         const vuFillL = document.getElementById('vu-fill-l');
         const vuFillR = document.getElementById('vu-fill-r');
         if (vuFillL) vuFillL.style.transform = `scaleY(${Math.min(currentVU_L, 100) / 100})`;
         if (vuFillR) vuFillR.style.transform = `scaleY(${Math.min(currentVU_R, 100) / 100})`;
 
-        // Contrôle des LED de Peak/Clip (si on dépasse 98%)
+        // Mise à jour de l'affichage HTML du Peak physique (qui glisse le long de la jauge)
+        // L'indicateur rouge (Peak) doit monter et descendre physiquement
         const peakLedL = document.getElementById('vu-peak-led-l');
         const peakLedR = document.getElementById('vu-peak-led-r');
         
         if (peakLedL) {
-            if (currentVU_L > 98) {
-                peakLedL.style.backgroundColor = '#ef4444';
-                peakLedL.style.boxShadow = '0 0 8px #ef4444';
-            } else {
-                peakLedL.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                peakLedL.style.boxShadow = 'none';
-            }
+            // on contraint visuellement entre 0 et 95% pour ne pas déborder du track
+            peakLedL.style.bottom = `${Math.min(Math.max(currentScrollPercent, 0), 95)}%`;
+            peakLedL.style.backgroundColor = '#ef4444'; // Toujours allumé pour rester visible
         }
         if (peakLedR) {
-            if (currentVU_R > 98) {
-                peakLedR.style.backgroundColor = '#ef4444';
-                peakLedR.style.boxShadow = '0 0 8px #ef4444';
-            } else {
-                peakLedR.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                peakLedR.style.boxShadow = 'none';
-            }
+            peakLedR.style.bottom = `${Math.min(Math.max(currentScrollPercent, 0), 95)}%`;
+            peakLedR.style.backgroundColor = '#ef4444'; // Toujours allumé pour rester visible
         }
 
-        // Le VU-mètre reste fixe et visible en permanence comme un indicateur de progression
+        // Le VU-mètre reste fixe et visible en permanence
         const vuContainer = document.getElementById('vu-meter-container');
         if (vuContainer) {
             vuContainer.style.opacity = '0.9';
@@ -3252,24 +3247,23 @@ document.addEventListener("DOMContentLoaded", () => {
     </script>
 <!-- VU-mètre décoratif lié au scroll -->
 <div id="vu-meter-container" class="fixed right-3 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center p-1.5 bg-black/80 backdrop-blur-md border border-white/10 rounded shadow-2xl transition-all duration-500 w-5 h-28 border-t border-t-[var(--accent-color)]" style="opacity: 0.15; transform: translateY(-50%) translateX(8px);">
-    <!-- Peak LEDs -->
-    <div class="flex gap-1 mb-1 justify-center w-full">
-        <div class="w-1 h-1 rounded-full bg-red-500/20 border border-red-500/30 transition-all duration-100" id="vu-peak-led-l"></div>
-        <div class="w-1 h-1 rounded-full bg-red-500/20 border border-red-500/30 transition-all duration-100" id="vu-peak-led-r"></div>
-    </div>
-    
     <!-- VU Meter tracks -->
     <div class="flex-1 flex justify-center gap-1 w-full">
         <!-- L Track -->
-        <div class="w-1 bg-black/60 rounded-sm relative overflow-hidden h-full border border-white/5">
+        <div class="w-1 bg-black/60 rounded-sm relative h-full border border-white/5">
             <div id="vu-fill-l" class="absolute bottom-0 left-0 right-0 w-full h-full rounded-sm origin-bottom will-change-transform" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%); transform: scaleY(0);"></div>
+            <!-- Peak Indicator L (mobile physiquement) -->
+            <div id="vu-peak-led-l" class="absolute left-[-2px] right-[-2px] h-[3px] bg-red-500 shadow-[0_0_6px_#ef4444] rounded-sm will-change-transform z-10" style="bottom: 0%;"></div>
         </div>
         <!-- R Track -->
-        <div class="w-1 bg-black/60 rounded-sm relative overflow-hidden h-full border border-white/5">
+        <div class="w-1 bg-black/60 rounded-sm relative h-full border border-white/5">
             <div id="vu-fill-r" class="absolute bottom-0 left-0 right-0 w-full h-full rounded-sm origin-bottom will-change-transform" style="background: linear-gradient(to top, #22c55e 60%, #eab308 85%, #ef4444 100%); transform: scaleY(0);"></div>
+            <!-- Peak Indicator R (mobile physiquement) -->
+            <div id="vu-peak-led-r" class="absolute left-[-2px] right-[-2px] h-[3px] bg-red-500 shadow-[0_0_6px_#ef4444] rounded-sm will-change-transform z-10" style="bottom: 0%;"></div>
         </div>
     </div>
 </div>
 
 </body>
 </html>
+
