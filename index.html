@@ -1775,7 +1775,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
    <nav class="apple-menubar">
     <div class="flex items-center gap-1 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
-        <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2"> DAW</a>
+        <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
         <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
         <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
         <a href="#lab" class="apple-menu-item click-sound touch-manipulation">Labo</a>
@@ -1826,26 +1826,39 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             if(bg) bg.style.transform = 'translateY(' + -(scrolled * 0.02) + 'px)';
         });
 
-        // Audio Context Setup
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const masterGain = audioCtx.createGain();
-        const analyser = audioCtx.createAnalyser();
-        masterGain.connect(analyser); analyser.connect(audioCtx.destination);
-        analyser.fftSize = 256; masterGain.gain.value = 0.5;
+        // Audio Context Setup (Lazy init to prevent pop on load)
+        let audioCtx = null;
+        let masterGain = null;
+        let analyser = null;
+
+        function initAudio() {
+            if (audioCtx) return;
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            masterGain = audioCtx.createGain();
+            analyser = audioCtx.createAnalyser();
+            masterGain.connect(analyser); analyser.connect(audioCtx.destination);
+            analyser.fftSize = 256; 
+            masterGain.gain.value = 0.5;
+        }
         
         // --- MOBILE AUDIO UNLOCK FIX ---
         const unlockAudioContext = () => {
+            initAudio();
             if (audioCtx.state !== 'running') {
                 audioCtx.resume().then(() => {
-                    document.body.removeEventListener('click', unlockAudioContext);
-                    document.body.removeEventListener('touchstart', unlockAudioContext);
-                    document.body.removeEventListener('keydown', unlockAudioContext);
+                    document.body.removeEventListener('click', unlockAudioContext, true);
+                    document.body.removeEventListener('touchstart', unlockAudioContext, true);
+                    document.body.removeEventListener('keydown', unlockAudioContext, true);
                 });
+            } else {
+                document.body.removeEventListener('click', unlockAudioContext, true);
+                document.body.removeEventListener('touchstart', unlockAudioContext, true);
+                document.body.removeEventListener('keydown', unlockAudioContext, true);
             }
         };
-        document.body.addEventListener('click', unlockAudioContext);
-        document.body.addEventListener('touchstart', unlockAudioContext);
-        document.body.addEventListener('keydown', unlockAudioContext);
+        document.body.addEventListener('click', unlockAudioContext, true);
+        document.body.addEventListener('touchstart', unlockAudioContext, true);
+        document.body.addEventListener('keydown', unlockAudioContext, true);
 
         // --- SCROLL AUDIO LOW-PASS FILTER AUTOMATION ---
         let scrollPadNode1 = null;
@@ -1858,6 +1871,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
         function startScrollPad() {
             if (isScrollSoundActive) return;
+            if (!audioCtx) return; // Prevent playing before user interaction
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume().catch(() => {});
                 if (audioCtx.state === 'suspended') return;
