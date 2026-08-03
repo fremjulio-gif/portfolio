@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jules Frémondière — Ingénieur du son & Sound Designer</title>
-    <meta name="description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio. En recherche de stage en 2026.">
+    <meta name="description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio. En recherche de stage 2026.">
     <meta name="author" content="Jules Frémondière">
     <meta property="og:title" content="Jules Frémondière — Étudiant Ingénieur du son & Sound Designer">
     <meta property="og:description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio.">
@@ -662,7 +662,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
     }
 }
         
-        #start-screen { position: fixed; inset: 0; z-index: 9999; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
+        #start-screen { position: fixed; inset: 0; z-index: 999999; background: #050505; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
         #start-screen.hidden-screen { opacity: 0; visibility: hidden; pointer-events: none; }
 
 .scroll-float {
@@ -1778,12 +1778,12 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
     </main>
     
-    <div id="vision-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+    <div id="vision-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
         <div onclick="closeVision()" class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"></div>
         <div class="relative glass-panel w-full max-w-2xl transform transition-all duration-300 scale-95 opacity-0" id="vision-content">
              <div class="win-header">
                 <span class="win-title">vision.dmg</span>
-                <button onclick="closeVision()" class="text-white/50 hover:text-white transition">✕</button>
+                <button type="button" onclick="closeVision();" class="text-white/60 hover:text-white text-lg font-bold transition-colors cursor-pointer px-2.5 py-1 rounded hover:bg-white/10 z-20 relative" title="Fermer la fenêtre">✕</button>
             </div>
             <div class="p-8 space-y-8 overflow-y-auto max-h-[80vh] custom-scrollbar">
                 <div><h4 class="text-[var(--accent-color)] font-bold uppercase tracking-widest mb-4 flex items-center gap-2">Outils de référence</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-white/5 p-4 rounded-xl border border-white/10 flex items-center gap-4"><div class="w-10 h-10 bg-black/40 rounded-full flex items-center justify-center text-[var(--accent-color)] font-bold text-xs">416</div><div><h5 class="font-bold">Sennheiser MKH 416</h5><p class="text-xs opacity-60">Capture extérieure, précision.</p></div></div><div class="bg-white/5 p-4 rounded-xl border border-white/10 flex items-center gap-4"><div class="w-10 h-10 bg-black/40 rounded-full flex items-center justify-center text-[var(--accent-color)] font-bold text-xs">50</div><div><h5 class="font-bold">Sennheiser MKH 50</h5><p class="text-xs opacity-60">Intérieurs, dialogue naturel.</p></div></div><div class="bg-white/5 p-4 rounded-xl border border-white/10 flex items-center gap-4"><div class="w-10 h-10 bg-black/40 rounded-full flex items-center justify-center text-[var(--accent-color)] font-bold text-xs">HD25</div><div><h5 class="font-bold">Casque HD25</h5><p class="text-xs opacity-60">Casque indécollable.</p></div></div><div class="bg-white/5 p-4 rounded-xl border border-white/10 flex items-center gap-4"><div class="w-10 h-10 bg-black/40 rounded-full flex items-center justify-center text-[var(--accent-color)] font-bold text-xs">633</div><div><h5 class="font-bold">Sound Devices 633</h5><p class="text-xs opacity-60">Mixette, précision.</p></div></div></div></div>
@@ -2522,10 +2522,16 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         function openVision() {
             const modal = document.getElementById('vision-modal');
             const content = document.getElementById('vision-content');
-            modal.classList.remove('hidden');
+            if (!modal || !content) return;
+            
+            modal.classList.remove('hidden', 'opacity-0');
+            modal.classList.add('flex');
             
             if (typeof anime !== 'undefined') {
                 anime.remove([modal, content]);
+                modal.style.opacity = '0';
+                content.style.opacity = '0';
+                
                 anime({
                     targets: modal,
                     opacity: [0, 1],
@@ -2536,48 +2542,47 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                     targets: content,
                     scale: [0.8, 1],
                     opacity: [0, 1],
-                    duration: 600,
-                    easing: 'easeOutElastic(1, .8)',
-                    begin: function() {
-                        content.classList.remove('scale-95', 'opacity-0');
-                    }
+                    duration: 500,
+                    easing: 'easeOutElastic(1, .8)'
                 });
             } else {
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    content.classList.remove('scale-95', 'opacity-0');
-                }, 10);
+                content.classList.remove('scale-95', 'opacity-0');
             }
         }
 
         function closeVision() {
             const modal = document.getElementById('vision-modal');
             const content = document.getElementById('vision-content');
+            if (!modal || !content) return;
+            
             if (typeof anime !== 'undefined') {
                 anime.remove([modal, content]);
                 anime({
                     targets: content,
                     scale: [1, 0.85],
                     opacity: [1, 0],
-                    duration: 250,
+                    duration: 220,
                     easing: 'easeInExpo'
                 });
                 anime({
                     targets: modal,
                     opacity: [1, 0],
-                    duration: 250,
+                    duration: 220,
                     easing: 'easeInExpo',
                     complete: function() {
                         modal.classList.add('hidden', 'opacity-0');
-                        content.classList.add('scale-95', 'opacity-0');
+                        modal.classList.remove('flex');
+                        modal.style.opacity = '';
+                        content.style.opacity = '';
+                        content.style.transform = '';
                     }
                 });
             } else {
-                modal.classList.add('opacity-0');
-                content.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
+                modal.classList.add('hidden', 'opacity-0');
+                modal.classList.remove('flex');
+                modal.style.opacity = '';
+                content.style.opacity = '';
+                content.style.transform = '';
             }
         }
 
@@ -2942,6 +2947,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelectorAll('.glass-panel').forEach(panel => {
+        if (panel.closest('#vision-modal') || panel.id === 'vision-content') return;
         const header = panel.querySelector('.win-header');
         if (!header) return;
 
