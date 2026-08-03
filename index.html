@@ -204,7 +204,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
     body.light-mode .apple-menu-item:hover { background: rgba(0, 0, 0, 0.05); color: #000; }
 }
 
-.dock-icon.dock-active { color: var(--accent-color) !important; transform: translateY(-5px) scale(1.1) !important; filter: drop-shadow(0 0 8px var(--accent-color)); }
+.dock-icon.dock-active { color: var(--accent-color) !important; filter: drop-shadow(0 0 8px var(--accent-color)); }
 
 /* Classe utilitaire pour tuer la barre de défilement blanche disgracieuse */
 .hide-scroll::-webkit-scrollbar { display: none; }
@@ -3479,41 +3479,98 @@ requestAnimationFrame(updateVUMeter);
         ptImg.style.setProperty('padding', '0px', 'important');
     }
     
-    // --- ANIME.JS HOVER EFFECTS & STEP BUTTON MICRO-INTERACTIONS ---
-    if (typeof anime !== 'undefined') {
-        document.querySelectorAll('.theme-pill, .dock-icon, .filter-btn, .seq-tab-btn, .glass-panel').forEach(el => {
+    // --- GLOBAL JUICY MICRO-INTERACTION ENGINE (ANIME.JS) ---
+    function initGlobalJuicyInteractions() {
+        if (typeof anime === 'undefined') return;
+
+        const selector = [
+            '.dock-icon',
+            '.apple-menu-item',
+            '.theme-pill',
+            '.project-card',
+            '.inspi-card-large',
+            '.lab-row',
+            '.drum-pad',
+            '.pad-button',
+            '.step-btn',
+            '.piano-cell',
+            '.filter-btn',
+            '.seq-tab-btn',
+            '.transport-btn',
+            '.play-btn',
+            '.btn-min',
+            '.btn-max',
+            '.btn-action',
+            '.click-sound',
+            'a[href]',
+            'button:not(#start-screen button)'
+        ].join(', ');
+
+        const elements = Array.from(document.querySelectorAll(selector));
+
+        elements.forEach(el => {
+            if (el.dataset.juicyInitialized === 'true') return;
+            el.dataset.juicyInitialized = 'true';
+
+            // PROTOCOLE STRICT ANTI-CONFLIT: Désactiver la propriété transition CSS sur transform
+            el.style.transitionProperty = 'background-color, border-color, box-shadow, color, opacity';
+
+            // 1. SURVOL (MouseEnter): Pop & Elevate (translateY: -4px, scale: 1.04)
             el.addEventListener('mouseenter', () => {
                 anime.remove(el);
                 anime({
                     targets: el,
-                    translateY: -2,
-                    duration: 220,
-                    easing: 'easeOutQuad'
+                    translateY: -4,
+                    scale: 1.04,
+                    duration: 500,
+                    easing: 'easeOutElastic(1, 0.5)'
                 });
             });
+
+            // 2. SORTIE DE SURVOL (MouseLeave): Retour rapide à 0
             el.addEventListener('mouseleave', () => {
                 anime.remove(el);
                 anime({
                     targets: el,
                     translateY: 0,
+                    scale: 1.0,
                     duration: 220,
-                    easing: 'easeOutQuad'
+                    easing: 'easeOutCubic'
                 });
             });
-        });
 
-        // Feedback réactif d'enfoncement instantané pour les boutons de grille et cellules piano
-        document.querySelectorAll('.step-btn, .piano-cell').forEach(btn => {
-            btn.addEventListener('pointerdown', () => {
-                anime.remove(btn);
+            // 3. PRESSION / CLIC (PointerDown): Effet Squish / Enfoncement instantané (scale: 0.92, translateY: 1px)
+            el.addEventListener('pointerdown', () => {
+                anime.remove(el);
                 anime({
-                    targets: btn,
-                    scale: [0.85, 1],
-                    duration: 120,
-                    easing: 'easeOutQuad'
+                    targets: el,
+                    scale: 0.92,
+                    translateY: 1,
+                    duration: 90,
+                    easing: 'easeOutQuad',
+                    complete: function() {
+                        anime({
+                            targets: el,
+                            scale: el.matches(':hover') ? 1.04 : 1.0,
+                            translateY: el.matches(':hover') ? -4 : 0,
+                            duration: 350,
+                            easing: 'easeOutElastic(1, 0.6)'
+                        });
+                    }
                 });
             });
         });
+    }
+
+    // Initialisation immédiate au chargement du DOM
+    initGlobalJuicyInteractions();
+
+    // Observer pour surveiller et binder les éléments générés dynamiquement (séquenceur, piano roll, etc.)
+    if (typeof MutationObserver !== 'undefined') {
+        const observer = new MutationObserver(() => {
+            initGlobalJuicyInteractions();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
     }
 });
 
