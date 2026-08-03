@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jules Frémondière — Ingénieur du son & Sound Designer</title>
-    <meta name="description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio. En recherche de stage 2026.">
+    <meta name="description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio. En recherche de stage en 2026.">
     <meta name="author" content="Jules Frémondière">
     <meta property="og:title" content="Jules Frémondière — Étudiant Ingénieur du son & Sound Designer">
     <meta property="og:description" content="Portfolio de Jules Frémondière, étudiant ingénieur du son à 3iS. Mixage, composition, sound design, post-production audio.">
@@ -2012,17 +2012,49 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             const isOpen = content.classList.contains('open');
             
             if (isOpen) {
-                content.classList.remove('open');
+                if (typeof anime !== 'undefined') {
+                    anime.remove(content);
+                    anime({
+                        targets: content,
+                        opacity: [1, 0],
+                        scaleY: [1, 0.95],
+                        duration: 250,
+                        easing: 'easeInQuad',
+                        complete: function() {
+                            content.classList.remove('open');
+                        }
+                    });
+                } else {
+                    content.classList.remove('open');
+                }
                 chevron.style.transform = 'rotate(0deg)';
             } else {
                 content.classList.add('open');
                 chevron.style.transform = 'rotate(180deg)';
                 
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                
-                setTimeout(() => {
-                    document.getElementById('performance-accordion').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 500); 
+                if (typeof anime !== 'undefined') {
+                    anime.remove(content);
+                    anime({
+                        targets: content,
+                        scale: [0.92, 1],
+                        opacity: [0, 1],
+                        duration: 500,
+                        easing: 'easeOutElastic(1, .8)',
+                        begin: function() {
+                            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                        },
+                        complete: function() {
+                            const acc = document.getElementById('performance-accordion');
+                            if (acc) acc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    });
+                } else {
+                    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                    setTimeout(() => {
+                        const acc = document.getElementById('performance-accordion');
+                        if (acc) acc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 500); 
+                }
             }
             playClickSound();
         }
@@ -2312,11 +2344,23 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         }
         
         function playPad(soundType, el, freq) {
-             if (audioCtx.state === 'suspended') audioCtx.resume();
+             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
              const now = audioCtx.currentTime;
              
              el.classList.add('hit');
              setTimeout(() => el.classList.remove('hit'), 100);
+             
+             // Anime.js reactive press animation (100-150ms)
+             if (typeof anime !== 'undefined') {
+                 anime.remove(el);
+                 anime({
+                     targets: el,
+                     scale: [0.91, 1],
+                     translateY: [2, 0],
+                     duration: 130,
+                     easing: 'easeOutQuad'
+                 });
+             }
              
              if (soundType === 'synth' && freq) {
                  playSynth(freq, now, 0.2, 'sine');
@@ -2434,12 +2478,40 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             // Modifier la variable thème de base
             document.documentElement.style.setProperty('--theme-accent', t.accent); 
             
-            document.getElementById('theme-bg').style.backgroundImage = `url('${t.bg}')`; 
+            const themeBg = document.getElementById('theme-bg');
+            if (themeBg) {
+                themeBg.style.backgroundImage = `url('${t.bg}')`; 
+                if (typeof anime !== 'undefined') {
+                    anime.remove(themeBg);
+                    anime({
+                        targets: themeBg,
+                        translateY: [-15, 0],
+                        opacity: [0.6, 1],
+                        duration: 700,
+                        easing: 'easeOutCubic'
+                    });
+                }
+            }
+            
             const isAbleton = name === 'ableton';
-            document.getElementById('theme-widget').style.backgroundColor = isAbleton ? 'rgba(0,0,0,0.85)' : '';
-            document.getElementById('theme-widget').style.setProperty('--island-bg', isAbleton ? 'none' : `url('${t.bar}')`);
+            const themeWidget = document.getElementById('theme-widget');
+            if (themeWidget) {
+                themeWidget.style.backgroundColor = isAbleton ? 'rgba(0,0,0,0.85)' : '';
+                themeWidget.style.setProperty('--island-bg', isAbleton ? 'none' : `url('${t.bar}')`);
+                if (typeof anime !== 'undefined') {
+                    anime.remove(themeWidget);
+                    anime({
+                        targets: themeWidget,
+                        scale: [0.94, 1],
+                        duration: 350,
+                        easing: 'easeOutExpo'
+                    });
+                }
+            }
+            
             document.querySelectorAll('.theme-pill').forEach(b => b.classList.remove('active')); 
-            document.querySelector(`.theme-pill[onclick*="'${name}'"]`).classList.add('active'); 
+            const activePill = document.querySelector(`.theme-pill[onclick*="'${name}'"]`);
+            if (activePill) activePill.classList.add('active'); 
             
             Object.values(wavesurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
             Object.values(ptxWaveSurfers).forEach(ws => { if(ws) ws.setOptions({ progressColor: t.accent }); });
@@ -2451,20 +2523,62 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             const modal = document.getElementById('vision-modal');
             const content = document.getElementById('vision-content');
             modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95', 'opacity-0');
-            }, 10);
+            
+            if (typeof anime !== 'undefined') {
+                anime.remove([modal, content]);
+                anime({
+                    targets: modal,
+                    opacity: [0, 1],
+                    duration: 300,
+                    easing: 'easeOutExpo'
+                });
+                anime({
+                    targets: content,
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    duration: 600,
+                    easing: 'easeOutElastic(1, .8)',
+                    begin: function() {
+                        content.classList.remove('scale-95', 'opacity-0');
+                    }
+                });
+            } else {
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95', 'opacity-0');
+                }, 10);
+            }
         }
 
         function closeVision() {
             const modal = document.getElementById('vision-modal');
             const content = document.getElementById('vision-content');
-            modal.classList.add('opacity-0');
-            content.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            if (typeof anime !== 'undefined') {
+                anime.remove([modal, content]);
+                anime({
+                    targets: content,
+                    scale: [1, 0.85],
+                    opacity: [1, 0],
+                    duration: 250,
+                    easing: 'easeInExpo'
+                });
+                anime({
+                    targets: modal,
+                    opacity: [1, 0],
+                    duration: 250,
+                    easing: 'easeInExpo',
+                    complete: function() {
+                        modal.classList.add('hidden', 'opacity-0');
+                        content.classList.add('scale-95', 'opacity-0');
+                    }
+                });
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
         }
 
         let autoStartTimer = setTimeout(() => { startExperience(true); }, 1200);
@@ -2844,9 +2958,10 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         }
 
-        // --- Logique Réduire / Restaurer (Roll-up Parfait) ---
+        // --- Logique Réduire / Restaurer (Roll-up Parfait avec Anime.js) ---
         const toggleWindow = (e) => {
             e.stopPropagation();
+            const isCollapsing = !panel.classList.contains('window-collapsed');
             panel.classList.toggle('window-collapsed');
             
             // Fix : On écrase le padding dynamiquement pour que la fenêtre fasse exactement 44px de haut
@@ -2855,6 +2970,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 panel.style.setProperty('padding', '0', 'important');
             } else {
                 panel.style.padding = panel.dataset.originalPadding || '';
+                if (typeof anime !== 'undefined') {
+                    anime.remove(panel);
+                    anime({
+                        targets: panel,
+                        scale: [0.95, 1],
+                        opacity: [0.7, 1],
+                        duration: 450,
+                        easing: 'easeOutElastic(1, .8)'
+                    });
+                }
             }
             if(typeof playClickSound === 'function') playClickSound();
         };
@@ -3265,9 +3390,48 @@ requestAnimationFrame(updateVUMeter);
         ptImg.style.setProperty('height', '48px', 'important');
         ptImg.style.setProperty('padding', '0px', 'important');
     }
+    
+    // --- ANIME.JS HOVER EFFECTS & STEP BUTTON MICRO-INTERACTIONS ---
+    if (typeof anime !== 'undefined') {
+        document.querySelectorAll('.theme-pill, .dock-icon, .filter-btn, .seq-tab-btn, .glass-panel').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                anime.remove(el);
+                anime({
+                    targets: el,
+                    translateY: -2,
+                    duration: 220,
+                    easing: 'easeOutQuad'
+                });
+            });
+            el.addEventListener('mouseleave', () => {
+                anime.remove(el);
+                anime({
+                    targets: el,
+                    translateY: 0,
+                    duration: 220,
+                    easing: 'easeOutQuad'
+                });
+            });
+        });
+
+        // Feedback réactif d'enfoncement instantané pour les boutons de grille et cellules piano
+        document.querySelectorAll('.step-btn, .piano-cell').forEach(btn => {
+            btn.addEventListener('pointerdown', () => {
+                anime.remove(btn);
+                anime({
+                    targets: btn,
+                    scale: [0.85, 1],
+                    duration: 120,
+                    easing: 'easeOutQuad'
+                });
+            });
+        });
+    }
 });
 
     </script>
 
+    <!-- Script CDN Officiel Anime.js v3.x -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </body>
 </html>
