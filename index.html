@@ -513,13 +513,13 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         .sequencer-track-row { min-width: 500px; touch-action: none; }
         .sequencer-track-row-large { min-width: 800px; touch-action: none; }
         
-        .step-btn { height: 32px; width: 100%; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; position: relative; z-index: 10; touch-action: none;}
+        .step-btn { height: 32px; width: 100%; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s !important; position: relative; z-index: 10; touch-action: none;}
         @media (max-width: 768px) { .step-btn { height: 40px; } }
         .step-btn.active { background: var(--accent-color); border-color: transparent; box-shadow: 0 0 12px var(--accent-color); }
         body.light-mode .step-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
         body.light-mode .step-btn.active { background-color: #333; border-color: #333; box-shadow: none; }
         
-        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 4px; cursor: pointer; transition: 0.1s; border: 1px solid transparent; position: relative; z-index: 10; touch-action: none; }
+        .piano-cell { background: rgba(255,255,255,0.03); border-radius: 4px; cursor: pointer; transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s !important; border: 1px solid transparent; position: relative; z-index: 10; touch-action: none; }
         .piano-cell.note-start { background: var(--accent-color); opacity: 1; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; }
         .piano-cell.note-sustain { background: var(--accent-color); opacity: 0.7; border-left: none; border-radius: 0; }
         .piano-cell.note-sustain:last-child, .piano-cell.note-start:not(:has(+ .note-sustain)) { border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-right: 1px solid transparent; }
@@ -2236,6 +2236,74 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         const scaleIntervals = { 'major': [0, 2, 4, 5, 7, 9, 11, 12], 'minor': [0, 2, 3, 5, 7, 8, 10, 12], 'pentaminor': [0, 3, 5, 7, 10, 12], 'pentamajor': [0, 2, 4, 7, 9, 12] };
         let currentScaleNotesLarge = [...notesLarge];
 
+        function animateJuicyPad(el) {
+            if (typeof anime === 'undefined' || !el) return;
+            anime.remove(el);
+            anime({
+                targets: el,
+                scale: [0.7, 1.15, 1],
+                duration: 350,
+                easing: 'easeOutElastic(1, .6)'
+            });
+        }
+
+        function animateSequencerSVGs() {
+            if (typeof anime === 'undefined') return;
+            const paths = Array.from(document.querySelectorAll('#sequencer-inner svg line, #sequencer-inner svg path'));
+            if (!paths.length) return;
+            
+            paths.forEach(p => {
+                if (p.getTotalLength) {
+                    const len = p.getTotalLength();
+                    p.style.strokeDasharray = len;
+                    p.style.strokeDashoffset = len;
+                }
+            });
+
+            anime({
+                targets: paths,
+                strokeDashoffset: [anime.setDashoffset, 0],
+                duration: 750,
+                delay: anime.stagger(50),
+                easing: 'easeInOutSine'
+            });
+        }
+
+        function animateSequencerEntrance() {
+            if (typeof anime === 'undefined') return;
+            const inner = document.getElementById('sequencer-inner');
+            if (!inner) return;
+
+            anime.remove(inner);
+            anime({
+                targets: inner,
+                scale: [0.94, 1],
+                opacity: [0, 1],
+                duration: 600,
+                easing: 'easeOutElastic(1, .7)'
+            });
+
+            const items = Array.from(inner.querySelectorAll('.seq-tabs-container, #seq-pads-ui .drum-pad, .sequencer-track-row-large > div, .transport-btn, #mixer-panel'));
+            if (items.length) {
+                anime.remove(items);
+                items.forEach(el => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(15px)';
+                });
+
+                anime({
+                    targets: items,
+                    translateY: [15, 0],
+                    opacity: [0, 1],
+                    delay: anime.stagger(50),
+                    duration: 650,
+                    easing: 'easeOutElastic(1, .7)'
+                });
+            }
+
+            animateSequencerSVGs();
+        }
+
         function createStepBtn(arrayRef, index, dataArray) {
             const btn = document.createElement('button'); btn.className = `step-btn click-sound touch-manipulation`;
             const toggle = (e) => {
@@ -2244,6 +2312,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                 const state = !dataArray[index];
                 dataArray[index] = state;
                 btn.classList.toggle('active', state);
+                animateJuicyPad(btn);
             };
             btn.addEventListener('pointerdown', toggle);
             return btn;
@@ -2273,6 +2342,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                         const state = !gridData[r][c]; 
                         gridData[r][c] = state ? 1 : 0; 
                         updateCellVisual(cell, gridData[r][c]); 
+                        animateJuicyPad(cell);
                         cell.setPointerCapture(e.pointerId); 
                     });
                     container.appendChild(cell);
@@ -2297,9 +2367,23 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                 document.getElementById('btn-pads').classList.remove('active-tab'); 
                 document.getElementById('btn-large').classList.add('active-tab'); 
             } 
+            animateSequencerEntrance();
         }
             
         function togglePlay(target) { isPlaying = !isPlaying; const btn = document.getElementById(`play-btn-large`); const led = document.getElementById(`seq-led-large`);
+            if (btn && typeof anime !== 'undefined') {
+                const playSvg = btn.querySelector('svg');
+                if (playSvg) {
+                    anime.remove(playSvg);
+                    anime({
+                        targets: playSvg,
+                        rotate: isPlaying ? '1turn' : '0turn',
+                        scale: [0.7, 1.25, 1],
+                        duration: 550,
+                        easing: 'easeOutElastic(1, .6)'
+                    });
+                }
+            }
             if(isPlaying) { 
                 if(btn) btn.classList.add('playing'); 
                 if(led) { led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse'); }
@@ -2321,9 +2405,37 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             currentStep = (currentStep + 1) % 16;
         }
 
-        function highlightColumn(mode, colIdx, maxCols, maxRows) { const tracks = ['kick', 'snare', 'hat', 'perc1', 'perc2']; tracks.forEach(t => { const row = document.getElementById(`track-${t}-${mode}`); if(row && row.children[colIdx]) row.children[colIdx].classList.add('playing-col'); }); for(let r=0; r<maxRows; r++) { const cell = document.getElementById(`note-${mode}-${r}-${colIdx}`); if(cell) cell.classList.add('playing-col'); } }
+        function highlightColumn(mode, colIdx, maxCols, maxRows) { 
+            const tracks = ['kick', 'snare', 'hat', 'perc1', 'perc2']; 
+            tracks.forEach(t => { 
+                const row = document.getElementById(`track-${t}-${mode}`); 
+                if(row && row.children[colIdx]) {
+                    const btn = row.children[colIdx];
+                    btn.classList.add('playing-col'); 
+                    if (btn.classList.contains('active')) animateJuicyPad(btn);
+                }
+            }); 
+            for(let r=0; r<maxRows; r++) { 
+                const cell = document.getElementById(`note-${mode}-${r}-${colIdx}`); 
+                if(cell) {
+                    cell.classList.add('playing-col'); 
+                    if (cell.classList.contains('active') || cell.classList.contains('note-start')) animateJuicyPad(cell);
+                }
+            } 
+        }
         function resetVisuals() { document.querySelectorAll('.playing-col').forEach(el => el.classList.remove('playing-col')); }
         function clearSequencer(mode) { 
+             const clearSvg = document.querySelector('button[onclick*="clearSequencer"] svg');
+             if (clearSvg && typeof anime !== 'undefined') {
+                 anime.remove(clearSvg);
+                 anime({
+                     targets: clearSvg,
+                     rotate: ['-90deg', '0deg'],
+                     scale: [0.7, 1.2, 1],
+                     duration: 500,
+                     easing: 'easeOutElastic(1, .6)'
+                 });
+             }
              seqLarge.kick.fill(0); seqLarge.snare.fill(0); seqLarge.hat.fill(0); seqLarge.perc1.fill(0); seqLarge.perc2.fill(0); melodyLarge.forEach(r=>r.fill(false)); 
              updatePianoRoll(mode); 
              const tracks = ['kick', 'snare', 'hat', 'perc1', 'perc2']; 
