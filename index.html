@@ -18,8 +18,8 @@
     <link rel="preload" as="image" href="moi.png">
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-        <!-- Script CDN Officiel Anime.js v3.x -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+        <!-- Script CDN Officiel Anime.js V4 -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.0-beta.95/dist/anime.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2237,18 +2237,20 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         let currentScaleNotesLarge = [...notesLarge];
 
         function animateJuicyPad(el) {
-            if (typeof anime === 'undefined' || !el) return;
-            anime.remove(el);
-            anime({
-                targets: el,
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+            if (!anim || !el) return;
+            if (typeof anime !== 'undefined' && anime.remove) anime.remove(el);
+            anim(el, {
                 scale: [0.7, 1.15, 1],
                 duration: 350,
-                easing: 'easeOutElastic(1, .6)'
+                ease: 'outElastic(1, .6)'
             });
         }
 
         function animateSequencerSVGs() {
-            if (typeof anime === 'undefined') return;
+            const anim = typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null);
+            const stg = typeof stagger !== 'undefined' ? stagger : (typeof anime !== 'undefined' && anime.stagger ? anime.stagger : null);
+            if (!anim) return;
             const paths = Array.from(document.querySelectorAll('#sequencer-inner svg line, #sequencer-inner svg path'));
             if (!paths.length) return;
             
@@ -2260,44 +2262,42 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                 }
             });
 
-            anime({
-                targets: paths,
-                strokeDashoffset: [anime.setDashoffset, 0],
+            anim(paths, {
+                strokeDashoffset: [typeof anime !== 'undefined' && anime.setDashoffset ? anime.setDashoffset : 0, 0],
                 duration: 750,
-                delay: anime.stagger(50),
-                easing: 'easeInOutSine'
+                delay: stg ? stg(50) : 50,
+                ease: 'inOutSine'
             });
         }
 
         function animateSequencerEntrance() {
-            if (typeof anime === 'undefined') return;
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+            const stg = typeof stagger !== 'undefined' ? stagger : (typeof anime !== 'undefined' && anime.stagger ? anime.stagger : null);
             const inner = document.getElementById('sequencer-inner');
-            if (!inner) return;
+            if (!inner || !anim) return;
 
-            anime.remove(inner);
-            anime({
-                targets: inner,
+            if (typeof anime !== 'undefined' && anime.remove) anime.remove(inner);
+            anim(inner, {
                 scale: [0.94, 1],
                 opacity: [0, 1],
                 duration: 600,
-                easing: 'easeOutElastic(1, .7)'
+                ease: 'outElastic(1, .7)'
             });
 
             const items = Array.from(inner.querySelectorAll('.seq-tabs-container, #seq-pads-ui .drum-pad, .sequencer-track-row-large > div, .transport-btn, #mixer-panel'));
             if (items.length) {
-                anime.remove(items);
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(items);
                 items.forEach(el => {
                     el.style.opacity = '0';
                     el.style.transform = 'translateY(15px)';
                 });
 
-                anime({
-                    targets: items,
+                anim(items, {
                     translateY: [15, 0],
                     opacity: [0, 1],
-                    delay: anime.stagger(50),
+                    delay: stg ? stg(50) : 50,
                     duration: 650,
-                    easing: 'easeOutElastic(1, .7)'
+                    ease: 'outElastic(1, .7)'
                 });
             }
 
@@ -2371,16 +2371,16 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         }
             
         function togglePlay(target) { isPlaying = !isPlaying; const btn = document.getElementById(`play-btn-large`); const led = document.getElementById(`seq-led-large`);
-            if (btn && typeof anime !== 'undefined') {
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+            if (btn && anim) {
                 const playSvg = btn.querySelector('svg');
                 if (playSvg) {
-                    anime.remove(playSvg);
-                    anime({
-                        targets: playSvg,
+                    if (typeof anime !== 'undefined' && anime.remove) anime.remove(playSvg);
+                    anim(playSvg, {
                         rotate: isPlaying ? '1turn' : '0turn',
                         scale: [0.7, 1.25, 1],
                         duration: 550,
-                        easing: 'easeOutElastic(1, .6)'
+                        ease: 'outElastic(1, .6)'
                     });
                 }
             }
@@ -2426,14 +2426,14 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         function resetVisuals() { document.querySelectorAll('.playing-col').forEach(el => el.classList.remove('playing-col')); }
         function clearSequencer(mode) { 
              const clearSvg = document.querySelector('button[onclick*="clearSequencer"] svg');
-             if (clearSvg && typeof anime !== 'undefined') {
-                 anime.remove(clearSvg);
-                 anime({
-                     targets: clearSvg,
+             const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+             if (clearSvg && anim) {
+                 if (typeof anime !== 'undefined' && anime.remove) anime.remove(clearSvg);
+                 anim(clearSvg, {
                      rotate: ['-90deg', '0deg'],
                      scale: [0.7, 1.2, 1],
                      duration: 500,
-                     easing: 'easeOutElastic(1, .6)'
+                     ease: 'outElastic(1, .6)'
                  });
              }
              seqLarge.kick.fill(0); seqLarge.snare.fill(0); seqLarge.hat.fill(0); seqLarge.perc1.fill(0); seqLarge.perc2.fill(0); melodyLarge.forEach(r=>r.fill(false)); 
@@ -2666,32 +2666,31 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         }
 
         function openVision() {
-            console.log('🚀 [Anime.js] Animation Vision.dmg (OPEN) lancée');
+            console.log('🚀 [Anime.js V4] Animation Vision.dmg (OPEN) lancée');
             const modal = document.getElementById('vision-modal');
             const content = document.getElementById('vision-content');
             if (!modal || !content) return;
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
             
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             
-            if (typeof anime !== 'undefined') {
-                anime.remove([modal, content]);
+            if (anim) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, content]);
                 modal.style.opacity = '0';
                 content.style.opacity = '0';
                 content.style.transform = 'scale(0.5)';
                 
-                anime({
-                    targets: modal,
+                anim(modal, {
                     opacity: [0, 1],
                     duration: 350,
-                    easing: 'linear'
+                    ease: 'linear'
                 });
-                anime({
-                    targets: content,
+                anim(content, {
                     scale: [0.5, 1],
                     opacity: [0, 1],
                     duration: 800,
-                    easing: 'easeOutElastic(1, .6)'
+                    ease: 'outElastic(1, .6)'
                 });
             } else {
                 modal.style.opacity = '1';
@@ -2703,26 +2702,25 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         }
 
         function closeVision() {
-            console.log('🚀 [Anime.js] Animation Vision.dmg (CLOSE) lancée');
+            console.log('🚀 [Anime.js V4] Animation Vision.dmg (CLOSE) lancée');
             const modal = document.getElementById('vision-modal');
             const content = document.getElementById('vision-content');
             if (!modal || !content) return;
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
             
-            if (typeof anime !== 'undefined') {
-                anime.remove([modal, content]);
-                anime({
-                    targets: content,
+            if (anim) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, content]);
+                anim(content, {
                     scale: [1, 0.5],
                     opacity: [1, 0],
                     duration: 300,
-                    easing: 'easeInExpo'
+                    ease: 'inExpo'
                 });
-                anime({
-                    targets: modal,
+                anim(modal, {
                     opacity: [1, 0],
                     duration: 300,
-                    easing: 'easeInExpo',
-                    complete: function() {
+                    ease: 'inExpo',
+                    onComplete: function() {
                         modal.classList.add('hidden');
                         modal.classList.remove('flex');
                         modal.style.opacity = '';
@@ -2979,29 +2977,29 @@ document.querySelectorAll('.scroll-float').forEach(el => scrollObserver.observe(
 
 
 
-        // ── PIE CHART ANIMATION AU SCROLL (ANIME.JS STAGGER + ELASTIC) ──
+        // ── PIE CHART ANIMATION AU SCROLL (ANIME.JS V4 STAGGER + ELASTIC) ──
 function animatePieCharts() {
-    console.log('🚀 [Anime.js] Animation Pie Charts (Skills) lancée');
+    console.log('🚀 [Anime.js V4] Animation Pie Charts (Skills) lancée');
     const charts = Array.from(document.querySelectorAll('.pie-chart'));
     if (!charts.length) return;
+    const anim = typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null);
 
-    if (typeof anime !== 'undefined') {
+    if (anim) {
         charts.forEach((chart, index) => {
             const targetPercent = parseFloat(chart.style.getPropertyValue('--percent') || chart.getAttribute('style')?.match(/--percent:\s*([\d.]+)/)?.[1] || 0);
             const obj = { val: 0 };
             
-            anime({
-                targets: obj,
+            anim(obj, {
                 val: [0, targetPercent],
                 duration: 1200,
                 delay: index * 150,
-                easing: 'easeOutElastic(1, .75)',
-                update: function() {
+                ease: 'outElastic(1, .75)',
+                onUpdate: function() {
                     chart.style.setProperty('--drawn-percent', obj.val);
                     const span = chart.querySelector('span');
                     if (span) span.textContent = Math.round(obj.val) + '%';
                 },
-                complete: function() {
+                onComplete: function() {
                     chart.classList.add('animated');
                 }
             });
@@ -3017,27 +3015,28 @@ function animatePieCharts() {
     }
 }
 
-// ── TIMELINE.LOG ANIMATION DEFILEMENT VERTICAL STAGGERED (ANIME.JS) ──
+// ── TIMELINE.LOG ANIMATION DEFILEMENT VERTICAL STAGGERED (ANIME.JS V4) ──
 function initTimelineAnimation() {
     const parcoursEl = document.getElementById('parcours');
     if (!parcoursEl) return;
+    const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+    const stg = typeof stagger !== 'undefined' ? stagger : (typeof anime !== 'undefined' && anime.stagger ? anime.stagger : null);
 
     const timelineObserver = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            console.log('🚀 [Anime.js] Animation Timeline.log (Parcours) lancée');
+            console.log('🚀 [Anime.js V4] Animation Timeline.log (Parcours) lancée');
             const items = Array.from(parcoursEl.querySelectorAll('.group'));
-            if (typeof anime !== 'undefined' && items.length) {
+            if (anim && items.length) {
                 items.forEach(el => {
                     el.style.opacity = '0';
                 });
-                anime.remove(items);
-                anime({
-                    targets: items,
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(items);
+                anim(items, {
                     translateY: [-35, 0],
                     opacity: [0, 1],
-                    delay: anime.stagger(120),
+                    delay: stg ? stg(120) : 120,
                     duration: 900,
-                    easing: 'easeOutElastic(1, .8)'
+                    ease: 'outElastic(1, .8)'
                 });
             }
             timelineObserver.disconnect();
@@ -3591,9 +3590,10 @@ requestAnimationFrame(updateVUMeter);
         ptImg.style.setProperty('padding', '0px', 'important');
     }
     
-    // --- GLOBAL JUICY MICRO-INTERACTION ENGINE (ANIME.JS) ---
+    // --- GLOBAL JUICY MICRO-INTERACTION ENGINE (ANIME.JS V4 - WAAPI ENGINE) ---
     function initGlobalJuicyInteractions() {
-        if (typeof anime === 'undefined') return;
+        const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.waapi?.animate || anime.animate || anime) : null));
+        if (!anim) return;
 
         const selector = [
             '.dock-icon',
@@ -3627,46 +3627,42 @@ requestAnimationFrame(updateVUMeter);
             // PROTOCOLE STRICT ANTI-CONFLIT: Désactiver la propriété transition CSS sur transform
             el.style.transitionProperty = 'background-color, border-color, box-shadow, color, opacity';
 
-            // 1. SURVOL (MouseEnter): Pop & Elevate (translateY: -4px, scale: 1.04)
+            // 1. SURVOL (MouseEnter): Pop & Elevate (translateY: -4px, scale: 1.04) via WAAPI Engine (60 FPS)
             el.addEventListener('mouseenter', () => {
-                anime.remove(el);
-                anime({
-                    targets: el,
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(el);
+                anim(el, {
                     translateY: -4,
                     scale: 1.04,
                     duration: 500,
-                    easing: 'easeOutElastic(1, 0.5)'
+                    ease: 'outElastic(1, 0.5)'
                 });
             });
 
             // 2. SORTIE DE SURVOL (MouseLeave): Retour rapide à 0
             el.addEventListener('mouseleave', () => {
-                anime.remove(el);
-                anime({
-                    targets: el,
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(el);
+                anim(el, {
                     translateY: 0,
                     scale: 1.0,
                     duration: 220,
-                    easing: 'easeOutCubic'
+                    ease: 'outCubic'
                 });
             });
 
-            // 3. PRESSION / CLIC (PointerDown): Effet Squish / Enfoncement instantané (scale: 0.92, translateY: 1px)
+            // 3. PRESSION / CLIC (PointerDown): Effet Squish / Enfoncement instantané
             el.addEventListener('pointerdown', () => {
-                anime.remove(el);
-                anime({
-                    targets: el,
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(el);
+                anim(el, {
                     scale: 0.92,
                     translateY: 1,
                     duration: 90,
-                    easing: 'easeOutQuad',
-                    complete: function() {
-                        anime({
-                            targets: el,
+                    ease: 'outQuad',
+                    onComplete: function() {
+                        anim(el, {
                             scale: el.matches(':hover') ? 1.04 : 1.0,
                             translateY: el.matches(':hover') ? -4 : 0,
                             duration: 350,
-                            easing: 'easeOutElastic(1, 0.6)'
+                            ease: 'outElastic(1, 0.6)'
                         });
                     }
                 });
