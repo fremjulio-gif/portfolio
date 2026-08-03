@@ -1778,9 +1778,9 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
     </main>
     
-    <div id="vision-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+    <div id="vision-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4">
         <div onclick="closeVision()" class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"></div>
-        <div class="relative glass-panel w-full max-w-2xl transform transition-all duration-300 scale-95 opacity-0" id="vision-content">
+        <div class="relative glass-panel w-full max-w-2xl" id="vision-content">
              <div class="win-header">
                 <span class="win-title">vision.dmg</span>
                 <button type="button" onclick="closeVision();" class="text-white/60 hover:text-white text-lg font-bold transition-colors cursor-pointer px-2.5 py-1 rounded hover:bg-white/10 z-20 relative" title="Fermer la fenêtre">✕</button>
@@ -2519,12 +2519,37 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); }); }, {threshold: 0.1}); document.querySelectorAll('.scroll-float').forEach(el => observer.observe(el));
         
+        function animateVisionBars() {
+            const bars = Array.from(document.querySelectorAll('.vision-bar-fill'));
+            if (!bars.length) return;
+
+            bars.forEach(bar => {
+                if (!bar.dataset.targetWidth) {
+                    bar.dataset.targetWidth = bar.style.width || '100%';
+                }
+                bar.style.width = '0%';
+            });
+
+            if (typeof anime !== 'undefined') {
+                anime.remove(bars);
+                anime({
+                    targets: bars,
+                    width: (el) => [0, el.dataset.targetWidth],
+                    duration: 1100,
+                    delay: anime.stagger(140),
+                    easing: 'easeOutElastic(1, .75)'
+                });
+            } else {
+                bars.forEach(b => { b.style.width = b.dataset.targetWidth; });
+            }
+        }
+
         function openVision() {
             const modal = document.getElementById('vision-modal');
             const content = document.getElementById('vision-content');
             if (!modal || !content) return;
             
-            modal.classList.remove('hidden', 'opacity-0');
+            modal.classList.remove('hidden');
             modal.classList.add('flex');
             
             if (typeof anime !== 'undefined') {
@@ -2535,19 +2560,22 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                 anime({
                     targets: modal,
                     opacity: [0, 1],
-                    duration: 300,
-                    easing: 'easeOutExpo'
+                    duration: 350,
+                    easing: 'linear'
                 });
                 anime({
                     targets: content,
-                    scale: [0.8, 1],
+                    scale: [0.5, 1],
                     opacity: [0, 1],
-                    duration: 500,
-                    easing: 'easeOutElastic(1, .8)'
+                    duration: 800,
+                    easing: 'easeOutElastic(1, .6)'
                 });
             } else {
-                content.classList.remove('scale-95', 'opacity-0');
+                modal.style.opacity = '1';
+                content.style.opacity = '1';
             }
+
+            animateVisionBars();
         }
 
         function closeVision() {
@@ -2559,18 +2587,18 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                 anime.remove([modal, content]);
                 anime({
                     targets: content,
-                    scale: [1, 0.85],
+                    scale: [1, 0.5],
                     opacity: [1, 0],
-                    duration: 220,
+                    duration: 300,
                     easing: 'easeInExpo'
                 });
                 anime({
                     targets: modal,
                     opacity: [1, 0],
-                    duration: 220,
+                    duration: 300,
                     easing: 'easeInExpo',
                     complete: function() {
-                        modal.classList.add('hidden', 'opacity-0');
+                        modal.classList.add('hidden');
                         modal.classList.remove('flex');
                         modal.style.opacity = '';
                         content.style.opacity = '';
@@ -2578,11 +2606,8 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                     }
                 });
             } else {
-                modal.classList.add('hidden', 'opacity-0');
+                modal.classList.add('hidden');
                 modal.classList.remove('flex');
-                modal.style.opacity = '';
-                content.style.opacity = '';
-                content.style.transform = '';
             }
         }
 
@@ -2829,31 +2854,72 @@ document.querySelectorAll('.scroll-float').forEach(el => scrollObserver.observe(
 
 
 
-        // ── PIE CHART ANIMATION AU SCROLL ─────────────────────────────
+        // ── PIE CHART ANIMATION AU SCROLL (ANIME.JS STAGGER + ELASTIC) ──
 function animatePieCharts() {
-  document.querySelectorAll('.pie-chart').forEach(chart => {
-    const target = parseFloat(chart.style.getPropertyValue('--percent') || chart.getAttribute('style').match(/--percent:\s*([\d.]+)/)?.[1] || 0);
-    const duration = 900;
-    const start = performance.now();
+    const charts = Array.from(document.querySelectorAll('.pie-chart'));
+    if (!charts.length) return;
 
-    function step(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // Easing : ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = target * eased;
-      chart.style.setProperty('--drawn-percent', current);
-      // Met à jour le texte
-      const span = chart.querySelector('span');
-      if (span) span.textContent = Math.round(current) + '%';
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        chart.classList.add('animated');
-      }
+    charts.forEach(chart => {
+        const targetPercent = parseFloat(chart.style.getPropertyValue('--percent') || chart.getAttribute('style')?.match(/--percent:\s*([\d.]+)/)?.[1] || 0);
+        chart._targetPercent = targetPercent;
+        chart._currentVal = 0;
+    });
+
+    if (typeof anime !== 'undefined') {
+        anime.remove(charts);
+        anime({
+            targets: charts,
+            _currentVal: (el) => el._targetPercent,
+            duration: 1200,
+            delay: anime.stagger(150),
+            easing: 'easeOutElastic(1, .75)',
+            update: function(anim) {
+                anim.animatables.forEach(item => {
+                    const el = item.target;
+                    const val = el._currentVal;
+                    el.style.setProperty('--drawn-percent', val);
+                    const span = el.querySelector('span');
+                    if (span) span.textContent = Math.round(val) + '%';
+                });
+            },
+            complete: function() {
+                charts.forEach(c => c.classList.add('animated'));
+            }
+        });
+    } else {
+        charts.forEach(c => {
+            c.style.setProperty('--drawn-percent', c._targetPercent);
+            const span = c.querySelector('span');
+            if (span) span.textContent = Math.round(c._targetPercent) + '%';
+            c.classList.add('animated');
+        });
     }
-    requestAnimationFrame(step);
-  });
+}
+
+// ── TIMELINE.LOG ANIMATION DEFILEMENT VERTICAL STAGGERED (ANIME.JS) ──
+function initTimelineAnimation() {
+    const parcoursEl = document.getElementById('parcours');
+    if (!parcoursEl) return;
+
+    const timelineObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            const items = Array.from(parcoursEl.querySelectorAll('.group'));
+            if (typeof anime !== 'undefined' && items.length) {
+                anime.remove(items);
+                anime({
+                    targets: items,
+                    translateY: [-40, 0],
+                    opacity: [0, 1],
+                    delay: anime.stagger(120),
+                    duration: 900,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            }
+            timelineObserver.disconnect();
+        }
+    }, { threshold: 0.15 });
+
+    timelineObserver.observe(parcoursEl);
 }
 
 // Déclenche quand #skills entre dans le viewport
@@ -2866,6 +2932,9 @@ const pieObserver = new IntersectionObserver((entries) => {
 
 const skillsEl = document.getElementById('skills');
 if (skillsEl) pieObserver.observe(skillsEl);
+
+// Initialiser l'animation staggered de la timeline
+initTimelineAnimation();
 
 // Relance l'animation si on change de thème (pour le glow)
     document.querySelectorAll('.theme-pill').forEach(btn => {
