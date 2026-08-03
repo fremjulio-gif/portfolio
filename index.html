@@ -3015,7 +3015,7 @@ function animatePieCharts() {
     }
 }
 
-// ── TIMELINE.LOG ANIMATION DEFILEMENT VERTICAL STAGGERED (ANIME.JS V4) ──
+// ── TIMELINE.LOG ANIMATION DEFILEMENT VERTICAL STAGGERED & HOVER (ANIME.JS V4) ──
 function initTimelineAnimation() {
     const parcoursEl = document.getElementById('parcours');
     if (!parcoursEl) return;
@@ -3024,19 +3024,46 @@ function initTimelineAnimation() {
 
     const timelineObserver = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            console.log('🚀 [Anime.js V4] Animation Timeline.log (Parcours) lancée');
+            console.log('🚀 [Anime.js V4] Animation Timeline.log (Parcours) lancée - Full Refactor');
             const items = Array.from(parcoursEl.querySelectorAll('.group'));
             if (anim && items.length) {
                 items.forEach(el => {
                     el.style.opacity = '0';
+                    el.style.transform = 'translateY(40px) scale(0.85)';
                 });
                 if (typeof anime !== 'undefined' && anime.remove) anime.remove(items);
+
+                // 2. Apparition "Juicy" & Staggering au Scroll
                 anim(items, {
-                    translateY: [-35, 0],
+                    translateY: [40, 0],
+                    scale: [0.85, 1],
                     opacity: [0, 1],
-                    delay: stg ? stg(120) : 120,
+                    delay: stg ? stg(150) : 150,
                     duration: 900,
-                    ease: 'outElastic(1, .8)'
+                    ease: 'outElastic(1, .75)'
+                });
+
+                // 3. Interactivité au Survol (Hover Effects 60 FPS via WAAPI)
+                items.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                        anim(card, {
+                            translateY: -6,
+                            scale: 1.025,
+                            duration: 450,
+                            ease: 'outElastic(1, .6)'
+                        });
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                        anim(card, {
+                            translateY: 0,
+                            scale: 1.0,
+                            duration: 250,
+                            ease: 'outCubic'
+                        });
+                    });
                 });
             }
             timelineObserver.disconnect();
