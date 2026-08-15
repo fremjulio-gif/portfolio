@@ -20,20 +20,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script CDN Officiel Anime.js V4 -->
     <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.0-beta.95/dist/anime.min.js"></script>
-    <!-- Script CDN Spline 3D Viewer (Dernière version optimisée) -->
-    <script type="module" src="https://unpkg.com/@splinetool/viewer/build/spline-viewer.js"></script>
+    <!-- Script CDN Spline 3D Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.98/build/spline-viewer.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CONTRÔLE DE TAILLE ABSOLU SPLINE (ZÉRO MARGE PARASITE) & PURGE CSS --- */
+        /* --- CONTRÔLE DE TAILLE ABSOLU SPLINE, DISQUE TOURNANT & CROP ANTI-FILIGRANE --- */
         spline-viewer {
             width: 100% !important;
             height: 100% !important;
             display: block;
         }
+        
+        /* Masquage de sécurité du watermark et du loader via Shadow Parts */
         spline-viewer::shadow #logo,
         spline-viewer::shadow a#logo,
         spline-viewer::shadow #loader,
@@ -46,6 +48,36 @@
             visibility: hidden !important;
             pointer-events: none !important;
             transform: scale(0) !important;
+        }
+
+        /* Animation de rotation continue "tel un disque" */
+        .spin-disc {
+            animation: spinVinylDisc 12s linear infinite;
+            transform-origin: center center;
+            will-change: transform;
+        }
+        .spin-disc:hover,
+        .group:hover .spin-disc {
+            animation-duration: 4s; /* Accélération au survol */
+        }
+        @keyframes spinVinylDisc {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Crop chirurgical : agrandissement à 130% centré pour expulser tout filigrane hors du masque */
+        .spline-disk-crop {
+            width: 130% !important;
+            height: 130% !important;
+            min-width: 130% !important;
+            min-height: 130% !important;
+            transform: scale(1.3);
+            transform-origin: center center;
+            display: block;
         }
         /* --- CORE VARS & THEME ISOLATION --- */
         :root {
@@ -857,12 +889,14 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
     <div id="start-screen">
         <div onclick="startExperience()" class="cursor-pointer flex flex-col items-center gap-6 group">
   
-  <!-- Logo 3D Spline Interactif -->
-  <div class="relative w-20 h-20 mb-2 flex items-center justify-center rounded-2xl overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 shadow-[0_0_40px_-8px_rgba(255,255,255,0.15)] transition-transform duration-300 group-hover:scale-105">
-    <spline-viewer
-        url="https://prod.spline.design/B7sDEZ7ZfOlUR6PE/scene.splinecode"
-        class="pointer-events-none group-hover:pointer-events-auto">
-    </spline-viewer>
+  <!-- Logo 3D Spline Interactif (Disque Tournant & Croppé Anti-Filigrane) -->
+  <div class="relative w-24 h-24 mb-2 flex items-center justify-center rounded-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 shadow-[0_0_50px_-10px_rgba(255,255,255,0.2)] transition-transform duration-300 group-hover:scale-105">
+    <div class="w-full h-full flex items-center justify-center spin-disc">
+      <spline-viewer
+          url="https://prod.spline.design/B7sDEZ7ZfOlUR6PE/scene.splinecode"
+          class="spline-disk-crop pointer-events-none group-hover:pointer-events-auto">
+      </spline-viewer>
+    </div>
   </div>
 
   <!-- Nom -->
@@ -1824,13 +1858,15 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
    <nav class="apple-menubar">
     <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
-        <!-- Logo 3D Interactif Spline -->
+        <!-- Logo 3D Interactif Spline (Disque Tournant & Croppé Anti-Filigrane) -->
         <a href="#hero" class="flex items-center justify-center mr-1.5 click-sound touch-manipulation group" title="Jules Frémondière — Accueil">
-            <div class="w-8 h-8 relative flex items-center justify-center rounded-lg overflow-hidden transition-transform duration-200 group-hover:scale-110">
-                <spline-viewer
-                    url="https://prod.spline.design/B7sDEZ7ZfOlUR6PE/scene.splinecode"
-                    class="pointer-events-none group-hover:pointer-events-auto">
-                </spline-viewer>
+            <div class="w-8 h-8 relative flex items-center justify-center rounded-full overflow-hidden border border-white/10 bg-black/40 shadow-sm group-hover:border-white/30 transition-all duration-300">
+                <div class="w-full h-full flex items-center justify-center spin-disc">
+                    <spline-viewer
+                        url="https://prod.spline.design/B7sDEZ7ZfOlUR6PE/scene.splinecode"
+                        class="spline-disk-crop pointer-events-none group-hover:pointer-events-auto">
+                    </spline-viewer>
+                </div>
             </div>
         </a>
         <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
