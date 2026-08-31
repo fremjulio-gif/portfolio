@@ -2480,7 +2480,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                 <a href="mailto:jules.fremondiere@3is.fr" class="text-lg font-bold text-[var(--accent-color)] hover:underline relative z-10">jules.fremondiere@3is.fr</a>
                 <a href="https://linktr.ee/jlo.flp" target="_blank" class="mt-6 inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1 touch-manipulation relative z-10">Linktree & Réseaux <span>↗</span></a>
                 
-                <p class="font-mono text-[10px] opacity-30 mt-8 relative z-10">© 2026 SYSTEM JULES F.</p>
+                <button type="button" onclick="openEasterEggQR()" class="font-mono text-[10px] opacity-30 hover:opacity-100 hover:text-[var(--accent-color)] mt-8 relative z-10 transition-all duration-300 cursor-pointer bg-transparent border-none p-1 rounded hover:scale-105 active:scale-95 focus:outline-none select-none" title="System Info">© 2026 SYSTEM JULES F.</button>
         </footer>
 
     </main>
@@ -2497,6 +2497,46 @@ body.light-mode .apple-menu-item { color: #222222; }
                 <div><h4 class="text-[var(--accent-color)] font-bold uppercase tracking-widest mb-4">Maîtrise Technique</h4><div class="space-y-4"><div><div class="flex justify-between text-xs font-mono mb-1"><span>FL Studio</span><span>80%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 80%"></div></div></div><div><div class="flex justify-between text-xs font-mono mb-1"><span>Ableton Live</span><span>75%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 75%"></div></div></div><div><div class="flex justify-between text-xs font-mono mb-1"><span>Pro Tools</span><span>70%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 70%"></div></div></div><div><div class="flex justify-between text-xs font-mono mb-1"><span>Premiere Pro</span><span>65%</span></div><div class="vision-bar-container"><div class="vision-bar-fill" style="width: 65%"></div></div></div></div></div>
                 <div><h4 class="text-[var(--accent-color)] font-bold uppercase tracking-widest mb-4">Plugins Fétiches</h4><div class="flex flex-wrap gap-2"><span class="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono">Arturia V</span><span class="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono">Kilohearts</span><span class="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono">FabFilter</span><span class="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono">Soundtoys</span><span class="px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-mono">Valhalla</span></div></div>
                 <div><h4 class="text-[var(--accent-color)] font-bold uppercase tracking-widest mb-4">Matériel Personnel</h4><div class="bg-white/5 p-4 rounded-xl border border-white/10 text-xs font-mono leading-relaxed opacity-80">Scarlett Focusrite 2i2 • RODE NT1A • YAMAHA HS7 • DT 990 PRO 250Ohm • Macbook Pro 2022 M2 24 Go RAM.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EASTER EGG WIDGET : SYSTEM JULES F. (QR CODE SHARE) -->
+    <div id="easter-egg-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4">
+        <div onclick="closeEasterEggQR()" class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"></div>
+        <div class="relative glass-panel w-full max-w-sm overflow-hidden text-center p-0" id="easter-egg-content">
+            <div class="win-header">
+                <span class="win-title flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                    system_access.key
+                </span>
+                <button type="button" onclick="closeEasterEggQR();" class="text-white/60 hover:text-white text-lg font-bold transition-colors cursor-pointer px-2.5 py-1 rounded hover:bg-white/10 z-20 relative" title="Fermer">✕</button>
+            </div>
+            <div class="p-6 flex flex-col items-center gap-4">
+                <div class="text-center">
+                    <p class="font-mono text-[11px] text-[var(--accent-color)] font-bold uppercase tracking-widest mb-1">Portfolio Direct Access</p>
+                    <p class="text-xs text-white/60">Scannez pour ouvrir le portfolio sur smartphone</p>
+                </div>
+
+                <!-- QR CODE CONTENEUR GLASS -->
+                <div class="p-3.5 bg-white rounded-2xl border border-white/20 shadow-[0_0_35px_rgba(255,255,255,0.15)] flex items-center justify-center transition hover:scale-105 duration-300">
+                    <img id="easter-egg-qr-img" 
+                         src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https%3A%2F%2Ffremjulio-gif.github.io%2Fportfolio%2F&margin=4&color=000000&bgcolor=ffffff" 
+                         alt="QR Code Portfolio Jules Frémondière" 
+                         width="190" height="190" 
+                         class="rounded-lg object-contain block">
+                </div>
+
+                <div class="w-full bg-black/40 border border-white/10 rounded-xl p-3 flex flex-col gap-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-mono text-[10px] text-white/50 truncate">https://fremjulio-gif.github.io/portfolio/</span>
+                        <button type="button" onclick="copyPortfolioLink(this)" class="shrink-0 font-mono text-[10px] uppercase tracking-wider bg-white/10 hover:bg-[var(--accent-color)] hover:text-black px-2.5 py-1 rounded transition click-sound cursor-pointer">
+                            Copier
+                        </button>
+                    </div>
+                </div>
+
+                <p class="font-mono text-[9px] text-white/30 tracking-widest uppercase">© 2026 Jules Frémondière · Sound Design</p>
             </div>
         </div>
     </div>
@@ -3441,6 +3481,96 @@ body.light-mode .apple-menu-item { color: #222222; }
             }
         }
 
+        /* --- EASTER EGG SYSTEM ACCESS (QR CODE) --- */
+        function openEasterEggQR() {
+            const modal = document.getElementById('easter-egg-modal');
+            const content = document.getElementById('easter-egg-content');
+            if (!modal || !content) return;
+
+            // Synth chime secret d'ouverture (Arpège Web Audio)
+            try {
+                if (typeof audioCtx !== 'undefined' && audioCtx) {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    const now = audioCtx.currentTime;
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + i * 0.05);
+                        gain.gain.setValueAtTime(0.0001, now + i * 0.05);
+                        gain.gain.exponentialRampToValueAtTime(0.035, now + i * 0.05 + 0.01);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.05 + 0.22);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start(now + i * 0.05);
+                        osc.stop(now + i * 0.05 + 0.23);
+                    });
+                }
+            } catch(e) {}
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+            if (anim) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, content]);
+                modal.style.opacity = '0';
+                content.style.opacity = '0';
+                content.style.transform = 'scale(0.6)';
+
+                anim(modal, { opacity: [0, 1], duration: 300, ease: 'linear' });
+                anim(content, { scale: [0.6, 1], opacity: [0, 1], duration: 650, ease: 'outElastic(1, .6)' });
+            } else {
+                modal.style.opacity = '1';
+                content.style.opacity = '1';
+                content.style.transform = 'scale(1)';
+            }
+        }
+
+        function closeEasterEggQR() {
+            const modal = document.getElementById('easter-egg-modal');
+            const content = document.getElementById('easter-egg-content');
+            if (!modal || !content) return;
+
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+            if (anim) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, content]);
+                anim(content, { scale: [1, 0.6], opacity: [1, 0], duration: 250, ease: 'inExpo' });
+                anim(modal, {
+                    opacity: [1, 0],
+                    duration: 250,
+                    ease: 'inExpo',
+                    onComplete: function() {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        modal.style.opacity = '';
+                        content.style.opacity = '';
+                        content.style.transform = '';
+                    }
+                });
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function copyPortfolioLink(btn) {
+            const url = "https://fremjulio-gif.github.io/portfolio/";
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    if (btn) {
+                        const oldText = btn.textContent;
+                        btn.textContent = "Copié !";
+                        btn.classList.add('bg-[var(--accent-color)]', 'text-black');
+                        setTimeout(() => {
+                            btn.textContent = oldText;
+                            btn.classList.remove('bg-[var(--accent-color)]', 'text-black');
+                        }, 2000);
+                    }
+                });
+            }
+        }
+
         let autoStartTimer = setTimeout(() => { startExperience(true); }, 1200);
         function startExperience(isAuto = false) { clearTimeout(autoStartTimer); document.getElementById('start-screen').classList.add('hidden-screen'); if (!isAuto && audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }
         function updateHUDClock() {
@@ -3880,7 +4010,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelectorAll('.glass-panel').forEach(panel => {
-        if (panel.closest('#vision-modal') || panel.id === 'vision-content') return;
+        if (panel.closest('#vision-modal') || panel.id === 'vision-content' || panel.closest('#easter-egg-modal') || panel.id === 'easter-egg-content') return;
         const header = panel.querySelector('.win-header');
         if (!header) return;
 
