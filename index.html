@@ -894,8 +894,8 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             </button>
 
         <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
-        <div class="bg-black/50 border border-white/10 rounded-md px-3 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0 min-w-[96px] w-[96px]">
-            <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 tabular-nums whitespace-nowrap text-center tracking-widest pointer-events-none w-full" style="font-variant-numeric: tabular-nums;">00:00:00:00</div>
+        <div class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0 min-w-[76px]">
+            <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 tabular-nums whitespace-nowrap text-center tracking-wider pointer-events-none" style="font-variant-numeric: tabular-nums;">00:00:00</div>
         </div>
      </div>
 </div>
@@ -2801,17 +2801,18 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
         let autoStartTimer = setTimeout(() => { startExperience(true); }, 1200);
         function startExperience(isAuto = false) { clearTimeout(autoStartTimer); document.getElementById('start-screen').classList.add('hidden-screen'); if (!isAuto && audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }
-        setInterval(() => {
+        function updateHUDClock() {
             const now = new Date();
             const timeDisp = document.getElementById('time-display');
             if (timeDisp) {
                 const hours = String(now.getHours()).padStart(2, '0');
                 const minutes = String(now.getMinutes()).padStart(2, '0');
                 const seconds = String(now.getSeconds()).padStart(2, '0');
-                const centiseconds = String(Math.floor(now.getMilliseconds() / 10)).padStart(2, '0');
-                timeDisp.textContent = `${hours}:${minutes}:${seconds}:${centiseconds}`;
+                timeDisp.textContent = `${hours}:${minutes}:${seconds}`;
             }
-        }, 40);
+        }
+        updateHUDClock();
+        setInterval(updateHUDClock, 500);
 
         // --- 5. SESSION.PTX (MULTI-TRACK ENGINE) ---
         const ptxTracks = {
