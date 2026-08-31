@@ -20,6 +20,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script CDN Officiel Anime.js V4 -->
     <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.0-beta.95/dist/anime.min.js"></script>
+    <!-- Script Officiel SoundCloud Player API -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -982,14 +984,94 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 #hero {
   min-height: 70vh;
   background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,255,255,0.06) 0%, transparent 70%);
-
-
-
-  
 }
 
+        /* --- NOW PLAYING SOUNDCLOUD WIDGET --- */
+        #now-playing-widget {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
 
+        #np-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            min-height: 22px;
+        }
+        #np-trigger:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
 
+        #now-playing-widget.playing #np-icon-note {
+            display: none !important;
+        }
+        #now-playing-widget.playing #np-spectrum {
+            display: flex !important;
+        }
+
+        #now-playing-widget.playing #np-play-icon {
+            display: none !important;
+        }
+        #now-playing-widget.playing #np-pause-icon {
+            display: block !important;
+        }
+
+        #now-playing-widget.playing .np-dot {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        #np-panel {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            width: 288px;
+            background: rgba(18, 18, 20, 0.85);
+            backdrop-filter: blur(30px) saturate(160%);
+            -webkit-backdrop-filter: blur(30px) saturate(160%);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+            border-radius: 18px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 0, 0, 0.5);
+            transform-origin: top right;
+            z-index: 10000;
+            padding: 16px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #np-panel.open {
+            display: block !important;
+            animation: npPanelOpen 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes npPanelOpen {
+            0% {
+                opacity: 0;
+                transform: translateY(-8px) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .np-bar {
+            transition: height 0.08s ease;
+            will-change: height;
+        }
+
+        #np-play {
+            background-color: var(--accent-color) !important;
+            color: #000000 !important;
+        }
 
     </style>
 
@@ -2038,8 +2120,86 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
             <span>48 kHz</span>
             <span class="text-[var(--accent-color)] animate-pulse">●</span>
         </div>
+
+        <!-- WIDGET NOW PLAYING (SOUNDCLOUD SHUFFLE) -->
+        <div id="now-playing-widget" class="relative">
+            <div id="np-trigger" onclick="npTogglePanel()" title="Now Playing">
+                <div id="np-icon-note" class="text-white/85 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
+                </div>
+                <div id="np-spectrum" class="hidden items-end gap-[2px] h-3.5 w-4">
+                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 4px;"></span>
+                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 8px;"></span>
+                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 12px;"></span>
+                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 6px;"></span>
+                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 10px;"></span>
+                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 14px;"></span>
+                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 5px;"></span>
+                </div>
+            </div>
+
+            <div id="np-panel">
+                <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
+                    <span class="np-head-label font-mono text-[10px] uppercase tracking-widest text-white/70 flex items-center gap-1.5">
+                        <span class="np-dot w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span> Now Playing
+                    </span>
+                    <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="np-body flex items-center gap-3 mb-3">
+                    <div id="np-art" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
+                        <span class="np-art-glyph font-mono text-lg text-[var(--accent-color)]">♪</span>
+                    </div>
+                    <div id="np-info" class="flex-1 min-w-0">
+                        <div id="np-title" class="font-bold text-xs truncate text-white" title="—">—</div>
+                        <div id="np-sub" class="text-[10px] text-white/40 truncate font-light mt-0.5">SoundCloud · shuffle</div>
+                    </div>
+                </div>
+
+                <div id="np-progress-wrap" class="w-full h-1.5 bg-white/10 hover:bg-white/20 rounded-full cursor-pointer relative overflow-hidden mb-1 transition-colors" onclick="npSeek(event)">
+                    <div id="np-progress" class="h-full bg-[var(--accent-color)] rounded-full transition-all duration-100" style="width: 0%;"></div>
+                </div>
+
+                <div id="np-times" class="flex justify-between font-mono text-[9px] text-white/40 mb-3">
+                    <span id="np-time-cur">0:00</span>
+                    <span id="np-time-tot">0:00</span>
+                </div>
+
+                <div id="np-controls" class="flex items-center justify-center gap-4">
+                    <div id="np-prev" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(true)" title="Précédent (Aléatoire)">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                        </svg>
+                    </div>
+                    <button id="np-play" class="w-11 h-11 rounded-full bg-[var(--accent-color)] text-black flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(var(--accent-color),0.4)] hover:scale-105 active:scale-95 transition" onclick="npTogglePlay()" title="Lecture / Pause">
+                        <svg id="np-play-icon" class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        <svg id="np-pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                        </svg>
+                    </button>
+                    <div id="np-next" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(false)" title="Suivant (Aléatoire)">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
+
+<!-- iframe SoundCloud caché (Lecteur Audio Background) -->
+<iframe id="sc-widget" allow="autoplay"
+  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/el_jlo&auto_play=false&buying=false&sharing=false&download=false&show_artwork=false&show_playcount=false&show_user=false&hide_related=true&visual=false"
+  style="position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-9999px;"></iframe>
 
 <nav class="dock-container">
     <a href="#hero" class="dock-icon click-sound touch-manipulation">
@@ -3983,6 +4143,248 @@ requestAnimationFrame(updateVUMeter);
         observer.observe(document.body, { childList: true, subtree: true });
     }
 });
+
+// ========================================================
+// --- NOW PLAYING SOUNDCLOUD SHUFFLE CONTROLLER (API) ---
+// ========================================================
+const NP_TRACKS = [
+    { url: 'https://soundcloud.com/el_jlo/apocalypse', title: 'Apocalypse', genre: 'Remix — Ambient — Synth' },
+    { url: 'https://soundcloud.com/el_jlo/ocarina-theme-with-drums', title: 'OCARINA THEME WITH DRUMS', genre: 'Trap — OST — Remix' },
+    { url: 'https://soundcloud.com/el_jlo/sets/remix-tape-vol-1', title: 'Remix Tape vol.1', genre: 'Electro — Trap — Remix' },
+    { url: 'https://soundcloud.com/el_jlo/long-day-jlo', title: 'Long Day', genre: 'Ambient — Electro — Dnb' }
+];
+
+let npCurrentTrackIndex = Math.floor(Math.random() * NP_TRACKS.length);
+let npIsPlaying = false;
+let npDurationMs = 0;
+let npAnimFrame = null;
+let scWidget = null;
+let npSpectrumPhase = 0;
+
+function npFormatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return "0:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function npTogglePanel() {
+    const panel = document.getElementById('np-panel');
+    if (panel) panel.classList.toggle('open');
+}
+
+function npClosePanel() {
+    const panel = document.getElementById('np-panel');
+    if (panel) panel.classList.remove('open');
+}
+
+function npStartSpectrum() {
+    if (npAnimFrame) cancelAnimationFrame(npAnimFrame);
+    const bars = document.querySelectorAll('#np-spectrum .np-bar');
+    if (!bars.length) return;
+
+    function renderSpectrum() {
+        if (!npIsPlaying) return;
+        npSpectrumPhase += 0.12;
+        bars.forEach((bar, i) => {
+            const h = Math.sin(npSpectrumPhase + i * 0.9) * 4.5 + Math.cos(npSpectrumPhase * 0.7 + i * 1.3) * 2.5 + (Math.random() * 2) + 7;
+            const clampedH = Math.max(3, Math.min(15, h));
+            bar.style.height = `${clampedH}px`;
+        });
+        npAnimFrame = requestAnimationFrame(renderSpectrum);
+    }
+    npAnimFrame = requestAnimationFrame(renderSpectrum);
+}
+
+function npStopSpectrum() {
+    if (npAnimFrame) {
+        cancelAnimationFrame(npAnimFrame);
+        npAnimFrame = null;
+    }
+    const bars = document.querySelectorAll('#np-spectrum .np-bar');
+    bars.forEach(bar => { bar.style.height = '3px'; });
+}
+
+function npFetchCurrentInfo() {
+    if (!scWidget) return;
+    try {
+        scWidget.getCurrentSound((sound) => {
+            if (!sound) return;
+            const titleEl = document.getElementById('np-title');
+            const subEl = document.getElementById('np-sub');
+            const artEl = document.getElementById('np-art');
+            const totEl = document.getElementById('np-time-tot');
+
+            if (titleEl && sound.title) {
+                titleEl.textContent = sound.title;
+                titleEl.title = sound.title;
+            }
+            if (subEl) {
+                subEl.textContent = sound.genre ? `${sound.genre} · SoundCloud` : 'SoundCloud · shuffle';
+            }
+            if (sound.duration) {
+                npDurationMs = sound.duration;
+                if (totEl) totEl.textContent = npFormatTime(sound.duration / 1000);
+            }
+            if (artEl) {
+                if (sound.artwork_url) {
+                    const highResArt = sound.artwork_url.replace('-large', '-t300x300');
+                    artEl.innerHTML = `<img src="${highResArt}" alt="Artwork" class="w-full h-full object-cover rounded-xl" onerror="this.parentElement.innerHTML='<span class=\\'np-art-glyph font-mono text-lg text-[var(--accent-color)]\\'>♪</span>'">`;
+                } else {
+                    artEl.innerHTML = '<span class="np-art-glyph font-mono text-lg text-[var(--accent-color)]">♪</span>';
+                }
+            }
+        });
+    } catch(e) {
+        console.log("Could not fetch sound info:", e);
+    }
+}
+
+function npLoadTrack(index, autoPlay = true) {
+    if (!scWidget) return;
+    npCurrentTrackIndex = (index + NP_TRACKS.length) % NP_TRACKS.length;
+    const track = NP_TRACKS[npCurrentTrackIndex];
+
+    // Pré-remplir l'UI avec les infos locales
+    const titleEl = document.getElementById('np-title');
+    const subEl = document.getElementById('np-sub');
+    const progEl = document.getElementById('np-progress');
+    const curEl = document.getElementById('np-time-cur');
+    if (titleEl) {
+        titleEl.textContent = track.title;
+        titleEl.title = track.title;
+    }
+    if (subEl) subEl.textContent = `${track.genre} · SoundCloud`;
+    if (progEl) progEl.style.width = '0%';
+    if (curEl) curEl.textContent = '0:00';
+
+    try {
+        scWidget.load(track.url, {
+            auto_play: autoPlay,
+            callback: () => {
+                npFetchCurrentInfo();
+            }
+        });
+    } catch(e) {
+        console.error("SC Load error:", e);
+    }
+}
+
+function npTogglePlay() {
+    if (!scWidget) return;
+    try {
+        scWidget.toggle();
+    } catch(e) {
+        console.error("SC Toggle error:", e);
+    }
+}
+
+function npNext(isPrev = false, autoPlay = true) {
+    let nextIdx;
+    if (NP_TRACKS.length > 1) {
+        do {
+            nextIdx = Math.floor(Math.random() * NP_TRACKS.length);
+        } while (nextIdx === npCurrentTrackIndex);
+    } else {
+        nextIdx = 0;
+    }
+    npLoadTrack(nextIdx, autoPlay);
+}
+
+function npSeek(event) {
+    if (!scWidget || !npDurationMs) return;
+    const wrap = document.getElementById('np-progress-wrap');
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+    try {
+        scWidget.seekTo(ratio * npDurationMs);
+    } catch(e) {
+        console.error("SC Seek error:", e);
+    }
+}
+
+function npInitWidget() {
+    const iframe = document.getElementById('sc-widget');
+    if (!iframe || typeof SC === 'undefined' || !SC.Widget) {
+        setTimeout(npInitWidget, 300);
+        return;
+    }
+
+    try {
+        scWidget = SC.Widget(iframe);
+
+        scWidget.bind(SC.Widget.Events.READY, () => {
+            console.log("🎵 [Now Playing] SoundCloud Widget initialisé avec succès");
+            npLoadTrack(npCurrentTrackIndex, false);
+        });
+
+        scWidget.bind(SC.Widget.Events.PLAY, () => {
+            npIsPlaying = true;
+            const widgetEl = document.getElementById('now-playing-widget');
+            if (widgetEl) widgetEl.classList.add('playing');
+            npStartSpectrum();
+            npFetchCurrentInfo();
+        });
+
+        scWidget.bind(SC.Widget.Events.PAUSE, () => {
+            npIsPlaying = false;
+            const widgetEl = document.getElementById('now-playing-widget');
+            if (widgetEl) widgetEl.classList.remove('playing');
+            npStopSpectrum();
+        });
+
+        scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+            if (!data) return;
+            const progress = (data.relativePosition || 0) * 100;
+            const curMs = data.currentPosition || 0;
+            const progEl = document.getElementById('np-progress');
+            if (progEl) progEl.style.width = `${progress}%`;
+
+            const timeCurEl = document.getElementById('np-time-cur');
+            if (timeCurEl) timeCurEl.textContent = npFormatTime(curMs / 1000);
+        });
+
+        scWidget.bind(SC.Widget.Events.FINISH, () => {
+            // Morceau suivant aléatoire automatique
+            npNext(false, true);
+        });
+
+        scWidget.bind(SC.Widget.Events.ERROR, (err) => {
+            console.warn("SoundCloud Widget Error:", err);
+        });
+    } catch(e) {
+        console.error("Erreur init SC Widget:", e);
+    }
+}
+
+// Exposer sur window
+window.npTogglePanel = npTogglePanel;
+window.npClosePanel = npClosePanel;
+window.npTogglePlay = npTogglePlay;
+window.npNext = npNext;
+window.npSeek = npSeek;
+
+// Fermeture au clic extérieur et touche Échap
+document.addEventListener('click', (e) => {
+    const widget = document.getElementById('now-playing-widget');
+    if (widget && !widget.contains(e.target)) {
+        npClosePanel();
+    }
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        npClosePanel();
+    }
+});
+
+// Lancement de l'initialisation du widget
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', npInitWidget);
+} else {
+    npInitWidget();
+}
 
     </script>
 </body>
