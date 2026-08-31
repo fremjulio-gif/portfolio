@@ -563,7 +563,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             isolation: isolate;
             overflow: hidden;
             width: 100%;
-            transition: transform 0.9s var(--ease-elastic-smooth), border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow), background-color 1s ease, filter 0.8s var(--ease-smooth-slow);
+            transition: border-color 1.5s var(--ease-smooth-slow), box-shadow 1.5s var(--ease-smooth-slow), background-color 1.5s var(--ease-smooth-slow), filter 1.5s var(--ease-smooth-slow);
         }
 
         /* Bord lumineux & biseau optique 3D via ::before (Liquid Glass Bezel & Refraction) */
@@ -588,19 +588,23 @@ body.light-mode .apple-menu-item { color: #222222; }
             z-index: 1;
             filter: blur(0.4px);
             box-shadow: inset 0 1px 1px 0 rgba(255,255,255,0.35), inset 0 -1px 1px 0 rgba(0,0,0,0.25), 0 0 14px -2px var(--glass-edge-glow);
-            transition: border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow), opacity 1.2s var(--ease-smooth-slow);
+            transition: border-color 1.5s var(--ease-smooth-slow), box-shadow 1.5s var(--ease-smooth-slow), opacity 1.5s var(--ease-smooth-slow);
         }
 
         @media (hover: hover) {
             .liquid-glass:hover,
             .glass-panel:hover { 
-                transform: scale(1.004) translateY(-1px); 
-                background-color: var(--glass-tint-strong);
+                transform: none !important; 
+                background-color: rgba(255, 255, 255, 0.05);
                 box-shadow: 
-                    0 55px 115px -30px rgba(0, 0, 0, 0.8),
-                    0 25px 50px -20px rgba(0, 0, 0, 0.6),
-                    inset 0 1px 0 0 color-mix(in srgb, var(--accent-color) 45%, #ffffff),
-                    0 0 30px -4px color-mix(in srgb, var(--accent-color) 20%, transparent);
+                    0 55px 115px -30px rgba(0, 0, 0, 0.75),
+                    0 25px 50px -20px rgba(0, 0, 0, 0.55),
+                    inset 0 1px 0 0 color-mix(in srgb, var(--accent-color) 30%, rgba(255,255,255,0.25)),
+                    0 0 22px -6px color-mix(in srgb, var(--accent-color) 12%, transparent);
+            }
+            .liquid-glass:hover::before,
+            .glass-panel:hover::before {
+                box-shadow: inset 0 1px 1px 0 rgba(255,255,255,0.45), inset 0 -1px 1px 0 rgba(0,0,0,0.25), 0 0 16px -2px color-mix(in srgb, var(--accent-color) 25%, var(--glass-edge-glow));
             }
             .dock-icon:hover { color: #fff; transform: scale(1.03); }
             body.light-mode .dock-icon:hover { color: #000; }
@@ -645,6 +649,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             padding: 0 24px; border-bottom: 1px solid var(--glass-border); 
             background: rgba(255,255,255,0.02); flex-shrink: 0; 
             box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
+            transition: background-color 1.5s var(--ease-smooth-slow), border-color 1.5s var(--ease-smooth-slow);
         }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
         
