@@ -81,6 +81,27 @@
             filter: brightness(1.7) contrast(1.25) drop-shadow(0 0 5px rgba(255,255,255,0.7));
             will-change: transform, filter;
         }
+
+        /* --- SYSTEM SPECS MONITORING PANEL (CONSOLE / MASTER BUS VST LOOK) --- */
+        .system-specs-panel {
+            position: relative;
+            z-index: 10;
+        }
+        .spec-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+            transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease !important;
+            will-change: transform, box-shadow;
+        }
+        .spec-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.08);
+        }
         /* --- CORE VARS & THEME ISOLATION --- */
         :root {
             /* Variables de thèmes dynamiques (manipulées par le JS) */
@@ -1106,20 +1127,132 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                     <span class="win-title">Timeline.log</span>
                     <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
                 </div>
-                <div class="grid grid-cols-3 gap-4 mb-8 pb-6 border-b border-white/10 p-6">
-                  <div class="text-center">
-                    <p class="text-3xl font-black text-[var(--accent-color)]">3</p>
-                    <p class="text-[10px] uppercase opacity-50 tracking-widest">Ans de formation</p>
-                  </div>
-                  <div class="text-center">
-                    <p class="text-3xl font-black text-[var(--accent-color)]">8+</p>
-                    <p class="text-[10px] uppercase opacity-50 tracking-widest">Projets livrés</p>
-                  </div>
-                  <div class="text-center">
-                    <p class="text-3xl font-black text-[var(--accent-color)]">47/50</p>
-                    <p class="text-[10px] uppercase opacity-50 tracking-widest">Pro Tools 101 Fundamentals</p>
-                  </div>
-                </div>
+                <div class="p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
+                    <!-- SYSTEM STATUS // MASTER BUS SPECS (6 STATS CLÉS) -->
+                    <div class="system-specs-panel mb-10 md:mb-12">
+                        <!-- En-tête technique style Rack de Studio / Console -->
+                        <div class="flex items-center justify-between mb-3.5 px-1">
+                            <div class="flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-[var(--accent-color)]">
+                                <span class="inline-block w-2 h-2 rounded-full bg-[var(--accent-color)] animate-pulse shadow-[0_0_8px_var(--accent-color)]"></span>
+                                <span class="font-bold">[ SYSTEM STATUS // MASTER BUS SPECS ]</span>
+                            </div>
+                            <div class="flex items-center gap-2 font-mono text-[9px] text-white/40 uppercase tracking-widest">
+                                <span class="hidden sm:inline-block">CALIBRATION 2026</span>
+                                <span class="text-[var(--accent-color)] font-bold">● 6 NODES ACTIVE</span>
+                            </div>
+                        </div>
+
+                        <!-- Grille des 6 Statistiques Clés -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+                            <!-- 1. 3 Ans de Formation -->
+                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
+                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
+                                <div class="flex items-center justify-between mb-2 z-10">
+                                    <span class="text-base md:text-lg filter drop-shadow">🎓</span>
+                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">3iS</span>
+                                </div>
+                                <div class="my-1 z-10">
+                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
+                                        3 <span class="text-xs md:text-sm font-semibold opacity-75">Ans</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 z-10">
+                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">Formation 3iS</h4>
+                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Institut Image & Son</p>
+                                </div>
+                            </div>
+
+                            <!-- 2. Certification Pro Tools -->
+                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
+                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
+                                <div class="flex items-center justify-between mb-2 z-10">
+                                    <span class="text-base md:text-lg filter drop-shadow">🏆</span>
+                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Avid</span>
+                                </div>
+                                <div class="my-1 z-10">
+                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
+                                        47<span class="text-xs md:text-sm font-light text-white/40">/50</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 z-10">
+                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">Certif. Pro Tools</h4>
+                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">101 Fundamentals (94%)</p>
+                                </div>
+                            </div>
+
+                            <!-- 3. 3 DAWs Maîtrisés -->
+                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
+                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
+                                <div class="flex items-center justify-between mb-2 z-10">
+                                    <span class="text-base md:text-lg filter drop-shadow">🎛️</span>
+                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Workflows</span>
+                                </div>
+                                <div class="my-1 z-10">
+                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
+                                        3 <span class="text-xs md:text-sm font-semibold opacity-75">DAWs</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 z-10">
+                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">DAWs Maîtrisés</h4>
+                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">PT · Ableton Live · FL</p>
+                                </div>
+                            </div>
+
+                            <!-- 4. 8+ Projets -->
+                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
+                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
+                                <div class="flex items-center justify-between mb-2 z-10">
+                                    <span class="text-base md:text-lg filter drop-shadow">🎥</span>
+                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Livrables</span>
+                                </div>
+                                <div class="my-1 z-10">
+                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
+                                        8<span class="text-lg md:text-xl font-bold">+</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 z-10">
+                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">8+ Projets</h4>
+                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Prise son, Design & Mix TV</p>
+                                </div>
+                            </div>
+
+                            <!-- 5. 32 Canaux en Direct -->
+                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
+                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
+                                <div class="flex items-center justify-between mb-2 z-10">
+                                    <span class="text-base md:text-lg filter drop-shadow">🎙️</span>
+                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Live X32</span>
+                                </div>
+                                <div class="my-1 z-10">
+                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
+                                        32 <span class="text-xs md:text-sm font-semibold opacity-75">In/Out</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 z-10">
+                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">32 Canaux Direct</h4>
+                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Routing & Mix X32 live</p>
+                                </div>
+                            </div>
+
+                            <!-- 6. 1 Tournée Européenne -->
+                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
+                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
+                                <div class="flex items-center justify-between mb-2 z-10">
+                                    <span class="text-base md:text-lg filter drop-shadow">🌍</span>
+                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Scène</span>
+                                </div>
+                                <div class="my-1 z-10">
+                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
+                                        1 <span class="text-xs md:text-sm font-semibold opacity-75">Tournée</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 z-10">
+                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">Tournée Europe</h4>
+                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Danseur / Boris Charmatz</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <div class="relative pl-8 md:pl-10 border-l border-white/10 space-y-4">
     
     <div class="relative group p-4 md:p-5 rounded-xl transition-colors duration-300 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
@@ -1212,6 +1345,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         </div>
     </div>
 
+</div>
 </div>
             </section><!-- fin parcours -->
 
@@ -3085,7 +3219,7 @@ function animatePieCharts() {
     }
 }
 
-// ── TIMELINE.LOG ANIMATION DEFILEMENT VERTICAL STAGGERED & HOVER (ANIME.JS V4) ──
+// ── TIMELINE.LOG ANIMATION DEFILEMENT VERTICAL & SYSTEM SPECS (ANIME.JS V4) ──
 function initTimelineAnimation() {
     const parcoursEl = document.getElementById('parcours');
     if (!parcoursEl) return;
@@ -3094,47 +3228,67 @@ function initTimelineAnimation() {
 
     const timelineObserver = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            console.log('🚀 [Anime.js V4] Animation Timeline.log (Parcours) lancée - Full Refactor');
-            const items = Array.from(parcoursEl.querySelectorAll('.group'));
-            if (anim && items.length) {
-                items.forEach(el => {
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(40px) scale(0.85)';
-                });
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove(items);
+            console.log('🚀 [Anime.js V4] Animation Timeline.log (Parcours & System Specs) lancée');
+            const specCards = Array.from(parcoursEl.querySelectorAll('.spec-card'));
+            const timelineEntries = Array.from(parcoursEl.querySelectorAll('.relative.pl-8 > .group, .relative.pl-10 > .group'));
 
-                // 2. Apparition "Juicy" & Staggering au Scroll
-                anim(items, {
-                    translateY: [40, 0],
-                    scale: [0.85, 1],
-                    opacity: [0, 1],
-                    delay: stg ? stg(150) : 150,
-                    duration: 900,
-                    ease: 'outElastic(1, .75)'
-                });
+            if (anim) {
+                // 1. Apparition Staggered des 6 Cartes System Specs
+                if (specCards.length) {
+                    specCards.forEach(el => {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(25px) scale(0.92)';
+                    });
+                    if (typeof anime !== 'undefined' && anime.remove) anime.remove(specCards);
+                    anim(specCards, {
+                        translateY: [25, 0],
+                        scale: [0.92, 1],
+                        opacity: [0, 1],
+                        delay: stg ? stg(60) : 60,
+                        duration: 750,
+                        ease: 'outElastic(1, .8)'
+                    });
+                }
 
-                // 3. Interactivité au Survol (Hover Effects 60 FPS via WAAPI)
-                items.forEach(card => {
-                    card.addEventListener('mouseenter', () => {
-                        if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                        anim(card, {
-                            translateY: -6,
-                            scale: 1.025,
-                            duration: 450,
-                            ease: 'outElastic(1, .6)'
-                        });
+                // 2. Apparition Staggered de la Timeline Verticale
+                if (timelineEntries.length) {
+                    timelineEntries.forEach(el => {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(35px) scale(0.88)';
+                    });
+                    if (typeof anime !== 'undefined' && anime.remove) anime.remove(timelineEntries);
+                    anim(timelineEntries, {
+                        translateY: [35, 0],
+                        scale: [0.88, 1],
+                        opacity: [0, 1],
+                        delay: stg ? stg(120, { start: 220 }) : 220,
+                        duration: 850,
+                        ease: 'outElastic(1, .75)'
                     });
 
-                    card.addEventListener('mouseleave', () => {
-                        if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                        anim(card, {
-                            translateY: 0,
-                            scale: 1.0,
-                            duration: 250,
-                            ease: 'outCubic'
+                    // 3. Hover Effects sur les items de timeline
+                    timelineEntries.forEach(card => {
+                        card.addEventListener('mouseenter', () => {
+                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                            anim(card, {
+                                translateY: -6,
+                                scale: 1.025,
+                                duration: 450,
+                                ease: 'outElastic(1, .6)'
+                            });
+                        });
+
+                        card.addEventListener('mouseleave', () => {
+                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                            anim(card, {
+                                translateY: 0,
+                                scale: 1.0,
+                                duration: 250,
+                                ease: 'outCubic'
+                            });
                         });
                     });
-                });
+                }
             }
             timelineObserver.disconnect();
         }
@@ -3698,6 +3852,7 @@ requestAnimationFrame(updateVUMeter);
             '.theme-pill',
             '.project-card',
             '.inspi-card-large',
+            '.spec-card',
             '.lab-row',
             '.drum-pad',
             '.pad-button',
