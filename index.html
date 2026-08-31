@@ -26,25 +26,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- SYSTEM SPECS MONITORING PANEL (CONSOLE / MASTER BUS VST LOOK) --- */
-        .system-specs-panel {
-            position: relative;
-            z-index: 10;
-        }
-        .spec-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+        /* --- SYSTEM SPECS MONITORING PANEL (MINIMALIST & HIGH-READABILITY) --- */
+        .stat-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
+            border-radius: 0.75rem;
             transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease !important;
             will-change: transform, box-shadow;
         }
-        .spec-card:hover {
-            background: rgba(255, 255, 255, 0.04);
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.03);
             border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.05);
         }
         /* --- CORE VARS & THEME ISOLATION --- */
         :root {
@@ -1068,127 +1063,65 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                     <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
                 </div>
                 <div class="p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
-                    <!-- SYSTEM STATUS // MASTER BUS SPECS (6 STATS CLÉS) -->
-                    <div class="system-specs-panel mb-10 md:mb-12">
-                        <!-- En-tête technique style Rack de Studio / Console -->
-                        <div class="flex items-center justify-between mb-3.5 px-1">
-                            <div class="flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-[var(--accent-color)]">
-                                <span class="inline-block w-2 h-2 rounded-full bg-[var(--accent-color)] animate-pulse shadow-[0_0_8px_var(--accent-color)]"></span>
-                                <span class="font-bold">[ SYSTEM STATUS // MASTER BUS SPECS ]</span>
-                            </div>
-                            <div class="flex items-center gap-2 font-mono text-[9px] text-white/40 uppercase tracking-widest">
-                                <span class="hidden sm:inline-block">CALIBRATION 2026</span>
-                                <span class="text-[var(--accent-color)] font-bold">● 6 NODES ACTIVE</span>
-                            </div>
+                    <!-- STATS PANEL OVERVIEW -->
+                    <div class="mb-10 p-6 bg-black/30 border border-white/5 rounded-2xl backdrop-blur-md">
+                        <div class="text-[10px] font-mono tracking-[0.2em] text-white/40 uppercase mb-6 flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                            [ SYSTEM STATUS // MASTER SPECS ]
                         </div>
-
-                        <!-- Grille des 6 Statistiques Clés -->
-                        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
-                            <!-- 1. 3 Ans de Formation -->
-                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
-                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="text-base md:text-lg filter drop-shadow">🎓</span>
-                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">3iS</span>
-                                </div>
-                                <div class="my-1 z-10">
-                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
-                                        3 <span class="text-xs md:text-sm font-semibold opacity-75">Ans</span>
-                                    </div>
-                                </div>
-                                <div class="mt-1 z-10">
-                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">Formation 3iS</h4>
-                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Institut Image & Son</p>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+                            <!-- Card 1 -->
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
+                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">ANS</span></span>
+                                <div class="mt-4">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Formation 3iS</h4>
+                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Ingénierie du son & Sound Design.</p>
                                 </div>
                             </div>
 
-                            <!-- 2. Certification Pro Tools -->
-                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
-                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="text-base md:text-lg filter drop-shadow">🏆</span>
-                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Avid</span>
-                                </div>
-                                <div class="my-1 z-10">
-                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
-                                        47<span class="text-xs md:text-sm font-light text-white/40">/50</span>
-                                    </div>
-                                </div>
-                                <div class="mt-1 z-10">
-                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">Certif. Pro Tools</h4>
-                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">101 Fundamentals (94%)</p>
+                            <!-- Card 2 -->
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
+                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xl font-light text-white/40">/50</span></span>
+                                <div class="mt-4">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Certif. Avid</h4>
+                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Pro Tools Fundamentals User.</p>
                                 </div>
                             </div>
 
-                            <!-- 3. 3 DAWs Maîtrisés -->
-                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
-                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="text-base md:text-lg filter drop-shadow">🎛️</span>
-                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Workflows</span>
-                                </div>
-                                <div class="my-1 z-10">
-                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
-                                        3 <span class="text-xs md:text-sm font-semibold opacity-75">DAWs</span>
-                                    </div>
-                                </div>
-                                <div class="mt-1 z-10">
-                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">DAWs Maîtrisés</h4>
-                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">PT · Ableton Live · FL</p>
+                            <!-- Card 3 -->
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
+                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">DAWs</span></span>
+                                <div class="mt-4">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Logiciels</h4>
+                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Pro Tools, Ableton, FL Studio.</p>
                                 </div>
                             </div>
 
-                            <!-- 4. 8+ Projets -->
-                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
-                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="text-base md:text-lg filter drop-shadow">🎥</span>
-                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Livrables</span>
-                                </div>
-                                <div class="my-1 z-10">
-                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
-                                        8<span class="text-lg md:text-xl font-bold">+</span>
-                                    </div>
-                                </div>
-                                <div class="mt-1 z-10">
-                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">8+ Projets</h4>
-                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Prise son, Design & Mix TV</p>
+                            <!-- Card 4 -->
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
+                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">8+ <span class="text-lg font-light">PROJS</span></span>
+                                <div class="mt-4">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Livrables</h4>
+                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Mixage, Sound Design, Prise de son.</p>
                                 </div>
                             </div>
 
-                            <!-- 5. 32 Canaux en Direct -->
-                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
-                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="text-base md:text-lg filter drop-shadow">🎙️</span>
-                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Live X32</span>
-                                </div>
-                                <div class="my-1 z-10">
-                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
-                                        32 <span class="text-xs md:text-sm font-semibold opacity-75">In/Out</span>
-                                    </div>
-                                </div>
-                                <div class="mt-1 z-10">
-                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">32 Canaux Direct</h4>
-                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Routing & Mix X32 live</p>
+                            <!-- Card 5 -->
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
+                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-lg font-light">CH.</span></span>
+                                <div class="mt-4">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Live Mix</h4>
+                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Routing & mix direct sur Behringer X32.</p>
                                 </div>
                             </div>
 
-                            <!-- 6. 1 Tournée Européenne -->
-                            <div class="spec-card group/spec relative p-3.5 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col justify-between overflow-hidden click-sound touch-manipulation cursor-crosshair hover:border-[var(--accent-color)]/40 hover:bg-white/[0.04] transition-colors duration-300">
-                                <div class="absolute -right-6 -top-6 w-16 h-16 bg-[var(--accent-color)]/10 rounded-full blur-xl pointer-events-none group-hover/spec:bg-[var(--accent-color)]/20 transition-colors duration-300"></div>
-                                <div class="flex items-center justify-between mb-2 z-10">
-                                    <span class="text-base md:text-lg filter drop-shadow">🌍</span>
-                                    <span class="text-[8px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-white/50 border border-white/10 group-hover/spec:border-[var(--accent-color)]/30 group-hover/spec:text-[var(--accent-color)] transition-colors">Scène</span>
-                                </div>
-                                <div class="my-1 z-10">
-                                    <div class="text-2xl md:text-3xl font-black font-mono text-[var(--accent-color)] tracking-tight leading-none drop-shadow-[0_0_12px_rgba(var(--accent-color),0.25)]">
-                                        1 <span class="text-xs md:text-sm font-semibold opacity-75">Tournée</span>
-                                    </div>
-                                </div>
-                                <div class="mt-1 z-10">
-                                    <h4 class="text-xs font-bold text-white tracking-wide leading-tight group-hover/spec:text-[var(--accent-color)] transition-colors">Tournée Europe</h4>
-                                    <p class="text-[9px] font-mono text-white/40 leading-snug mt-0.5 group-hover/spec:text-white/60 transition-colors">Danseur / Boris Charmatz</p>
+                            <!-- Card 6 -->
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
+                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-lg font-light">TOUR.</span></span>
+                                <div class="mt-4">
+                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Europe</h4>
+                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Danse Hip-Hop (Boris Charmatz).</p>
                                 </div>
                             </div>
                         </div>
@@ -3164,24 +3097,43 @@ function initTimelineAnimation() {
     const timelineObserver = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             console.log('🚀 [Anime.js V4] Animation Timeline.log (Parcours & System Specs) lancée');
-            const specCards = Array.from(parcoursEl.querySelectorAll('.spec-card'));
+            const statCards = Array.from(parcoursEl.querySelectorAll('.stat-card, .spec-card'));
             const timelineEntries = Array.from(parcoursEl.querySelectorAll('.relative.pl-8 > .group, .relative.pl-10 > .group'));
 
             if (anim) {
                 // 1. Apparition Staggered des 6 Cartes System Specs
-                if (specCards.length) {
-                    specCards.forEach(el => {
+                if (statCards.length) {
+                    statCards.forEach(el => {
                         el.style.opacity = '0';
-                        el.style.transform = 'translateY(25px) scale(0.92)';
+                        el.style.transform = 'translateY(20px)';
                     });
-                    if (typeof anime !== 'undefined' && anime.remove) anime.remove(specCards);
-                    anim(specCards, {
-                        translateY: [25, 0],
-                        scale: [0.92, 1],
+                    if (typeof anime !== 'undefined' && anime.remove) anime.remove(statCards);
+                    anim(statCards, {
+                        translateY: [20, 0],
                         opacity: [0, 1],
                         delay: stg ? stg(60) : 60,
-                        duration: 750,
-                        ease: 'outElastic(1, .8)'
+                        duration: 650,
+                        ease: 'outQuad'
+                    });
+
+                    // Micro-hover subtil (-3px, sans flou de mise à l'échelle)
+                    statCards.forEach(card => {
+                        card.addEventListener('mouseenter', () => {
+                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                            anim(card, {
+                                translateY: -3,
+                                duration: 250,
+                                ease: 'outQuad'
+                            });
+                        });
+                        card.addEventListener('mouseleave', () => {
+                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                            anim(card, {
+                                translateY: 0,
+                                duration: 200,
+                                ease: 'outCubic'
+                            });
+                        });
                     });
                 }
 
@@ -3787,7 +3739,7 @@ requestAnimationFrame(updateVUMeter);
             '.theme-pill',
             '.project-card',
             '.inspi-card-large',
-            '.spec-card',
+            '.stat-card',
             '.lab-row',
             '.drum-pad',
             '.pad-button',
