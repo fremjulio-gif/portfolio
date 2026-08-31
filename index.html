@@ -2437,7 +2437,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             </div>
         </div>
         
-        <footer id="contact" class="col-span-12 glass-panel p-0 text-center flex flex-col items-center justify-center scroll-float mb-32 overflow-hidden relative">
+        <footer id="contact" class="col-span-12 glass-panel p-0 pb-16 md:pb-10 text-center flex flex-col items-center justify-center scroll-float mb-36 md:mb-32 overflow-hidden relative">
             
             <div class="absolute inset-0 z-0 grid grid-cols-3 md:grid-cols-4 gap-2 p-2 opacity-30 blur-[2px] pointer-events-none grayscale">
                 <img src="1.png" loading="lazy" decoding="async" class="w-full h-full object-cover rounded-lg">
@@ -2480,7 +2480,15 @@ body.light-mode .apple-menu-item { color: #222222; }
                 <a href="mailto:jules.fremondiere@3is.fr" class="text-lg font-bold text-[var(--accent-color)] hover:underline relative z-10">jules.fremondiere@3is.fr</a>
                 <a href="https://linktr.ee/jlo.flp" target="_blank" class="mt-6 inline-flex items-center gap-2 text-[var(--glass-text)] border-b border-transparent hover:border-[var(--accent-color)] transition pb-1 touch-manipulation relative z-10">Linktree & Réseaux <span>↗</span></a>
                 
-                <button type="button" onclick="openEasterEggQR()" class="font-mono text-[10px] opacity-30 hover:opacity-100 hover:text-[var(--accent-color)] mt-8 relative z-10 transition-all duration-300 cursor-pointer bg-transparent border-none p-1 rounded hover:scale-105 active:scale-95 focus:outline-none select-none" title="System Info">© 2026 SYSTEM JULES F.</button>
+                <div class="mt-8 mb-4 relative z-20 flex justify-center items-center w-full">
+                    <button type="button" 
+                            onclick="openEasterEggQR()" 
+                            class="font-mono text-[11px] opacity-40 hover:opacity-100 hover:text-[var(--accent-color)] active:opacity-100 active:text-[var(--accent-color)] transition-all duration-300 cursor-pointer bg-transparent border-none px-4 py-3 min-h-[44px] inline-flex items-center justify-center rounded-lg hover:scale-105 active:scale-95 focus:outline-none touch-manipulation click-sound" 
+                            style="-webkit-tap-highlight-color: transparent;"
+                            title="System Info">
+                        © 2026 SYSTEM JULES F.
+                    </button>
+                </div>
         </footer>
 
     </main>
