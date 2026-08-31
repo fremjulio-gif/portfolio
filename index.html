@@ -35,8 +35,8 @@
         body[data-theme="fl"] .stat-card {
             background: var(--glass-tint) !important;
             border: 1px solid var(--glass-border) !important;
-            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness));
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness));
+            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
             border-radius: var(--radius-card) !important;
             padding: 1.5rem !important;
             min-height: 145px;
@@ -45,7 +45,7 @@
             justify-content: space-between !important;
             box-sizing: border-box !important;
             box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight) !important;
-            transition: border-color 0.8s var(--ease-apple), background-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple) !important;
+            transition: transform 0.9s var(--ease-elastic-smooth), border-color 1.2s var(--ease-smooth-slow), background-color 1s ease, box-shadow 1.2s var(--ease-smooth-slow) !important;
             position: relative;
             isolation: isolate;
         }
@@ -53,10 +53,10 @@
         body[data-theme="ableton"] .stat-card:hover,
         body[data-theme="protools"] .stat-card:hover,
         body[data-theme="fl"] .stat-card:hover {
-            transform: none !important;
+            transform: scale(1.008) translateY(-1px) !important;
             background: var(--glass-tint-strong) !important;
-            border-color: color-mix(in srgb, var(--accent-color) 35%, var(--glass-edge-top)) !important;
-            box-shadow: 0 55px 110px -30px rgba(0, 0, 0, 0.75), 0 25px 50px -20px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 var(--glass-highlight), 0 0 15px -5px color-mix(in srgb, var(--accent-color) 15%, transparent) !important;
+            border-color: color-mix(in srgb, var(--accent-color) 45%, var(--glass-edge-top)) !important;
+            box-shadow: 0 55px 110px -30px rgba(0, 0, 0, 0.75), 0 25px 50px -20px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 var(--glass-highlight), 0 0 20px -4px color-mix(in srgb, var(--accent-color) 25%, transparent) !important;
         }
 
         /* Chiffres géants verrouillés (3 ANS, 47/50, 3 DAWs, etc.) */
@@ -161,23 +161,24 @@
             /* Variables d'interface (écrasables par le Clean Mode) */
             --accent-color: var(--theme-accent);
             
-            /* --- LIQUID GLASS DESIGN SYSTEM (iOS 26 / visionOS 26 Spec v3) --- */
+            /* --- LIQUID GLASS DESIGN SYSTEM (iOS 26 / visionOS 26 Spec v4) --- */
             --glass-tint: rgba(255, 255, 255, 0.04);
             --glass-tint-strong: rgba(255, 255, 255, 0.08);
-            --glass-blur: 18px;
-            --glass-blur-sm: 12px;
-            --glass-blur-lg: 30px;
-            --glass-saturate: 160%;
-            --glass-brightness: 1.05;
+            --glass-blur: 24px;
+            --glass-blur-sm: 14px;
+            --glass-blur-lg: 36px;
+            --glass-saturate: 180%;
+            --glass-contrast: 104%;
+            --glass-brightness: 1.06;
 
-            /* Edge light : bord lumineux, en 2 teintes pour l'effet tranche de verre */
-            --glass-edge-top: rgba(255, 255, 255, 0.35);
-            --glass-edge-bottom: rgba(255, 255, 255, 0.04);
-            --glass-edge-glow: rgba(255, 255, 255, 0.06);
+            /* Edge light : bord lumineux biseauté, en 2 teintes pour l'effet tranche de verre */
+            --glass-edge-top: rgba(255, 255, 255, 0.40);
+            --glass-edge-bottom: rgba(255, 255, 255, 0.06);
+            --glass-edge-glow: rgba(255, 255, 255, 0.08);
 
             /* Highlights et ombres optiques (Double ombre profonde permanente) */
-            --glass-highlight: rgba(255, 255, 255, 0.10);
-            --glass-inner-shadow: rgba(0, 0, 0, 0.25);
+            --glass-highlight: rgba(255, 255, 255, 0.12);
+            --glass-inner-shadow: rgba(0, 0, 0, 0.28);
             --glass-drop-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.7),
                                  0 20px 40px -20px rgba(0, 0, 0, 0.5);
 
@@ -193,11 +194,9 @@
             --radius-button: 12px;
             --radius-pill: 9999px;
 
-            /* Reflet dynamique qui suit la souris (subtil 0.06 max) */
-            --mx: 50%;
-            --my: 0%;
-            --glass-spot: rgba(255, 255, 255, 0.06);
-
+            /* Courbes d'accélération visionOS 26 : élasticité douce et transitions lentes */
+            --ease-elastic-smooth: cubic-bezier(0.2, 1.25, 0.4, 1);
+            --ease-smooth-slow: cubic-bezier(0.16, 1, 0.3, 1);
             --ease-ios: cubic-bezier(0.25, 0.8, 0.25, 1);
             --ease-apple: cubic-bezier(0.25, 0.8, 0.25, 1);
             --vh: 1vh; 
@@ -553,8 +552,8 @@ body.light-mode .apple-menu-item { color: #222222; }
         .glass-panel {
             position: relative;
             background-color: var(--glass-tint);
-            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness));
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness));
+            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
             border: 1px solid transparent;
             border-radius: var(--radius-window);
             box-shadow: 
@@ -564,10 +563,10 @@ body.light-mode .apple-menu-item { color: #222222; }
             isolation: isolate;
             overflow: hidden;
             width: 100%;
-            transition: box-shadow 0.8s var(--ease-apple), border-color 0.8s var(--ease-apple), filter 0.8s var(--ease-apple), opacity 0.8s var(--ease-apple);
+            transition: transform 0.9s var(--ease-elastic-smooth), border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow), background-color 1s ease, filter 0.8s var(--ease-smooth-slow);
         }
 
-        /* Bord lumineux = Gradient hairline via ::before (Edge Light avec réfraction et lueur douce) */
+        /* Bord lumineux & biseau optique 3D via ::before (Liquid Glass Bezel & Refraction) */
         .liquid-glass::before,
         .glass-panel::before {
             content: "";
@@ -587,59 +586,25 @@ body.light-mode .apple-menu-item { color: #222222; }
             mask-composite: exclude;
             pointer-events: none;
             z-index: 1;
-            filter: blur(0.5px);
-            box-shadow: 0 0 12px -2px var(--glass-edge-glow);
-            transition: opacity 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple);
-        }
-
-        /* Reflet dynamique qui suit la souris (Specular Spot doux) */
-        .liquid-glass::after,
-        .glass-panel::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: radial-gradient(
-                240px circle at var(--mx, 50%) var(--my, 0%),
-                var(--glass-spot),
-                transparent 65%
-            );
-            opacity: 0;
-            transition: opacity 0.8s var(--ease-apple);
-            pointer-events: none;
-            z-index: 2;
-            mix-blend-mode: overlay;
+            filter: blur(0.4px);
+            box-shadow: inset 0 1px 1px 0 rgba(255,255,255,0.35), inset 0 -1px 1px 0 rgba(0,0,0,0.25), 0 0 14px -2px var(--glass-edge-glow);
+            transition: border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow), opacity 1.2s var(--ease-smooth-slow);
         }
 
         @media (hover: hover) {
             .liquid-glass:hover,
             .glass-panel:hover { 
-                transform: none !important; 
+                transform: scale(1.004) translateY(-1px); 
+                background-color: var(--glass-tint-strong);
                 box-shadow: 
-                    0 55px 110px -30px rgba(0, 0, 0, 0.75),
-                    0 25px 50px -20px rgba(0, 0, 0, 0.55),
-                    inset 0 1px 0 0 color-mix(in srgb, var(--accent-color) 25%, #ffffff),
-                    0 0 25px -5px color-mix(in srgb, var(--accent-color) 10%, transparent);
+                    0 55px 115px -30px rgba(0, 0, 0, 0.8),
+                    0 25px 50px -20px rgba(0, 0, 0, 0.6),
+                    inset 0 1px 0 0 color-mix(in srgb, var(--accent-color) 45%, #ffffff),
+                    0 0 30px -4px color-mix(in srgb, var(--accent-color) 20%, transparent);
             }
-            .liquid-glass:hover::after,
-            .glass-panel:hover::after {
-                opacity: 1;
-            }
-            .dock-icon:hover { color: #fff; }
+            .dock-icon:hover { color: #fff; transform: scale(1.03); }
             body.light-mode .dock-icon:hover { color: #000; }
-            .theme-pill:hover { opacity: 1; transform: scale(1.02); background: rgba(255,255,255,0.25); }
-        }
-
-        @media (hover: none) {
-            .liquid-glass::after,
-            .glass-panel::after {
-                opacity: 0.4;
-                background: radial-gradient(
-                    260px circle at 50% 0%,
-                    var(--glass-spot),
-                    transparent 70%
-                );
-            }
+            .theme-pill:hover { opacity: 1; transform: scale(1.04); background: rgba(255,255,255,0.25); }
         }
 
         /* --- VARIANTES LIQUID GLASS --- */
@@ -712,14 +677,14 @@ body.light-mode .apple-menu-item { color: #222222; }
             position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; 
             cursor: pointer; border: 1px solid var(--glass-border); 
             box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight); 
-            transition: filter 0.8s var(--ease-apple), border-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple); 
+            transition: transform 0.9s var(--ease-elastic-smooth), filter 0.8s var(--ease-smooth-slow), border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow); 
         }
         @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
         .project-card:hover { 
-            transform: none !important; 
+            transform: scale(1.008) translateY(-1px); 
             filter: brightness(1.03); 
-            border-color: color-mix(in srgb, var(--accent-color) 40%, var(--glass-edge-top)); 
-            box-shadow: 0 55px 110px -30px rgba(0,0,0,0.75), 0 25px 50px -20px rgba(0,0,0,0.55), 0 0 20px -5px color-mix(in srgb, var(--accent-color) 15%, transparent);
+            border-color: color-mix(in srgb, var(--accent-color) 45%, var(--glass-edge-top)); 
+            box-shadow: 0 55px 115px -30px rgba(0,0,0,0.8), 0 25px 50px -20px rgba(0,0,0,0.6), 0 0 25px -5px color-mix(in srgb, var(--accent-color) 25%, transparent);
         }
         .project-card img, .project-card video { width: 100%; height: 100%; object-fit: cover; transition: 0.8s var(--ease-apple); filter: brightness(0.85); }
         body.light-mode .project-card img, body.light-mode .project-card video { filter: brightness(1); }
@@ -747,14 +712,14 @@ body.light-mode .apple-menu-item { color: #222222; }
 
         .inspi-card-large { 
             position: relative; overflow: hidden; border-radius: 16px; border: 1px solid var(--glass-border); 
-            transition: border-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple), filter 0.8s var(--ease-apple); aspect-ratio: 16/9; cursor: pointer; opacity: 0; animation: fadeInUp 0.8s forwards; 
+            transition: transform 0.9s var(--ease-elastic-smooth), border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow), filter 0.8s var(--ease-smooth-slow); aspect-ratio: 16/9; cursor: pointer; opacity: 0; animation: fadeInUp 0.8s forwards; 
             box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight);
         }
         @media (hover: hover) {
             .inspi-card-large:hover { 
-                transform: none !important; 
-                border-color: color-mix(in srgb, var(--accent-color) 40%, var(--glass-edge-top)); 
-                box-shadow: 0 55px 110px -30px rgba(0,0,0,0.75), 0 25px 50px -20px rgba(0,0,0,0.55), 0 0 20px -5px color-mix(in srgb, var(--accent-color) 15%, transparent); 
+                transform: scale(1.008) translateY(-1px); 
+                border-color: color-mix(in srgb, var(--accent-color) 45%, var(--glass-edge-top)); 
+                box-shadow: 0 55px 115px -30px rgba(0,0,0,0.8), 0 25px 50px -20px rgba(0,0,0,0.6), 0 0 25px -5px color-mix(in srgb, var(--accent-color) 25%, transparent); 
             }
             .inspi-card-large:hover img { transform: scale(1.02); filter: brightness(0.7); }
             .inspi-card-large:hover .inspi-content { opacity: 1; transform: translateY(0); }
@@ -806,16 +771,17 @@ body.light-mode .apple-menu-item { color: #222222; }
             box-shadow: 0 4px 14px rgba(0,0,0,0.35), inset 0 1px 0 var(--glass-highlight);
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             font-family: 'Share Tech Mono', monospace; font-size: 14px; letter-spacing: 1px; color: rgba(255,255,255,0.85);
-            transition: transform 0.25s var(--ease-apple), background-color 0.25s var(--ease-apple), box-shadow 0.25s var(--ease-apple), border-color 0.25s var(--ease-apple); 
+            transition: transform 0.6s var(--ease-elastic-smooth), background-color 0.8s ease, box-shadow 1.2s var(--ease-smooth-slow), border-color 1.2s var(--ease-smooth-slow); 
             cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
             position: relative; overflow: hidden;
             isolation: isolate;
         }
         @media (hover: hover) {
             .drum-pad:hover {
+                transform: scale(1.02);
                 background: var(--glass-tint-strong);
-                border-color: color-mix(in srgb, var(--accent-color) 35%, var(--glass-edge-top));
-                box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 10px color-mix(in srgb, var(--accent-color) 15%, transparent);
+                border-color: color-mix(in srgb, var(--accent-color) 45%, var(--glass-edge-top));
+                box-shadow: 0 6px 18px rgba(0,0,0,0.4), 0 0 14px color-mix(in srgb, var(--accent-color) 20%, transparent);
             }
         }
         .drum-pad:active, .drum-pad.hit { 
@@ -853,15 +819,15 @@ body.light-mode .apple-menu-item { color: #222222; }
             -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
             border: 1px solid var(--glass-border); 
             color: var(--accent-color); cursor: pointer; 
-            transition: transform 0.25s var(--ease-apple), background-color 0.25s var(--ease-apple), box-shadow 0.25s var(--ease-apple), border-color 0.25s var(--ease-apple); 
+            transition: transform 0.6s var(--ease-elastic-smooth), background-color 0.8s ease, box-shadow 1.2s var(--ease-smooth-slow), border-color 1.2s var(--ease-smooth-slow); 
             box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 1px 0 var(--glass-highlight); 
         }
         @media (hover: hover) { 
             .transport-btn:hover { 
-                transform: scale(1.02); 
+                transform: scale(1.03); 
                 background: color-mix(in srgb, var(--accent-color) 15%, var(--glass-tint-strong)); 
-                border-color: var(--accent-color);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.35), 0 0 10px color-mix(in srgb, var(--accent-color) 25%, transparent);
+                border-color: color-mix(in srgb, var(--accent-color) 50%, var(--glass-edge-top));
+                box-shadow: 0 6px 16px rgba(0,0,0,0.4), 0 0 14px color-mix(in srgb, var(--accent-color) 30%, transparent);
             } 
         }
         .transport-btn:active { transform: scale(0.97) !important; }
@@ -1126,14 +1092,14 @@ body.light-mode .apple-menu-item { color: #222222; }
     -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
     border-radius: var(--radius-pill);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 var(--glass-highlight);
-    transition: transform 0.25s var(--ease-apple), background-color 0.25s var(--ease-apple), border-color 0.25s var(--ease-apple), color 0.25s var(--ease-apple), box-shadow 0.25s var(--ease-apple);
+    transition: transform 0.6s var(--ease-elastic-smooth), background-color 0.8s ease, border-color 1.2s var(--ease-smooth-slow), color 0.3s ease, box-shadow 1.2s var(--ease-smooth-slow);
 }
 @media (hover: hover) {
     .filter-btn:hover {
-        transform: scale(1.02);
+        transform: scale(1.03);
         background: var(--glass-tint-strong) !important;
-        border-color: color-mix(in srgb, var(--accent-color) 40%, var(--glass-edge-top)) !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.35), 0 0 10px color-mix(in srgb, var(--accent-color) 20%, transparent);
+        border-color: color-mix(in srgb, var(--accent-color) 50%, var(--glass-edge-top)) !important;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 14px color-mix(in srgb, var(--accent-color) 25%, transparent);
     }
 }
 .filter-btn:active {
@@ -1373,6 +1339,26 @@ body.light-mode .apple-menu-item { color: #222222; }
     
 </head>
 <body class="font-fl selection:bg-white selection:text-black" data-theme="fl">
+
+    <!-- SVG LIQUID GLASS OPTICAL REFRACTION PIPELINE (visionOS 26 Spec) -->
+    <svg width="0" height="0" style="position:absolute; width:0; height:0; pointer-events:none; overflow:hidden;" aria-hidden="true">
+        <defs>
+            <!-- Réfraction physique de surface de verre -->
+            <filter id="liquid-glass-refraction" x="-10%" y="-10%" width="120%" height="120%" filterUnits="objectBoundingBox">
+                <feTurbulence type="fractalNoise" baseFrequency="0.02 0.02" numOctaves="2" result="glassNoise" />
+                <feDisplacementMap in="SourceGraphic" in2="glassNoise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+                <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+                <feMerge>
+                    <feMergeNode in="blurred" />
+                </feMerge>
+            </filter>
+            <!-- Réfraction de biseau / arête (Bevel Edge Refraction) -->
+            <filter id="glass-edge-bevel" x="-20%" y="-20%" width="140%" height="140%">
+                <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="1" result="bevelNoise" />
+                <feDisplacementMap in="SourceGraphic" in2="bevelNoise" scale="4" xChannelSelector="B" yChannelSelector="A" />
+            </filter>
+        </defs>
+    </svg>
 
     <div id="start-screen">
         <div onclick="startExperience()" class="cursor-pointer flex flex-col items-center gap-6 group">
@@ -4549,20 +4535,6 @@ if (document.readyState === 'loading') {
 } else {
     npInitWidget();
 }
-
-// ========================================================
-// --- LIQUID GLASS LIGHT-FOLLOWING SPECULAR ENGINE ---
-// ========================================================
-(function(){
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: none)').matches) return;
-    document.addEventListener('pointermove', (e) => {
-        const el = e.target && e.target.closest ? e.target.closest('.liquid-glass, .glass-panel, .stat-card, .project-card, .inspi-card-large, .drum-pad, .dock-container, .theme-island, #now-playing-widget, .transport-btn, .filter-btn') : null;
-        if (!el) return;
-        const r = el.getBoundingClientRect();
-        el.style.setProperty('--mx', `${(e.clientX - r.left)}px`);
-        el.style.setProperty('--my', `${(e.clientY - r.top)}px`);
-    }, { passive: true });
-})();
 
     </script>
 </body>
