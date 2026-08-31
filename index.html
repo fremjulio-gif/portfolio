@@ -20,68 +20,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script CDN Officiel Anime.js V4 -->
     <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.0-beta.95/dist/anime.min.js"></script>
-    <!-- Script CDN Spline 3D Viewer -->
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.98/build/spline-viewer.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CONTRÔLE DE TAILLE ABSOLU SPLINE, DISQUE TOURNANT & CROP ANTI-FILIGRANE --- */
-        spline-viewer {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-        
-        /* Masquage de sécurité du watermark et du loader via Shadow Parts */
-        spline-viewer::shadow #logo,
-        spline-viewer::shadow a#logo,
-        spline-viewer::shadow #loader,
-        spline-viewer::part(logo),
-        spline-viewer::part(loader),
-        #spline-logo,
-        spline-viewer #logo {
-            display: none !important;
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-            transform: scale(0) !important;
-        }
-
-        /* Animation de rotation continue "tel un disque" */
-        .spin-disc {
-            animation: spinVinylDisc 12s linear infinite;
-            transform-origin: center center;
-            will-change: transform;
-        }
-        .spin-disc:hover,
-        .group:hover .spin-disc {
-            animation-duration: 4s; /* Accélération au survol */
-        }
-        @keyframes spinVinylDisc {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Crop chirurgical & Luminosité augmentée : agrandissement à 130% centré pour expulser tout filigrane avec contraste éclatant */
-        .spline-disk-crop {
-            width: 130% !important;
-            height: 130% !important;
-            min-width: 130% !important;
-            min-height: 130% !important;
-            transform: scale(1.3);
-            transform-origin: center center;
-            display: block;
-            filter: brightness(1.7) contrast(1.25) drop-shadow(0 0 5px rgba(255,255,255,0.7));
-            will-change: transform, filter;
-        }
-
         /* --- SYSTEM SPECS MONITORING PANEL (CONSOLE / MASTER BUS VST LOOK) --- */
         .system-specs-panel {
             position: relative;
@@ -912,14 +856,10 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
     <div id="start-screen">
         <div onclick="startExperience()" class="cursor-pointer flex flex-col items-center gap-6 group">
   
-  <!-- Logo 3D Spline Interactif (Disque Tournant & Croppé Anti-Filigrane) -->
-  <div class="relative w-24 h-24 mb-2 flex items-center justify-center rounded-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 shadow-[0_0_50px_-10px_rgba(255,255,255,0.2)] transition-transform duration-300 group-hover:scale-105">
-    <div class="w-full h-full flex items-center justify-center spin-disc">
-      <spline-viewer
-          url="https://prod.spline.design/B7sDEZ7ZfOlUR6PE/scene.splinecode"
-          class="spline-disk-crop pointer-events-none group-hover:pointer-events-auto">
-      </spline-viewer>
-    </div>
+  <!-- Photo Avatar -->
+  <div class="relative w-20 h-20 mb-2">
+    <img src="moi.png" alt="Jules" class="w-full h-full rounded-full object-cover object-top border border-white/10"
+         style="filter: grayscale(20%); box-shadow: 0 0 40px -8px rgba(255,255,255,0.15);">
   </div>
 
   <!-- Nom -->
@@ -1994,16 +1934,11 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
    <nav class="apple-menubar">
     <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
-        <!-- Logo 3D Interactif Spline (Disque Tournant & Croppé Anti-Filigrane) -->
-        <a href="#hero" class="flex items-center justify-center mr-2 click-sound touch-manipulation group" title="Jules Frémondière — Accueil">
-            <div class="w-8 h-8 relative flex items-center justify-center rounded-full overflow-hidden border border-white/25 bg-white/10 shadow-[0_0_12px_rgba(255,255,255,0.3)] group-hover:border-white/60 group-hover:shadow-[0_0_18px_rgba(255,255,255,0.7)] transition-all duration-300">
-                <div class="w-full h-full flex items-center justify-center spin-disc">
-                    <spline-viewer
-                        url="https://prod.spline.design/B7sDEZ7ZfOlUR6PE/scene.splinecode"
-                        class="spline-disk-crop pointer-events-none group-hover:pointer-events-auto">
-                    </spline-viewer>
-                </div>
-            </div>
+        <!-- Apple Menu Logo -->
+        <a href="#hero" class="flex items-center justify-center mr-2 px-1.5 py-1 click-sound touch-manipulation group text-white/80 hover:text-white transition-colors" title="Jules Frémondière — Accueil">
+            <svg class="w-3.5 h-3.5 fill-current opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200" viewBox="0 0 170 170">
+                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-6.3-9.56-11.05-20.47-14.25-32.72-3.2-12.26-4.81-23.75-4.81-34.48 0-14.59 3.58-26.77 10.74-36.54 7.16-9.77 16.48-14.77 27.97-15 4.58 0 9.89 1.25 15.93 3.75 6.04 2.5 10.15 3.8 12.33 3.9 1.74 0 6.09-1.42 13.05-4.25 6.96-2.83 12.69-4.14 17.19-3.92 13.06.65 23.61 5.38 31.64 14.18-11.32 6.86-16.88 16.32-16.69 28.39.22 9.57 3.86 17.51 10.92 23.82 7.07 6.31 15.54 10.02 25.43 11.12-2.39 7.39-5.32 14.72-8.79 21.99zM119.22 31.84c0-7.18 2.61-13.82 7.83-19.92 5.22-6.1 11.69-10.12 19.41-12.06.33 2.18.49 4.25.49 6.2 0 7.39-2.77 14.2-8.31 20.43-5.54 6.24-12.23 10.22-20.07 11.94-.32-1.96-.49-4.16-.49-6.59z"/>
+            </svg>
         </a>
         <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
         <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
