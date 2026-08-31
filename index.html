@@ -793,13 +793,15 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
     border-radius: 100px; padding: 6px; 
     display: flex; align-items: center; gap: 12px; 
     box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 0 var(--glass-highlight);
-    overflow: hidden;
+    overflow: visible;
 }
         /* Pseudo-élément pour le flou des images bar_daw */
         .theme-island::before {
             content: '';
             position: absolute;
             inset: 0;
+            overflow: hidden;
+            border-radius: 100px;
             background-image: var(--island-bg);
             background-size: cover;
             background-position: center;
@@ -1031,20 +1033,26 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         #np-panel {
             display: none;
             position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
-            width: 288px;
-            background: rgba(18, 18, 20, 0.85);
-            backdrop-filter: blur(30px) saturate(160%);
-            -webkit-backdrop-filter: blur(30px) saturate(160%);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-            border-radius: 18px;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 0, 0, 0.5);
-            transform-origin: top right;
+            right: -20px;
+            bottom: calc(100% + 14px);
+            width: 290px;
+            background: rgba(18, 18, 20, 0.9);
+            backdrop-filter: blur(35px) saturate(170%);
+            -webkit-backdrop-filter: blur(35px) saturate(170%);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+            border-radius: 20px;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.5);
+            transform-origin: bottom right;
             z-index: 10000;
             padding: 16px;
             user-select: none;
             -webkit-user-select: none;
+        }
+
+        @media (max-width: 640px) {
+            #np-panel {
+                right: -60px;
+            }
         }
 
         #np-panel.open {
@@ -1055,7 +1063,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         @keyframes npPanelOpen {
             0% {
                 opacity: 0;
-                transform: translateY(-8px) scale(0.96);
+                transform: translateY(10px) scale(0.95);
             }
             100% {
                 opacity: 1;
@@ -1125,12 +1133,87 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                 <img src="logo_protools.png" alt="PT" class="w-full h-full object-contain p-1">
             </button>
 
-        <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
-        <div class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0 min-w-[76px]">
-            <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 tabular-nums whitespace-nowrap text-center tracking-wider pointer-events-none" style="font-variant-numeric: tabular-nums;">00:00:00</div>
+            <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
+
+            <!-- WIDGET NOW PLAYING (SOUNDCLOUD SHUFFLE) -->
+            <div id="now-playing-widget" class="relative">
+                <div id="np-trigger" onclick="npTogglePanel()" title="Now Playing (SoundCloud)" class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center gap-1.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-pointer hover:bg-white/10 hover:border-white/20 transition min-w-[36px] h-[28px]">
+                    <div id="np-icon-note" class="text-white/85 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5 text-[var(--accent-color)]" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                        </svg>
+                    </div>
+                    <div id="np-spectrum" class="hidden items-end gap-[2px] h-3.5 w-4">
+                        <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 4px;"></span>
+                        <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 8px;"></span>
+                        <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 12px;"></span>
+                        <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 6px;"></span>
+                        <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 10px;"></span>
+                        <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 14px;"></span>
+                        <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 5px;"></span>
+                    </div>
+                </div>
+
+                <div id="np-panel">
+                    <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
+                        <span class="np-head-label font-mono text-[10px] uppercase tracking-widest text-white/70 flex items-center gap-1.5">
+                            <span class="np-dot w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span> Now Playing
+                        </span>
+                        <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="np-body flex items-center gap-3 mb-3">
+                        <div id="np-art" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
+                            <span class="np-art-glyph font-mono text-lg text-[var(--accent-color)]">♪</span>
+                        </div>
+                        <div id="np-info" class="flex-1 min-w-0">
+                            <div id="np-title" class="font-bold text-xs truncate text-white" title="—">—</div>
+                            <div id="np-sub" class="text-[10px] text-white/40 truncate font-light mt-0.5">SoundCloud · shuffle</div>
+                        </div>
+                    </div>
+
+                    <div id="np-progress-wrap" class="w-full h-1.5 bg-white/10 hover:bg-white/20 rounded-full cursor-pointer relative overflow-hidden mb-1 transition-colors" onclick="npSeek(event)">
+                        <div id="np-progress" class="h-full bg-[var(--accent-color)] rounded-full transition-all duration-100" style="width: 0%;"></div>
+                    </div>
+
+                    <div id="np-times" class="flex justify-between font-mono text-[9px] text-white/40 mb-3">
+                        <span id="np-time-cur">0:00</span>
+                        <span id="np-time-tot">0:00</span>
+                    </div>
+
+                    <div id="np-controls" class="flex items-center justify-center gap-4">
+                        <div id="np-prev" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(true)" title="Précédent (Aléatoire)">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                            </svg>
+                        </div>
+                        <button id="np-play" class="w-11 h-11 rounded-full bg-[var(--accent-color)] text-black flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(var(--accent-color),0.4)] hover:scale-105 active:scale-95 transition" onclick="npTogglePlay()" title="Lecture / Pause">
+                            <svg id="np-play-icon" class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg id="np-pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
+                        <div id="np-next" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(false)" title="Suivant (Aléatoire)">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
+            <div class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0 min-w-[76px]">
+                <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 tabular-nums whitespace-nowrap text-center tracking-wider pointer-events-none" style="font-variant-numeric: tabular-nums;">00:00:00</div>
+            </div>
         </div>
-     </div>
-</div>
+    </div>
 
 <!-- VU-mètre décoratif lié au scroll -->
 <div id="vu-meter-container" class="fixed right-3 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center p-1.5 bg-black/80 backdrop-blur-md border border-white/10 rounded shadow-2xl transition-all duration-500 w-5 h-28 border-t border-t-[var(--accent-color)]" style="opacity: 1; transform: translateY(-50%) translateX(8px);">
@@ -2119,79 +2202,6 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         <div class="hidden xs:flex items-center gap-1.5 font-mono text-[9px] opacity-40">
             <span>48 kHz</span>
             <span class="text-[var(--accent-color)] animate-pulse">●</span>
-        </div>
-
-        <!-- WIDGET NOW PLAYING (SOUNDCLOUD SHUFFLE) -->
-        <div id="now-playing-widget" class="relative">
-            <div id="np-trigger" onclick="npTogglePanel()" title="Now Playing">
-                <div id="np-icon-note" class="text-white/85 flex items-center justify-center">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                    </svg>
-                </div>
-                <div id="np-spectrum" class="hidden items-end gap-[2px] h-3.5 w-4">
-                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 4px;"></span>
-                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 8px;"></span>
-                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 12px;"></span>
-                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 6px;"></span>
-                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 10px;"></span>
-                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 14px;"></span>
-                    <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 5px;"></span>
-                </div>
-            </div>
-
-            <div id="np-panel">
-                <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
-                    <span class="np-head-label font-mono text-[10px] uppercase tracking-widest text-white/70 flex items-center gap-1.5">
-                        <span class="np-dot w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span> Now Playing
-                    </span>
-                    <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="np-body flex items-center gap-3 mb-3">
-                    <div id="np-art" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
-                        <span class="np-art-glyph font-mono text-lg text-[var(--accent-color)]">♪</span>
-                    </div>
-                    <div id="np-info" class="flex-1 min-w-0">
-                        <div id="np-title" class="font-bold text-xs truncate text-white" title="—">—</div>
-                        <div id="np-sub" class="text-[10px] text-white/40 truncate font-light mt-0.5">SoundCloud · shuffle</div>
-                    </div>
-                </div>
-
-                <div id="np-progress-wrap" class="w-full h-1.5 bg-white/10 hover:bg-white/20 rounded-full cursor-pointer relative overflow-hidden mb-1 transition-colors" onclick="npSeek(event)">
-                    <div id="np-progress" class="h-full bg-[var(--accent-color)] rounded-full transition-all duration-100" style="width: 0%;"></div>
-                </div>
-
-                <div id="np-times" class="flex justify-between font-mono text-[9px] text-white/40 mb-3">
-                    <span id="np-time-cur">0:00</span>
-                    <span id="np-time-tot">0:00</span>
-                </div>
-
-                <div id="np-controls" class="flex items-center justify-center gap-4">
-                    <div id="np-prev" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(true)" title="Précédent (Aléatoire)">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-                        </svg>
-                    </div>
-                    <button id="np-play" class="w-11 h-11 rounded-full bg-[var(--accent-color)] text-black flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(var(--accent-color),0.4)] hover:scale-105 active:scale-95 transition" onclick="npTogglePlay()" title="Lecture / Pause">
-                        <svg id="np-play-icon" class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                        <svg id="np-pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                        </svg>
-                    </button>
-                    <div id="np-next" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(false)" title="Suivant (Aléatoire)">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </nav>
