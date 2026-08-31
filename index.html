@@ -45,7 +45,7 @@
             justify-content: space-between !important;
             box-sizing: border-box !important;
             box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight) !important;
-            transition: transform 0.7s var(--ease-apple), border-color 0.7s var(--ease-apple), background-color 0.7s var(--ease-apple), box-shadow 0.7s var(--ease-apple) !important;
+            transition: border-color 0.8s var(--ease-apple), background-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple) !important;
             position: relative;
             isolation: isolate;
         }
@@ -53,10 +53,10 @@
         body[data-theme="ableton"] .stat-card:hover,
         body[data-theme="protools"] .stat-card:hover,
         body[data-theme="fl"] .stat-card:hover {
-            transform: translateY(-2px) !important;
+            transform: none !important;
             background: var(--glass-tint-strong) !important;
-            border-color: color-mix(in srgb, var(--accent-color) 40%, var(--glass-edge-top)) !important;
-            box-shadow: 0 55px 110px -30px rgba(0, 0, 0, 0.75), 0 25px 50px -20px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 var(--glass-highlight), 0 0 15px -5px color-mix(in srgb, var(--accent-color) 20%, transparent) !important;
+            border-color: color-mix(in srgb, var(--accent-color) 35%, var(--glass-edge-top)) !important;
+            box-shadow: 0 55px 110px -30px rgba(0, 0, 0, 0.75), 0 25px 50px -20px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 var(--glass-highlight), 0 0 15px -5px color-mix(in srgb, var(--accent-color) 15%, transparent) !important;
         }
 
         /* Chiffres géants verrouillés (3 ANS, 47/50, 3 DAWs, etc.) */
@@ -564,7 +564,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             isolation: isolate;
             overflow: hidden;
             width: 100%;
-            transition: transform 0.7s var(--ease-apple), box-shadow 0.7s var(--ease-apple), border-color 0.7s var(--ease-apple), filter 0.7s var(--ease-apple), opacity 0.7s var(--ease-apple);
+            transition: box-shadow 0.8s var(--ease-apple), border-color 0.8s var(--ease-apple), filter 0.8s var(--ease-apple), opacity 0.8s var(--ease-apple);
         }
 
         /* Bord lumineux = Gradient hairline via ::before (Edge Light avec réfraction et lueur douce) */
@@ -589,7 +589,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             z-index: 1;
             filter: blur(0.5px);
             box-shadow: 0 0 12px -2px var(--glass-edge-glow);
-            transition: opacity 0.6s var(--ease-apple), box-shadow 0.6s var(--ease-apple);
+            transition: opacity 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple);
         }
 
         /* Reflet dynamique qui suit la souris (Specular Spot doux) */
@@ -605,7 +605,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                 transparent 65%
             );
             opacity: 0;
-            transition: opacity 0.6s var(--ease-apple);
+            transition: opacity 0.8s var(--ease-apple);
             pointer-events: none;
             z-index: 2;
             mix-blend-mode: overlay;
@@ -614,18 +614,18 @@ body.light-mode .apple-menu-item { color: #222222; }
         @media (hover: hover) {
             .liquid-glass:hover,
             .glass-panel:hover { 
-                transform: translateY(-2px); 
+                transform: none !important; 
                 box-shadow: 
                     0 55px 110px -30px rgba(0, 0, 0, 0.75),
                     0 25px 50px -20px rgba(0, 0, 0, 0.55),
-                    inset 0 1px 0 0 color-mix(in srgb, var(--accent-color) 30%, #ffffff),
-                    0 0 25px -5px color-mix(in srgb, var(--accent-color) 15%, transparent);
+                    inset 0 1px 0 0 color-mix(in srgb, var(--accent-color) 25%, #ffffff),
+                    0 0 25px -5px color-mix(in srgb, var(--accent-color) 10%, transparent);
             }
             .liquid-glass:hover::after,
             .glass-panel:hover::after {
                 opacity: 1;
             }
-            .dock-icon:hover { color: #fff; transform: translateY(-2px); }
+            .dock-icon:hover { color: #fff; }
             body.light-mode .dock-icon:hover { color: #000; }
             .theme-pill:hover { opacity: 1; transform: scale(1.02); background: rgba(255,255,255,0.25); }
         }
@@ -683,8 +683,8 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
         
-        .stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; transition: transform 0.7s var(--ease-apple), background-color 0.7s var(--ease-apple), box-shadow 0.7s var(--ease-apple); padding: 10px; border-radius: 20px; }
-        @media (min-width: 1024px) { .stat-item:hover { transform: translateY(-2px); background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); } }
+        .stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; transition: background-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple); padding: 10px; border-radius: 20px; }
+        @media (min-width: 1024px) { .stat-item:hover { transform: none !important; background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); } }
 
         .pie-chart {
           width: 80px; height: 80px; border-radius: 50%;
@@ -693,7 +693,7 @@ body.light-mode .apple-menu-item { color: #222222; }
           margin: 0 auto 1rem;
           box-shadow: 0 0 0px transparent;
           position: relative; z-index: 10;
-          transition: box-shadow 0.6s var(--ease-apple), transform 0.6s var(--ease-apple);
+          transition: box-shadow 0.8s var(--ease-apple);
         }
         @media (min-width: 1024px) {
           .pie-chart { width: 130px; height: 130px; margin-bottom: 1.5rem; }
@@ -703,8 +703,8 @@ body.light-mode .apple-menu-item { color: #222222; }
           box-shadow: 0 0 28px -4px color-mix(in srgb, var(--accent-color) 60%, transparent);
         }
         .stat-item:hover .pie-chart {
-          transform: scale(1.02);
-          box-shadow: 0 0 40px -6px color-mix(in srgb, var(--accent-color) 70%, transparent);
+          transform: none !important;
+          box-shadow: 0 0 35px -6px color-mix(in srgb, var(--accent-color) 60%, transparent);
         }
         .stat-item:hover p { opacity: 1 !important; }
 
@@ -712,16 +712,16 @@ body.light-mode .apple-menu-item { color: #222222; }
             position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; 
             cursor: pointer; border: 1px solid var(--glass-border); 
             box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight); 
-            transition: transform 0.7s var(--ease-apple), filter 0.7s var(--ease-apple), border-color 0.7s var(--ease-apple), box-shadow 0.7s var(--ease-apple); 
+            transition: filter 0.8s var(--ease-apple), border-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple); 
         }
         @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
         .project-card:hover { 
-            transform: translateY(-2px); 
+            transform: none !important; 
             filter: brightness(1.03); 
-            border-color: color-mix(in srgb, var(--accent-color) 50%, var(--glass-edge-top)); 
-            box-shadow: 0 55px 110px -30px rgba(0,0,0,0.75), 0 25px 50px -20px rgba(0,0,0,0.55), 0 0 20px -5px color-mix(in srgb, var(--accent-color) 25%, transparent);
+            border-color: color-mix(in srgb, var(--accent-color) 40%, var(--glass-edge-top)); 
+            box-shadow: 0 55px 110px -30px rgba(0,0,0,0.75), 0 25px 50px -20px rgba(0,0,0,0.55), 0 0 20px -5px color-mix(in srgb, var(--accent-color) 15%, transparent);
         }
-        .project-card img, .project-card video { width: 100%; height: 100%; object-fit: cover; transition: 0.7s var(--ease-apple); filter: brightness(0.85); }
+        .project-card img, .project-card video { width: 100%; height: 100%; object-fit: cover; transition: 0.8s var(--ease-apple); filter: brightness(0.85); }
         body.light-mode .project-card img, body.light-mode .project-card video { filter: brightness(1); }
         .project-info { 
             opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; 
@@ -733,7 +733,7 @@ body.light-mode .apple-menu-item { color: #222222; }
         /* --- LAB & INSPIRATIONS --- */
         .lab-row { 
             display: flex; flex-direction: column; justify-content: center; padding: 16px; 
-            border-bottom: 1px solid var(--glass-border); transition: background-color 0.3s var(--ease-apple); position: relative; overflow: hidden; 
+            border-bottom: 1px solid var(--glass-border); transition: background-color 0.4s var(--ease-apple); position: relative; overflow: hidden; 
         }
         .lab-row:last-child { border-bottom: none; }
         @media (hover: hover) { 
@@ -742,26 +742,26 @@ body.light-mode .apple-menu-item { color: #222222; }
         .lab-row.playing .text-xs { opacity: 1; }
         
         .lab-content-wrapper { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 20; }
-        .lab-btn-area { cursor: pointer; padding: 8px; margin: -8px; border-radius: 50%; transition: background-color 0.25s var(--ease-apple), transform 0.25s var(--ease-apple); z-index: 30; }
+        .lab-btn-area { cursor: pointer; padding: 8px; margin: -8px; border-radius: 50%; transition: background-color 0.3s var(--ease-apple), transform 0.3s var(--ease-apple); z-index: 30; }
         .lab-btn-area:active { background: rgba(255,255,255,0.15); transform: scale(0.97); }
 
         .inspi-card-large { 
             position: relative; overflow: hidden; border-radius: 16px; border: 1px solid var(--glass-border); 
-            transition: transform 0.7s var(--ease-apple), border-color 0.7s var(--ease-apple), box-shadow 0.7s var(--ease-apple), filter 0.7s var(--ease-apple); aspect-ratio: 16/9; cursor: pointer; opacity: 0; animation: fadeInUp 0.8s forwards; 
+            transition: border-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple), filter 0.8s var(--ease-apple); aspect-ratio: 16/9; cursor: pointer; opacity: 0; animation: fadeInUp 0.8s forwards; 
             box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight);
         }
         @media (hover: hover) {
             .inspi-card-large:hover { 
-                transform: translateY(-2px); 
-                border-color: color-mix(in srgb, var(--accent-color) 50%, var(--glass-edge-top)); 
-                box-shadow: 0 55px 110px -30px rgba(0,0,0,0.75), 0 25px 50px -20px rgba(0,0,0,0.55), 0 0 20px -5px color-mix(in srgb, var(--accent-color) 25%, transparent); 
+                transform: none !important; 
+                border-color: color-mix(in srgb, var(--accent-color) 40%, var(--glass-edge-top)); 
+                box-shadow: 0 55px 110px -30px rgba(0,0,0,0.75), 0 25px 50px -20px rgba(0,0,0,0.55), 0 0 20px -5px color-mix(in srgb, var(--accent-color) 15%, transparent); 
             }
             .inspi-card-large:hover img { transform: scale(1.02); filter: brightness(0.7); }
             .inspi-card-large:hover .inspi-content { opacity: 1; transform: translateY(0); }
             .inspi-card-large:hover .img-notinbed { transform: scale(1.22); filter: brightness(0.7); } 
         }
         .img-notinbed { transform: scale(1.2); } 
-        .inspi-img-large { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease-apple), filter 0.7s var(--ease-apple); }
+        .inspi-img-large { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-apple), filter 0.8s var(--ease-apple); }
         .object-bottom-fix { object-position: bottom; }
         .inspi-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.92), transparent); opacity: 0; transform: translateY(10px); transition: all 0.4s ease; }
         @media (max-width: 768px) { .inspi-content { opacity: 1; transform: translateY(0); background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); } }
@@ -975,10 +975,13 @@ body.light-mode .apple-menu-item { color: #222222; }
         #vision-modal.hidden { opacity: 0; pointer-events: none; display: none; }
 
         /* Bouton Vision flottant */
+        #vision-float-btn {
+            transition: box-shadow 0.6s var(--ease-apple), border-color 0.6s var(--ease-apple), background-color 0.6s var(--ease-apple) !important;
+        }
         @media (hover: hover) {
             #vision-float-btn:hover {
-                transform: translateY(-4px) !important;
-                box-shadow: 0 0 60px -8px color-mix(in srgb, var(--accent-color) 55%, transparent), 0 30px 80px -20px rgba(0,0,0,0.7) !important;
+                transform: none !important;
+                box-shadow: 0 0 60px -8px color-mix(in srgb, var(--accent-color) 45%, transparent), 0 30px 80px -20px rgba(0,0,0,0.7) !important;
             }
         }
         /* Neutralisation des transitions CSS en conflit avec Anime.js */
@@ -986,7 +989,7 @@ body.light-mode .apple-menu-item { color: #222222; }
         .vision-bar-container { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; width: 100%; }
         .vision-bar-fill { height: 100%; background: var(--accent-color); width: 0%; transition: none !important; }
         body.light-mode .vision-bar-container { background: rgba(0,0,0,0.1); }
-        #parcours .group { transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important; }
+        #parcours .group { transition: background-color 0.6s var(--ease-apple), border-color 0.6s var(--ease-apple), box-shadow 0.6s var(--ease-apple) !important; }
 
         .loading-container {
   width: 100%;
@@ -1725,57 +1728,57 @@ body.light-mode .apple-menu-item { color: #222222; }
                     </div>
                 <div class="relative pl-8 md:pl-10 border-l border-white/10 space-y-4">
     
-    <div class="relative group p-4 md:p-5 rounded-xl transition-colors duration-300 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
-        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-300 z-10"></div>
-        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-300"></div>
+    <div class="relative group p-4 md:p-5 rounded-xl transition-all duration-500 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
+        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-500 z-10"></div>
+        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-500"></div>
         
         <div class="flex-1 w-full">
             <span class="text-[10px] font-mono text-[var(--accent-color)] mb-1 block uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity">2023 – 2026</span>
-            <h3 class="text-lg md:text-xl font-bold group-hover:translate-x-2 transition-transform duration-300 text-white">3iS - Institut International</h3>
+            <h3 class="text-lg md:text-xl font-bold text-white transition-colors duration-500">3iS - Institut International</h3>
             <p class="text-xs uppercase tracking-wider opacity-50 mb-2 mt-1">Bachelor Son à l'image / Ingénieur du son</p>
-            <p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--accent-color)] group-hover:border-white/50 transition-colors">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p>
+            <p class="text-sm md:text-base opacity-70 italic pl-3 border-l-2 border-[var(--accent-color)] group-hover:border-white/50 transition-colors duration-500">Prise en main de matériel professionnel, Intervenants passionnés, Détermination.</p>
         </div>
     </div>
 
-    <div class="relative group p-4 md:p-5 rounded-xl transition-colors duration-300 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
-        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-300 z-10"></div>
-        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-300"></div>
+    <div class="relative group p-4 md:p-5 rounded-xl transition-all duration-500 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
+        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-500 z-10"></div>
+        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-500"></div>
         
         <div class="flex-1 w-full">
-            <span class="text-[10px] font-mono text-gray-400 group-hover:text-[var(--accent-color)] mb-1 block uppercase tracking-widest font-bold transition-colors">Fév - Avr 2026</span>
-            <h3 class="text-lg md:text-xl font-bold group-hover:translate-x-2 transition-transform duration-300 text-white">Paname Comedy Club</h3>
+            <span class="text-[10px] font-mono text-gray-400 group-hover:text-[var(--accent-color)] mb-1 block uppercase tracking-widest font-bold transition-colors duration-500">Fév - Avr 2026</span>
+            <h3 class="text-lg md:text-xl font-bold text-white transition-colors duration-500">Paname Comedy Club</h3>
             <p class="text-sm md:text-base opacity-70 italic mt-2 mb-3">Régisseur Ingénieur du son.</p>
-            <a href="https://www.instagram.com/panameartcafe/" target="_blank" class="text-[10px] uppercase tracking-widest font-mono border border-white/10 px-4 py-2 rounded-full group-hover:bg-[var(--accent-color)] group-hover:text-black group-hover:border-[var(--accent-color)] inline-block transition-all duration-300">▶ Visiter l'Instagram</a>
+            <a href="https://www.instagram.com/panameartcafe/" target="_blank" class="text-[10px] uppercase tracking-widest font-mono border border-white/10 px-4 py-2 rounded-full group-hover:bg-[var(--accent-color)] group-hover:text-black group-hover:border-[var(--accent-color)] inline-block transition-all duration-500">▶ Visiter l'Instagram</a>
         </div>
-        <div class="w-full md:w-32 h-24 shrink-0 rounded-lg overflow-hidden border border-white/10 shadow-lg relative group-hover:border-[var(--accent-color)]/50 transition-colors">
-            <div class="absolute inset-0 bg-[var(--accent-color)]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"></div>
-            <img src="panameart.webp" alt="Paname Art Cafe" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 group-hover:scale-110">
+        <div class="w-full md:w-32 h-24 shrink-0 rounded-lg overflow-hidden border border-white/10 shadow-lg relative group-hover:border-[var(--accent-color)]/50 transition-colors duration-500">
+            <div class="absolute inset-0 bg-[var(--accent-color)]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
+            <img src="panameart.webp" alt="Paname Art Cafe" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-105">
         </div>
     </div>
 
-    <div class="relative group p-4 md:p-5 rounded-xl transition-colors duration-300 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
-        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-300 z-10"></div>
-        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-300"></div>
+    <div class="relative group p-4 md:p-5 rounded-xl transition-all duration-500 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
+        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-500 z-10"></div>
+        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-500"></div>
         
         <div class="flex-1 w-full">
-            <span class="text-[10px] font-mono text-gray-400 group-hover:text-[var(--accent-color)] mb-1 block uppercase tracking-widest font-bold transition-colors">2023</span>
-            <h3 class="text-lg md:text-xl font-bold group-hover:translate-x-2 transition-transform duration-300 text-white">Service Civique / Césure</h3>
+            <span class="text-[10px] font-mono text-gray-400 group-hover:text-[var(--accent-color)] mb-1 block uppercase tracking-widest font-bold transition-colors duration-500">2023</span>
+            <h3 class="text-lg md:text-xl font-bold text-white transition-colors duration-500">Service Civique / Césure</h3>
             <p class="text-sm md:text-base opacity-70 italic mt-2 mb-3">Projet Court Métrage grâce à l’association Thermogène Média.</p>
-            <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-[10px] uppercase tracking-widest font-mono border border-white/10 px-4 py-2 rounded-full group-hover:bg-[var(--accent-color)] group-hover:text-black group-hover:border-[var(--accent-color)] inline-block transition-all duration-300">▶ Voir le projet vidéo</a>
+            <a href="https://www.youtube.com/watch?v=kxMZPKXg96U" target="_blank" class="text-[10px] uppercase tracking-widest font-mono border border-white/10 px-4 py-2 rounded-full group-hover:bg-[var(--accent-color)] group-hover:text-black group-hover:border-[var(--accent-color)] inline-block transition-all duration-500">▶ Voir le projet vidéo</a>
         </div>
-        <div class="w-full md:w-32 h-24 shrink-0 rounded-lg overflow-hidden border border-white/10 shadow-lg relative group-hover:border-[var(--accent-color)]/50 transition-colors">
-            <div class="absolute inset-0 bg-[var(--accent-color)]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"></div>
-            <img src="peace3.jpg" alt="Asso" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 group-hover:scale-110">
+        <div class="w-full md:w-32 h-24 shrink-0 rounded-lg overflow-hidden border border-white/10 shadow-lg relative group-hover:border-[var(--accent-color)]/50 transition-colors duration-500">
+            <div class="absolute inset-0 bg-[var(--accent-color)]/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
+            <img src="peace3.jpg" alt="Asso" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-105">
         </div>
     </div>
 
-    <div class="relative group p-4 md:p-5 rounded-xl transition-colors duration-300 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
-        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-300 z-10"></div>
-        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-300"></div>
+    <div class="relative group p-4 md:p-5 rounded-xl transition-all duration-500 hover:bg-white/[0.02] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.01)] border border-transparent hover:border-white/10 flex flex-col md:flex-row gap-6 items-center click-sound touch-manipulation cursor-crosshair">
+        <div class="absolute -left-[38px] md:-left-[46px] top-1/2 -translate-y-1/2 w-3 h-3 rotate-45 border-2 border-white/20 bg-[#050505] group-hover:bg-[var(--accent-color)] group-hover:border-[var(--accent-color)] group-hover:shadow-[0_0_15px_var(--accent-color)] transition-all duration-500 z-10"></div>
+        <div class="absolute -left-[28px] md:-left-[36px] top-1/2 -translate-y-1/2 w-4 md:w-6 h-[1px] bg-white/10 group-hover:bg-[var(--accent-color)] transition-colors duration-500"></div>
         
         <div class="flex-1 w-full">
-            <span class="text-[10px] font-mono text-gray-400 group-hover:text-[var(--accent-color)] mb-1 block uppercase tracking-widest font-bold transition-colors">2022</span>
-            <h3 class="text-lg md:text-xl font-bold group-hover:translate-x-2 transition-transform duration-300 text-white">BAC STI2D ITEC</h3>
+            <span class="text-[10px] font-mono text-gray-400 group-hover:text-[var(--accent-color)] mb-1 block uppercase tracking-widest font-bold transition-colors duration-500">2022</span>
+            <h3 class="text-lg md:text-xl font-bold text-white transition-colors duration-500">BAC STI2D ITEC</h3>
             <p class="text-sm md:text-base opacity-70 italic mt-2">Esprit d’équipe, Innovation et Informatique, Réflexion technique.</p>
         </div>
     </div>
@@ -3721,35 +3724,15 @@ function initTimelineAnimation() {
                 if (statCards.length) {
                     statCards.forEach(el => {
                         el.style.opacity = '0';
-                        el.style.transform = 'translateY(20px)';
+                        el.style.transform = 'translateY(15px)';
                     });
                     if (typeof anime !== 'undefined' && anime.remove) anime.remove(statCards);
                     anim(statCards, {
-                        translateY: [20, 0],
+                        translateY: [15, 0],
                         opacity: [0, 1],
                         delay: stg ? stg(60) : 60,
                         duration: 650,
                         ease: 'outQuad'
-                    });
-
-                    // Micro-hover subtil (-3px, sans flou de mise à l'échelle)
-                    statCards.forEach(card => {
-                        card.addEventListener('mouseenter', () => {
-                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                            anim(card, {
-                                translateY: -3,
-                                duration: 250,
-                                ease: 'outQuad'
-                            });
-                        });
-                        card.addEventListener('mouseleave', () => {
-                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                            anim(card, {
-                                translateY: 0,
-                                duration: 200,
-                                ease: 'outCubic'
-                            });
-                        });
                     });
                 }
 
@@ -3757,39 +3740,15 @@ function initTimelineAnimation() {
                 if (timelineEntries.length) {
                     timelineEntries.forEach(el => {
                         el.style.opacity = '0';
-                        el.style.transform = 'translateY(35px) scale(0.88)';
+                        el.style.transform = 'translateY(20px)';
                     });
                     if (typeof anime !== 'undefined' && anime.remove) anime.remove(timelineEntries);
                     anim(timelineEntries, {
-                        translateY: [35, 0],
-                        scale: [0.88, 1],
+                        translateY: [20, 0],
                         opacity: [0, 1],
-                        delay: stg ? stg(120, { start: 220 }) : 220,
-                        duration: 850,
-                        ease: 'outElastic(1, .75)'
-                    });
-
-                    // 3. Hover Effects sur les items de timeline
-                    timelineEntries.forEach(card => {
-                        card.addEventListener('mouseenter', () => {
-                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                            anim(card, {
-                                translateY: -6,
-                                scale: 1.025,
-                                duration: 450,
-                                ease: 'outElastic(1, .6)'
-                            });
-                        });
-
-                        card.addEventListener('mouseleave', () => {
-                            if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                            anim(card, {
-                                translateY: 0,
-                                scale: 1.0,
-                                duration: 250,
-                                ease: 'outCubic'
-                            });
-                        });
+                        delay: stg ? stg(100, { start: 150 }) : 150,
+                        duration: 700,
+                        ease: 'outQuad'
                     });
                 }
             }
