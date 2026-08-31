@@ -893,9 +893,9 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                 <img src="logo_protools.png" alt="PT" class="w-full h-full object-contain p-1">
             </button>
 
-        <div class="w-[1px] h-[24px] bg-white/20 mx-1"></div>
-        <div class="bg-black/50 border border-white/10 rounded-md px-3 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0">
-            <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 min-w-[85px] whitespace-nowrap text-center tracking-widest pointer-events-none">00:00:00</div>
+        <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
+        <div class="bg-black/50 border border-white/10 rounded-md px-3 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0 min-w-[96px] w-[96px]">
+            <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 tabular-nums whitespace-nowrap text-center tracking-widest pointer-events-none w-full" style="font-variant-numeric: tabular-nums;">00:00:00:00</div>
         </div>
      </div>
 </div>
@@ -923,30 +923,29 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
     <main class="bento-grid">
         
-        <section id="hero" class="col-span-12 glass-panel p-6 md:p-8 flex flex-col justify-center items-center text-center min-h-[80vh] md:min-h-[50vh] scroll-float relative group">
-            <div class="relative z-10">
-                <div class="mb-8 flex justify-center">
-                <div class="relative w-14 h-14 md:w-16 md:h-16">
-                <img src="moi.png" alt="Jules" class="w-full h-full rounded-full object-cover object-top border border-white/10 shadow-2xl" style="filter: grayscale(20%);">
-                <div class="absolute inset-0 rounded-full" style="box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 40px -8px var(--accent-color);"></div>
-                 </div>
-            </div>
-                <p class="text-xs md:text-sm font-mono uppercase tracking-[0.3em] opacity-40 mb-6">Étudiant ingénieur du son</p>
-                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-3 leading-[0.95]"style="background: linear-gradient(180deg, #ffffff 60%, rgba(255,255,255,0.4) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Jules<br>Frémondière</h1>
-                <div class="inline-flex items-center gap-2 border border-white/10 bg-white/5 text-white/60 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest mb-8 backdrop-blur-md">
-                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] inline-block"></span>
-  En recherche de stage · 2026
+        <section id="hero" class="col-span-12 glass-panel p-6 md:p-8 pt-8 md:pt-10 pb-12 md:pb-16 flex flex-col justify-center items-center text-center scroll-float relative group">
+            <div class="relative z-10 max-w-3xl mx-auto">
+                <div class="mb-4 md:mb-5 flex justify-center">
+                    <div class="relative w-14 h-14 md:w-16 md:h-16">
+                        <img src="moi.png" alt="Jules" class="w-full h-full rounded-full object-cover object-top border border-white/10 shadow-2xl" style="filter: grayscale(20%);">
+                        <div class="absolute inset-0 rounded-full" style="box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 40px -8px var(--accent-color);"></div>
+                    </div>
                 </div>
-                <p class="text-xs md:text-sm opacity-50 font-light tracking-wide mt-6 mb-2">3iS · Promotion 2026</p>
-                <p class="text-xs md:text-sm opacity-75 font-light tracking-wide mt-6 mb-2">Du plateau au mix : captation, repair, design, composition à l'image. Une approche technique et rigoureuse du son, nourrie par une pratique artistique continue — musique, montage, création visuelle.</p>
-                <a href="mailto:jules.fremondiere@3is.fr" class="block mt-4 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition leading-normal">jules.fremondiere@3is.fr</a>
-                <div class="mt-12 flex gap-3 justify-center flex-wrap">
-          <a href="#contact"
-                 class="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-white/90 transition click-sound tracking-wide">Me contacter </a>
-          <a href="CV_FREMONDIEREJULES.pdf" download
-            class="px-8 py-3.5 rounded-full bg-white/10 text-white font-semibold text-sm hover:bg-white/20 transition click-sound tracking-wide backdrop-blur-md border border-white/10 flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>CV</a>
-</div>
+                <p class="text-xs md:text-sm font-mono uppercase tracking-[0.3em] opacity-40 mb-3 md:mb-4">Étudiant ingénieur du son</p>
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-3 leading-[0.95]" style="background: linear-gradient(180deg, #ffffff 60%, rgba(255,255,255,0.4) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Jules<br>Frémondière</h1>
+                <div class="inline-flex items-center gap-2 border border-white/10 bg-white/5 text-white/60 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest mb-4 md:mb-6 backdrop-blur-md">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] inline-block"></span>
+                    En recherche de stage · 2026
+                </div>
+                <p class="text-xs md:text-sm opacity-50 font-light tracking-wide mb-1">3iS · Promotion 2026</p>
+                <p class="text-xs md:text-sm opacity-75 font-light tracking-wide max-w-2xl mx-auto leading-relaxed">Du plateau au mix : captation, repair, design, composition à l'image. Une approche technique et rigoureuse du son, nourrie par une pratique artistique continue — musique, montage, création visuelle.</p>
+                <a href="mailto:jules.fremondiere@3is.fr" class="inline-block mt-3 text-base md:text-lg text-[var(--glass-text)] opacity-60 hover:opacity-100 font-mono transition leading-normal">jules.fremondiere@3is.fr</a>
+                <div class="mt-6 md:mt-8 flex gap-3 justify-center flex-wrap">
+                    <a href="#contact" class="px-8 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-white/90 transition click-sound tracking-wide">Me contacter</a>
+                    <a href="CV_FREMONDIEREJULES.pdf" download class="px-8 py-3.5 rounded-full bg-white/10 text-white font-semibold text-sm hover:bg-white/20 transition click-sound tracking-wide backdrop-blur-md border border-white/10 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>CV
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -1121,7 +1120,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                                 <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-lg font-light">TOUR.</span></span>
                                 <div class="mt-4">
                                     <h4 class="text-xs font-bold uppercase tracking-wider text-white">Europe</h4>
-                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Danse Hip-Hop (Boris Charmatz).</p>
+                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Danse contemporaine (avec Boris Charmatz en 2014).</p>
                                 </div>
                             </div>
                         </div>
@@ -1867,12 +1866,6 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
    <nav class="apple-menubar">
     <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
-        <!-- Apple Menu Logo -->
-        <a href="#hero" class="flex items-center justify-center mr-2 px-1.5 py-1 click-sound touch-manipulation group text-white/80 hover:text-white transition-colors" title="Jules Frémondière — Accueil">
-            <svg class="w-3.5 h-3.5 fill-current opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-200" viewBox="0 0 170 170">
-                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-6.3-9.56-11.05-20.47-14.25-32.72-3.2-12.26-4.81-23.75-4.81-34.48 0-14.59 3.58-26.77 10.74-36.54 7.16-9.77 16.48-14.77 27.97-15 4.58 0 9.89 1.25 15.93 3.75 6.04 2.5 10.15 3.8 12.33 3.9 1.74 0 6.09-1.42 13.05-4.25 6.96-2.83 12.69-4.14 17.19-3.92 13.06.65 23.61 5.38 31.64 14.18-11.32 6.86-16.88 16.32-16.69 28.39.22 9.57 3.86 17.51 10.92 23.82 7.07 6.31 15.54 10.02 25.43 11.12-2.39 7.39-5.32 14.72-8.79 21.99zM119.22 31.84c0-7.18 2.61-13.82 7.83-19.92 5.22-6.1 11.69-10.12 19.41-12.06.33 2.18.49 4.25.49 6.2 0 7.39-2.77 14.2-8.31 20.43-5.54 6.24-12.23 10.22-20.07 11.94-.32-1.96-.49-4.16-.49-6.59z"/>
-            </svg>
-        </a>
         <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
         <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
         <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
@@ -2807,8 +2800,18 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         }
 
         let autoStartTimer = setTimeout(() => { startExperience(true); }, 1200);
-        function startExperience(isAuto = false) { clearTimeout(autoStartTimer); document.getElementById('start-screen').classList.add('hidden-screen'); if (!isAuto && audioCtx.state === 'suspended') audioCtx.resume();  }
-        setInterval(() => { const now = new Date(); const timeDisp = document.getElementById('time-display'); if(timeDisp) timeDisp.textContent = now.toLocaleTimeString('fr-FR', {hour12:false}) + ':' + Math.floor(now.getMilliseconds()/10); }, 40);
+        function startExperience(isAuto = false) { clearTimeout(autoStartTimer); document.getElementById('start-screen').classList.add('hidden-screen'); if (!isAuto && audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }
+        setInterval(() => {
+            const now = new Date();
+            const timeDisp = document.getElementById('time-display');
+            if (timeDisp) {
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const centiseconds = String(Math.floor(now.getMilliseconds() / 10)).padStart(2, '0');
+                timeDisp.textContent = `${hours}:${minutes}:${seconds}:${centiseconds}`;
+            }
+        }, 40);
 
         // --- 5. SESSION.PTX (MULTI-TRACK ENGINE) ---
         const ptxTracks = {
