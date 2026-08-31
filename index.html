@@ -26,20 +26,127 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* --- SYSTEM SPECS MONITORING PANEL (MINIMALIST & HIGH-READABILITY) --- */
-        .stat-card {
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        /* --- SYSTEM SPECS & STATS CARDS : VERROUILLAGE TYPOGRAPHIQUE ET DIMENSIONNEL --- */
+        .stat-card,
+        body[data-theme="ableton"] .stat-card,
+        body[data-theme="protools"] .stat-card,
+        body[data-theme="fl"] .stat-card {
+            background: rgba(255, 255, 255, 0.01) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-radius: 0.75rem;
+            border-radius: 0.75rem !important;
+            padding: 1.5rem !important;
+            min-height: 145px;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            box-sizing: border-box !important;
             transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease !important;
             will-change: transform, box-shadow;
         }
-        .stat-card:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.05);
+        .stat-card:hover,
+        body[data-theme="ableton"] .stat-card:hover,
+        body[data-theme="protools"] .stat-card:hover,
+        body[data-theme="fl"] .stat-card:hover {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.05) !important;
+        }
+
+        /* Chiffres géants verrouillés (3 ANS, 47/50, 3 DAWs, etc.) */
+        .stat-card .stat-number,
+        .stat-card > span,
+        body[data-theme="ableton"] .stat-card .stat-number,
+        body[data-theme="ableton"] .stat-card > span,
+        body[data-theme="protools"] .stat-card .stat-number,
+        body[data-theme="protools"] .stat-card > span,
+        body[data-theme="fl"] .stat-card .stat-number,
+        body[data-theme="fl"] .stat-card > span {
+            font-family: 'Share Tech Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+            font-size: 2.25rem !important; /* text-4xl */
+            line-height: 1 !important;
+            font-weight: 900 !important;
+            letter-spacing: -0.025em !important;
+            color: var(--accent-color) !important;
+            display: block !important;
+        }
+        @media (min-width: 768px) {
+            .stat-card .stat-number,
+            .stat-card > span,
+            body[data-theme="ableton"] .stat-card .stat-number,
+            body[data-theme="ableton"] .stat-card > span,
+            body[data-theme="protools"] .stat-card .stat-number,
+            body[data-theme="protools"] .stat-card > span,
+            body[data-theme="fl"] .stat-card .stat-number,
+            body[data-theme="fl"] .stat-card > span {
+                font-size: 3rem !important; /* text-5xl */
+            }
+        }
+        .stat-card .stat-number span,
+        .stat-card > span span,
+        body[data-theme="ableton"] .stat-card .stat-number span,
+        body[data-theme="ableton"] .stat-card > span span,
+        body[data-theme="protools"] .stat-card .stat-number span,
+        body[data-theme="protools"] .stat-card > span span {
+            font-weight: 300 !important;
+            letter-spacing: normal !important;
+        }
+
+        /* Titres & Labels de cartes */
+        .stat-card h4,
+        body[data-theme="ableton"] .stat-card h4,
+        body[data-theme="protools"] .stat-card h4,
+        body[data-theme="fl"] .stat-card h4 {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-size: 0.75rem !important; /* text-xs */
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            color: #ffffff !important;
+            margin: 0 !important;
+        }
+
+        /* Textes descriptifs de cartes */
+        .stat-card p,
+        body[data-theme="ableton"] .stat-card p,
+        body[data-theme="protools"] .stat-card p,
+        body[data-theme="fl"] .stat-card p {
+            font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-size: 0.6875rem !important; /* text-[11px] */
+            font-weight: 300 !important;
+            line-height: 1.5 !important;
+            color: rgba(255, 255, 255, 0.55) !important;
+            margin-top: 0.25rem !important;
+        }
+
+        /* Skills Jauges & Pourcentages */
+        .skill-percent,
+        body[data-theme="ableton"] .skill-percent,
+        body[data-theme="protools"] .skill-percent,
+        body[data-theme="fl"] .skill-percent {
+            font-family: 'Share Tech Mono', monospace !important;
+            font-weight: 700 !important;
+            font-size: 1.5rem !important;
+            color: #ffffff !important;
+        }
+        .stat-item h4,
+        body[data-theme="ableton"] .stat-item h4,
+        body[data-theme="protools"] .stat-item h4,
+        body[data-theme="fl"] .stat-item h4 {
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.1em !important;
+            color: var(--accent-color) !important;
+        }
+        .stat-item p,
+        body[data-theme="ableton"] .stat-item p,
+        body[data-theme="protools"] .stat-item p,
+        body[data-theme="fl"] .stat-item p {
+            font-family: 'Jost', sans-serif !important;
+            font-size: 0.75rem !important;
+            line-height: 1.5 !important;
+            color: rgba(255, 255, 255, 0.7) !important;
         }
         /* --- CORE VARS & THEME ISOLATION --- */
         :root {
@@ -259,24 +366,34 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
         }
 
         /* Hiérarchie et Contrastes des Titres */
-        body[data-theme="ableton"] h1, body[data-theme="ableton"] h2, body[data-theme="ableton"] h3, body[data-theme="ableton"] h4, body[data-theme="ableton"] .win-title {
+        body[data-theme="ableton"] h1, 
+        body[data-theme="ableton"] h2, 
+        body[data-theme="ableton"] h3, 
+        body[data-theme="ableton"] h4:not(.stat-card h4):not(.stat-item h4), 
+        body[data-theme="ableton"] .win-title {
             font-weight: 600 !important;
             letter-spacing: -0.01em !important;
             color: #FFFFFF !important;
         }
 
         /* Textes secondaires, sous-titres et icônes */
-        body[data-theme="ableton"] p, body[data-theme="ableton"] span, body[data-theme="ableton"] a {
+        body[data-theme="ableton"] p:not(.stat-card p):not(.stat-item p), 
+        body[data-theme="ableton"] span:not(.stat-card *):not(.stat-item *), 
+        body[data-theme="ableton"] a:not(.stat-card *) {
             font-weight: 300 !important;
         }
         body[data-theme="ableton"] .text-gray-400, body[data-theme="ableton"] .text-gray-500, body[data-theme="ableton"] .text-gray-600, 
-        body[data-theme="ableton"] .opacity-50, body[data-theme="ableton"] .opacity-60, body[data-theme="ableton"] .opacity-70 {
+        body[data-theme="ableton"] .opacity-50:not(.stat-card *):not(.stat-item *), 
+        body[data-theme="ableton"] .opacity-60:not(.stat-card *):not(.stat-item *), 
+        body[data-theme="ableton"] .opacity-70:not(.stat-card *):not(.stat-item *) {
             color: #86868B !important;
-            opacity: 1 !important; /* On annule l'opacité CSS pour utiliser une couleur franche */
+            opacity: 1 !important;
         }
 
         /* Conservation de l'aspect technique pour le code/timeline */
-        body[data-theme="ableton"] .font-mono, body[data-theme="ableton"] .font-tech, body[data-theme="ableton"] .font-mono * {
+        body[data-theme="ableton"] .font-mono:not(.stat-card *):not(.stat-item *), 
+        body[data-theme="ableton"] .font-tech:not(.stat-card *):not(.stat-item *), 
+        body[data-theme="ableton"] .font-mono *:not(.stat-card *):not(.stat-item *) {
             font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace !important;
             letter-spacing: 0.03em !important;
         }
@@ -1098,7 +1215,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
                         <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
                             <!-- Card 1 -->
                             <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
-                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">ANS</span></span>
+                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">ANS</span></span>
                                 <div class="mt-4">
                                     <h4 class="text-xs font-bold uppercase tracking-wider text-white">Formation 3iS</h4>
                                     <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Ingénierie du son & Sound Design.</p>
@@ -1107,7 +1224,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
                             <!-- Card 2 -->
                             <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
-                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xl font-light text-white/40">/50</span></span>
+                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xl font-light text-white/40">/50</span></span>
                                 <div class="mt-4">
                                     <h4 class="text-xs font-bold uppercase tracking-wider text-white">Certif. Avid</h4>
                                     <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Pro Tools Fundamentals User.</p>
@@ -1116,7 +1233,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
                             <!-- Card 3 -->
                             <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
-                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">DAWs</span></span>
+                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">DAWs</span></span>
                                 <div class="mt-4">
                                     <h4 class="text-xs font-bold uppercase tracking-wider text-white">Logiciels</h4>
                                     <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Pro Tools, Ableton, FL Studio.</p>
@@ -1125,7 +1242,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
                             <!-- Card 4 -->
                             <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
-                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">8+ <span class="text-lg font-light">PROJS</span></span>
+                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">8+ <span class="text-lg font-light">PROJS</span></span>
                                 <div class="mt-4">
                                     <h4 class="text-xs font-bold uppercase tracking-wider text-white">Livrables</h4>
                                     <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Mixage, Sound Design, Prise de son.</p>
@@ -1134,7 +1251,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
                             <!-- Card 5 -->
                             <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
-                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-lg font-light">CH.</span></span>
+                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-lg font-light">CH.</span></span>
                                 <div class="mt-4">
                                     <h4 class="text-xs font-bold uppercase tracking-wider text-white">Live Mix</h4>
                                     <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Routing & mix direct sur Behringer X32.</p>
@@ -1143,7 +1260,7 @@ body.light-mode .apple-menu-item { color: #1a1a1a; }
 
                             <!-- Card 6 -->
                             <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
-                                <span class="text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-lg font-light">TOUR.</span></span>
+                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-lg font-light">TOUR.</span></span>
                                 <div class="mt-4">
                                     <h4 class="text-xs font-bold uppercase tracking-wider text-white">Europe</h4>
                                     <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Danse contemporaine (avec Boris Charmatz en 2014).</p>
