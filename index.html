@@ -38,8 +38,8 @@
             backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
             -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
             border-radius: var(--radius-card) !important;
-            padding: 1.5rem !important;
-            min-height: 145px;
+            padding: 0.75rem !important;
+            min-height: 85px;
             display: flex !important;
             flex-direction: column !important;
             justify-content: space-between !important;
@@ -48,6 +48,15 @@
             transition: transform 0.9s var(--ease-elastic-smooth), border-color 1.2s var(--ease-smooth-slow), background-color 1s ease, box-shadow 1.2s var(--ease-smooth-slow) !important;
             position: relative;
             isolation: isolate;
+        }
+        @media (min-width: 768px) {
+            .stat-card,
+            body[data-theme="ableton"] .stat-card,
+            body[data-theme="protools"] .stat-card,
+            body[data-theme="fl"] .stat-card {
+                padding: 1.5rem !important;
+                min-height: 145px;
+            }
         }
         .stat-card:hover,
         body[data-theme="ableton"] .stat-card:hover,
@@ -59,7 +68,7 @@
             box-shadow: 0 55px 110px -30px rgba(0, 0, 0, 0.75), 0 25px 50px -20px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 var(--glass-highlight), 0 0 20px -4px color-mix(in srgb, var(--accent-color) 25%, transparent) !important;
         }
 
-        /* Chiffres géants verrouillés (3 ANS, 47/50, 3 DAWs, etc.) */
+        /* Chiffres compacts sur mobile & géants sur desktop */
         .stat-card .stat-number,
         .stat-card > span,
         body[data-theme="ableton"] .stat-card .stat-number,
@@ -69,7 +78,7 @@
         body[data-theme="fl"] .stat-card .stat-number,
         body[data-theme="fl"] .stat-card > span {
             font-family: 'Share Tech Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-            font-size: 2.25rem !important; /* text-4xl */
+            font-size: 1.6rem !important; /* Mobile compact */
             line-height: 1 !important;
             font-weight: 900 !important;
             letter-spacing: -0.025em !important;
@@ -1223,33 +1232,35 @@ body.light-mode .apple-menu-item { color: #222222; }
     margin-top: 20px !important;    /* Espace régulier entre les blocs */
   }
 
-  /* 2. Grille de compétences en 2x2 parfait */
-  .skills-grid-mobile {
+  /* 2. Grille de compétences 2x2 compacte et équilibrée */
+  .skills-grid-container {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* 2 colonnes égales */
-    gap: 12px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    padding: 10px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  @media (min-width: 768px) {
+    .skills-grid-container {
+      gap: 16px !important;
+      padding: 20px !important;
+    }
   }
 
-  /* Transformation des items en carrés */
-  .skills-grid-mobile .stat-item {
-    aspect-ratio: 1 / 1 !important; /* Force la forme carrée */
+  .skills-grid-container .stat-item {
+    padding: 10px 8px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 14px !important;
     justify-content: center !important;
     align-items: center !important;
-    padding: 10px !important;
-    background: rgba(255, 255, 255, 0.02) !important; /* Léger fond pour marquer le carré */
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
   }
-
-  /* Réduction proportionnelle des graphiques pour le format 2x2 mobile */
-  .skills-grid-mobile .pie-chart {
-    width: 64px !important;
-    height: 64px !important;
-    margin: 0 auto 0.5rem !important;
-  }
-  
-  .skills-grid-mobile .pie-chart span {
-    font-size: 14px !important;
+  @media (min-width: 768px) {
+    .skills-grid-container .stat-item {
+      padding: 16px !important;
+      border-radius: 18px !important;
+    }
   }
 }
 
@@ -1583,82 +1594,80 @@ body.light-mode .apple-menu-item { color: #222222; }
             <!-- Colonne gauche : Stats & Skills + bouton Vision -->
             <div class="lg:col-span-5 flex flex-col gap-6">
 
-                <section id="skills" class="glass-panel skills-grid-mobile scroll-float flex flex-col z-50 relative">
+                <section id="skills" class="glass-panel scroll-float flex flex-col z-50 relative">
                     <div class="win-header shrink-0">
                         <span class="win-title">Stats & Skills.sys</span>
                         <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
                     </div>
-                    <div class="stat-item flex flex-col items-center text-center">
-    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group ">
-       <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
-            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
-                  stroke-dasharray="100, 100" stroke-dashoffset="25" stroke-linecap="round" data-percent="75"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-        </svg>
-        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
-            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">75%</span>
-        </div>
-    </div>
-    <div class="h-8 flex items-center justify-center">
-        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Mixage</h4>
-    </div>
-    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Écoute active, prise de décision, Pro Tools.</p>
-</div>
+                    <div class="skills-grid-container">
+                        <!-- 1. Mixage -->
+                        <div class="stat-item flex flex-col items-center text-center">
+                            <div class="skill-gauge relative flex flex-col items-center justify-center w-14 h-14 sm:w-18 sm:h-18 md:w-28 md:h-28 mb-1 md:mb-2 group">
+                                <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
+                                    <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                                          stroke-dasharray="100, 100" stroke-dashoffset="25" stroke-linecap="round" data-percent="75"
+                                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+                                    <span class="text-xs sm:text-sm md:text-xl font-bold text-white tracking-wider skill-percent" style="font-family: monospace;">75%</span>
+                                </div>
+                            </div>
+                            <h4 class="text-[11px] sm:text-xs md:text-base font-bold uppercase tracking-wider text-[var(--accent-color)] leading-tight">Mixage</h4>
+                            <p class="text-[9px] sm:text-[10px] md:text-xs opacity-60 leading-tight mt-0.5 line-clamp-2 max-w-[140px]">Écoute active, Pro Tools.</p>
+                        </div>
 
-<div class="stat-item flex flex-col items-center text-center">
-    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
-        <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
-            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
-                  stroke-dasharray="100, 100" stroke-dashoffset="30" stroke-linecap="round" data-percent="70"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-        </svg>
-        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
-            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">70%</span>
-        </div>
-    </div>
-    <div class="h-8 flex items-center justify-center">
-        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Composition</h4>
-    </div>
-    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Créativité, Organisation, Live 12.</p>
-</div>
+                        <!-- 2. Composition -->
+                        <div class="stat-item flex flex-col items-center text-center">
+                            <div class="skill-gauge relative flex flex-col items-center justify-center w-14 h-14 sm:w-18 sm:h-18 md:w-28 md:h-28 mb-1 md:mb-2 group">
+                                <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
+                                    <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                                          stroke-dasharray="100, 100" stroke-dashoffset="30" stroke-linecap="round" data-percent="70"
+                                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+                                    <span class="text-xs sm:text-sm md:text-xl font-bold text-white tracking-wider skill-percent" style="font-family: monospace;">70%</span>
+                                </div>
+                            </div>
+                            <h4 class="text-[11px] sm:text-xs md:text-base font-bold uppercase tracking-wider text-[var(--accent-color)] leading-tight">Composition</h4>
+                            <p class="text-[9px] sm:text-[10px] md:text-xs opacity-60 leading-tight mt-0.5 line-clamp-2 max-w-[140px]">Créativité, Live 12.</p>
+                        </div>
 
-<div class="stat-item flex flex-col items-center text-center">
-    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
-        <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
-            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
-                  stroke-dasharray="100, 100" stroke-dashoffset="30" stroke-linecap="round" data-percent="70"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-        </svg>
-        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
-            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">70%</span>
-        </div>
-    </div>
-    <div class="h-8 flex items-center justify-center">
-        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Repair</h4>
-    </div>
-    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">Nettoyage Audio, RX 10, Ozone.</p>
-</div>
+                        <!-- 3. Repair -->
+                        <div class="stat-item flex flex-col items-center text-center">
+                            <div class="skill-gauge relative flex flex-col items-center justify-center w-14 h-14 sm:w-18 sm:h-18 md:w-28 md:h-28 mb-1 md:mb-2 group">
+                                <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
+                                    <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                                          stroke-dasharray="100, 100" stroke-dashoffset="30" stroke-linecap="round" data-percent="70"
+                                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+                                    <span class="text-xs sm:text-sm md:text-xl font-bold text-white tracking-wider skill-percent" style="font-family: monospace;">70%</span>
+                                </div>
+                            </div>
+                            <h4 class="text-[11px] sm:text-xs md:text-base font-bold uppercase tracking-wider text-[var(--accent-color)] leading-tight">Repair</h4>
+                            <p class="text-[9px] sm:text-[10px] md:text-xs opacity-60 leading-tight mt-0.5 line-clamp-2 max-w-[140px]">Nettoyage, RX 10.</p>
+                        </div>
 
-<div class="stat-item flex flex-col items-center text-center">
-    <div class="skill-gauge relative flex flex-col items-center justify-center w-24 h-24 md:w-32 md:h-32 mb-3 group">
-        <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
-            <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
-                  stroke-dasharray="100, 100" stroke-dashoffset="25" stroke-linecap="round" data-percent="75"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-        </svg>
-        <div class="absolute flex flex-col items-center justify-center pointer-events-none">
-            <span class="text-xl md:text-2xl font-bold text-white tracking-widest skill-percent" style="font-family: monospace;">75%</span>
-        </div>
-    </div>
-    <div class="h-8 flex items-center justify-center">
-        <h4 class="text-sm md:text-xl font-bold uppercase tracking-widest text-[var(--accent-color)]">Recording</h4>
-    </div>
-    <p class="text-xs md:text-sm opacity-70 leading-relaxed max-w-[200px] mt-1 mx-auto">SoundDevice, Couple micro.</p>
-</div>
+                        <!-- 4. Recording -->
+                        <div class="stat-item flex flex-col items-center text-center">
+                            <div class="skill-gauge relative flex flex-col items-center justify-center w-14 h-14 sm:w-18 sm:h-18 md:w-28 md:h-28 mb-1 md:mb-2 group">
+                                <svg class="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 36 36">
+                                    <path class="gauge-bg fill-none stroke-[2.5]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="gauge-progress fill-none stroke-[2.5] stroke-current text-[var(--accent-color)] transition-all duration-300"
+                                          stroke-dasharray="100, 100" stroke-dashoffset="25" stroke-linecap="round" data-percent="75"
+                                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="absolute flex flex-col items-center justify-center pointer-events-none">
+                                    <span class="text-xs sm:text-sm md:text-xl font-bold text-white tracking-wider skill-percent" style="font-family: monospace;">75%</span>
+                                </div>
+                            </div>
+                            <h4 class="text-[11px] sm:text-xs md:text-base font-bold uppercase tracking-wider text-[var(--accent-color)] leading-tight">Recording</h4>
+                            <p class="text-[9px] sm:text-[10px] md:text-xs opacity-60 leading-tight mt-0.5 line-clamp-2 max-w-[140px]">Sound Devices, Couples.</p>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Bouton Vision.dmg flottant -->
@@ -1689,66 +1698,66 @@ body.light-mode .apple-menu-item { color: #222222; }
                     <span class="win-title">Timeline.log</span>
                     <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
                 </div>
-                <div class="p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
+                <div class="p-4 sm:p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
                     <!-- STATS PANEL OVERVIEW -->
-                    <div class="mb-10 p-6 bg-black/30 border border-white/5 rounded-2xl backdrop-blur-md">
-                        <div class="text-[10px] font-mono tracking-[0.2em] text-white/40 uppercase mb-6 flex items-center gap-2">
+                    <div class="mb-8 p-3.5 sm:p-5 md:p-6 bg-black/30 border border-white/5 rounded-2xl backdrop-blur-md">
+                        <div class="text-[9px] sm:text-[10px] font-mono tracking-[0.2em] text-white/40 uppercase mb-3 sm:mb-5 flex items-center gap-2">
                             <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
                             [ SYSTEM STATUS // MASTER SPECS ]
                         </div>
                         
-                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-5">
                             <!-- Card 1 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
-                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">ANS</span></span>
-                                <div class="mt-4">
-                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Formation 3iS</h4>
-                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Ingénierie du son & Sound Design.</p>
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">ANS</span></span>
+                                <div class="mt-1.5 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Formation 3iS</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Ingénierie son & Design.</p>
                                 </div>
                             </div>
 
                             <!-- Card 2 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
-                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xl font-light text-white/40">/50</span></span>
-                                <div class="mt-4">
-                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Certif. Avid</h4>
-                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Pro Tools Fundamentals User.</p>
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xs sm:text-sm md:text-lg font-light text-white/40">/50</span></span>
+                                <div class="mt-1.5 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Certif. Avid</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Pro Tools User.</p>
                                 </div>
                             </div>
 
                             <!-- Card 3 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
-                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-lg font-light">DAWs</span></span>
-                                <div class="mt-4">
-                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Logiciels</h4>
-                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Pro Tools, Ableton, FL Studio.</p>
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">DAWs</span></span>
+                                <div class="mt-1.5 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Logiciels</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Pro Tools, Live, FL.</p>
                                 </div>
                             </div>
 
                             <!-- Card 4 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
-                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">8+ <span class="text-lg font-light">PROJS</span></span>
-                                <div class="mt-4">
-                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Livrables</h4>
-                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Mixage, Sound Design, Prise de son.</p>
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">8+ <span class="text-xs sm:text-sm md:text-base font-light text-white/60">PROJS</span></span>
+                                <div class="mt-1.5 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Livrables</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Mix, Design, Plateau.</p>
                                 </div>
                             </div>
 
                             <!-- Card 5 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
-                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-lg font-light">CH.</span></span>
-                                <div class="mt-4">
-                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Live Mix</h4>
-                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Routing & mix direct sur Behringer X32.</p>
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">CH.</span></span>
+                                <div class="mt-1.5 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Live Mix</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Routing Behringer X32.</p>
                                 </div>
                             </div>
 
                             <!-- Card 6 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-6 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
-                                <span class="stat-number text-4xl md:text-5xl font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-lg font-light">TOUR.</span></span>
-                                <div class="mt-4">
-                                    <h4 class="text-xs font-bold uppercase tracking-wider text-white">Europe</h4>
-                                    <p class="text-[11px] text-white/50 font-light mt-1 leading-relaxed">Danse contemporaine (avec Boris Charmatz en 2014).</p>
+                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">TOUR.</span></span>
+                                <div class="mt-1.5 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Europe</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Danse contemporaine.</p>
                                 </div>
                             </div>
                         </div>
