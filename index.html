@@ -997,6 +997,61 @@ body.light-mode .apple-menu-item { color: #222222; }
         body.light-mode .vision-bar-container { background: rgba(0,0,0,0.1); }
         #parcours .group { transition: background-color 0.6s var(--ease-apple), border-color 0.6s var(--ease-apple), box-shadow 0.6s var(--ease-apple) !important; }
 
+        /* --- AUDIO EASTER EGGS : SYSTEM SECRETS --- */
+        /* Secret 2 : Surchauffe analogique & LED CLIP */
+        #clip-led.clipping-flash {
+            background-color: #ef4444 !important;
+            border-color: #f87171 !important;
+            box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444 !important;
+        }
+        body.analog-overdrive-active {
+            filter: contrast(1.04) saturate(1.12) brightness(1.02);
+            transition: filter 0.8s ease;
+        }
+        #analog-heat-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 99998;
+            opacity: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.04) 0%, rgba(245, 158, 11, 0.02) 60%, transparent 90%);
+            transition: opacity 0.8s ease;
+        }
+        #analog-heat-overlay.active {
+            opacity: 1;
+        }
+
+        /* Secret 3 : DAW HUD Indicator (Touche Espace) */
+        #daw-hud-indicator {
+            transition: none !important;
+        }
+
+        /* Secret 4 : Vis de rack 19" studio */
+        .studio-rack-screw {
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            opacity: 0.35;
+            transition: opacity 0.3s ease;
+            padding: 0;
+            outline: none;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            flex-shrink: 0;
+        }
+        .studio-rack-screw:hover {
+            opacity: 0.9;
+        }
+        .studio-rack-screw svg {
+            transition: none !important;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.8));
+        }
+
         .loading-container {
   width: 100%;
   height: 2px;
@@ -1601,8 +1656,28 @@ body.light-mode .apple-menu-item { color: #222222; }
 
                 <section id="skills" class="glass-panel scroll-float flex flex-col z-50 relative">
                     <div class="win-header shrink-0">
-                        <span class="win-title">Stats & Skills.sys</span>
-                        <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                        <div class="flex items-center gap-2.5">
+                            <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                                <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                                    <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                                    <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                    <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                    <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                                </svg>
+                            </button>
+                            <span class="win-title">Stats & Skills.sys</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                            <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                                <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                                    <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                                    <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                    <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                    <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="skills-grid-container">
                         <!-- 1. Mixage -->
@@ -1700,8 +1775,28 @@ body.light-mode .apple-menu-item { color: #222222; }
             <!-- Colonne droite : Mon Parcours -->
             <section id="parcours" class="lg:col-span-7 glass-panel scroll-float z-40 relative min-h-[60vh] md:min-h-0">
                 <div class="win-header">
-                    <span class="win-title">Timeline.log</span>
-                    <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                    <div class="flex items-center gap-2.5">
+                        <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                            <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                                <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                                <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                            </svg>
+                        </button>
+                        <span class="win-title">Timeline.log</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                        <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                            <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                                <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                                <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 <div class="p-4 sm:p-6 md:p-8 h-full overflow-y-auto custom-scrollbar">
                     <!-- STATS PANEL OVERVIEW -->
@@ -1867,8 +1962,28 @@ body.light-mode .apple-menu-item { color: #222222; }
 
         <section id="projets" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative">
             <div class="win-header">
-                <span class="win-title">explorer.prproj</span>
-                <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                <div class="flex items-center gap-2.5">
+                    <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                            <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                            <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                        </svg>
+                    </button>
+                    <span class="win-title">explorer.prproj</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                    <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                            <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                            <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             
             <div class="p-8 space-y-8">
@@ -2102,8 +2217,28 @@ body.light-mode .apple-menu-item { color: #222222; }
 
         <section id="inspirations" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
              <div class="win-header">
-                <span class="win-title">Reference_Library</span>
-                <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                <div class="flex items-center gap-2.5">
+                    <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                            <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                            <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                        </svg>
+                    </button>
+                    <span class="win-title">Reference_Library</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                    <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                            <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                            <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="p-8">
                 <h3 class="text-2xl font-mono mb-10 opacity-90 font-bold tracking-tight">Reference_Library</h3>
@@ -2563,6 +2698,17 @@ body.light-mode .apple-menu-item { color: #222222; }
         </div>
     </div>
 
+    <!-- SECRET 2 : OVERLAY SURCHAUFFE ANALOGIQUE -->
+    <div id="analog-heat-overlay"></div>
+
+    <!-- SECRET 3 : HUD DAW PLAY / PAUSE (ESPACE) -->
+    <div id="daw-hud-indicator" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[99999] pointer-events-none opacity-0 scale-90 flex flex-col items-center justify-center w-24 h-24 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
+        <div id="daw-hud-icon" class="text-[var(--accent-color)] flex items-center justify-center">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span id="daw-hud-text" class="font-mono text-[9px] uppercase tracking-widest text-white/80 mt-1">LECTURE</span>
+    </div>
+
    <nav class="apple-menubar">
     <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
         <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
@@ -2573,10 +2719,15 @@ body.light-mode .apple-menu-item { color: #222222; }
         <a href="#contact" class="apple-menu-item click-sound touch-manipulation">Aide</a>
     </div>
 
-    <div class="flex items-center gap-4 shrink-0">
+    <div class="flex items-center gap-3 shrink-0">
         <div class="hidden xs:flex items-center gap-1.5 font-mono text-[9px] opacity-40">
             <span>48 kHz</span>
             <span class="text-[var(--accent-color)] animate-pulse">●</span>
+        </div>
+        <!-- Secret 2 : CLIP Indicator LED -->
+        <div id="clip-indicator-wrap" class="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition cursor-help select-none pl-2.5 border-l border-white/10" title="Indicateur de saturation analogique (CLIP)">
+            <span class="font-mono text-[8px] font-bold tracking-tight uppercase text-white/50">CLIP</span>
+            <span id="clip-led" class="w-2 h-2 rounded-full bg-red-950/90 border border-red-900/60 inline-block shadow-none transition-all duration-300"></span>
         </div>
     </div>
 </nav>
@@ -4728,6 +4879,273 @@ if (document.readyState === 'loading') {
 } else {
     npInitWidget();
 }
+
+/* ==========================================================================
+   🎛️ AUDIO EASTER EGGS & CREATIVE SECRETS (JULES FREMONDIERE 2026)
+   ========================================================================== */
+
+// ── SECRET 1 : CONSOLE DÉVELOPPEUR & COMMANDE VIP 'jules()' ──
+(function initConsoleSecret() {
+    const asciiArt = 
+`  ██████████████████████████████████████████████████████████
+  █  __   _  _   _     ____   ____   _    _  _   _   ___    █
+  █  | | | | | | | |   | ___| / ___| | |  | || | | | / _ \\   █
+  █  | | | | | | | |   |  _|  \\___ \\ | |/\\| || | | || | | |  █
+  █  | |_| | | |_| |   | |___  ___) ||  /\\  || |_| || |_| |  █
+  █   \\___/   \\___/    |_____||____/  \\/  \\/  \\___/  \\___/   █
+  █       🎛️  SOUND DESIGNER  ·  AUDIO ENGINEER  ·  2026      █
+  ██████████████████████████████████████████████████████████`;
+
+    console.log(`%c${asciiArt}`, 'color: #22c55e; font-family: monospace; font-weight: bold; line-height: 1.15;');
+    console.log(
+        "%c🎛️ [SYSTEM DETECTED] %cHello fellow dev/recruiter! Looking for a sound specialist?\n%cType %c'jules()'%c in the console to unlock a secret track & direct contact.",
+        "color: #22c55e; font-weight: bold; font-size: 13px;",
+        "color: #e2e8f0; font-size: 12px;",
+        "color: #94a3b8; font-size: 11px;",
+        "color: #f59e0b; font-weight: bold; font-size: 12px; text-decoration: underline;",
+        "color: #94a3b8; font-size: 11px;"
+    );
+
+    window.jules = function() {
+        // Synthèse sonore jingle 8-bit rétro
+        try {
+            if (typeof audioCtx !== 'undefined' && audioCtx) {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                const notes = [
+                    { f: 523.25, d: 0.10 }, // C5
+                    { f: 659.25, d: 0.10 }, // E5
+                    { f: 783.99, d: 0.10 }, // G5
+                    { f: 1046.50, d: 0.12 }, // C6
+                    { f: 1318.51, d: 0.12 }, // E6
+                    { f: 1567.98, d: 0.14 }, // G6
+                    { f: 2093.00, d: 0.35 }  // C7
+                ];
+                let offset = 0;
+                notes.forEach(note => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(note.f, now + offset);
+                    gain.gain.setValueAtTime(0.0001, now + offset);
+                    gain.gain.exponentialRampToValueAtTime(0.025, now + offset + 0.01);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + note.d);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + offset);
+                    osc.stop(now + offset + note.d + 0.01);
+                    offset += note.d * 0.85;
+                });
+            }
+        } catch(e) {}
+
+        console.log(
+            "%c🎵 [SECRET TRACK UNLOCKED] %c'8-Bit Studio Chime' by Jules Frémondière\n" +
+            "%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+            "📧 Email       : jules.fremondiere@3is.fr\n" +
+            "🎓 Formation   : 3iS (Promotion 2026 · Son à l'image & Sound Design)\n" +
+            "🌐 Portfolio   : https://fremjulio-gif.github.io/portfolio/\n" +
+            "🔗 Linktree    : https://linktr.ee/jlo.flp\n" +
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+            "color: #38bdf8; font-weight: bold; font-size: 14px;",
+            "color: #a855f7; font-style: italic; font-size: 12px;",
+            "color: #64748b; font-family: monospace; font-size: 11px;"
+        );
+        return "🎛️ Merci pour votre curiosité ! Contact : jules.fremondiere@3is.fr";
+    };
+})();
+
+// ── SECRET 2 : SURCHAUFFE ANALOGIQUE & LED CLIP ──
+(function initAnalogOverdriveSecret() {
+    let clickTimestamps = [];
+    let isClipping = false;
+    let clipResetTimeout = null;
+
+    document.addEventListener('click', () => {
+        const now = Date.now();
+        clickTimestamps.push(now);
+        clickTimestamps = clickTimestamps.filter(t => now - t <= 3000);
+
+        if (clickTimestamps.length >= 7 && !isClipping) {
+            triggerClip();
+        }
+    });
+
+    function triggerClip() {
+        isClipping = true;
+        const led = document.getElementById('clip-led');
+        const overlay = document.getElementById('analog-heat-overlay');
+        const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : null);
+
+        // Effet sonore de saturation analogique subtile
+        try {
+            if (typeof audioCtx !== 'undefined' && audioCtx) {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(110, now);
+                osc.frequency.exponentialRampToValueAtTime(55, now + 0.35);
+                gain.gain.setValueAtTime(0.012, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.36);
+            }
+        } catch(e) {}
+
+        // 1. Allumage flash LED rouge
+        if (led) {
+            led.classList.add('clipping-flash');
+            if (anim) {
+                anim(led, {
+                    scale: [1, 1.4, 1],
+                    duration: 300,
+                    ease: 'outElastic(1, .5)'
+                });
+            }
+        }
+
+        // 2. Chaleur d'overdrive analogique sur l'écran
+        document.body.classList.add('analog-overdrive-active');
+        if (overlay) overlay.classList.add('active');
+
+        // 3. Extinction progressive au bout de 5 secondes
+        clearTimeout(clipResetTimeout);
+        clipResetTimeout = setTimeout(() => {
+            if (led) led.classList.remove('clipping-flash');
+            document.body.classList.remove('analog-overdrive-active');
+            if (overlay) overlay.classList.remove('active');
+            clickTimestamps = [];
+            isClipping = false;
+        }, 5000);
+    }
+})();
+
+// ── SECRET 3 : RACCOURCI CLAVIER ESPACE (DAW PLAY/PAUSE + HUD) ──
+(function initSpacebarDawSecret() {
+    let hudTimeout = null;
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.key === ' ') {
+            const target = e.target;
+            const tag = target.tagName ? target.tagName.toLowerCase() : '';
+            if (tag === 'input' || tag === 'textarea' || tag === 'select' || target.isContentEditable) {
+                return;
+            }
+            e.preventDefault(); // Évite le défilement vertical brusque de la page
+
+            let isNowPlaying = false;
+            // Gestion intelligente du séquenceur ou SoundCloud
+            if (typeof isPlaying !== 'undefined' && isPlaying) {
+                if (typeof togglePlay === 'function') togglePlay('large');
+                isNowPlaying = false;
+            } else if (typeof isPlaying !== 'undefined' && document.getElementById('step-sequencer-large') && !document.getElementById('step-sequencer-large').classList.contains('hidden')) {
+                if (typeof togglePlay === 'function') togglePlay('large');
+                isNowPlaying = true;
+            } else if (typeof npTogglePlay === 'function') {
+                npTogglePlay();
+                const playIcon = document.getElementById('np-play-icon');
+                isNowPlaying = playIcon ? playIcon.classList.contains('hidden') : true;
+            }
+
+            showDawHud(isNowPlaying);
+        }
+    });
+
+    function showDawHud(playing) {
+        const hud = document.getElementById('daw-hud-indicator');
+        const iconWrap = document.getElementById('daw-hud-icon');
+        const textWrap = document.getElementById('daw-hud-text');
+        if (!hud || !iconWrap || !textWrap) return;
+
+        if (playing) {
+            iconWrap.innerHTML = '<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+            textWrap.textContent = 'LECTURE';
+        } else {
+            iconWrap.innerHTML = '<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+            textWrap.textContent = 'PAUSE';
+        }
+
+        const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : null);
+        if (anim) {
+            clearTimeout(hudTimeout);
+            anim(hud, {
+                opacity: [0, 1],
+                scale: [0.85, 1],
+                duration: 180,
+                ease: 'outQuad'
+            });
+
+            hudTimeout = setTimeout(() => {
+                anim(hud, {
+                    opacity: [1, 0],
+                    scale: [1, 0.9],
+                    duration: 220,
+                    ease: 'inQuad'
+                });
+            }, 450);
+        } else {
+            hud.style.opacity = '1';
+            setTimeout(() => { hud.style.opacity = '0'; }, 500);
+        }
+    }
+})();
+
+// ── SECRET 4 : VIS DE RACK 19" STUDIO EN ROTATION & CLIC METALLIQUE ──
+function triggerRackScrew(btn, event) {
+    if (event) event.stopPropagation();
+    if (!btn) return;
+
+    let currentAngle = parseInt(btn.getAttribute('data-angle') || '0', 10);
+    currentAngle += 90;
+    btn.setAttribute('data-angle', currentAngle);
+
+    const svg = btn.querySelector('svg');
+    const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : null);
+    if (svg && anim) {
+        anim(svg, {
+            rotate: currentAngle,
+            duration: 500,
+            ease: 'outElastic(1, .5)'
+        });
+    }
+
+    // Son de tournevis métallique / ratchet
+    try {
+        if (typeof audioCtx !== 'undefined' && audioCtx) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const now = audioCtx.currentTime;
+            
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+            osc1.type = 'triangle';
+            osc1.frequency.setValueAtTime(3400, now);
+            osc1.frequency.exponentialRampToValueAtTime(900, now + 0.04);
+            gain1.gain.setValueAtTime(0.008, now);
+            gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+            osc1.start(now);
+            osc1.stop(now + 0.05);
+
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(1550, now);
+            osc2.frequency.exponentialRampToValueAtTime(500, now + 0.07);
+            gain2.gain.setValueAtTime(0.005, now);
+            gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.start(now);
+            osc2.stop(now + 0.08);
+        }
+    } catch(e) {}
+}
+window.triggerRackScrew = triggerRackScrew;
 
     </script>
 </body>
