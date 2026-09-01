@@ -33,10 +33,10 @@
         body[data-theme="ableton"] .stat-card,
         body[data-theme="protools"] .stat-card,
         body[data-theme="fl"] .stat-card {
-            background: var(--glass-tint) !important;
-            border: 1px solid var(--glass-border) !important;
-            backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
+            background: rgba(255, 255, 255, 0.01) !important;
+            border: 1px solid rgba(255, 255, 255, 0.06) !important;
+            backdrop-filter: blur(16px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
             border-radius: var(--radius-card) !important;
             padding: 0.75rem !important;
             min-height: 85px;
@@ -44,8 +44,8 @@
             flex-direction: column !important;
             justify-content: space-between !important;
             box-sizing: border-box !important;
-            box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight) !important;
-            transition: transform 0.9s var(--ease-elastic-smooth), border-color 1.2s var(--ease-smooth-slow), background-color 1s ease, box-shadow 1.2s var(--ease-smooth-slow) !important;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05) !important;
+            transition: transform 0.5s var(--ease-apple), border-color 0.4s ease, background-color 0.4s ease, box-shadow 0.5s ease !important;
             position: relative;
             isolation: isolate;
         }
@@ -62,10 +62,10 @@
         body[data-theme="ableton"] .stat-card:hover,
         body[data-theme="protools"] .stat-card:hover,
         body[data-theme="fl"] .stat-card:hover {
-            transform: scale(1.008) translateY(-1px) !important;
-            background: var(--glass-tint-strong) !important;
-            border-color: color-mix(in srgb, var(--accent-color) 45%, var(--glass-edge-top)) !important;
-            box-shadow: 0 55px 110px -30px rgba(0, 0, 0, 0.75), 0 25px 50px -20px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 var(--glass-highlight), 0 0 20px -4px color-mix(in srgb, var(--accent-color) 25%, transparent) !important;
+            transform: translateY(-2px) !important;
+            background: rgba(255, 255, 255, 0.025) !important;
+            border-color: rgba(255, 255, 255, 0.14) !important;
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
         }
 
         /* Chiffres compacts sur mobile & géants sur desktop */
@@ -1809,56 +1809,56 @@ body.light-mode .apple-menu-item { color: #222222; }
                         
                         <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-5">
                             <!-- Card 1 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
-                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">ANS</span></span>
-                                <div class="mt-1.5 sm:mt-3">
-                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Formation 3iS</h4>
-                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Ingénierie son & Design.</p>
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">ANS</span></span>
+                                <div class="mt-2 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Formation 3iS</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/45 font-light mt-0.5 leading-snug">Ingénierie son & design</p>
                                 </div>
                             </div>
 
                             <!-- Card 2 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
-                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xs sm:text-sm md:text-lg font-light text-white/40">/50</span></span>
-                                <div class="mt-1.5 sm:mt-3">
-                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Certif. Avid</h4>
-                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Pro Tools Fundamentals 101.</p>
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xs sm:text-sm md:text-lg font-light text-white/40 tracking-normal">/50</span></span>
+                                <div class="mt-2 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Certif. Avid</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/45 font-light mt-0.5 leading-snug">Pro Tools Fundamentals 101</p>
                                 </div>
                             </div>
 
                             <!-- Card 3 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
-                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">DAWs</span></span>
-                                <div class="mt-1.5 sm:mt-3">
-                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Logiciels</h4>
-                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Pro Tools, Live, FL.</p>
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">DAWs</span></span>
+                                <div class="mt-2 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Logiciels</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/45 font-light mt-0.5 leading-snug">Pro Tools, Live, FL</p>
                                 </div>
                             </div>
 
                             <!-- Card 4 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
-                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">10+ <span class="text-xs sm:text-sm md:text-base font-light text-white/60">PROJS</span></span>
-                                <div class="mt-1.5 sm:mt-3">
-                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Livrables</h4>
-                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Mix, Design, Plateau.</p>
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">10+ <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">PROJS</span></span>
+                                <div class="mt-2 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Livrables</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/45 font-light mt-0.5 leading-snug">Mix, design, plateau</p>
                                 </div>
                             </div>
 
                             <!-- Card 5 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
-                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">CH.</span></span>
-                                <div class="mt-1.5 sm:mt-3">
-                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Live Mix</h4>
-                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Routing Behringer X32.</p>
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">CH.</span></span>
+                                <div class="mt-2 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Live Mix</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/45 font-light mt-0.5 leading-snug">Routing Behringer X32</p>
                                 </div>
                             </div>
 
                             <!-- Card 6 -->
-                            <div class="stat-card bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-[var(--accent-color)]/30 p-2.5 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
-                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-xs sm:text-sm md:text-base font-light text-white/60">TOUR.</span></span>
-                                <div class="mt-1.5 sm:mt-3">
-                                    <h4 class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white">Europe</h4>
-                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/50 font-light mt-0.5 leading-snug">Spectacle de danse contemporaine (mis en scène par Boris Charmatz).</p>
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
+                                <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">TOUR.</span></span>
+                                <div class="mt-2 sm:mt-3">
+                                    <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Europe</h4>
+                                    <p class="text-[9px] sm:text-[10px] md:text-[11px] text-white/45 font-light mt-0.5 leading-snug">Danse (Boris Charmatz)</p>
                                 </div>
                             </div>
                         </div>
@@ -2369,7 +2369,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                     <span class="text-[var(--accent-color)] text-xl animate-pulse">●</span>
                     <div class="flex flex-col items-start gap-1">
                         <h2 class="font-tech text-[var(--accent-color)] text-lg md:text-xl tracking-[0.2em] group-hover:brightness-125 transition drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] uppercase">Performance Mode & Session</h2>
-                        <span class="font-mono text-[10px] opacity-50 uppercase tracking-widest group-hover:opacity-80 transition">🔒 Unlock — Séquenceur · Beatpad · Session PTX</span>
+                        <span class="font-mono text-[10px] opacity-50 uppercase tracking-widest group-hover:opacity-80 transition">[STANDBY] · Séquenceur · Beatpad · Session PTX</span>
                     </div>
                 </div>
                 <svg id="perf-chevron" class="w-8 h-8 text-[var(--accent-color)] transition-transform duration-700 ease-in-out" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -3879,11 +3879,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://youtu.be/9UOw2Qhdke0',
                 description: "Réalisation de prises de son en extérieur, perche chirurgicale, complétée par un travail de voix off enregistrée en studio.",
                 badges: [
-                    { icon: '🎙️', label: 'Sennheiser MKH 416' },
-                    { icon: '🎛️', label: 'Sound Devices MixPre' },
-                    { icon: '💻', label: 'Avid Pro Tools Ultimate' },
-                    { icon: '🎥', label: 'Tournage Extérieur' },
-                    { icon: '🗣️', label: 'Voix Off & Perche' }
+                    'Sennheiser MKH 416',
+                    'Sound Devices MixPre',
+                    'Avid Pro Tools Ultimate',
+                    'Tournage Extérieur',
+                    'Voix Off & Perche'
                 ]
             },
             'etranger': {
@@ -3895,11 +3895,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://www.instagram.com/p/DWjtkh5jTH2',
                 description: "Création de l'identité sonore du teaser de l'adaptation théâtrale de « L'Étranger ». Travail de textures analogiques sombres, synthétiseurs modulaires et nappes spectrales évolutives pour retranscrire la tension psychologique et l'absurdité du récit.",
                 badges: [
-                    { icon: '🎛️', label: 'Ableton Live 12' },
-                    { icon: '🎹', label: 'Synthèse Analogique & Modulaire' },
-                    { icon: '🎚️', label: 'Suites Arturia V' },
-                    { icon: '🎭', label: 'Création Sonore Théâtre' },
-                    { icon: '🔊', label: 'Sound Design Immersif' }
+                    'Ableton Live 12',
+                    'Synthèse Analogique & Modulaire',
+                    'Suites Arturia V',
+                    'Création Sonore Théâtre',
+                    'Sound Design Immersif'
                 ]
             },
             'instable': {
@@ -3911,11 +3911,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://www.youtube.com/watch?v=U3lwDA_INOQ',
                 description: "Supervision sonore intégrale de la websérie. Huis clos, donc prise de son en intérieur avec gestion de liaisons HF sans décrochage. Suivi du mixage et montage son stéréo aux normes audio du cinéma.",
                 badges: [
-                    { icon: '🎙️', label: 'Sound Devices MixPre-6 II' },
-                    { icon: '💻', label: 'Avid Pro Tools' },
-                    { icon: '📡', label: 'Liaisons HF Sennheiser' },
-                    { icon: '🎬', label: 'Normes Audio Cinéma' },
-                    { icon: '🎚️', label: 'Montage Son & Mix Stéréo' }
+                    'Sound Devices MixPre-6 II',
+                    'Avid Pro Tools',
+                    'Liaisons HF Sennheiser',
+                    'Normes Audio Cinéma',
+                    'Montage Son & Mix Stéréo'
                 ]
             },
             'ouragan': {
@@ -3927,11 +3927,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://www.instagram.com/p/DFVFY0EtxAQ/',
                 description: "Performance artistique sonore immersive en direct pour un metteur en scène. Mise en place d'une architecture de diffusion multicanal en temps réel, conception de patchs de routing complexes sur console de mixage numérique et gestion de flux audio.",
                 badges: [
-                    { icon: '🎛️', label: 'Console Allen & Heath' },
-                    { icon: '🌐', label: 'Spatialisation Multicanal' },
-                    { icon: '⚡', label: 'Patchs de Routing Complexes' },
-                    { icon: '🎪', label: 'Performance Live & Résidence' },
-                    { icon: '🔊', label: 'Gestion Flux Audio' }
+                    'Console Allen & Heath',
+                    'Spatialisation Multicanal',
+                    'Patchs de Routing Complexes',
+                    'Performance Live & Résidence',
+                    'Gestion Flux Audio'
                 ]
             },
             'srh': {
@@ -3944,11 +3944,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6',
                 description: "Mixage et pré-mastering d'un titre Digital Rap moderne. Traitement de la voix lead (égalisation chirurgicale, compression multibande, auto-tune), sculpting des fréquences basses/808 et optimisation du loudness pour les plateformes de streaming (-14 LUFS).",
                 badges: [
-                    { icon: '🎛️', label: 'Ableton Live 12' },
-                    { icon: '🎙️', label: 'Traitement Voix Lead & Auto-Tune' },
-                    { icon: '📊', label: 'Sculpting Basse & 808' },
-                    { icon: '🎵', label: 'Digital Rap Moderne' },
-                    { icon: '📈', label: 'Loudness Streaming (-14 LUFS)' }
+                    'Ableton Live 12',
+                    'Traitement Voix Lead & Auto-Tune',
+                    'Sculpting Basse & 808',
+                    'Digital Rap Moderne',
+                    'Loudness Streaming (-14 LUFS)'
                 ]
             },
             'capharnaum': {
@@ -3960,11 +3960,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://www.youtube.com/watch?v=D-x6BQSPRuA',
                 description: "Fiction intimiste reposant sur une très forte dynamique sonore entre silences pesants et détonations sonores. Prise de son de plateau au micro hypercardioïde, création de bruitages (Foley) sur-mesure et mixage stéréo immersif.",
                 badges: [
-                    { icon: '🎙️', label: 'Micro Hypercardioïde' },
-                    { icon: '🎙️', label: 'Sound Devices MixPre-6' },
-                    { icon: '💻', label: 'Avid Pro Tools' },
-                    { icon: '🎬', label: 'Fiction Intimiste' },
-                    { icon: '🔊', label: 'Bruitage & Foley Sur-Mesure' }
+                    'Micro Hypercardioïde',
+                    'Sound Devices MixPre-6',
+                    'Avid Pro Tools',
+                    'Fiction Intimiste',
+                    'Bruitage & Foley Sur-Mesure'
                 ]
             },
             'desaccordes': {
@@ -3976,11 +3976,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://www.youtube.com/watch?v=TiqWW0e6RSg',
                 description: "Enregistrement et diffusion télévisuelle en direct (sur Twitch) sans seconde prise. Prise de son multi-chroniqueurs et invités plateau, mixage antenne en temps réel sur console Behringer X32, gestion des liaisons d'intercom et distribution broadcast.",
                 badges: [
-                    { icon: '🎛️', label: 'Console Behringer X32' },
-                    { icon: '📺', label: 'Direct Broadcast Twitch / TV' },
-                    { icon: '⚡', label: 'Mixage Antenne Temps Réel' },
-                    { icon: '🎙️', label: 'Multi-Chroniqueurs & Invités' },
-                    { icon: '📡', label: 'Liaisons Intercom' }
+                    'Console Behringer X32',
+                    'Direct Broadcast Twitch / TV',
+                    'Mixage Antenne Temps Réel',
+                    'Multi-Chroniqueurs & Invités',
+                    'Liaisons Intercom'
                 ]
             },
             'longday': {
@@ -3992,11 +3992,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'https://www.youtube.com/watch?v=w_9xYrwzKNs',
                 description: "Réalisation d'un clip vidéo couplé à une production musicale complète. Montage dynamique cadencé, composition du beat, sound design et mixage final sur FL Studio.",
                 badges: [
-                    { icon: '🎹', label: 'FL Studio 25' },
-                    { icon: '🎬', label: 'Adobe Premiere Pro' },
-                    { icon: '⏱️', label: 'Montage Dynamique Cadencé' },
-                    { icon: '🎵', label: 'Composition & Beatmaking' },
-                    { icon: '🔊', label: 'Sound Design & Mixage Final' }
+                    'FL Studio 25',
+                    'Adobe Premiere Pro',
+                    'Montage Dynamique Cadencé',
+                    'Composition & Beatmaking',
+                    'Sound Design & Mixage Final'
                 ]
             },
             'graal': {
@@ -4008,11 +4008,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                 directUrl: 'http://youtube.com/watch?v=eZI3RtKjmTY',
                 description: "Teaser événementiel pour le 50ème anniversaire de « Sacré Graal » au Cinéma Saint-Paul de Rezé. Captation en environnement réel urbain à fort passage, filtrage des perturbations extérieures et enregistrement multipiste haute définition.",
                 badges: [
-                    { icon: '🎙️', label: 'Sennheiser MKH 416' },
-                    { icon: '🎛️', label: 'Enregistreur Zoom F8n' },
-                    { icon: '🏙️', label: 'Captation Environnement Urbain' },
-                    { icon: '🎬', label: 'Cinéma Saint-Paul de Rezé' },
-                    { icon: '🎚️', label: 'Enregistrement Multipiste HD' }
+                    'Sennheiser MKH 416',
+                    'Enregistreur Zoom F8n',
+                    'Captation Environnement Urbain',
+                    'Cinéma Saint-Paul de Rezé',
+                    'Enregistrement Multipiste HD'
                 ]
             }
         };
@@ -4150,13 +4150,12 @@ body.light-mode .apple-menu-item { color: #222222; }
                 extLink.href = project.directUrl;
             }
 
-            // Badges techniques
+            // Badges techniques Raw & Precise
             const badgesContainer = document.getElementById('pm-badges-container');
             if (badgesContainer) {
                 badgesContainer.innerHTML = project.badges.map(b => `
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 font-mono text-[11px] text-white/90 transition shadow-sm">
-                        <span class="text-xs">${b.icon}</span>
-                        <span>${b.label}</span>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 font-mono text-[10px] sm:text-[11px] text-white/80 uppercase tracking-wider transition select-none">
+                        ${b}
                     </span>
                 `).join('');
             }
