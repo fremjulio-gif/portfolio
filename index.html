@@ -2927,129 +2927,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         document.body.addEventListener('touchstart', unlockAudioContext, true);
         document.body.addEventListener('keydown', unlockAudioContext, true);
 
-        // --- SCROLL AUDIO LOW-PASS FILTER AUTOMATION ---
-        let scrollPadNode1 = null;
-        let scrollPadNode2 = null;
-        let scrollPadNode3 = null;
-        let scrollFilter = null;
-        let scrollGain = null;
-        let isScrollSoundActive = false;
-        let scrollTimeout = null;
-
-        function startScrollPad() {
-            if (isScrollSoundActive) return;
-            if (!audioCtx) return; // Prevent playing before user interaction
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume().catch(() => {});
-                if (audioCtx.state === 'suspended') return;
-            }
-
-            isScrollSoundActive = true;
-
-            // Création des oscillateurs (Synthèse de nappe riche et douce)
-            // Osc 1 : Triangle pour une assise chaleureuse en bas-médium
-            scrollPadNode1 = audioCtx.createOscillator();
-            scrollPadNode1.type = 'triangle';
-            scrollPadNode1.frequency.setValueAtTime(110, audioCtx.currentTime); // La2
-            scrollPadNode1.detune.setValueAtTime(-6, audioCtx.currentTime); // Chorus
-
-            // Osc 2 : Sawtooth pour apporter des harmoniques riches dans les aigus
-            scrollPadNode2 = audioCtx.createOscillator();
-            scrollPadNode2.type = 'sawtooth';
-            scrollPadNode2.frequency.setValueAtTime(165, audioCtx.currentTime); // Mi3 (Quinte)
-            scrollPadNode2.detune.setValueAtTime(8, audioCtx.currentTime); // Chorus
-
-            // Osc 3 : Sine pour une octave supérieure pure et ultra-smooth
-            scrollPadNode3 = audioCtx.createOscillator();
-            scrollPadNode3.type = 'sine';
-            scrollPadNode3.frequency.setValueAtTime(220, audioCtx.currentTime); // La3
-            scrollPadNode3.detune.setValueAtTime(0, audioCtx.currentTime);
-
-            // Filtre Lowpass
-            scrollFilter = audioCtx.createBiquadFilter();
-            scrollFilter.type = 'lowpass';
-            
-            // Calcul initial de la fréquence du filtre selon le scroll (1200 Hz à 250 Hz)
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
-            const initialFreq = 1200 - (scrollPercent * 950);
-            scrollFilter.frequency.setValueAtTime(initialFreq, audioCtx.currentTime);
-
-            // Gain pour le fade
-            scrollGain = audioCtx.createGain();
-            scrollGain.gain.setValueAtTime(0, audioCtx.currentTime);
-
-            // Connexions
-            scrollPadNode1.connect(scrollFilter);
-            scrollPadNode2.connect(scrollFilter);
-            scrollPadNode3.connect(scrollFilter);
-            scrollFilter.connect(scrollGain);
-            scrollGain.connect(masterGain);
-
-            // Lancement
-            scrollPadNode1.start();
-            scrollPadNode2.start();
-            scrollPadNode3.start();
-
-            // Rendu ultra-subtile : volume cible descendu de 0.015 à 0.003
-            // Attaque légèrement plus lente (0.3s) pour être encore plus smooth
-            scrollGain.gain.linearRampToValueAtTime(0.003, audioCtx.currentTime + 0.3);
-        }
-
-        function stopScrollPad() {
-            if (!isScrollSoundActive) return;
-            isScrollSoundActive = false;
-
-            const currentGain = scrollGain;
-            const osc1 = scrollPadNode1;
-            const osc2 = scrollPadNode2;
-            const osc3 = scrollPadNode3;
-
-            // Fade-out progressif légèrement allongé (0.3s) pour plus de douceur
-            if (currentGain) {
-                currentGain.gain.setValueAtTime(currentGain.gain.value, audioCtx.currentTime);
-                currentGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-            }
-
-            // Arrêt des oscillateurs après le fade-out
-            setTimeout(() => {
-                try {
-                    osc1.stop();
-                    osc2.stop();
-                    osc3.stop();
-                    osc1.disconnect();
-                    osc2.disconnect();
-                    osc3.disconnect();
-                    currentGain.disconnect();
-                } catch(e) {}
-            }, 350);
-
-            scrollPadNode1 = null;
-            scrollPadNode2 = null;
-            scrollPadNode3 = null;
-            scrollFilter = null;
-            scrollGain = null;
-        }
-
-        window.addEventListener('scroll', () => {
-            // Démarrer le son si on scroll
-            startScrollPad();
-
-            // Si le son est actif, mettre à jour la fréquence du filtre (1200 Hz à 250 Hz)
-            if (isScrollSoundActive && scrollFilter) {
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                const scrollPercent = maxScroll > 0 ? window.pageYOffset / maxScroll : 0;
-                const targetFreq = 1200 - (scrollPercent * 950);
-                scrollFilter.frequency.setTargetAtTime(targetFreq, audioCtx.currentTime, 0.05);
-            }
-
-            // Réinitialiser le timeout d'arrêt
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                stopScrollPad();
-            }, 150); // S'arrête si pas de scroll pendant 150ms
-        });
-
         // --- PERFORMANCE ACCORDION TOGGLE ---
         function togglePerformanceMode() {
             const content = document.getElementById('performance-content');
@@ -3102,7 +2979,6 @@ body.light-mode .apple-menu-item { color: #222222; }
                     }, 500); 
                 }
             }
-            playClickSound();
         }
 
         // --- 2. LAB PLAYER LOGIC (WAVESURFER.JS) ---
@@ -3171,28 +3047,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         // --- 3. SEQUENCER CORE ---
         const trackVols = { kick: 0.9, snare: 0.8, hat: 0.7, perc: 0.6, synth: 0.75 };
         function setVol(track, val) { const normalized = val / 100; trackVols[track] = normalized * normalized; }
-
-        function playClickSound() {
-            if (!audioCtx || audioCtx.state === 'closed') return;
-            if (audioCtx.state === 'suspended') { audioCtx.resume().then(() => { triggerClickOsc(); }); } else { triggerClickOsc(); }
-        }
-        function triggerClickOsc() {
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-        }
-        function playThemeSwitchSound() {
-            if (!audioCtx || audioCtx.state === 'suspended') return;
-            const bSize = audioCtx.sampleRate * 0.5; const b = audioCtx.createBuffer(1, bSize, audioCtx.sampleRate); const d = b.getChannelData(0);
-            for(let i=0; i<bSize; i++) d[i] = Math.random() * 2 - 1;
-            const n = audioCtx.createBufferSource(); n.buffer = b; const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 200; const g = audioCtx.createGain();
-            n.connect(f); f.connect(g); g.connect(audioCtx.destination);
-            const now = audioCtx.currentTime; f.frequency.setValueAtTime(200, now); f.frequency.exponentialRampToValueAtTime(3000, now + 0.3); g.gain.setValueAtTime(0.1, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.4); n.start(now);
-        }
-        document.querySelectorAll('.click-sound').forEach(el => el.addEventListener('click', playClickSound));
 
         let isPlaying = false, currentStep = 0, intervalId = null, bpm = 120;
         let activeSequencer = 'pads';
@@ -3622,7 +3476,6 @@ body.light-mode .apple-menu-item { color: #222222; }
             protools: { bg: 'protools.png', bar: 'bar_protools.png', accent: '#a855f7', font: 'font-protools', mode: 'dark' } 
         };
         function setTheme(name) { 
-            playThemeSwitchSound(); 
             document.body.classList.add('switching-theme'); 
             setTimeout(() => document.body.classList.remove('switching-theme'), 300); 
             const t = themes[name]; 
@@ -3780,27 +3633,6 @@ body.light-mode .apple-menu-item { color: #222222; }
             const modal = document.getElementById('easter-egg-modal');
             const content = document.getElementById('easter-egg-content');
             if (!modal || !content) return;
-
-            // Synth chime secret d'ouverture (Arpège Web Audio)
-            try {
-                if (typeof audioCtx !== 'undefined' && audioCtx) {
-                    if (audioCtx.state === 'suspended') audioCtx.resume();
-                    const now = audioCtx.currentTime;
-                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(freq, now + i * 0.05);
-                        gain.gain.setValueAtTime(0.0001, now + i * 0.05);
-                        gain.gain.exponentialRampToValueAtTime(0.035, now + i * 0.05 + 0.01);
-                        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.05 + 0.22);
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.start(now + i * 0.05);
-                        osc.stop(now + i * 0.05 + 0.23);
-                    });
-                }
-            } catch(e) {}
 
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -4180,25 +4012,6 @@ body.light-mode .apple-menu-item { color: #222222; }
                     ease: 'outElastic(1, .6)'
                 });
             }
-
-            // Son d'ouverture Web Audio
-            try {
-                if (typeof audioCtx !== 'undefined' && audioCtx) {
-                    if (audioCtx.state === 'suspended') audioCtx.resume();
-                    const now = audioCtx.currentTime;
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(520, now);
-                    osc.frequency.exponentialRampToValueAtTime(1040, now + 0.08);
-                    gain.gain.setValueAtTime(0.015, now);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.11);
-                }
-            } catch(e) {}
         }
 
         function closeProjectModal() {
@@ -4725,7 +4538,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
             }
-            if(typeof playClickSound === 'function') playClickSound();
         };
 
         const btnMin = panel.querySelector('.btn-min');
@@ -4884,44 +4696,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (!isTouchDevice) {
-        // Desktop : Lecture déclenchée UNIQUEMENT au survol de la souris
+        // Desktop : Lecture vidéo au survol (100% silencieux)
         projectCards.forEach(card => {
             const video = card.querySelector('video');
-            let hoverTimeout;
-            let fadeInterval;
-
             if (video) {
+                video.muted = true;
                 card.addEventListener('mouseenter', () => {
                     video.currentTime = 0;
+                    video.muted = true;
                     video.play().catch(() => {});
-                    
-                    // Démarre le décompte de 2 secondes avant d'activer le son
-                    hoverTimeout = setTimeout(() => {
-                        video.muted = false;
-                        video.volume = 0;
-                        
-                        // Fondu progressif (Fade-in) jusqu'à 50% du volume
-                        const targetVol = 0.5;
-                        const step = 0.05;
-                        fadeInterval = setInterval(() => {
-                            if (video.volume < targetVol) {
-                                video.volume = Math.min(targetVol, video.volume + step);
-                            } else {
-                                clearInterval(fadeInterval);
-                            }
-                        }, 50);
-                    }, 2000);
                 });
 
                 card.addEventListener('mouseleave', () => {
-                    // Arrêt immédiat de la vidéo et remise à zéro
                     video.pause();
                     video.currentTime = 0;
-                    
-                    clearTimeout(hoverTimeout);
-                    clearInterval(fadeInterval);
                     video.muted = true;
-                    video.volume = 0;
                 });
             }
         });
@@ -5848,7 +5637,7 @@ if (document.readyState === 'loading') {
     }
 })();
 
-// ── SECRET 4 : VIS DE RACK 19" STUDIO EN ROTATION & CLIC METALLIQUE ──
+// ── SECRET 4 : VIS DE RACK 19" STUDIO EN ROTATION ÉLASTIQUE ──
 function triggerRackScrew(btn, event) {
     if (event) event.stopPropagation();
     if (!btn) return;
@@ -5866,38 +5655,6 @@ function triggerRackScrew(btn, event) {
             ease: 'outElastic(1, .5)'
         });
     }
-
-    // Son de tournevis métallique / ratchet
-    try {
-        if (typeof audioCtx !== 'undefined' && audioCtx) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const now = audioCtx.currentTime;
-            
-            const osc1 = audioCtx.createOscillator();
-            const gain1 = audioCtx.createGain();
-            osc1.type = 'triangle';
-            osc1.frequency.setValueAtTime(3400, now);
-            osc1.frequency.exponentialRampToValueAtTime(900, now + 0.04);
-            gain1.gain.setValueAtTime(0.008, now);
-            gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
-            osc1.connect(gain1);
-            gain1.connect(audioCtx.destination);
-            osc1.start(now);
-            osc1.stop(now + 0.05);
-
-            const osc2 = audioCtx.createOscillator();
-            const gain2 = audioCtx.createGain();
-            osc2.type = 'sine';
-            osc2.frequency.setValueAtTime(1550, now);
-            osc2.frequency.exponentialRampToValueAtTime(500, now + 0.07);
-            gain2.gain.setValueAtTime(0.005, now);
-            gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
-            osc2.connect(gain2);
-            gain2.connect(audioCtx.destination);
-            osc2.start(now);
-            osc2.stop(now + 0.08);
-        }
-    } catch(e) {}
 }
 window.triggerRackScrew = triggerRackScrew;
 
