@@ -688,8 +688,36 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
         .win-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; opacity: 0.6; }
         
-        .stat-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; transition: background-color 0.8s var(--ease-apple), box-shadow 0.8s var(--ease-apple); padding: 10px; border-radius: 20px; }
-        @media (min-width: 1024px) { .stat-item:hover { transform: none !important; background: rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.3); } }
+        .stat-item { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            width: 100%; 
+            padding: 10px; 
+            border-radius: 20px; 
+            perspective: 800px;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background-color 0.4s var(--ease-apple), box-shadow 0.4s var(--ease-apple);
+        }
+        @media (min-width: 1024px) { 
+            .stat-item:hover { 
+                background: rgba(255,255,255,0.03); 
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            } 
+        }
+
+        .skill-gauge {
+            transform-style: preserve-3d;
+            will-change: transform, filter;
+            transition: filter 0.3s ease;
+        }
+        .stat-item:hover .skill-gauge {
+            filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent-color) 45%, transparent));
+        }
 
         .pie-chart {
           width: 80px; height: 80px; border-radius: 50%;
@@ -706,10 +734,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
         .pie-chart.animated {
           box-shadow: 0 0 28px -4px color-mix(in srgb, var(--accent-color) 60%, transparent);
-        }
-        .stat-item:hover .pie-chart {
-          transform: none !important;
-          box-shadow: 0 0 35px -6px color-mix(in srgb, var(--accent-color) 60%, transparent);
         }
         .stat-item:hover p { opacity: 1 !important; }
 
@@ -1632,7 +1656,35 @@ body.light-mode .apple-menu-item { color: #222222; }
                     </div>
                 </div>
                 <p class="text-xs md:text-sm font-mono uppercase tracking-[0.3em] opacity-40 mb-3 md:mb-4">Étudiant ingénieur du son</p>
-                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-3 leading-[0.95]" style="background: linear-gradient(180deg, #ffffff 60%, rgba(255,255,255,0.4) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Jules<br>Frémondière</h1>
+                <div class="hero-name-wrap relative inline-block my-1">
+                    <!-- Waveform SVG Animée Réactive au Scroll -->
+                    <div id="hero-waveform-container" class="absolute -inset-x-12 -inset-y-6 pointer-events-none z-0 flex items-center justify-center opacity-45 overflow-visible" aria-hidden="true">
+                        <svg id="hero-waveform-svg" class="w-full h-full min-w-[320px] max-w-[560px] h-[120px] overflow-visible" viewBox="0 0 500 120">
+                            <defs>
+                                <linearGradient id="heroWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0" />
+                                    <stop offset="25%" stop-color="var(--accent-color)" stop-opacity="0.6" />
+                                    <stop offset="50%" stop-color="var(--accent-color)" stop-opacity="0.9" />
+                                    <stop offset="75%" stop-color="var(--accent-color)" stop-opacity="0.6" />
+                                    <stop offset="100%" stop-color="var(--accent-color)" stop-opacity="0" />
+                                </linearGradient>
+                                <linearGradient id="heroWaveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+                                    <stop offset="50%" stop-color="#ffffff" stop-opacity="0.3" />
+                                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                                </linearGradient>
+                                <filter id="waveGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="3" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+                            <path id="hero-wave-glow" fill="none" stroke="var(--accent-color)" stroke-width="6" stroke-opacity="0.15" filter="url(#waveGlow)" />
+                            <path id="hero-wave-path-1" fill="none" stroke="url(#heroWaveGrad1)" stroke-width="2.5" stroke-linecap="round" />
+                            <path id="hero-wave-path-2" fill="none" stroke="url(#heroWaveGrad2)" stroke-width="1.2" stroke-dasharray="4 6" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <h1 class="relative z-10 text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-3 leading-[0.95]" style="background: linear-gradient(180deg, #ffffff 60%, rgba(255,255,255,0.4) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Jules<br>Frémondière</h1>
+                </div>
                 <div class="inline-flex items-center gap-2 border border-white/10 bg-white/5 text-white/60 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest mb-4 md:mb-6 backdrop-blur-md">
                     <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] inline-block"></span>
                     En recherche de stage · 2026
@@ -2956,21 +3008,25 @@ body.light-mode .apple-menu-item { color: #222222; }
                 chevron.style.transform = 'rotate(180deg)';
                 
                 if (typeof anime !== 'undefined') {
-                    anime.remove(content);
-                    anime({
-                        targets: content,
-                        scale: [0.92, 1],
-                        opacity: [0, 1],
-                        duration: 500,
-                        easing: 'easeOutElastic(1, .8)',
-                        begin: function() {
-                            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-                        },
-                        complete: function() {
-                            const acc = document.getElementById('performance-accordion');
-                            if (acc) acc.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    });
+                    const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime.animate === 'function' ? anime.animate : null));
+                    if (anim) {
+                        content.style.transformOrigin = 'top center';
+                        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                        anim(content, {
+                            scale: [0.94, 1],
+                            translateY: [-8, 0],
+                            opacity: [0, 1],
+                            duration: 600,
+                            ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outElastic(1, .75)',
+                            onComplete: function() {
+                                const acc = document.getElementById('performance-accordion');
+                                if (acc) acc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        });
+                    } else {
+                        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                        content.style.opacity = '1';
+                    }
                 } else {
                     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
                     setTimeout(() => {
@@ -3573,18 +3629,19 @@ body.light-mode .apple-menu-item { color: #222222; }
                 if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, content]);
                 modal.style.opacity = '0';
                 content.style.opacity = '0';
-                content.style.transform = 'scale(0.5)';
+                content.style.transform = 'scale(0.85) translateY(20px)';
                 
                 anim(modal, {
                     opacity: [0, 1],
-                    duration: 350,
+                    duration: 300,
                     ease: 'linear'
                 });
                 anim(content, {
-                    scale: [0.5, 1],
+                    scale: [0.85, 1],
+                    translateY: [20, 0],
                     opacity: [0, 1],
-                    duration: 800,
-                    ease: 'outElastic(1, .6)'
+                    duration: 700,
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outElastic(1, .75)'
                 });
             } else {
                 modal.style.opacity = '1';
@@ -3605,15 +3662,16 @@ body.light-mode .apple-menu-item { color: #222222; }
             if (anim) {
                 if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, content]);
                 anim(content, {
-                    scale: [1, 0.5],
+                    scale: [1, 0.85],
+                    translateY: [0, 15],
                     opacity: [1, 0],
-                    duration: 300,
-                    ease: 'inExpo'
+                    duration: 250,
+                    ease: 'inQuad'
                 });
                 anim(modal, {
                     opacity: [1, 0],
-                    duration: 300,
-                    ease: 'inExpo',
+                    duration: 250,
+                    ease: 'inQuad',
                     onComplete: function() {
                         modal.classList.add('hidden');
                         modal.classList.remove('flex');
@@ -3642,10 +3700,16 @@ body.light-mode .apple-menu-item { color: #222222; }
                 if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, content]);
                 modal.style.opacity = '0';
                 content.style.opacity = '0';
-                content.style.transform = 'scale(0.6)';
+                content.style.transform = 'scale(0.85) translateY(18px)';
 
                 anim(modal, { opacity: [0, 1], duration: 300, ease: 'linear' });
-                anim(content, { scale: [0.6, 1], opacity: [0, 1], duration: 650, ease: 'outElastic(1, .6)' });
+                anim(content, { 
+                    scale: [0.85, 1], 
+                    translateY: [18, 0],
+                    opacity: [0, 1], 
+                    duration: 650, 
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outElastic(1, .75)' 
+                });
             } else {
                 modal.style.opacity = '1';
                 content.style.opacity = '1';
@@ -3999,17 +4063,18 @@ body.light-mode .apple-menu-item { color: #222222; }
             modal.classList.remove('pointer-events-none');
             modal.style.opacity = '1';
             
-            // Animation d'ouverture Anime.js V4 (Juicy Spring / Elastic)
+            // Animation d'ouverture Anime.js V4 (Spring Physics Organique)
             const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
             if (anim) {
                 if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, container]);
-                container.style.transform = 'scale(0.8)';
+                container.style.transform = 'scale(0.86) translateY(22px)';
                 container.style.opacity = '0';
                 anim(container, {
-                    scale: [0.8, 1],
+                    scale: [0.86, 1],
+                    translateY: [22, 0],
                     opacity: [0, 1],
-                    duration: 600,
-                    ease: 'outElastic(1, .6)'
+                    duration: 680,
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outElastic(1, .75)'
                 });
             }
         }
@@ -4659,8 +4724,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- 2. LECTURE DES VIDÉOS & ZOOM OUT AU SURVOL (ANIME.JS V4 60FPS) ---
+    // --- 2. LECTURE DES VIDÉOS & SURVOL SPRING PHYSICS (ANIME.JS V4 60FPS) ---
     const projectCards = document.querySelectorAll('.project-card');
+    const statCards = document.querySelectorAll('.stat-card');
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches || ('ontouchstart' in window);
     const animWaapi = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
     
@@ -4673,23 +4739,54 @@ document.addEventListener("DOMContentLoaded", () => {
             video.muted = true;
         }
 
-        // Effet Anime.js V4 de Zoom Out (scale: 0.96) au survol
+        // Effet Anime.js V4 Spring Physics au survol des cartes projets
         card.addEventListener('mouseenter', () => {
             if (animWaapi) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
                 animWaapi(card, {
-                    scale: 0.965,
-                    duration: 350,
-                    ease: 'outQuad'
+                    scale: 0.982,
+                    translateY: -3,
+                    duration: 320,
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outQuad'
                 });
             }
         });
 
         card.addEventListener('mouseleave', () => {
             if (animWaapi) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
                 animWaapi(card, {
                     scale: 1,
-                    duration: 450,
-                    ease: 'outElastic(1, .6)'
+                    translateY: 0,
+                    duration: 500,
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.35, mass: 0.8 }) : 'outElastic(1, .75)'
+                });
+            }
+        });
+    });
+
+    // Effet Anime.js V4 Spring Physics au survol des cartes de statistiques
+    statCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            if (animWaapi) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                animWaapi(card, {
+                    scale: 0.985,
+                    translateY: -2,
+                    duration: 320,
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outQuad'
+                });
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            if (animWaapi) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                animWaapi(card, {
+                    scale: 1,
+                    translateY: 0,
+                    duration: 500,
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.35, mass: 0.8 }) : 'outElastic(1, .75)'
                 });
             }
         });
@@ -4946,9 +5043,155 @@ requestAnimationFrame(updateVUMeter);
         ptImg.style.setProperty('padding', '0px', 'important');
     }
     
-    // --- GLOBAL MICRO-INTERACTIONS (PURE CSS VAR(--EASE-APPLE) HARMONIZATION) ---
-    // All transforms, shadows, borders and opacities are handled synchronously via CSS var(--ease-apple)
+    // --- 🎛️ 9. FADER HAPTIC : RÉSISTANCE PHYSIQUE & REBOND ÉLASTIQUE SUR LES SKILLS ---
+    initSkillGaugeHaptics();
+
+    // --- 🔊 10. WAVEFORM RÉACTIVE AU SCROLL (LE HERO RESPIRE) ---
+    initHeroScrollWaveform();
 });
+
+// --- 🎛️ FADER HAPTIC : RÉSISTANCE PHYSIQUE & REBOND ÉLASTIQUE SUR LES SKILLS ---
+function initSkillGaugeHaptics() {
+    const skillItems = document.querySelectorAll('.skills-grid-container .stat-item, #skills .stat-item');
+    if (!skillItems.length) return;
+
+    const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+    if (!anim) return;
+
+    skillItems.forEach(item => {
+        const gauge = item.querySelector('.skill-gauge');
+        if (!gauge) return;
+
+        // Survol : le chart résiste et "recule" en perspective 3D comme un bouton de console physique qu'on enfonce
+        item.addEventListener('mouseenter', () => {
+            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            anim(gauge, {
+                transform: ['perspective(600px) translateZ(0px) rotateX(0deg) scale(1)', 'perspective(600px) translateZ(-16px) rotateX(7deg) scale(0.93)'],
+                duration: 260,
+                ease: typeof spring === 'function' ? spring({ bounce: 0.2, mass: 0.6 }) : 'outQuad'
+            });
+        });
+
+        // Fin de survol : le chart revient avec un rebond élastique ressort très satisfaisant
+        item.addEventListener('mouseleave', () => {
+            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            anim(gauge, {
+                transform: ['perspective(600px) translateZ(-16px) rotateX(7deg) scale(0.93)', 'perspective(600px) translateZ(0px) rotateX(0deg) scale(1)'],
+                duration: 550,
+                ease: typeof spring === 'function' ? spring({ bounce: 0.45, mass: 0.8 }) : 'outElastic(1, .6)'
+            });
+        });
+
+        // Clic / Pointerdown : enfoncement mécanique console encore plus profond
+        item.addEventListener('pointerdown', () => {
+            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            anim(gauge, {
+                transform: 'perspective(600px) translateZ(-24px) rotateX(12deg) scale(0.88)',
+                duration: 120,
+                ease: 'outQuad'
+            });
+        });
+
+        item.addEventListener('pointerup', () => {
+            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            anim(gauge, {
+                transform: 'perspective(600px) translateZ(-16px) rotateX(7deg) scale(0.93)',
+                duration: 350,
+                ease: typeof spring === 'function' ? spring({ bounce: 0.35, mass: 0.8 }) : 'outElastic(1, .7)'
+            });
+        });
+    });
+}
+
+// --- 🔊 WAVEFORM RÉACTIVE AU SCROLL (LE HERO RESPIRE) ---
+function initHeroScrollWaveform() {
+    const path1 = document.getElementById('hero-wave-path-1');
+    const path2 = document.getElementById('hero-wave-path-2');
+    const glowPath = document.getElementById('hero-wave-glow');
+    if (!path1 || !path2) return;
+
+    let lastScrollY = window.pageYOffset;
+    let lastScrollTime = performance.now();
+    let scrollVelocity = 0;
+    let targetVelocity = 0;
+    let phase = 0;
+
+    // Calcul de la vélocité instantanée au scroll
+    window.addEventListener('scroll', () => {
+        const now = performance.now();
+        const deltaT = Math.max(16, now - lastScrollTime);
+        const currentScrollY = window.pageYOffset;
+        const deltaY = Math.abs(currentScrollY - lastScrollY);
+
+        // Vélocité normalisée proportionnelle à la vitesse de défilement
+        const instantVel = (deltaY / deltaT) * 16;
+        targetVelocity = Math.min(10, targetVelocity + instantVel);
+
+        lastScrollY = currentScrollY;
+        lastScrollTime = now;
+    }, { passive: true });
+
+    const width = 500;
+    const height = 120;
+    const centerY = height / 2;
+    const pointsCount = 44;
+    const step = width / (pointsCount - 1);
+
+    function renderWaveform(time) {
+        // Amorti progressif de la vélocité vers 0
+        scrollVelocity += (targetVelocity - scrollVelocity) * 0.12;
+        targetVelocity *= 0.93;
+        if (targetVelocity < 0.008) targetVelocity = 0;
+
+        // Respiration de repos (onde sinusoïdale studio douce) + excitation proportionnelle au scroll
+        const idleAmp = 6 + Math.sin(time * 0.0016) * 2.5;
+        const scrollAmp = scrollVelocity * 8.5;
+        const totalAmp = Math.min(46, idleAmp + scrollAmp);
+
+        const freq = 0.022 + scrollVelocity * 0.004;
+        const speed = 0.0026 + scrollVelocity * 0.0035;
+        phase += speed;
+
+        let d1 = '';
+        let d2 = '';
+
+        for (let i = 0; i < pointsCount; i++) {
+            const x = i * step;
+            // Enveloppe parabolique pour atténuer les bords gauche et droite
+            const normalizedX = (i / (pointsCount - 1)) * 2 - 1; // [-1 à 1]
+            const envelope = Math.max(0, 1 - Math.pow(normalizedX, 2));
+
+            // Synthèse multi-harmonique audio réaliste
+            const h1 = Math.sin(x * freq + phase * 1.5);
+            const h2 = Math.sin(x * freq * 2.2 - phase * 2.1) * 0.45;
+            const h3 = Math.cos(x * freq * 3.6 + phase * 0.8) * 0.25;
+            const noise = (Math.sin(x * 0.1 + time * 0.004) * 0.15) * (scrollVelocity > 0.4 ? 1 : 0.2);
+
+            const yOffset1 = (h1 + h2 + h3 + noise) * totalAmp * envelope;
+            const y1 = centerY + yOffset1;
+
+            // Seconde harmonique complémentaire
+            const yOffset2 = (Math.cos(x * freq * 1.5 - phase * 1.7) * 0.7 - h2 * 0.45) * (totalAmp * 0.7) * envelope;
+            const y2 = centerY + yOffset2;
+
+            if (i === 0) {
+                d1 += `M ${x.toFixed(1)} ${y1.toFixed(1)}`;
+                d2 += `M ${x.toFixed(1)} ${y2.toFixed(1)}`;
+            } else {
+                d1 += ` L ${x.toFixed(1)} ${y1.toFixed(1)}`;
+                d2 += ` L ${x.toFixed(1)} ${y2.toFixed(1)}`;
+            }
+        }
+
+        path1.setAttribute('d', d1);
+        path2.setAttribute('d', d2);
+        if (glowPath) glowPath.setAttribute('d', d1);
+
+        requestAnimationFrame(renderWaveform);
+    }
+
+    requestAnimationFrame(renderWaveform);
+}
 
 // ========================================================
 // --- NOW PLAYING SOUNDCLOUD SHUFFLE CONTROLLER (API) ---
@@ -5011,10 +5254,10 @@ function npTogglePanel() {
         const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
         if (anim) {
             anim(panel, {
-                scale: [0.85, 1],
+                scale: [0.88, 1],
                 opacity: [0, 1],
-                duration: 350,
-                ease: 'outElastic(1, .7)'
+                duration: 480,
+                ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outElastic(1, .75)'
             });
         }
     }
