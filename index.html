@@ -717,23 +717,28 @@ body.light-mode .apple-menu-item { color: #222222; }
             position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; 
             cursor: pointer; border: 1px solid var(--glass-border); 
             box-shadow: var(--glass-drop-shadow), inset 0 1px 0 0 var(--glass-highlight); 
-            transition: transform 0.9s var(--ease-elastic-smooth), filter 0.8s var(--ease-smooth-slow), border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow); 
+            transition: filter 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease; 
+            background: #000;
+            user-select: none;
+            -webkit-user-select: none;
         }
         @media (min-width: 768px) { .project-card { aspect-ratio: 16/10; } }
         .project-card:hover { 
-            transform: scale(1.008) translateY(-1px); 
-            filter: brightness(1.03); 
-            border-color: color-mix(in srgb, var(--accent-color) 45%, var(--glass-edge-top)); 
-            box-shadow: 0 55px 115px -30px rgba(0,0,0,0.8), 0 25px 50px -20px rgba(0,0,0,0.6), 0 0 25px -5px color-mix(in srgb, var(--accent-color) 25%, transparent);
+            filter: brightness(1.04); 
+            border-color: color-mix(in srgb, var(--accent-color) 50%, var(--glass-edge-top)); 
+            box-shadow: 0 40px 90px -25px rgba(0,0,0,0.85), 0 0 30px -5px color-mix(in srgb, var(--accent-color) 30%, transparent);
         }
-        .project-card img, .project-card video { width: 100%; height: 100%; object-fit: cover; transition: 0.8s var(--ease-apple); filter: brightness(0.85); }
-        body.light-mode .project-card img, body.light-mode .project-card video { filter: brightness(1); }
-        .project-info { 
-            opacity: 1; position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; 
-            padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 60%, transparent 100%); 
+        .project-card img, .project-card video { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease; filter: brightness(0.85); }
+        body.light-mode .project-card img, body.light-mode .project-card video { filter: brightness(0.95); }
+        .project-info-minimal { 
+            position: absolute; inset: auto 0 0 0; display: flex; flex-direction: column; justify-content: flex-end; 
+            padding: 16px 20px; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.55) 60%, transparent 100%); 
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            pointer-events: none;
+            z-index: 10;
         }
-        @media (min-width: 768px) { .project-info { padding: 24px; } }
+        @media (min-width: 768px) { .project-info-minimal { padding: 20px 24px; } }
 
         /* --- LAB & INSPIRATIONS --- */
         .lab-row { 
@@ -992,6 +997,8 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
         /* Neutralisation des transitions CSS en conflit avec Anime.js */
         #vision-content { transition: none !important; }
+        #project-detail-modal { transition: none !important; }
+        #project-detail-container { transition: none !important; }
         .vision-bar-container { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; width: 100%; }
         .vision-bar-fill { height: 100%; background: var(--accent-color); width: 0%; transition: none !important; }
         body.light-mode .vision-bar-container { background: rgba(0,0,0,0.1); }
@@ -2000,122 +2007,159 @@ body.light-mode .apple-menu-item { color: #222222; }
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" id="projects-grid">
     
-    <a href="https://youtu.be/9UOw2Qhdke0" target="_blank" data-tags="prise-de-son,post-prod" class="project-card group click-sound touch-manipulation">
-        <video src="preview_fumee.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Je suis la fumée... <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Court-métrage</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Tournage extérieur, </p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Prise de son perche · Voix off en post · Gestion du bruit ambiant lors de la captation</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">MKH 416 · Sound Devices · ProTools</p>
+    <!-- 1. Je suis la fumée... -->
+    <div role="button" tabindex="0" onclick="openProjectModal('fumee')" data-project-id="fumee" data-tags="prise-de-son,post-prod" class="project-card group click-sound touch-manipulation">
+        <video src="preview_fumee.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Court-métrage · Fiction</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Je suis la fumée...</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="https://www.instagram.com/p/DWjtkh5jTH2" target="_blank" data-tags="compo" class="project-card group click-sound touch-manipulation">
-        <video src="preview_etranger.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">L'Étranger (A. Camus) <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Teaser Théâtre</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Création d'une identité sonore pour accompagner l'absurdité de la pièce.</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Composition musicale originale · sound design immersif.</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Ableton Live 12 · Synthèse analogique · SUITES Arturia</p>
+    <!-- 2. L'Étranger -->
+    <div role="button" tabindex="0" onclick="openProjectModal('etranger')" data-project-id="etranger" data-tags="compo" class="project-card group click-sound touch-manipulation">
+        <video src="preview_etranger.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Teaser Théâtre · Compo</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">L'Étranger (A. Camus)</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="https://www.youtube.com/watch?v=U3lwDA_INOQ" target="_blank" data-tags="post-prod,prise-de-son" class="project-card group click-sound touch-manipulation">
-        <video src="preview_inst.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Instable <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Websérie</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Tournage urbain bruyant avec des dialogues croisés rapides.</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Supervision sonore : prise de son de plateau (Perche/HF) et post-production audio.</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1"> SD Mixpre6-II· ProTools · Nettoyage spectral et mixage dynamique</p>
+    <!-- 3. Instable -->
+    <div role="button" tabindex="0" onclick="openProjectModal('instable')" data-project-id="instable" data-tags="post-prod,prise-de-son" class="project-card group click-sound touch-manipulation">
+        <video src="preview_inst.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Websérie · Prise de son</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Instable</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="https://www.instagram.com/p/DFVFY0EtxAQ/" target="_blank" data-tags="mix-master,post-prod" class="project-card group click-sound touch-manipulation">
-        <video src="preview_oura.mov" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Ouragan <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Résidence</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Performance artistique immersive impliquant une spatialisation et une communication en temps réel.</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Gestion de l'architecture audio : routing console complexe, patch et diffusion multicanal.</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Console X32/M32 · Spatialisation multicanal · Routing de secours</p>
+    <!-- 4. Ouragan -->
+    <div role="button" tabindex="0" onclick="openProjectModal('ouragan')" data-project-id="ouragan" data-tags="mix-master,post-prod" class="project-card group click-sound touch-manipulation">
+        <video src="preview_oura.mov" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Résidence & Spatialisation</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Ouragan</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6" target="_blank" data-tags="mix-master" class="project-card group click-sound touch-manipulation">
+    <!-- 5. Srh - qutumeregardes -->
+    <div role="button" tabindex="0" onclick="openProjectModal('srh')" data-project-id="srh" data-tags="mix-master" class="project-card group click-sound touch-manipulation">
         <img src="cover.jpg" alt="Srh - qutumeregardes" loading="lazy" decoding="async" class="object-cover object-bottom w-full h-full transition duration-500 group-hover:scale-105 object-bottom-fix pointer-events-none">
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Srh - qutumeregardes <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Musique</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Mix d'un titre rap</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Ingénieur du son mixage et mastering · Digital Rap</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Ableton Live 12 · Traitement vocal · Balance spectrale et loudness</p>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Musique · Mixage & Master</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Srh - qutumeregardes</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="https://www.youtube.com/watch?v=D-x6BQSPRuA" target="_blank" data-tags="prise-de-son,mix-master,post-prod" class="project-card group click-sound touch-manipulation">
-        <video src="preview_capha.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Capharnaüm <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Court-métrage</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Court-métrage de fiction intimiste nécessitant une forte dynamique sonore.</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Prise de son plateau, sound design et mixage stéréo</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">MixPre-6 · ProTools · Bruitage et sound design narratif</p>
+    <!-- 6. Capharnaüm -->
+    <div role="button" tabindex="0" onclick="openProjectModal('capharnaum')" data-project-id="capharnaum" data-tags="prise-de-son,mix-master,post-prod" class="project-card group click-sound touch-manipulation">
+        <video src="preview_capha.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Court-métrage · Post-Prod</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Capharnaüm</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="https://www.youtube.com/watch?v=TiqWW0e6RSg" target="_blank" data-tags="mix-master,prise-de-son" class="project-card group click-sound touch-manipulation">
-        <video src="preview_desac.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Désaccordés <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Émission TV en direct</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Aucune deuxième prise possible.</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Ingénieur son direct, routing complet sur console X32.</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Prise de décision en temps réel · Mix Broadcast</p>
+    <!-- 7. Désaccordés -->
+    <div role="button" tabindex="0" onclick="openProjectModal('desaccordes')" data-project-id="desaccordes" data-tags="mix-master,prise-de-son" class="project-card group click-sound touch-manipulation">
+        <video src="preview_desac.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Émission TV · Live Broadcast</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Désaccordés</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="https://www.youtube.com/watch?v=w_9xYrwzKNs" target="_blank" data-tags="montage,compo" class="project-card group click-sound touch-manipulation">
-        <video src="preview_longday.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Long Day <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Clip musical</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Réalisation d'un clip couplé à une production musicale.</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Montage vidéo synchrone, composition musicale et mixage audio.</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Premiere Pro · FL Studio 21 · Synchronisation image/rythme</p>
+    <!-- 8. Long Day -->
+    <div role="button" tabindex="0" onclick="openProjectModal('longday')" data-project-id="longday" data-tags="montage,compo" class="project-card group click-sound touch-manipulation">
+        <video src="preview_longday.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Clip Musical · Montage</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Long Day</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 
-    <a href="http://youtube.com/watch?v=eZI3RtKjmTY" target="_blank" data-tags="prise-de-son" class="project-card group click-sound touch-manipulation">
-        <video src="preview_graal.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-60 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
-        <div class="project-info">
-            <div class="mb-auto"></div>
-            <h4 class="text-2xl md:text-3xl font-bold mb-2 leading-tight drop-shadow-md">Sacré Graal <span class="text-xs md:text-sm font-mono opacity-80 block md:inline md:ml-1">— Court-métrage</span></h4>
-            <div class="border-t border-white/20 pt-3 space-y-1">
-                <p class="font-mono text-[12px] text-white/60 leading-relaxed">Teaser du 50ème anniversaire de Sacré Graal (au Cinema St-Paul).</p>
-                <p class="font-mono text-[11px] text-white/90 leading-relaxed">Ingénieur du son (Prise de son).</p>
-                <p class="font-mono text-[10px] text-[var(--accent-color)] font-semibold mt-1">Prise de son en ville · Beaucoup de passage · Zoom F8n · MKH 416</p>
+    <!-- 9. Sacré Graal -->
+    <div role="button" tabindex="0" onclick="openProjectModal('graal')" data-project-id="graal" data-tags="prise-de-son" class="project-card group click-sound touch-manipulation">
+        <video src="preview_graal.mp4" loop muted playsinline preload="metadata" class="absolute inset-0 w-full h-full object-cover z-0 opacity-75 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
+        <div class="project-info-minimal">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="font-mono text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-semibold">Teaser Cinéma · Prise de son</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+                <h4 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug drop-shadow-md">Sacré Graal</h4>
+                <div class="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[var(--accent-color)] group-hover:text-black text-white/80 flex items-center justify-center transition duration-300 shrink-0">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
+
 </div>
             </div>
         </section>
@@ -2641,6 +2685,89 @@ body.light-mode .apple-menu-item { color: #222222; }
         </footer>
 
     </main>
+
+    <!-- =======================================================================
+         MODAL PROJECT DETAIL ("Project_Player.vst")
+         ======================================================================= -->
+    <div id="project-detail-modal" class="fixed inset-0 z-[99990] flex items-center justify-center p-3 sm:p-5 md:p-8 opacity-0 pointer-events-none" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);">
+        <div id="project-detail-container" class="glass-panel w-full max-w-4xl max-h-[90vh] flex flex-col rounded-3xl border border-white/15 bg-[#0d0e12]/95 shadow-[0_25px_70px_rgba(0,0,0,0.85),0_0_50px_-10px_color-mix(in_srgb,var(--accent-color)_30%,transparent)] overflow-hidden relative" style="transform-origin: center center;">
+            
+            <!-- Header façon macOS / DAW VST Plugin -->
+            <div class="win-header shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-black/40">
+                <div class="flex items-center gap-3">
+                    <button type="button" onclick="closeProjectModal()" class="w-3.5 h-3.5 rounded-full bg-[#ff5f56] hover:brightness-125 border border-red-700/50 flex items-center justify-center cursor-pointer group touch-manipulation click-sound" title="Fermer (Échap)">
+                        <svg class="w-2 h-2 text-black/80 opacity-0 group-hover:opacity-100 transition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                    <div class="w-3.5 h-3.5 rounded-full bg-[#ffbd2e] border border-amber-700/50 opacity-40"></div>
+                    <div class="w-3.5 h-3.5 rounded-full bg-[#27c93f] border border-green-700/50 opacity-40"></div>
+                    <span class="font-mono text-xs font-bold text-white/80 tracking-wider ml-2 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                        <span id="pm-vst-title">Project_Player.vst</span>
+                    </span>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <span id="pm-category-pill" class="font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-white/10 text-[var(--accent-color)] border border-white/10">Court-métrage</span>
+                    <button type="button" onclick="closeProjectModal()" class="text-white/40 hover:text-white transition p-1.5 rounded-lg hover:bg-white/10 cursor-pointer click-sound touch-manipulation" title="Fermer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Corps du Widget (2 colonnes scrollables) -->
+            <div class="overflow-y-auto custom-scrollbar p-4 sm:p-6 md:p-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
+                
+                <!-- Colonne Gauche : Lecteur Média (Web Player) -->
+                <div class="lg:col-span-7 flex flex-col gap-4">
+                    <div id="pm-media-frame" class="w-full rounded-2xl overflow-hidden bg-black/90 border border-white/10 relative aspect-video flex items-center justify-center shadow-2xl">
+                        <!-- Dynamic injection: YouTube Iframe / HTML5 Video / HTML5 Audio Custom Player -->
+                    </div>
+                    
+                    <!-- Barre d'état audio / VU-mètres dynamiques -->
+                    <div id="pm-playback-status" class="w-full bg-black/40 border border-white/5 rounded-xl p-3 flex items-center justify-between font-mono text-[11px] text-white/50">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                            <span id="pm-media-format">MONITORING 48kHz / 24-bit</span>
+                        </div>
+                        <a id="pm-external-link" href="#" target="_blank" class="inline-flex items-center gap-1.5 text-[var(--accent-color)] hover:underline tracking-wider uppercase font-semibold">
+                            <span>Ouvrir source</span>
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Colonne Droite : Spécifications & Métadonnées -->
+                <div class="lg:col-span-5 flex flex-col gap-5">
+                    <div>
+                        <h3 id="pm-title" class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">Je suis la fumée...</h3>
+                        <p id="pm-subtitle" class="font-mono text-xs text-[var(--accent-color)] uppercase tracking-wider mt-1">Prise de son & Post-Production</p>
+                    </div>
+
+                    <div class="bg-black/30 border border-white/5 rounded-2xl p-4 sm:p-5 backdrop-blur-md">
+                        <h4 class="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2 flex items-center gap-1.5">
+                            <svg class="w-3 h-3 text-[var(--accent-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Note d'intention & Contexte
+                        </h4>
+                        <p id="pm-description" class="text-sm md:text-[14px] text-white/80 leading-relaxed font-light">
+                            ...
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-3 flex items-center gap-1.5">
+                            <svg class="w-3 h-3 text-[var(--accent-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            Matériel & Logiciels Déployés
+                        </h4>
+                        <div id="pm-badges-container" class="flex flex-wrap gap-2">
+                            <!-- Badges injectés dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
     
     <div id="vision-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4">
         <div onclick="closeVision()" class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"></div>
@@ -3744,6 +3871,375 @@ body.light-mode .apple-menu-item { color: #222222; }
             }
         }
 
+        /* ==========================================================================
+           🎛️ EXPLORATEUR DE PROJETS // PROJECT_PLAYER.VST MODAL ENGINE
+           ========================================================================== */
+
+        const PROJECTS_DATA = {
+            'fumee': {
+                id: 'fumee',
+                title: 'Je suis la fumée...',
+                category: 'Court-métrage · Fiction',
+                mediaType: 'youtube',
+                mediaSrc: '9UOw2Qhdke0',
+                directUrl: 'https://youtu.be/9UOw2Qhdke0',
+                description: "Captation sonore sur tournage extérieur complexe avec une forte réverbération ambiante et des variations d'acoustique naturelle. Réalisation de prises de son perchées chirurgicales pour capter l'intimité et la texture des dialogues, complétée par un travail de doublage voix off en studio et un mixage dynamique immersif.",
+                badges: [
+                    { icon: '🎙️', label: 'Sennheiser MKH 416' },
+                    { icon: '🎛️', label: 'Sound Devices MixPre' },
+                    { icon: '💻', label: 'Avid Pro Tools Ultimate' },
+                    { icon: '🎥', label: 'Tournage Extérieur' },
+                    { icon: '🗣️', label: 'Voix Off & Perche' }
+                ]
+            },
+            'etranger': {
+                id: 'etranger',
+                title: "L'Étranger (Albert Camus)",
+                category: 'Teaser Théâtre · Compo',
+                mediaType: 'video',
+                mediaSrc: 'preview_etranger.mp4',
+                directUrl: 'https://www.instagram.com/p/DWjtkh5jTH2',
+                description: "Création d'une identité sonore et composition musicale originale pour accompagner la bande-annonce théâtrale de 'L'Étranger'. Travail de textures analogiques sombres, synthétiseurs modulaires et nappes spectrales évolutives pour retranscrire la tension psychologique et l'absurdité du récit.",
+                badges: [
+                    { icon: '🎛️', label: 'Ableton Live 12' },
+                    { icon: '🎹', label: 'Synthèse Analogique' },
+                    { icon: '🎚️', label: 'Suites Arturia V' },
+                    { icon: '🎭', label: 'Création Sonore Théâtre' },
+                    { icon: '🔊', label: 'Sound Design Immersif' }
+                ]
+            },
+            'instable': {
+                id: 'instable',
+                title: 'Instable',
+                category: 'Websérie · Prise de son',
+                mediaType: 'youtube',
+                mediaSrc: 'U3lwDA_INOQ',
+                directUrl: 'https://www.youtube.com/watch?v=U3lwDA_INOQ',
+                description: "Supervision sonore intégrale d'une websérie au rythme rapide. Prise de son de plateau en milieu urbain dense et bruyant avec gestion de liaisons HF sans décrochage, suivie d'un nettoyage spectral approfondi (iZotope RX) et d'un mixage multicanal équilibré.",
+                badges: [
+                    { icon: '🎙️', label: 'Sound Devices MixPre-6 II' },
+                    { icon: '💻', label: 'Avid Pro Tools' },
+                    { icon: '📡', label: 'Liaisons HF Sennheiser' },
+                    { icon: '🧹', label: 'iZotope RX Spectral Repair' },
+                    { icon: '🎚️', label: 'Mixage Dynamique' }
+                ]
+            },
+            'ouragan': {
+                id: 'ouragan',
+                title: 'Ouragan',
+                category: 'Résidence & Spatialisation',
+                mediaType: 'video',
+                mediaSrc: 'preview_oura.mov',
+                directUrl: 'https://www.instagram.com/p/DFVFY0EtxAQ/',
+                description: "Performance artistique sonore immersive en direct. Mise en place d'une architecture de diffusion multicanal en temps réel, conception de patchs de routing complexes sur console de mixage numérique et gestion de flux audio avec ligne de secours continue.",
+                badges: [
+                    { icon: '🎛️', label: 'Console Behringer X32 / Midas' },
+                    { icon: '🌐', label: 'Spatialisation Multicanal' },
+                    { icon: '⚡', label: 'Routing Live & Patch Secours' },
+                    { icon: '🎪', label: 'Résidence Artistique' }
+                ]
+            },
+            'srh': {
+                id: 'srh',
+                title: 'Srh - qutumeregardes',
+                category: 'Musique · Mixage & Master',
+                mediaType: 'audio',
+                mediaSrc: 'rover.mp3',
+                previewImg: 'cover.jpg',
+                directUrl: 'https://on.soundcloud.com/XCZ6FO4IZUqG5q24R6',
+                description: "Mixage et pré-mastering d'un titre Digital Rap moderne. Traitement de la voix lead (égalisation chirurgicale, compression multibande, auto-tune stylistique), sculpting des fréquences basses/808 et optimisation du loudness pour les plateformes de streaming (-14 LUFS).",
+                badges: [
+                    { icon: '🎛️', label: 'Ableton Live 12' },
+                    { icon: '🎙️', label: 'Traitement Vocal Lead' },
+                    { icon: '📊', label: 'Sculpting Basse & 808' },
+                    { icon: '🎵', label: 'Mastering Streaming Standards' }
+                ]
+            },
+            'capharnaum': {
+                id: 'capharnaum',
+                title: 'Capharnaüm',
+                category: 'Court-métrage · Post-Prod',
+                mediaType: 'youtube',
+                mediaSrc: 'D-x6BQSPRuA',
+                directUrl: 'https://www.youtube.com/watch?v=D-x6BQSPRuA',
+                description: "Fiction intimiste reposant sur une très forte dynamique sonore entre silences pesants et détonations sonores. Prise de son de plateau au micro directionnel, création de bruitages (Foley) sur-mesure et mixage stéréo immersif.",
+                badges: [
+                    { icon: '🎙️', label: 'Sound Devices MixPre-6' },
+                    { icon: '💻', label: 'Avid Pro Tools' },
+                    { icon: '🎬', label: 'Fiction Intimiste' },
+                    { icon: '🔊', label: 'Bruitage & Foley Narratif' }
+                ]
+            },
+            'desaccordes': {
+                id: 'desaccordes',
+                title: 'Désaccordés',
+                category: 'Émission TV · Live Broadcast',
+                mediaType: 'youtube',
+                mediaSrc: 'TiqWW0e6RSg',
+                directUrl: 'https://www.youtube.com/watch?v=TiqWW0e6RSg',
+                description: "Enregistrement et diffusion télévisuelle en direct sans seconde prise. Prise de son multi-chroniqueurs et invités plateau, mixage antenne en temps réel sur console numérique X32, gestion des liaisons d'intercom et distribution broadcast.",
+                badges: [
+                    { icon: '🎛️', label: 'Console Behringer X32' },
+                    { icon: '📺', label: 'Direct Broadcast TV' },
+                    { icon: '⚡', label: 'Mixage Temps Réel' },
+                    { icon: '🎙️', label: 'Prise Multi-Micros Plateau' }
+                ]
+            },
+            'longday': {
+                id: 'longday',
+                title: 'Long Day',
+                category: 'Clip Musical · Montage',
+                mediaType: 'youtube',
+                mediaSrc: 'w_9xYrwzKNs',
+                directUrl: 'https://www.youtube.com/watch?v=w_9xYrwzKNs',
+                description: "Réalisation d'un clip vidéo couplé à une production musicale complète. Montage dynamique cadencé sur les transitoires et les drops audio, composition du beat, sound design des transitions et mixage final sur FL Studio 21 et Premiere Pro.",
+                badges: [
+                    { icon: '🎬', label: 'Adobe Premiere Pro' },
+                    { icon: '🎹', label: 'Image-Line FL Studio 21' },
+                    { icon: '⏱️', label: 'Montage Rythmique Synchro' },
+                    { icon: '🎵', label: 'Composition & Beatmaking' }
+                ]
+            },
+            'graal': {
+                id: 'graal',
+                title: 'Sacré Graal',
+                category: 'Teaser Cinéma · Prise de son',
+                mediaType: 'youtube',
+                mediaSrc: 'eZI3RtKjmTY',
+                directUrl: 'http://youtube.com/watch?v=eZI3RtKjmTY',
+                description: "Teaser événementiel pour le 50ème anniversaire de 'Sacré Graal' au Cinéma Saint-Paul. Captation en environnement réel urbain à fort passage, filtrage des perturbations extérieures et enregistrement multipiste haute définition.",
+                badges: [
+                    { icon: '🎙️', label: 'Sennheiser MKH 416' },
+                    { icon: '🎛️', label: 'Enregistreur Zoom F8n' },
+                    { icon: '🏙️', label: 'Captation Extérieure Dense' },
+                    { icon: '🎬', label: 'Cinéma Saint-Paul' }
+                ]
+            }
+        };
+
+        function loadProjectPlayer(project) {
+            const frame = document.getElementById('pm-media-frame');
+            const formatEl = document.getElementById('pm-media-format');
+            if (!frame) return;
+
+            if (project.mediaType === 'youtube') {
+                frame.innerHTML = `
+                    <iframe src="https://www.youtube-nocookie.com/embed/${project.mediaSrc}?autoplay=1&rel=0&modestbranding=1" 
+                            title="${project.title}" 
+                            class="w-full h-full border-0 absolute inset-0 rounded-2xl" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                `;
+                if (formatEl) formatEl.textContent = 'YOUTUBE HD // STEREO PCM';
+            } else if (project.mediaType === 'video') {
+                frame.innerHTML = `
+                    <video id="pm-active-video" src="${project.mediaSrc}" controls autoplay playsinline class="w-full h-full object-contain absolute inset-0 bg-black rounded-2xl"></video>
+                `;
+                if (formatEl) formatEl.textContent = 'DIRECT VIDEO STREAM // 48kHz 24-bit';
+            } else if (project.mediaType === 'audio') {
+                frame.innerHTML = `
+                    <div class="w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#0c0d12] via-[#141620] to-[#0c0d12] text-center gap-4 relative select-none">
+                        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden shadow-2xl border border-white/15 relative group">
+                            <img src="${project.previewImg || 'cover.jpg'}" alt="${project.title}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-[var(--accent-color)]/20 mix-blend-overlay"></div>
+                        </div>
+                        <audio id="pm-active-audio" src="${project.mediaSrc}" preload="auto"></audio>
+                        <div class="flex items-center gap-3">
+                            <button id="pm-audio-play-btn" onclick="togglePmAudio()" class="w-12 h-12 rounded-full bg-[var(--accent-color)] text-black flex items-center justify-center shadow-[0_0_20px_color-mix(in_srgb,var(--accent-color)_50%,transparent)] hover:scale-105 active:scale-95 transition cursor-pointer click-sound touch-manipulation" title="Lecture / Pause">
+                                <svg id="pm-audio-icon-play" class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <svg id="pm-audio-icon-pause" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                            </button>
+                        </div>
+                        <div class="w-full max-w-xs flex items-center gap-3 font-mono text-[10px] text-white/60">
+                            <span id="pm-audio-cur">0:00</span>
+                            <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden cursor-pointer" onclick="seekPmAudio(event)">
+                                <div id="pm-audio-bar" class="h-full bg-[var(--accent-color)] w-0 transition-all duration-100"></div>
+                            </div>
+                            <span id="pm-audio-dur">--:--</span>
+                        </div>
+                    </div>
+                `;
+                if (formatEl) formatEl.textContent = 'MASTER AUDIO // 44.1kHz 24-bit';
+
+                const audio = document.getElementById('pm-active-audio');
+                if (audio) {
+                    audio.addEventListener('timeupdate', () => {
+                        const cur = document.getElementById('pm-audio-cur');
+                        const dur = document.getElementById('pm-audio-dur');
+                        const bar = document.getElementById('pm-audio-bar');
+                        if (cur) cur.textContent = formatTime(audio.currentTime);
+                        if (dur && audio.duration) dur.textContent = formatTime(audio.duration);
+                        if (bar && audio.duration) bar.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
+                    });
+                    audio.addEventListener('ended', () => {
+                        const iconPlay = document.getElementById('pm-audio-icon-play');
+                        const iconPause = document.getElementById('pm-audio-icon-pause');
+                        if (iconPlay && iconPause) {
+                            iconPlay.classList.remove('hidden');
+                            iconPause.classList.add('hidden');
+                        }
+                    });
+                    audio.play().then(() => {
+                        const iconPlay = document.getElementById('pm-audio-icon-play');
+                        const iconPause = document.getElementById('pm-audio-icon-pause');
+                        if (iconPlay && iconPause) {
+                            iconPlay.classList.add('hidden');
+                            iconPause.classList.remove('hidden');
+                        }
+                    }).catch(() => {});
+                }
+            }
+        }
+
+        function togglePmAudio() {
+            const audio = document.getElementById('pm-active-audio');
+            const iconPlay = document.getElementById('pm-audio-icon-play');
+            const iconPause = document.getElementById('pm-audio-icon-pause');
+            if (!audio) return;
+
+            if (audio.paused) {
+                audio.play().then(() => {
+                    if (iconPlay) iconPlay.classList.add('hidden');
+                    if (iconPause) iconPause.classList.remove('hidden');
+                }).catch(() => {});
+            } else {
+                audio.pause();
+                if (iconPlay) iconPlay.classList.remove('hidden');
+                if (iconPause) iconPause.classList.add('hidden');
+            }
+        }
+
+        function seekPmAudio(e) {
+            const audio = document.getElementById('pm-active-audio');
+            if (!audio || !audio.duration) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            audio.currentTime = ratio * audio.duration;
+        }
+
+        function formatTime(sec) {
+            if (isNaN(sec)) return "0:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function openProjectModal(projectId) {
+            const project = PROJECTS_DATA[projectId];
+            if (!project) return;
+
+            const modal = document.getElementById('project-detail-modal');
+            const container = document.getElementById('project-detail-container');
+            if (!modal || !container) return;
+
+            // Remplir les métadonnées
+            document.getElementById('pm-title').textContent = project.title;
+            document.getElementById('pm-subtitle').textContent = project.category;
+            document.getElementById('pm-category-pill').textContent = project.category;
+            document.getElementById('pm-description').textContent = project.description;
+            
+            const extLink = document.getElementById('pm-external-link');
+            if (extLink) {
+                extLink.href = project.directUrl;
+            }
+
+            // Badges techniques
+            const badgesContainer = document.getElementById('pm-badges-container');
+            if (badgesContainer) {
+                badgesContainer.innerHTML = project.badges.map(b => `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 font-mono text-[11px] text-white/90 transition shadow-sm">
+                        <span class="text-xs">${b.icon}</span>
+                        <span>${b.label}</span>
+                    </span>
+                `).join('');
+            }
+
+            // Charger le player multimédia
+            loadProjectPlayer(project);
+
+            // Afficher la modale
+            modal.classList.remove('pointer-events-none');
+            modal.style.opacity = '1';
+            
+            // Animation d'ouverture Anime.js V4 (Juicy Spring / Elastic)
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+            if (anim) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, container]);
+                container.style.transform = 'scale(0.8)';
+                container.style.opacity = '0';
+                anim(container, {
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    duration: 600,
+                    ease: 'outElastic(1, .6)'
+                });
+            }
+
+            // Son d'ouverture Web Audio
+            try {
+                if (typeof audioCtx !== 'undefined' && audioCtx) {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    const now = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(1040, now + 0.08);
+                    gain.gain.setValueAtTime(0.015, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.11);
+                }
+            } catch(e) {}
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('project-detail-modal');
+            const container = document.getElementById('project-detail-container');
+            if (!modal) return;
+
+            // Arrêt immédiat de toute lecture multimédia en cours
+            const mediaFrame = document.getElementById('pm-media-frame');
+            if (mediaFrame) {
+                const video = mediaFrame.querySelector('video');
+                if (video) { video.pause(); video.src = ""; }
+                const audio = mediaFrame.querySelector('audio');
+                if (audio) { audio.pause(); audio.src = ""; }
+                mediaFrame.innerHTML = ''; // Vide l'iframe YouTube
+            }
+
+            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+            if (anim && container) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, container]);
+                anim(container, {
+                    scale: [1, 0.85],
+                    opacity: [1, 0],
+                    duration: 220,
+                    ease: 'inQuad'
+                });
+                anim(modal, {
+                    opacity: [1, 0],
+                    duration: 220,
+                    ease: 'inQuad',
+                    onComplete: () => {
+                        modal.classList.add('pointer-events-none');
+                        modal.style.opacity = '0';
+                    }
+                });
+            } else {
+                modal.style.opacity = '0';
+                modal.classList.add('pointer-events-none');
+            }
+        }
+
+        // Exposer globalement
+        window.openProjectModal = openProjectModal;
+        window.closeProjectModal = closeProjectModal;
+        window.togglePmAudio = togglePmAudio;
+        window.seekPmAudio = seekPmAudio;
+
         let autoStartTimer = setTimeout(() => { startExperience(true); }, 1200);
         function startExperience(isAuto = false) { clearTimeout(autoStartTimer); document.getElementById('start-screen').classList.add('hidden-screen'); if (!isAuto && audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }
         function updateHUDClock() {
@@ -4183,7 +4679,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelectorAll('.glass-panel').forEach(panel => {
-        if (panel.closest('#vision-modal') || panel.id === 'vision-content' || panel.closest('#easter-egg-modal') || panel.id === 'easter-egg-content') return;
+        if (panel.closest('#vision-modal') || panel.id === 'vision-content' || panel.closest('#easter-egg-modal') || panel.id === 'easter-egg-content' || panel.closest('#project-detail-modal') || panel.id === 'project-detail-container') return;
         const header = panel.querySelector('.win-header');
         if (!header) return;
 
@@ -4345,9 +4841,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- 2. LECTURE DES VIDÉOS AU SURVOL (Hover Preview Desktop Only) ---
+    // --- 2. LECTURE DES VIDÉOS & ZOOM OUT AU SURVOL (ANIME.JS V4 60FPS) ---
     const projectCards = document.querySelectorAll('.project-card');
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches || ('ontouchstart' in window);
+    const animWaapi = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
     
     // Mettre toutes les vidéos de projets en pause par défaut au chargement
     projectCards.forEach(card => {
@@ -4357,6 +4854,27 @@ document.addEventListener("DOMContentLoaded", () => {
             video.currentTime = 0;
             video.muted = true;
         }
+
+        // Effet Anime.js V4 de Zoom Out (scale: 0.96) au survol
+        card.addEventListener('mouseenter', () => {
+            if (animWaapi) {
+                animWaapi(card, {
+                    scale: 0.965,
+                    duration: 350,
+                    ease: 'outQuad'
+                });
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            if (animWaapi) {
+                animWaapi(card, {
+                    scale: 1,
+                    duration: 450,
+                    ease: 'outElastic(1, .6)'
+                });
+            }
+        });
     });
 
     if (!isTouchDevice) {
@@ -4862,14 +5380,22 @@ window.npSeek = npSeek;
 // Fermeture au clic extérieur et touche Échap
 document.addEventListener('click', (e) => {
     const widget = document.getElementById('now-playing-widget');
-    if (widget && !widget.contains(e.target)) {
+    if (widget && !widget.contains(e.target) && !e.target.closest('#now-playing-island')) {
         npClosePanel();
+    }
+    const projectModal = document.getElementById('project-detail-modal');
+    const projectContainer = document.getElementById('project-detail-container');
+    if (projectModal && !projectModal.classList.contains('pointer-events-none') && e.target === projectModal) {
+        closeProjectModal();
     }
 });
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         npClosePanel();
+        closeProjectModal();
+        if (typeof closeVision === 'function') closeVision();
+        if (typeof closeEasterEggQR === 'function') closeEasterEggQR();
     }
 });
 
