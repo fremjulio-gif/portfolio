@@ -1106,11 +1106,11 @@ body.light-mode .apple-menu-item { color: #222222; }
         .dock-divider { width: 1px; height: 30px; background: rgba(255,255,255,0.15); }
 
         .theme-island { 
-            position: fixed; 
-            top: calc(14px + env(safe-area-inset-top, 0px)); 
-            bottom: auto;
-            left: 50%; 
-            transform: translateX(-50%);
+            position: fixed !important; 
+            top: calc(14px + env(safe-area-inset-top, 0px)) !important; 
+            bottom: auto !important;
+            left: 50% !important; 
+            transform: translateX(-50%) !important;
             z-index: 900; 
             background-color: rgba(18, 18, 20, 0.75); 
             backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)); 
@@ -1122,19 +1122,6 @@ body.light-mode .apple-menu-item { color: #222222; }
             filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.5));
             transition: all 0.7s var(--ease-apple);
             overflow: visible;
-            cursor: grab;
-            touch-action: none;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        .theme-island:active {
-            cursor: grabbing;
-        }
-        .theme-island.is-dragging {
-            cursor: grabbing !important;
-            transition: none !important;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.85), 0 0 30px var(--accent-color, rgba(34,197,94,0.35)) !important;
-            z-index: 99999 !important;
         }
         /* Pseudo-élément pour le flou des images bar_daw */
         .theme-island::before {
@@ -1154,7 +1141,7 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
         @media (min-width: 768px) { 
             .theme-island { 
-                top: calc(38px + env(safe-area-inset-top, 0px)); 
+                top: calc(38px + env(safe-area-inset-top, 0px)) !important; 
                 padding: 8px 16px; 
                 gap: 16px; 
             } 
@@ -1403,46 +1390,39 @@ body.light-mode .apple-menu-item { color: #222222; }
 
         #np-panel {
             display: none;
-            position: absolute;
-            right: 0;
-            top: calc(100% + 14px);
-            bottom: auto;
+            position: fixed;
             width: 290px;
-            background: rgba(18, 18, 20, 0.9);
+            background: rgba(18, 18, 20, 0.92);
             backdrop-filter: blur(35px) saturate(170%);
             -webkit-backdrop-filter: blur(35px) saturate(170%);
             border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
             border-radius: 20px;
             box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.5);
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.75));
-            transform-origin: top right;
             z-index: 10000;
             padding: 16px;
             user-select: none;
             -webkit-user-select: none;
+            touch-action: none;
+            cursor: grab;
+            transition: box-shadow 0.25s var(--ease-apple);
+        }
+
+        #np-panel.is-dragging {
+            cursor: grabbing !important;
+            transition: none !important;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 35px var(--accent-color, rgba(34, 197, 94, 0.4)) !important;
+            z-index: 99999 !important;
         }
 
         @media (max-width: 640px) {
             #np-panel {
-                right: -20px;
-                max-width: calc(100vw - 32px);
+                width: min(300px, calc(100vw - 24px));
             }
         }
 
         #np-panel.open {
             display: block !important;
-            animation: npPanelOpen 0.35s var(--ease-apple) forwards;
-        }
-
-        @keyframes npPanelOpen {
-            0% {
-                opacity: 0;
-                transform: translateY(8px) scale(0.98);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
         }
 
         .np-bar {
@@ -1524,11 +1504,8 @@ body.light-mode .apple-menu-item { color: #222222; }
 </div><div id="theme-bg"></div>
     <div class="scanlines"></div>
 
-    <div class="theme-island" id="theme-widget" title="Glisser pour déplacer sur l'écran">
-        <div class="hidden sm:flex items-center text-white/25 hover:text-white/60 transition cursor-grab px-0.5 select-none" title="Glisser pour déplacer le widget">
-            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><circle cx="9" cy="7" r="1.3"/><circle cx="15" cy="7" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="17" r="1.3"/><circle cx="15" cy="17" r="1.3"/></svg>
-        </div>
-        <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300 select-none">Pick your theme</span>
+    <div class="theme-island" id="theme-widget">
+        <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300">Pick your theme</span>
         <div class="flex gap-2 items-center">
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio">
                 <img src="logo_flstudio.png" alt="FL" class="w-full h-full object-contain p-1">
@@ -1561,10 +1538,11 @@ body.light-mode .apple-menu-item { color: #222222; }
                     </div>
                 </div>
 
-                <div id="np-panel">
-                    <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3">
-                        <span class="np-head-label font-mono text-[10px] uppercase tracking-widest text-white/70 flex items-center gap-1.5">
+                <div id="np-panel" title="Glisser pour déplacer le lecteur">
+                    <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3 cursor-grab select-none">
+                        <span class="np-head-label font-mono text-[10px] uppercase tracking-widest text-white/70 flex items-center gap-1.5 pointer-events-none">
                             <span class="np-dot w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span> Now Playing
+                            <span class="text-[9px] text-white/30 font-normal ml-1">⋮⋮</span>
                         </span>
                         <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -5209,45 +5187,70 @@ function npFormatTime(seconds) {
     return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-function npSmartPositionPanel() {
-    const widget = document.getElementById('now-playing-widget');
+let npPanelCustomPos = null;
+
+function npPositionDefault() {
     const panel = document.getElementById('np-panel');
-    if (!widget || !panel) return;
+    const trigger = document.getElementById('np-trigger');
+    if (!panel || !trigger) return;
+    const trigRect = trigger.getBoundingClientRect();
+    const panelWidth = Math.min(290, window.innerWidth - 24);
     
-    const widgetRect = widget.getBoundingClientRect();
-    const isBottomHalf = widgetRect.top > (window.innerHeight * 0.55);
-    const isRightHalf = widgetRect.left > (window.innerWidth * 0.5);
+    let left = trigRect.right - panelWidth;
+    let top = trigRect.bottom + 14;
 
-    if (isBottomHalf) {
-        panel.style.top = 'auto';
-        panel.style.bottom = 'calc(100% + 14px)';
-        panel.style.transformOrigin = isRightHalf ? 'bottom right' : 'bottom left';
-    } else {
-        panel.style.bottom = 'auto';
-        panel.style.top = 'calc(100% + 14px)';
-        panel.style.transformOrigin = isRightHalf ? 'top right' : 'top left';
-    }
+    const pad = 12;
+    left = Math.max(pad, Math.min(window.innerWidth - panelWidth - pad, left));
+    top = Math.max(pad, Math.min(window.innerHeight - 220 - pad, top));
 
-    if (isRightHalf) {
-        panel.style.left = 'auto';
-        panel.style.right = '0px';
-    } else {
-        panel.style.right = 'auto';
-        panel.style.left = '0px';
-    }
+    panel.style.left = `${left}px`;
+    panel.style.top = `${top}px`;
+    panel.style.right = 'auto';
+    panel.style.bottom = 'auto';
 }
 
 function npTogglePanel() {
     const panel = document.getElementById('np-panel');
-    if (panel) {
-        npSmartPositionPanel();
-        panel.classList.toggle('open');
+    if (!panel) return;
+    const isOpen = panel.classList.contains('open');
+    if (isOpen) {
+        npClosePanel();
+    } else {
+        if (!npPanelCustomPos) {
+            npPositionDefault();
+        }
+        panel.classList.add('open');
+        const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+        if (anim) {
+            anim(panel, {
+                scale: [0.85, 1],
+                opacity: [0, 1],
+                duration: 350,
+                ease: 'outElastic(1, .7)'
+            });
+        }
     }
 }
 
 function npClosePanel() {
     const panel = document.getElementById('np-panel');
-    if (panel) panel.classList.remove('open');
+    if (!panel || !panel.classList.contains('open')) return;
+    const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+    if (anim) {
+        anim(panel, {
+            scale: [1, 0.88],
+            opacity: [1, 0],
+            duration: 200,
+            ease: 'inQuad',
+            onComplete: () => {
+                panel.classList.remove('open');
+                panel.style.opacity = '';
+                panel.style.transform = '';
+            }
+        });
+    } else {
+        panel.classList.remove('open');
+    }
 }
 
 function npStartSpectrum() {
@@ -5460,11 +5463,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* ==========================================================================
-   🕹️ DRAGGABLE FLOATING THEME ISLAND & NOW PLAYING WIDGET
+   🕹️ DRAGGABLE FLOATING NOW PLAYING PLAYER WIDGET (#np-panel)
    ========================================================================== */
-function initDraggableIsland() {
-    const island = document.getElementById('theme-widget');
-    if (!island) return;
+function initDraggableNpPanel() {
+    const panel = document.getElementById('np-panel');
+    if (!panel) return;
 
     let isPointerDown = false;
     let isDragging = false;
@@ -5474,8 +5477,8 @@ function initDraggableIsland() {
 
     // Clamping within viewport edges with safe margins
     function clampPosition(x, y) {
-        const rect = island.getBoundingClientRect();
-        const pad = 10;
+        const rect = panel.getBoundingClientRect();
+        const pad = 12;
         const minX = pad;
         const maxX = Math.max(pad, window.innerWidth - rect.width - pad);
         const minY = pad;
@@ -5489,8 +5492,8 @@ function initDraggableIsland() {
 
     // Magnetic snap to closest edge on release
     function snapToEdge(currX, currY) {
-        const rect = island.getBoundingClientRect();
-        const pad = 12;
+        const rect = panel.getBoundingClientRect();
+        const pad = 14;
         const screenW = window.innerWidth;
         const screenH = window.innerHeight;
 
@@ -5516,9 +5519,11 @@ function initDraggableIsland() {
         return clampPosition(targetX, targetY);
     }
 
-    island.addEventListener('pointerdown', (e) => {
-        // Ignorer le drag si l'utilisateur clique à l'intérieur du panneau ouvert ou d'un slider
-        if (e.target.closest('#np-panel') || e.target.closest('input')) return;
+    panel.addEventListener('pointerdown', (e) => {
+        // Don't drag if clicking interactive controls (buttons, progress bar, close button)
+        if (e.target.closest('button') || e.target.closest('#np-progress-wrap') || e.target.closest('.np-head-close') || e.target.closest('#np-prev') || e.target.closest('#np-next')) {
+            return;
+        }
 
         isPointerDown = true;
         hasMoved = false;
@@ -5526,30 +5531,30 @@ function initDraggableIsland() {
         startX = e.clientX;
         startY = e.clientY;
 
-        const rect = island.getBoundingClientRect();
+        const rect = panel.getBoundingClientRect();
         initialLeft = rect.left;
         initialTop = rect.top;
 
         try {
-            island.setPointerCapture(e.pointerId);
+            panel.setPointerCapture(e.pointerId);
         } catch(err) {}
     });
 
-    island.addEventListener('pointermove', (e) => {
+    panel.addEventListener('pointermove', (e) => {
         if (!isPointerDown) return;
 
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
 
-        // Seuil d'activation du drag (> 4px) pour ne pas bloquer les clics légitimes
+        // Activation threshold (> 4px)
         if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
             isDragging = true;
             hasMoved = true;
-            island.classList.add('is-dragging');
-            island.style.transform = 'none';
-            island.style.bottom = 'auto';
-            island.style.right = 'auto';
-            island.style.margin = '0';
+            panel.classList.add('is-dragging');
+            panel.style.transform = 'none';
+            panel.style.bottom = 'auto';
+            panel.style.right = 'auto';
+            panel.style.margin = '0';
         }
 
         if (isDragging) {
@@ -5557,10 +5562,9 @@ function initDraggableIsland() {
             const rawY = initialTop + dy;
             const clamped = clampPosition(rawX, rawY);
 
-            island.style.left = `${clamped.x}px`;
-            island.style.top = `${clamped.y}px`;
-
-            npSmartPositionPanel();
+            panel.style.left = `${clamped.x}px`;
+            panel.style.top = `${clamped.y}px`;
+            npPanelCustomPos = { x: clamped.x, y: clamped.y };
         }
     });
 
@@ -5569,32 +5573,32 @@ function initDraggableIsland() {
         isPointerDown = false;
 
         try {
-            island.releasePointerCapture(e.pointerId);
+            panel.releasePointerCapture(e.pointerId);
         } catch(err) {}
 
         if (isDragging) {
-            island.classList.remove('is-dragging');
+            panel.classList.remove('is-dragging');
 
-            const currentLeft = parseFloat(island.style.left) || island.getBoundingClientRect().left;
-            const currentTop = parseFloat(island.style.top) || island.getBoundingClientRect().top;
+            const currentLeft = parseFloat(panel.style.left) || panel.getBoundingClientRect().left;
+            const currentTop = parseFloat(panel.style.top) || panel.getBoundingClientRect().top;
             const snapped = snapToEdge(currentLeft, currentTop);
+
+            npPanelCustomPos = { x: snapped.x, y: snapped.y };
 
             const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
             if (anim) {
-                island.style.transition = 'none';
-                anim(island, {
+                panel.style.transition = 'none';
+                anim(panel, {
                     left: [`${currentLeft}px`, `${snapped.x}px`],
                     top: [`${currentTop}px`, `${snapped.y}px`],
-                    duration: 350,
+                    duration: 300,
                     ease: 'outElastic(1, .8)'
                 });
             } else {
-                island.style.transition = 'left 0.3s ease, top 0.3s ease';
-                island.style.left = `${snapped.x}px`;
-                island.style.top = `${snapped.y}px`;
+                panel.style.transition = 'left 0.25s ease, top 0.25s ease';
+                panel.style.left = `${snapped.x}px`;
+                panel.style.top = `${snapped.y}px`;
             }
-
-            npSmartPositionPanel();
 
             setTimeout(() => {
                 isDragging = false;
@@ -5603,27 +5607,18 @@ function initDraggableIsland() {
         }
     }
 
-    island.addEventListener('pointerup', handlePointerEnd);
-    island.addEventListener('pointercancel', handlePointerEnd);
+    panel.addEventListener('pointerup', handlePointerEnd);
+    panel.addEventListener('pointercancel', handlePointerEnd);
 
-    // Annuler le clic sur les boutons enfants en cas de drag
-    island.addEventListener('click', (e) => {
-        if (hasMoved) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    }, true);
-
-    // Ajuster si la fenêtre est redimensionnée
+    // Adapt on window resize
     window.addEventListener('resize', () => {
-        if (island.style.left && island.style.top) {
-            const currentLeft = parseFloat(island.style.left);
-            const currentTop = parseFloat(island.style.top);
-            if (!isNaN(currentLeft) && !isNaN(currentTop)) {
-                const clamped = clampPosition(currentLeft, currentTop);
-                island.style.left = `${clamped.x}px`;
-                island.style.top = `${clamped.y}px`;
-                npSmartPositionPanel();
+        if (panel.classList.contains('open')) {
+            if (npPanelCustomPos) {
+                const clamped = clampPosition(npPanelCustomPos.x, npPanelCustomPos.y);
+                panel.style.left = `${clamped.x}px`;
+                panel.style.top = `${clamped.y}px`;
+            } else {
+                npPositionDefault();
             }
         }
     });
@@ -5633,11 +5628,11 @@ function initDraggableIsland() {
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         npInitWidget();
-        initDraggableIsland();
+        initDraggableNpPanel();
     });
 } else {
     npInitWidget();
-    initDraggableIsland();
+    initDraggableNpPanel();
 }
 
 /* ==========================================================================
