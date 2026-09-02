@@ -2399,7 +2399,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                     </div>
                     <div class="flex items-center gap-2 text-[10px] text-white/40 uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full" id="lab-count-badge">
                         <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span>
-                        <span id="lab-tracks-count">2 Pistes Studio</span>
+                        <span id="lab-tracks-count">7 Pistes Studio</span>
                     </div>
                 </div>
 
@@ -2409,14 +2409,54 @@ body.light-mode .apple-menu-item { color: #222222; }
                     <div class="flex items-center gap-2 overflow-x-auto hide-scroll pb-1 sm:pb-0" id="lab-filter-pills">
                         <button type="button" class="lab-filter-pill active" data-genre="all" onclick="setLabFilter('all', this)">
                             <span>Tous</span>
-                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full" id="lab-badge-all">2</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full" id="lab-badge-all">7</span>
                         </button>
-                        <button type="button" class="lab-filter-pill" data-genre="ambient" onclick="setLabFilter('ambient', this)">
-                            <span>Ambient</span>
+                        <button type="button" class="lab-filter-pill" data-genre="drum and bass" onclick="setLabFilter('drum and bass', this)">
+                            <span>Drum and Bass</span>
                             <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="guitare" onclick="setLabFilter('guitare', this)">
+                            <span>Guitare</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">2</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="synthés" onclick="setLabFilter('synthés', this)">
+                            <span>Synthés</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">3</span>
                         </button>
                         <button type="button" class="lab-filter-pill" data-genre="trap" onclick="setLabFilter('trap', this)">
                             <span>Trap</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">2</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="electronique" onclick="setLabFilter('electronique', this)">
+                            <span>Electronique</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">2</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="jungle" onclick="setLabFilter('jungle', this)">
+                            <span>Jungle</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="arpèges" onclick="setLabFilter('arpèges', this)">
+                            <span>Arpèges</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">2</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="voice" onclick="setLabFilter('voice', this)">
+                            <span>Voice</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="remix" onclick="setLabFilter('remix', this)">
+                            <span>Remix</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="sample" onclick="setLabFilter('sample', this)">
+                            <span>Sample</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="analogique" onclick="setLabFilter('analogique', this)">
+                            <span>Analogique</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="ambient" onclick="setLabFilter('ambient', this)">
+                            <span>Ambient</span>
                             <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
                         </button>
                         <button type="button" class="lab-filter-pill" data-genre="pop" onclick="setLabFilter('pop', this)">
@@ -2438,7 +2478,183 @@ body.light-mode .apple-menu-item { color: #222222; }
                 
                 <!-- TRACKS LIST -->
                 <div class="space-y-3" id="lab-tracks-list">
-                    <!-- 1. rover.mp3 -->
+                    <!-- 1. ifmemorieswasdrumandbass.mp3 -->
+                    <div class="lab-row group" id="lab-row-ifmemorieswasdrumandbass" data-genres="sample drum and bass dnb guitare" data-desc="Sample de guitare organique sculpté sur des breaks drum and bass tranchants et dynamiques." data-title="ifmemorieswasdrumandbass.mp3 ifmemorieswasdrumandbass.wav">
+                        <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <button type="button" class="lab-play-btn touch-manipulation mt-0.5 sm:mt-0" onclick="toggleWaveSurfer('ifmemorieswasdrumandbass')" title="Écouter / Pause (ifmemorieswasdrumandbass.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">ifmemorieswasdrumandbass.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-ifmemorieswasdrumandbass">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('sample')" title="Filtrer par Sample">#Sample</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('drum and bass')" title="Filtrer par Drum and Bass">#Drum and Bass</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('guitare')" title="Filtrer par Guitare">#Guitare</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Sample de guitare organique sculpté sur des breaks drum and bass tranchants et dynamiques.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-ifmemorieswasdrumandbass">00:00 / --:--</span>
+                            </div>
+                        </div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-ifmemorieswasdrumandbass" class="w-full cursor-crosshair"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. alwaysthinking.mp3 -->
+                    <div class="lab-row group" id="lab-row-alwaysthinking" data-genres="voice synthés synthe analogique" data-desc="Découpes vocales spatialisées, nappes de synthés planantes et traitement analogique chaleureux." data-title="alwaysthinking.mp3 alwaysthinking.wav">
+                        <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <button type="button" class="lab-play-btn touch-manipulation mt-0.5 sm:mt-0" onclick="toggleWaveSurfer('alwaysthinking')" title="Écouter / Pause (alwaysthinking.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">alwaysthinking.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-alwaysthinking">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('voice')" title="Filtrer par Voice">#Voice</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('synthés')" title="Filtrer par Synthés">#Synthés</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('analogique')" title="Filtrer par Analogique">#Analogique</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Découpes vocales spatialisées, nappes de synthés planantes et traitement analogique chaleureux.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-alwaysthinking">00:00 / --:--</span>
+                            </div>
+                        </div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-alwaysthinking" class="w-full cursor-crosshair"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. 2bad.mp3 -->
+                    <div class="lab-row group" id="lab-row-2bad" data-genres="guitare arpèges synthe synthés trap" data-desc="Arpèges de guitare mélancoliques couplés à des synthés sombres et une rythmique trap percutante." data-title="2bad.mp3 2bad.wav">
+                        <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <button type="button" class="lab-play-btn touch-manipulation mt-0.5 sm:mt-0" onclick="toggleWaveSurfer('2bad')" title="Écouter / Pause (2bad.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">2bad.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-2bad">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('guitare')" title="Filtrer par Guitare">#Guitare</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('arpèges')" title="Filtrer par Arpèges">#Arpèges</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('synthés')" title="Filtrer par Synthés">#Synthés</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('trap')" title="Filtrer par Trap">#Trap</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Arpèges de guitare mélancoliques couplés à des synthés sombres et une rythmique trap percutante.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-2bad">00:00 / --:--</span>
+                            </div>
+                        </div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-2bad" class="w-full cursor-crosshair"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. issues.mp3 -->
+                    <div class="lab-row group" id="lab-row-issues" data-genres="remix electronique jungle" data-desc="Remix électronique aux cadences jungle survitaminées, sub-basses rugueuses et cuts précis." data-title="issues.mp3 issues.wav">
+                        <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <button type="button" class="lab-play-btn touch-manipulation mt-0.5 sm:mt-0" onclick="toggleWaveSurfer('issues')" title="Écouter / Pause (issues.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">issues.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-issues">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('remix')" title="Filtrer par Remix">#Remix</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('electronique')" title="Filtrer par Electronique">#Electronique</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('jungle')" title="Filtrer par Jungle">#Jungle</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Remix électronique aux cadences jungle survitaminées, sub-basses rugueuses et cuts précis.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-issues">00:00 / --:--</span>
+                            </div>
+                        </div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-issues" class="w-full cursor-crosshair"></div>
+                        </div>
+                    </div>
+
+                    <!-- 5. unknown.mp3 -->
+                    <div class="lab-row group" id="lab-row-unknown" data-genres="arpèges synthe synthés electronique" data-desc="Évolution d'arpèges électroniques modulaires, sound design aérien et textures synthétiques." data-title="unknown.mp3 unknown.wav">
+                        <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <button type="button" class="lab-play-btn touch-manipulation mt-0.5 sm:mt-0" onclick="toggleWaveSurfer('unknown')" title="Écouter / Pause (unknown.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">unknown.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-unknown">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('arpèges')" title="Filtrer par Arpèges">#Arpèges</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('synthés')" title="Filtrer par Synthés">#Synthés</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('electronique')" title="Filtrer par Electronique">#Electronique</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Évolution d'arpèges électroniques modulaires, sound design aérien et textures synthétiques.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-unknown">00:00 / --:--</span>
+                            </div>
+                        </div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-unknown" class="w-full cursor-crosshair"></div>
+                        </div>
+                    </div>
+
+                    <!-- 6. rover.mp3 -->
                     <div class="lab-row group" id="lab-row-rover" data-genres="ambient trap" data-desc="Texture spatiale planante, nappes éthérées et sub-bass trap percutante." data-title="rover.mp3">
                         <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
                             <div class="flex items-start sm:items-center gap-4">
@@ -2455,7 +2671,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-eq-bar bar-3"></span>
                                             <span class="lab-eq-bar bar-4"></span>
                                         </div>
-                                        <div class="flex items-center gap-1.5">
+                                        <div class="flex items-center gap-1.5 flex-wrap">
                                             <span class="lab-tag-badge" onclick="filterLabByTag('ambient')" title="Filtrer par Ambient">#Ambient</span>
                                             <span class="lab-tag-badge" onclick="filterLabByTag('trap')" title="Filtrer par Trap">#Trap</span>
                                         </div>
@@ -2472,7 +2688,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                         </div>
                     </div>
 
-                    <!-- 2. wordsnight.mp3 -->
+                    <!-- 7. wordsnight.mp3 -->
                     <div class="lab-row group" id="lab-row-wordsnight" data-genres="pop lo-fi" data-desc="Mélodie pop nocturne chaleureuse aux accords feutrés et drum kit lo-fi." data-title="wordsnight.mp3">
                         <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
                             <div class="flex items-start sm:items-center gap-4">
@@ -2489,7 +2705,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-eq-bar bar-3"></span>
                                             <span class="lab-eq-bar bar-4"></span>
                                         </div>
-                                        <div class="flex items-center gap-1.5">
+                                        <div class="flex items-center gap-1.5 flex-wrap">
                                             <span class="lab-tag-badge" onclick="filterLabByTag('pop')" title="Filtrer par Pop">#Pop</span>
                                             <span class="lab-tag-badge" onclick="filterLabByTag('lo-fi')" title="Filtrer par Lo-fi">#Lo-fi</span>
                                         </div>
@@ -3251,6 +3467,41 @@ body.light-mode .apple-menu-item { color: #222222; }
 
         // --- 2. LAB RECORDER LOGIC (JUICY ANIME.JS V4 + TAGS / GENRES / SEARCH) ---
         const labTracks = [
+            { 
+                id: 'ifmemorieswasdrumandbass', 
+                title: 'ifmemorieswasdrumandbass.mp3', 
+                url: 'ifmemorieswasdrumandbass.mp3', 
+                genres: ['sample', 'drum and bass', 'dnb', 'guitare'], 
+                desc: 'Sample de guitare organique sculpté sur des breaks drum and bass tranchants et dynamiques.' 
+            },
+            { 
+                id: 'alwaysthinking', 
+                title: 'alwaysthinking.mp3', 
+                url: 'alwaysthinking.mp3', 
+                genres: ['voice', 'synthés', 'synthe', 'analogique'], 
+                desc: 'Découpes vocales spatialisées, nappes de synthés planantes et traitement analogique chaleureux.' 
+            },
+            { 
+                id: '2bad', 
+                title: '2bad.mp3', 
+                url: '2bad.mp3', 
+                genres: ['guitare', 'arpèges', 'synthe', 'synthés', 'trap'], 
+                desc: 'Arpèges de guitare mélancoliques couplés à des synthés sombres et une rythmique trap percutante.' 
+            },
+            { 
+                id: 'issues', 
+                title: 'issues.mp3', 
+                url: 'issues.mp3', 
+                genres: ['remix', 'electronique', 'jungle'], 
+                desc: 'Remix électronique aux cadences jungle survitaminées, sub-basses rugueuses et cuts précis.' 
+            },
+            { 
+                id: 'unknown', 
+                title: 'unknown.mp3', 
+                url: 'unknown.mp3', 
+                genres: ['arpèges', 'synthe', 'synthés', 'electronique'], 
+                desc: 'Évolution d\'arpèges électroniques modulaires, sound design aérien et textures synthétiques.' 
+            },
             { 
                 id: 'rover', 
                 title: 'rover.mp3', 
