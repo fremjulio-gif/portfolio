@@ -925,67 +925,81 @@ body.light-mode .apple-menu-item { color: #222222; }
             transform: translateY(0) !important;
         }
 
-        /* Lab Filter Pills & Tag System */
+        /* Lab Filter Pills & Tag System (Haute Lisibilité & 100% Homogène 1-Ligne) */
         .lab-filter-pill {
-            padding: 5px 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 13px;
             font-size: 11px;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            flex-shrink: 0;
+            line-height: 1;
             border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.88);
             cursor: pointer;
             user-select: none;
             touch-action: manipulation;
-            transition: all 0.25s var(--ease-apple);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            transition: all 0.2s var(--ease-apple);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
         }
         @media (hover: hover) {
             .lab-filter-pill:hover {
-                background: rgba(255, 255, 255, 0.08);
-                color: #fff;
-                border-color: rgba(255, 255, 255, 0.22);
+                background: rgba(255, 255, 255, 0.15);
+                color: #ffffff;
+                border-color: rgba(255, 255, 255, 0.3);
                 transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
             }
         }
         .lab-filter-pill.active {
-            background: color-mix(in srgb, var(--accent-color) 18%, rgba(255, 255, 255, 0.06));
+            background: color-mix(in srgb, var(--accent-color) 25%, rgba(255, 255, 255, 0.1));
             border-color: var(--accent-color);
             color: var(--accent-color);
-            box-shadow: 0 0 16px -4px color-mix(in srgb, var(--accent-color) 40%, transparent);
+            box-shadow: 0 0 16px -2px color-mix(in srgb, var(--accent-color) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             font-weight: 700;
         }
 
         .lab-tag-badge {
             display: inline-flex;
             align-items: center;
-            padding: 2px 7px;
+            justify-content: center;
+            padding: 3px 8px;
             border-radius: 6px;
-            font-size: 10px;
+            font-size: 10.5px;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+            line-height: 1.2;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.88);
             cursor: pointer;
             transition: all 0.2s var(--ease-apple);
         }
         @media (hover: hover) {
             .lab-tag-badge:hover {
-                background: color-mix(in srgb, var(--accent-color) 25%, rgba(255, 255, 255, 0.1));
+                background: color-mix(in srgb, var(--accent-color) 30%, rgba(255, 255, 255, 0.15));
                 border-color: var(--accent-color);
                 color: var(--accent-color);
-                transform: scale(1.06);
+                transform: scale(1.05);
+                box-shadow: 0 0 10px -2px color-mix(in srgb, var(--accent-color) 40%, transparent);
             }
         }
         .lab-tag-badge.active-filter {
             background: var(--accent-color);
-            color: #000 !important;
+            color: #000000 !important;
             border-color: var(--accent-color);
-            font-weight: bold;
+            font-weight: 700;
+            box-shadow: 0 0 12px -2px var(--accent-color);
         }
 
         .lab-search-input {
@@ -1824,11 +1838,11 @@ body.light-mode .apple-menu-item { color: #222222; }
 
             <!-- WIDGET NOW PLAYING (LECTEUR & VISUALISEUR GLOBAL DU SITE) -->
             <div id="now-playing-widget" class="relative" data-source="soundcloud">
-                <div id="np-trigger" onclick="npTogglePanel()" title="Now Playing · Lecteur Global du Site" class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center gap-1.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-pointer hover:bg-white/10 hover:border-white/20 transition min-w-[36px] h-[28px]">
-                    <div id="np-trigger-square" class="w-3.5 h-3.5 rounded-[4px] bg-white/10 border border-white/20 flex items-center justify-center transition-all duration-300">
-                        <span id="np-trigger-icon" class="text-[9px] leading-none text-[var(--accent-color)] font-mono">♪</span>
+                <div id="np-trigger" onclick="npTogglePanel(event)" title="Now Playing · Lecteur Global du Site" class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center gap-1.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-pointer hover:bg-white/10 hover:border-white/20 transition min-w-[36px] h-[28px] touch-manipulation select-none">
+                    <div id="np-trigger-square" class="w-3.5 h-3.5 rounded-[4px] bg-white/10 border border-white/20 flex items-center justify-center transition-all duration-300 pointer-events-none">
+                        <span id="np-trigger-icon" class="text-[9px] leading-none text-[var(--accent-color)] font-mono pointer-events-none">♪</span>
                     </div>
-                    <div id="np-spectrum" class="hidden items-end gap-[2px] h-3.5 w-4">
+                    <div id="np-spectrum" class="hidden items-end gap-[2px] h-3.5 w-4 pointer-events-none">
                         <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 4px;"></span>
                         <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 8px;"></span>
                         <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 12px;"></span>
@@ -6468,6 +6482,7 @@ let npAnimFrame = null;
 let scWidget = null;
 let npSpectrumPhase = 0;
 let npPanelCustomPos = null;
+let npPanelIsOpen = false;
 
 function npFormatTime(seconds) {
     if (isNaN(seconds) || seconds < 0) return "0:00";
@@ -6525,6 +6540,18 @@ function npOpenPanel() {
         panel.style.bottom = 'auto';
     }
 
+    npPanelIsOpen = true;
+
+    if (!npPanelCustomPos) {
+        npPositionDefault();
+    } else {
+        const clamped = npClampPosition(npPanelCustomPos.x, npPanelCustomPos.y);
+        panel.style.left = `${clamped.x}px`;
+        panel.style.top = `${clamped.y}px`;
+        panel.style.right = 'auto';
+        panel.style.bottom = 'auto';
+    }
+
     panel.classList.add('open');
     panel.style.display = 'block';
     panel.style.pointerEvents = 'auto';
@@ -6536,7 +6563,7 @@ function npOpenPanel() {
         a.animate(panel, {
             scale: [0.92, 1],
             opacity: [0, 1],
-            duration: 280,
+            duration: 250,
             ease: 'outCubic'
         });
     } else {
@@ -6548,41 +6575,48 @@ function npOpenPanel() {
 function npClosePanel() {
     const panel = document.getElementById('np-panel');
     if (!panel) return;
-    if (!panel.classList.contains('open') && panel.style.display === 'none') return;
+
+    npPanelIsOpen = false;
 
     const a = typeof window.anime !== 'undefined' ? window.anime : null;
     if (a && typeof a.remove === 'function') a.remove(panel);
 
     const cleanup = () => {
-        panel.classList.remove('open');
-        panel.style.display = 'none';
-        panel.style.opacity = '';
-        panel.style.transform = '';
-        panel.style.pointerEvents = 'none';
+        if (!npPanelIsOpen) {
+            panel.classList.remove('open');
+            panel.style.display = 'none';
+            panel.style.opacity = '';
+            panel.style.transform = '';
+            panel.style.pointerEvents = 'none';
+        }
     };
 
     if (a && typeof a.animate === 'function') {
         const animInstance = a.animate(panel, {
             scale: [1, 0.92],
             opacity: [1, 0],
-            duration: 170,
+            duration: 150,
             ease: 'inQuad'
         });
         if (animInstance && animInstance.then) {
             animInstance.then(cleanup);
         } else {
-            setTimeout(cleanup, 175);
+            setTimeout(cleanup, 155);
         }
     } else {
         cleanup();
     }
 }
 
-function npTogglePanel() {
+function npTogglePanel(e) {
+    if (e) {
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+    }
     const panel = document.getElementById('np-panel');
     if (!panel) return;
-    const isVisible = panel.classList.contains('open') && panel.style.display !== 'none' && panel.style.opacity !== '0';
-    if (isVisible) {
+
+    if (npPanelIsOpen) {
         npClosePanel();
     } else {
         npOpenPanel();
@@ -6911,9 +6945,12 @@ window.npSeek = npSeek;
 
 // Fermeture au clic extérieur et touche Échap
 document.addEventListener('click', (e) => {
-    const widget = document.getElementById('now-playing-widget');
-    if (widget && !widget.contains(e.target) && !e.target.closest('#now-playing-island')) {
-        npClosePanel();
+    const panel = document.getElementById('np-panel');
+    const trigger = document.getElementById('np-trigger');
+    if (panel && npPanelIsOpen) {
+        if (!panel.contains(e.target) && !trigger.contains(e.target)) {
+            npClosePanel();
+        }
     }
     const projectModal = document.getElementById('project-detail-modal');
     if (projectModal && !projectModal.classList.contains('pointer-events-none') && e.target === projectModal) {
