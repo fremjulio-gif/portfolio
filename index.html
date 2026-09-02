@@ -1574,7 +1574,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: transform 0.25s var(--ease-apple), background-color 0.25s var(--ease-apple), border-color 0.25s var(--ease-apple);
+            transition: transform 0.25s var(--ease-apple), background-color 0.25s var(--ease-apple), border-color 0.25s var(--ease-apple), box-shadow 0.25s ease;
             cursor: pointer;
             min-height: 22px;
         }
@@ -1589,7 +1589,33 @@ body.light-mode .apple-menu-item { color: #222222; }
             transform: scale(0.97);
         }
 
-        #now-playing-widget.playing #np-icon-note {
+        #now-playing-widget[data-source="lab"] #np-trigger {
+            border-color: rgba(59, 130, 246, 0.5);
+            background: rgba(59, 130, 246, 0.15);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+        }
+        #now-playing-widget[data-source="explore"] #np-trigger {
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.15);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+        }
+        #now-playing-widget[data-source="session"] #np-trigger {
+            border-color: rgba(249, 115, 22, 0.5);
+            background: rgba(249, 115, 22, 0.15);
+            box-shadow: 0 0 12px rgba(249, 115, 22, 0.3);
+        }
+        #now-playing-widget[data-source="sequencer"] #np-trigger {
+            border-color: rgba(234, 179, 8, 0.5);
+            background: rgba(234, 179, 8, 0.15);
+            box-shadow: 0 0 12px rgba(234, 179, 8, 0.3);
+        }
+        #now-playing-widget[data-source="soundcloud"] #np-trigger {
+            border-color: rgba(255, 85, 0, 0.5);
+            background: rgba(255, 85, 0, 0.15);
+            box-shadow: 0 0 12px rgba(255, 85, 0, 0.3);
+        }
+
+        #now-playing-widget.playing #np-trigger-square {
             display: none !important;
         }
         #now-playing-widget.playing #np-spectrum {
@@ -1610,8 +1636,8 @@ body.light-mode .apple-menu-item { color: #222222; }
         #np-panel {
             display: none;
             position: fixed;
-            width: 290px;
-            background: rgba(18, 18, 20, 0.92);
+            width: 295px;
+            background: rgba(18, 18, 20, 0.94);
             backdrop-filter: blur(35px) saturate(170%);
             -webkit-backdrop-filter: blur(35px) saturate(170%);
             border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
@@ -1624,14 +1650,15 @@ body.light-mode .apple-menu-item { color: #222222; }
             -webkit-user-select: none;
             touch-action: none;
             cursor: grab;
-            transition: box-shadow 0.25s var(--ease-apple);
+            transition: box-shadow 0.25s var(--ease-apple), border-color 0.25s ease;
         }
 
         #np-panel.is-dragging {
             cursor: grabbing !important;
             transition: none !important;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 35px var(--accent-color, rgba(34, 197, 94, 0.4)) !important;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 35px var(--np-active-color, var(--accent-color)) !important;
             z-index: 99999 !important;
+            transform: scale(1.015);
         }
 
         @media (max-width: 640px) {
@@ -1645,23 +1672,23 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
 
         .np-bar {
-            transition: height 0.08s ease;
+            transition: height 0.08s ease, background-color 0.25s ease;
             will-change: height;
         }
 
         #np-play {
-            background-color: var(--accent-color) !important;
+            background-color: var(--np-active-color, var(--accent-color)) !important;
             color: #000000 !important;
-            transition: transform 0.25s var(--ease-apple), box-shadow 0.25s var(--ease-apple);
+            transition: transform 0.25s var(--ease-apple), box-shadow 0.25s var(--ease-apple), background-color 0.25s ease;
         }
         @media (hover: hover) {
             #np-play:hover {
-                transform: scale(1.02);
-                box-shadow: 0 0 15px var(--accent-color);
+                transform: scale(1.04);
+                box-shadow: 0 0 20px var(--np-active-color, var(--accent-color));
             }
         }
         #np-play:active {
-            transform: scale(0.97) !important;
+            transform: scale(0.96) !important;
         }
 
     </style>
@@ -1738,13 +1765,11 @@ body.light-mode .apple-menu-item { color: #222222; }
 
             <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
 
-            <!-- WIDGET NOW PLAYING (SOUNDCLOUD SHUFFLE) -->
-            <div id="now-playing-widget" class="relative">
-                <div id="np-trigger" onclick="npTogglePanel()" title="Now Playing (SoundCloud)" class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center gap-1.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-pointer hover:bg-white/10 hover:border-white/20 transition min-w-[36px] h-[28px]">
-                    <div id="np-icon-note" class="text-white/85 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5 text-[var(--accent-color)]" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                        </svg>
+            <!-- WIDGET NOW PLAYING (LECTEUR & VISUALISEUR GLOBAL DU SITE) -->
+            <div id="now-playing-widget" class="relative" data-source="soundcloud">
+                <div id="np-trigger" onclick="npTogglePanel()" title="Now Playing · Lecteur Global du Site" class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center gap-1.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-pointer hover:bg-white/10 hover:border-white/20 transition min-w-[36px] h-[28px]">
+                    <div id="np-trigger-square" class="w-3.5 h-3.5 rounded-[4px] bg-white/10 border border-white/20 flex items-center justify-center transition-all duration-300">
+                        <span id="np-trigger-icon" class="text-[9px] leading-none text-[var(--accent-color)] font-mono">♪</span>
                     </div>
                     <div id="np-spectrum" class="hidden items-end gap-[2px] h-3.5 w-4">
                         <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 4px;"></span>
@@ -1757,26 +1782,30 @@ body.light-mode .apple-menu-item { color: #222222; }
                     </div>
                 </div>
 
-                <div id="np-panel" title="Glisser pour déplacer le lecteur">
+                <div id="np-panel" title="Glisser pour déplacer le lecteur sur l'écran">
                     <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3 cursor-grab select-none">
-                        <span class="np-head-label font-mono text-[10px] uppercase tracking-widest text-white/70 flex items-center gap-1.5 pointer-events-none">
-                            <span class="np-dot w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span> Now Playing
-                            <span class="text-[9px] text-white/30 font-normal ml-1">⋮⋮</span>
-                        </span>
-                        <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
+                        <div class="flex items-center gap-2 pointer-events-none">
+                            <span class="np-dot w-2 h-2 rounded-full bg-[var(--accent-color)] shadow-[0_0_8px_var(--accent-color)]"></span>
+                            <span id="np-source-badge" class="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-white/15 bg-white/5 text-white/90 font-bold transition-all duration-300">SOUNDCLOUD</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] text-white/30 font-mono tracking-widest select-none pointer-events-none">DRAG ⋮⋮</span>
+                            <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
 
                     <div class="np-body flex items-center gap-3 mb-3">
-                        <div id="np-art" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner">
-                            <span class="np-art-glyph font-mono text-lg text-[var(--accent-color)]">♪</span>
+                        <!-- CARRÉ DE COULEUR / FOND / COVER DU LECTEUR GLOBAL -->
+                        <div id="np-art" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner transition-all duration-300 relative">
+                            <span id="np-art-glyph" class="font-mono text-lg text-[var(--accent-color)]">♪</span>
                         </div>
                         <div id="np-info" class="flex-1 min-w-0">
                             <div id="np-title" class="font-bold text-xs truncate text-white" title="—">—</div>
-                            <div id="np-sub" class="text-[10px] text-white/40 truncate font-light mt-0.5">SoundCloud · shuffle</div>
+                            <div id="np-sub" class="text-[10px] text-white/50 truncate font-light mt-0.5">SoundCloud · shuffle</div>
                         </div>
                     </div>
 
@@ -1784,13 +1813,13 @@ body.light-mode .apple-menu-item { color: #222222; }
                         <div id="np-progress" class="h-full bg-[var(--accent-color)] rounded-full transition-all duration-100" style="width: 0%;"></div>
                     </div>
 
-                    <div id="np-times" class="flex justify-between font-mono text-[9px] text-white/40 mb-3">
+                    <div id="np-times" class="flex justify-between font-mono text-[9px] text-white/40 mb-3 tabular-nums">
                         <span id="np-time-cur">0:00</span>
                         <span id="np-time-tot">0:00</span>
                     </div>
 
                     <div id="np-controls" class="flex items-center justify-center gap-4">
-                        <div id="np-prev" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(true)" title="Précédent (Aléatoire)">
+                        <div id="np-prev" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(true)" title="Précédent">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
                             </svg>
@@ -1803,7 +1832,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                 <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                             </svg>
                         </button>
-                        <div id="np-next" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(false)" title="Suivant (Aléatoire)">
+                        <div id="np-next" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(false)" title="Suivant">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
                             </svg>
@@ -3599,6 +3628,9 @@ body.light-mode .apple-menu-item { color: #222222; }
                             const dur = ws.getDuration() || 0;
                             timeDisp.textContent = `${formatLabTime(currentTime)} / ${formatLabTime(dur)}`;
                         }
+                        if (typeof updateGlobalAudioProgress === 'function') {
+                            updateGlobalAudioProgress('lab', currentTime, ws.getDuration() || 0, track.id);
+                        }
                     });
 
                     // Interaction tactile / scrubbing sur la waveform
@@ -3624,6 +3656,9 @@ body.light-mode .apple-menu-item { color: #222222; }
                                 ease: 'outQuad'
                             });
                         }
+                        if (typeof updateGlobalAudioProgress === 'function') {
+                            updateGlobalAudioProgress('lab', currentTime, ws.getDuration() || 0, track.id);
+                        }
                     });
 
                     // Événements de lecture
@@ -3635,14 +3670,32 @@ body.light-mode .apple-menu-item { color: #222222; }
                             }
                         });
                         updateLabUI(track.id, true);
+                        if (typeof setGlobalNowPlaying === 'function') {
+                            setGlobalNowPlaying('lab', {
+                                id: track.id,
+                                title: track.title,
+                                sub: 'Lab_Record.sh · ' + track.genres.join(' · '),
+                                ws: ws,
+                                duration: ws.getDuration()
+                            });
+                        }
                     });
 
-                    ws.on('pause', () => updateLabUI(track.id, false));
+                    ws.on('pause', () => {
+                        updateLabUI(track.id, false);
+                        if (typeof setGlobalAudioPaused === 'function') {
+                            setGlobalAudioPaused('lab', track.id);
+                        }
+                    });
+
                     ws.on('finish', () => {
                         updateLabUI(track.id, false);
                         const timeDisp = document.getElementById(`lab-time-${track.id}`);
                         if (timeDisp) {
                             timeDisp.textContent = `00:00 / ${formatLabTime(ws.getDuration())}`;
+                        }
+                        if (typeof setGlobalAudioPaused === 'function') {
+                            setGlobalAudioPaused('lab', track.id);
                         }
                     });
                 });
@@ -4198,10 +4251,20 @@ body.light-mode .apple-menu-item { color: #222222; }
                 if(led) { led.classList.remove('bg-red-900'); led.classList.add('bg-red-500', 'animate-pulse'); }
                 if(audioCtx.state==='suspended')audioCtx.resume(); 
                 intervalId = setInterval(nextStep, (60/bpm)*1000/4); 
+                if (typeof setGlobalNowPlaying === 'function') {
+                    setGlobalNowPlaying('sequencer', {
+                        id: 'sequencer-vst',
+                        title: 'TR-808 Pattern & Performance Matrix',
+                        sub: `Sequencer.vst · ${bpm} BPM Drum Machine`
+                    });
+                }
             } else { 
                 if(btn) btn.classList.remove('playing'); 
                 if(led) { led.classList.add('bg-red-900'); led.classList.remove('bg-red-500', 'animate-pulse'); }
                 clearInterval(intervalId); resetVisuals(); currentStep = 0; 
+                if (typeof setGlobalAudioPaused === 'function') {
+                    setGlobalAudioPaused('sequencer', 'sequencer-vst');
+                }
             } 
         }
 
@@ -4790,6 +4853,36 @@ body.light-mode .apple-menu-item { color: #222222; }
                     <video id="pm-active-video" src="${project.mediaSrc}" controls autoplay playsinline class="w-full h-full object-contain absolute inset-0 bg-black rounded-2xl"></video>
                 `;
                 if (formatEl) formatEl.textContent = 'DIRECT VIDEO STREAM // 48kHz 24-bit';
+                
+                const vid = document.getElementById('pm-active-video');
+                if (vid) {
+                    vid.addEventListener('play', () => {
+                        if (typeof setGlobalNowPlaying === 'function') {
+                            setGlobalNowPlaying('explore', {
+                                id: project.id,
+                                title: project.title,
+                                sub: 'Explorer.prproj · ' + project.category,
+                                media: vid,
+                                duration: vid.duration || 0
+                            });
+                        }
+                    });
+                    vid.addEventListener('timeupdate', () => {
+                        if (typeof updateGlobalAudioProgress === 'function') {
+                            updateGlobalAudioProgress('explore', vid.currentTime, vid.duration || 0, project.id);
+                        }
+                    });
+                    vid.addEventListener('pause', () => {
+                        if (typeof setGlobalAudioPaused === 'function') {
+                            setGlobalAudioPaused('explore', project.id);
+                        }
+                    });
+                    vid.addEventListener('ended', () => {
+                        if (typeof setGlobalAudioPaused === 'function') {
+                            setGlobalAudioPaused('explore', project.id);
+                        }
+                    });
+                }
             } else if (project.mediaType === 'soundcloud') {
                 frame.innerHTML = `
                     <iframe class="w-full h-full border-0 absolute inset-0 rounded-2xl" 
@@ -4824,6 +4917,18 @@ body.light-mode .apple-menu-item { color: #222222; }
 
                 const audio = document.getElementById('pm-active-audio');
                 if (audio) {
+                    audio.addEventListener('play', () => {
+                        if (typeof setGlobalNowPlaying === 'function') {
+                            setGlobalNowPlaying('explore', {
+                                id: project.id,
+                                title: project.title,
+                                sub: 'Explorer.prproj · ' + project.category,
+                                media: audio,
+                                duration: audio.duration || 0,
+                                artUrl: project.previewImg
+                            });
+                        }
+                    });
                     audio.addEventListener('timeupdate', () => {
                         const cur = document.getElementById('pm-audio-cur');
                         const dur = document.getElementById('pm-audio-dur');
@@ -4831,6 +4936,14 @@ body.light-mode .apple-menu-item { color: #222222; }
                         if (cur) cur.textContent = formatTime(audio.currentTime);
                         if (dur && audio.duration) dur.textContent = formatTime(audio.duration);
                         if (bar && audio.duration) bar.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
+                        if (typeof updateGlobalAudioProgress === 'function') {
+                            updateGlobalAudioProgress('explore', audio.currentTime, audio.duration || 0, project.id);
+                        }
+                    });
+                    audio.addEventListener('pause', () => {
+                        if (typeof setGlobalAudioPaused === 'function') {
+                            setGlobalAudioPaused('explore', project.id);
+                        }
                     });
                     audio.addEventListener('ended', () => {
                         const iconPlay = document.getElementById('pm-audio-icon-play');
@@ -4838,6 +4951,9 @@ body.light-mode .apple-menu-item { color: #222222; }
                         if (iconPlay && iconPause) {
                             iconPlay.classList.remove('hidden');
                             iconPause.classList.add('hidden');
+                        }
+                        if (typeof setGlobalAudioPaused === 'function') {
+                            setGlobalAudioPaused('explore', project.id);
                         }
                     });
                     audio.play().then(() => {
@@ -5124,6 +5240,15 @@ body.light-mode .apple-menu-item { color: #222222; }
             document.getElementById('ptx-play-icon').innerText = "❚❚";
             ptxAnimFrame = requestAnimationFrame(updatePtxUI);
             
+            if (typeof setGlobalNowPlaying === 'function') {
+                setGlobalNowPlaying('session', {
+                    id: 'session-ptx',
+                    title: 'Court-Métrage (Session 5 Stems)',
+                    sub: 'Session.ptx · 48kHz / 24-bit Multi-Track',
+                    duration: ptxDuration
+                });
+            }
+
             ptxTracks.dx.source.onended = () => {
                 if(audioCtx.currentTime - ptxStartTime + ptxOffset >= ptxDuration) {
                     stopPtxAudio();
@@ -5148,6 +5273,9 @@ body.light-mode .apple-menu-item { color: #222222; }
             document.getElementById('ptx-play-text').innerText = "PLAY SESSION";
             document.getElementById('ptx-play-icon').innerText = "▶";
             ptxIsPlaying = false;
+            if (typeof setGlobalAudioPaused === 'function') {
+                setGlobalAudioPaused('session', 'session-ptx');
+            }
         }
 
         function togglePtxPlay() {
@@ -5221,6 +5349,9 @@ body.light-mode .apple-menu-item { color: #222222; }
             if (!ptxIsPlaying) return;
             const current = ptxOffset + (audioCtx.currentTime - ptxStartTime);
             updatePtxVisuals(current);
+            if (typeof updateGlobalAudioProgress === 'function') {
+                updateGlobalAudioProgress('session', current, ptxDuration, 'session-ptx');
+            }
             if (current < ptxDuration) ptxAnimFrame = requestAnimationFrame(updatePtxUI);
         }
 
@@ -6120,9 +6251,62 @@ function initHudScrollWaveform() {
     requestAnimationFrame(renderWaveform);
 }
 
-// ========================================================
-// --- NOW PLAYING SOUNDCLOUD SHUFFLE CONTROLLER (API) ---
-// ========================================================
+// ==========================================================================
+// 🎛️ GLOBAL NOW PLAYING & MULTI-SOURCE AUDIO VISUALIZER (JULES FREMONDIERE)
+// ==========================================================================
+const AUDIO_SOURCES_CONFIG = {
+    lab: {
+        id: 'lab',
+        label: 'LAB_RECORD.SH',
+        color: '#3b82f6',
+        colorLight: '#60a5fa',
+        bgGrad: 'linear-gradient(135deg, rgba(59, 130, 246, 0.45) 0%, rgba(29, 78, 216, 0.2) 100%)',
+        borderColor: 'rgba(59, 130, 246, 0.65)',
+        glow: '0 0 25px rgba(59, 130, 246, 0.5)',
+        icon: `<svg class="w-6 h-6 text-blue-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`
+    },
+    explore: {
+        id: 'explore',
+        label: 'EXPLORER.PRPROJ',
+        color: '#ef4444',
+        colorLight: '#f87171',
+        bgGrad: 'linear-gradient(135deg, rgba(239, 68, 68, 0.45) 0%, rgba(185, 28, 28, 0.2) 100%)',
+        borderColor: 'rgba(239, 68, 68, 0.65)',
+        glow: '0 0 25px rgba(239, 68, 68, 0.5)',
+        icon: `<svg class="w-6 h-6 text-red-400" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>`
+    },
+    session: {
+        id: 'session',
+        label: 'SESSION.PTX',
+        color: '#f97316',
+        colorLight: '#fb923c',
+        bgGrad: 'linear-gradient(135deg, rgba(249, 115, 22, 0.45) 0%, rgba(194, 65, 12, 0.2) 100%)',
+        borderColor: 'rgba(249, 115, 22, 0.65)',
+        glow: '0 0 25px rgba(249, 115, 22, 0.5)',
+        icon: `<svg class="w-6 h-6 text-orange-400" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5v14h18V5H3zm4 12H5V7h2v10zm4 0H9v-6h2v6zm4 0h-2v-8h2v8zm4 0h-2v-4h2v4z"/></svg>`
+    },
+    sequencer: {
+        id: 'sequencer',
+        label: 'SEQUENCER.VST',
+        color: '#eab308',
+        colorLight: '#fde047',
+        bgGrad: 'linear-gradient(135deg, rgba(234, 179, 8, 0.45) 0%, rgba(161, 98, 7, 0.2) 100%)',
+        borderColor: 'rgba(234, 179, 8, 0.65)',
+        glow: '0 0 25px rgba(234, 179, 8, 0.5)',
+        icon: `<svg class="w-6 h-6 text-yellow-400" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg>`
+    },
+    soundcloud: {
+        id: 'soundcloud',
+        label: 'SOUNDCLOUD',
+        color: '#ff5500',
+        colorLight: '#ff7733',
+        bgGrad: 'linear-gradient(135deg, rgba(255, 85, 0, 0.45) 0%, rgba(204, 68, 0, 0.2) 100%)',
+        borderColor: 'rgba(255, 85, 0, 0.65)',
+        glow: '0 0 25px rgba(255, 85, 0, 0.5)',
+        icon: `<svg class="w-6 h-6 text-[#ff5500]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>`
+    }
+};
+
 const NP_TRACKS = [
     { url: 'https://soundcloud.com/el_jlo/apocalypse', title: 'Apocalypse', genre: 'Remix — Ambient — Synth' },
     { url: 'https://soundcloud.com/el_jlo/ocarina-theme-with-drums', title: 'OCARINA THEME WITH DRUMS', genre: 'Trap — OST — Remix' },
@@ -6131,12 +6315,19 @@ const NP_TRACKS = [
     { url: 'https://soundcloud.com/el_jlo/long-day-jlo', title: 'Long Day', genre: 'Ambient — Electro — Dnb' }
 ];
 
+let globalCurrentSource = 'soundcloud';
+let globalAudioPlaying = false;
+let globalActiveTrackId = null;
+let globalActiveWs = null;
+let globalActiveMedia = null;
+let globalDurationSec = 0;
+
 let npCurrentTrackIndex = Math.floor(Math.random() * NP_TRACKS.length);
-let npIsPlaying = false;
 let npDurationMs = 0;
 let npAnimFrame = null;
 let scWidget = null;
 let npSpectrumPhase = 0;
+let npPanelCustomPos = null;
 
 function npFormatTime(seconds) {
     if (isNaN(seconds) || seconds < 0) return "0:00";
@@ -6145,14 +6336,13 @@ function npFormatTime(seconds) {
     return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-let npPanelCustomPos = null;
-
+// Positionnement initial du panel
 function npPositionDefault() {
     const panel = document.getElementById('np-panel');
     const trigger = document.getElementById('np-trigger');
     if (!panel || !trigger) return;
     const trigRect = trigger.getBoundingClientRect();
-    const panelWidth = Math.min(290, window.innerWidth - 24);
+    const panelWidth = Math.min(295, window.innerWidth - 24);
     
     let left = trigRect.right - panelWidth;
     let top = trigRect.bottom + 14;
@@ -6181,10 +6371,10 @@ function npTogglePanel() {
         const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
         if (anim) {
             anim(panel, {
-                scale: [0.88, 1],
+                scale: [0.92, 1],
                 opacity: [0, 1],
-                duration: 480,
-                ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outElastic(1, .75)'
+                duration: 320,
+                ease: 'outCubic'
             });
         }
     }
@@ -6196,9 +6386,9 @@ function npClosePanel() {
     const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
     if (anim) {
         anim(panel, {
-            scale: [1, 0.88],
+            scale: [1, 0.92],
             opacity: [1, 0],
-            duration: 200,
+            duration: 180,
             ease: 'inQuad',
             onComplete: () => {
                 panel.classList.remove('open');
@@ -6211,13 +6401,127 @@ function npClosePanel() {
     }
 }
 
+// --- GESTIONNAIRE D'ÉTAT UNIFIÉ DU LECTEUR GLOBAL DU SITE ---
+function setGlobalNowPlaying(sourceKey, data = {}) {
+    const cfg = AUDIO_SOURCES_CONFIG[sourceKey] || AUDIO_SOURCES_CONFIG.soundcloud;
+    globalCurrentSource = sourceKey;
+    globalAudioPlaying = true;
+    
+    if (data.id) globalActiveTrackId = data.id;
+    if (data.ws) globalActiveWs = data.ws;
+    if (data.media) globalActiveMedia = data.media;
+    if (data.duration) globalDurationSec = data.duration;
+
+    const widget = document.getElementById('now-playing-widget');
+    const panel = document.getElementById('np-panel');
+    const trigger = document.getElementById('np-trigger');
+    const square = document.getElementById('np-trigger-square');
+    const trigIcon = document.getElementById('np-trigger-icon');
+    const badge = document.getElementById('np-source-badge');
+    const art = document.getElementById('np-art');
+    const titleEl = document.getElementById('np-title');
+    const subEl = document.getElementById('np-sub');
+    const prog = document.getElementById('np-progress');
+    const playBtn = document.getElementById('np-play');
+    const timeTot = document.getElementById('np-time-tot');
+    const bars = document.querySelectorAll('#np-spectrum .np-bar');
+
+    if (widget) {
+        widget.setAttribute('data-source', sourceKey);
+        widget.classList.add('playing');
+    }
+
+    if (panel) {
+        panel.style.setProperty('--np-active-color', cfg.color);
+        panel.style.borderColor = cfg.borderColor;
+    }
+
+    if (square) {
+        square.style.backgroundColor = cfg.bgGrad;
+        square.style.borderColor = cfg.borderColor;
+        square.style.boxShadow = `0 0 8px ${cfg.color}`;
+    }
+
+    if (trigIcon) {
+        trigIcon.style.color = cfg.colorLight;
+    }
+
+    bars.forEach(bar => {
+        bar.style.backgroundColor = cfg.color;
+    });
+
+    if (badge) {
+        badge.textContent = cfg.label;
+        badge.style.borderColor = cfg.borderColor;
+        badge.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+        badge.style.color = cfg.colorLight;
+        badge.style.boxShadow = `0 0 10px ${cfg.color}33`;
+    }
+
+    // Mise à jour du carré de couleur / fond / cover
+    if (art) {
+        art.style.background = cfg.bgGrad;
+        art.style.borderColor = cfg.borderColor;
+        art.style.boxShadow = cfg.glow;
+        if (data.artUrl) {
+            art.innerHTML = `<img src="${data.artUrl}" alt="Artwork" class="w-full h-full object-cover rounded-xl" onerror="this.parentElement.innerHTML='${cfg.icon.replace(/'/g, "\\'")}'">`;
+        } else {
+            art.innerHTML = cfg.icon;
+        }
+    }
+
+    if (titleEl && data.title) {
+        titleEl.textContent = data.title;
+        titleEl.title = data.title;
+    }
+    if (subEl && data.sub) {
+        subEl.textContent = data.sub;
+    }
+    if (prog) {
+        prog.style.backgroundColor = cfg.color;
+    }
+    if (playBtn) {
+        playBtn.style.backgroundColor = cfg.color;
+        playBtn.style.boxShadow = `0 0 20px ${cfg.color}`;
+    }
+    if (timeTot && data.duration) {
+        timeTot.textContent = npFormatTime(data.duration);
+    }
+
+    npStartSpectrum();
+}
+
+function setGlobalAudioPaused(sourceKey, id) {
+    if (sourceKey === globalCurrentSource) {
+        globalAudioPlaying = false;
+        const widget = document.getElementById('now-playing-widget');
+        if (widget) widget.classList.remove('playing');
+        npStopSpectrum();
+    }
+}
+
+function updateGlobalAudioProgress(sourceKey, curSec, durSec, id) {
+    if (sourceKey === globalCurrentSource) {
+        const timeCurEl = document.getElementById('np-time-cur');
+        const timeTotEl = document.getElementById('np-time-tot');
+        const progEl = document.getElementById('np-progress');
+
+        if (timeCurEl) timeCurEl.textContent = npFormatTime(curSec);
+        if (durSec > 0) {
+            if (timeTotEl) timeTotEl.textContent = npFormatTime(durSec);
+            const pct = Math.max(0, Math.min(100, (curSec / durSec) * 100));
+            if (progEl) progEl.style.width = `${pct}%`;
+        }
+    }
+}
+
 function npStartSpectrum() {
     if (npAnimFrame) cancelAnimationFrame(npAnimFrame);
     const bars = document.querySelectorAll('#np-spectrum .np-bar');
     if (!bars.length) return;
 
     function renderSpectrum() {
-        if (!npIsPlaying) return;
+        if (!globalAudioPlaying && !npIsPlaying) return;
         npSpectrumPhase += 0.12;
         bars.forEach((bar, i) => {
             const h = Math.sin(npSpectrumPhase + i * 0.9) * 4.5 + Math.cos(npSpectrumPhase * 0.7 + i * 1.3) * 2.5 + (Math.random() * 2) + 7;
@@ -6238,35 +6542,102 @@ function npStopSpectrum() {
     bars.forEach(bar => { bar.style.height = '3px'; });
 }
 
+function npTogglePlay() {
+    if (globalCurrentSource === 'lab') {
+        if (globalActiveWs) {
+            globalActiveWs.playPause();
+        } else if (typeof labTracks !== 'undefined' && labTracks.length > 0) {
+            toggleWaveSurfer(labTracks[0].id);
+        }
+    } else if (globalCurrentSource === 'explore') {
+        if (globalActiveMedia) {
+            if (globalActiveMedia.paused) {
+                globalActiveMedia.play().catch(() => {});
+            } else {
+                globalActiveMedia.pause();
+            }
+        }
+    } else if (globalCurrentSource === 'session') {
+        if (typeof togglePtxPlay === 'function') {
+            togglePtxPlay();
+        }
+    } else if (globalCurrentSource === 'sequencer') {
+        if (typeof togglePlay === 'function') {
+            togglePlay('large');
+        }
+    } else {
+        if (scWidget) {
+            scWidget.toggle();
+        }
+    }
+}
+
+function npNext(isPrev = false, autoPlay = true) {
+    if (globalCurrentSource === 'lab' && typeof labTracks !== 'undefined') {
+        const curIdx = labTracks.findIndex(t => t.id === globalActiveTrackId);
+        const nextIdx = isPrev 
+            ? (curIdx <= 0 ? labTracks.length - 1 : curIdx - 1)
+            : (curIdx >= labTracks.length - 1 ? 0 : curIdx + 1);
+        if (labTracks[nextIdx]) {
+            toggleWaveSurfer(labTracks[nextIdx].id);
+        }
+    } else {
+        let nextIdx;
+        if (NP_TRACKS.length > 1) {
+            do {
+                nextIdx = Math.floor(Math.random() * NP_TRACKS.length);
+            } while (nextIdx === npCurrentTrackIndex);
+        } else {
+            nextIdx = 0;
+        }
+        npLoadTrack(nextIdx, autoPlay);
+    }
+}
+
+function npSeek(event) {
+    const wrap = document.getElementById('np-progress-wrap');
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+
+    if (globalCurrentSource === 'lab' && globalActiveWs) {
+        globalActiveWs.seekTo(ratio);
+    } else if (globalCurrentSource === 'explore' && globalActiveMedia && globalActiveMedia.duration) {
+        globalActiveMedia.currentTime = ratio * globalActiveMedia.duration;
+    } else if (globalCurrentSource === 'session' && ptxDuration) {
+        ptxOffset = ratio * ptxDuration;
+        if (typeof updatePtxVisuals === 'function') updatePtxVisuals(ptxOffset);
+        const video = document.getElementById('ptx-video');
+        if (video) video.currentTime = ptxOffset;
+        if (ptxIsPlaying) {
+            stopPtxAudio();
+            playPtxAudio();
+        }
+    } else if (scWidget && npDurationMs) {
+        try {
+            scWidget.seekTo(ratio * npDurationMs);
+        } catch(e) {}
+    }
+}
+
 function npFetchCurrentInfo() {
     if (!scWidget) return;
     try {
         scWidget.getCurrentSound((sound) => {
             if (!sound) return;
-            const titleEl = document.getElementById('np-title');
-            const subEl = document.getElementById('np-sub');
-            const artEl = document.getElementById('np-art');
-            const totEl = document.getElementById('np-time-tot');
+            const sub = sound.genre ? `${sound.genre} · SoundCloud` : 'SoundCloud · Shuffle';
+            let artUrl = null;
+            if (sound.artwork_url) {
+                artUrl = sound.artwork_url.replace('-large', '-t300x300');
+            }
+            if (sound.duration) npDurationMs = sound.duration;
 
-            if (titleEl && sound.title) {
-                titleEl.textContent = sound.title;
-                titleEl.title = sound.title;
-            }
-            if (subEl) {
-                subEl.textContent = sound.genre ? `${sound.genre} · SoundCloud` : 'SoundCloud · shuffle';
-            }
-            if (sound.duration) {
-                npDurationMs = sound.duration;
-                if (totEl) totEl.textContent = npFormatTime(sound.duration / 1000);
-            }
-            if (artEl) {
-                if (sound.artwork_url) {
-                    const highResArt = sound.artwork_url.replace('-large', '-t300x300');
-                    artEl.innerHTML = `<img src="${highResArt}" alt="Artwork" class="w-full h-full object-cover rounded-xl" onerror="this.parentElement.innerHTML='<span class=\\'np-art-glyph font-mono text-lg text-[var(--accent-color)]\\'>♪</span>'">`;
-                } else {
-                    artEl.innerHTML = '<span class="np-art-glyph font-mono text-lg text-[var(--accent-color)]">♪</span>';
-                }
-            }
+            setGlobalNowPlaying('soundcloud', {
+                title: sound.title || 'SoundCloud Stream',
+                sub: sub,
+                artUrl: artUrl,
+                duration: sound.duration ? sound.duration / 1000 : 0
+            });
         });
     } catch(e) {
         console.log("Could not fetch sound info:", e);
@@ -6278,18 +6649,10 @@ function npLoadTrack(index, autoPlay = true) {
     npCurrentTrackIndex = (index + NP_TRACKS.length) % NP_TRACKS.length;
     const track = NP_TRACKS[npCurrentTrackIndex];
 
-    // Pré-remplir l'UI avec les infos locales
-    const titleEl = document.getElementById('np-title');
-    const subEl = document.getElementById('np-sub');
-    const progEl = document.getElementById('np-progress');
-    const curEl = document.getElementById('np-time-cur');
-    if (titleEl) {
-        titleEl.textContent = track.title;
-        titleEl.title = track.title;
-    }
-    if (subEl) subEl.textContent = `${track.genre} · SoundCloud`;
-    if (progEl) progEl.style.width = '0%';
-    if (curEl) curEl.textContent = '0:00';
+    setGlobalNowPlaying('soundcloud', {
+        title: track.title,
+        sub: `${track.genre} · SoundCloud`
+    });
 
     try {
         scWidget.load(track.url, {
@@ -6300,40 +6663,6 @@ function npLoadTrack(index, autoPlay = true) {
         });
     } catch(e) {
         console.error("SC Load error:", e);
-    }
-}
-
-function npTogglePlay() {
-    if (!scWidget) return;
-    try {
-        scWidget.toggle();
-    } catch(e) {
-        console.error("SC Toggle error:", e);
-    }
-}
-
-function npNext(isPrev = false, autoPlay = true) {
-    let nextIdx;
-    if (NP_TRACKS.length > 1) {
-        do {
-            nextIdx = Math.floor(Math.random() * NP_TRACKS.length);
-        } while (nextIdx === npCurrentTrackIndex);
-    } else {
-        nextIdx = 0;
-    }
-    npLoadTrack(nextIdx, autoPlay);
-}
-
-function npSeek(event) {
-    if (!scWidget || !npDurationMs) return;
-    const wrap = document.getElementById('np-progress-wrap');
-    if (!wrap) return;
-    const rect = wrap.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
-    try {
-        scWidget.seekTo(ratio * npDurationMs);
-    } catch(e) {
-        console.error("SC Seek error:", e);
     }
 }
 
@@ -6354,32 +6683,23 @@ function npInitWidget() {
 
         scWidget.bind(SC.Widget.Events.PLAY, () => {
             npIsPlaying = true;
-            const widgetEl = document.getElementById('now-playing-widget');
-            if (widgetEl) widgetEl.classList.add('playing');
-            npStartSpectrum();
             npFetchCurrentInfo();
         });
 
         scWidget.bind(SC.Widget.Events.PAUSE, () => {
             npIsPlaying = false;
-            const widgetEl = document.getElementById('now-playing-widget');
-            if (widgetEl) widgetEl.classList.remove('playing');
-            npStopSpectrum();
+            setGlobalAudioPaused('soundcloud');
         });
 
         scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
             if (!data) return;
-            const progress = (data.relativePosition || 0) * 100;
             const curMs = data.currentPosition || 0;
-            const progEl = document.getElementById('np-progress');
-            if (progEl) progEl.style.width = `${progress}%`;
-
-            const timeCurEl = document.getElementById('np-time-cur');
-            if (timeCurEl) timeCurEl.textContent = npFormatTime(curMs / 1000);
+            const curSec = curMs / 1000;
+            const durSec = (npDurationMs || 0) / 1000;
+            updateGlobalAudioProgress('soundcloud', curSec, durSec);
         });
 
         scWidget.bind(SC.Widget.Events.FINISH, () => {
-            // Morceau suivant aléatoire automatique
             npNext(false, true);
         });
 
@@ -6392,6 +6712,9 @@ function npInitWidget() {
 }
 
 // Exposer sur window
+window.setGlobalNowPlaying = setGlobalNowPlaying;
+window.setGlobalAudioPaused = setGlobalAudioPaused;
+window.updateGlobalAudioProgress = updateGlobalAudioProgress;
 window.npTogglePanel = npTogglePanel;
 window.npClosePanel = npClosePanel;
 window.npTogglePlay = npTogglePlay;
@@ -6405,7 +6728,6 @@ document.addEventListener('click', (e) => {
         npClosePanel();
     }
     const projectModal = document.getElementById('project-detail-modal');
-    const projectContainer = document.getElementById('project-detail-container');
     if (projectModal && !projectModal.classList.contains('pointer-events-none') && e.target === projectModal) {
         closeProjectModal();
     }
@@ -6421,7 +6743,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* ==========================================================================
-   🕹️ DRAGGABLE FLOATING NOW PLAYING PLAYER WIDGET (#np-panel)
+   🕹️ 100% DRAGGABLE & RESPONSIVE NOW PLAYING PLAYER WIDGET (#np-panel)
    ========================================================================== */
 function initDraggableNpPanel() {
     const panel = document.getElementById('np-panel');
@@ -6431,7 +6753,6 @@ function initDraggableNpPanel() {
     let isDragging = false;
     let startX = 0, startY = 0;
     let initialLeft = 0, initialTop = 0;
-    let hasMoved = false;
 
     // Clamping within viewport edges with safe margins
     function clampPosition(x, y) {
@@ -6458,7 +6779,7 @@ function initDraggableNpPanel() {
         let targetX = currX;
         let targetY = currY;
 
-        const snapThreshold = 45;
+        const snapThreshold = 80;
 
         // Snap horizontally
         if (currX < snapThreshold) {
@@ -6478,13 +6799,12 @@ function initDraggableNpPanel() {
     }
 
     panel.addEventListener('pointerdown', (e) => {
-        // Don't drag if clicking interactive controls (buttons, progress bar, close button)
-        if (e.target.closest('button') || e.target.closest('#np-progress-wrap') || e.target.closest('.np-head-close') || e.target.closest('#np-prev') || e.target.closest('#np-next')) {
+        // Ignorer le drag si le clic est sur un bouton de contrôle ou une barre de progression
+        if (e.target.closest('button') || e.target.closest('#np-progress-wrap') || e.target.closest('.np-head-close') || e.target.closest('#np-prev') || e.target.closest('#np-next') || e.target.closest('#np-play')) {
             return;
         }
 
         isPointerDown = true;
-        hasMoved = false;
         isDragging = false;
         startX = e.clientX;
         startY = e.clientY;
@@ -6507,7 +6827,6 @@ function initDraggableNpPanel() {
         // Activation threshold (> 4px)
         if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
             isDragging = true;
-            hasMoved = true;
             panel.classList.add('is-dragging');
             panel.style.transform = 'none';
             panel.style.bottom = 'auto';
@@ -6543,14 +6862,15 @@ function initDraggableNpPanel() {
 
             npPanelCustomPos = { x: snapped.x, y: snapped.y };
 
-            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
-            if (anim) {
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a && typeof a.animate === 'function') {
+                if (typeof a.remove === 'function') a.remove(panel);
                 panel.style.transition = 'none';
-                anim(panel, {
-                    left: [`${currentLeft}px`, `${snapped.x}px`],
-                    top: [`${currentTop}px`, `${snapped.y}px`],
-                    duration: 300,
-                    ease: 'outElastic(1, .8)'
+                a.animate(panel, {
+                    left: `${snapped.x}px`,
+                    top: `${snapped.y}px`,
+                    duration: 320,
+                    ease: 'outCubic'
                 });
             } else {
                 panel.style.transition = 'left 0.25s ease, top 0.25s ease';
@@ -6560,15 +6880,14 @@ function initDraggableNpPanel() {
 
             setTimeout(() => {
                 isDragging = false;
-                hasMoved = false;
-            }, 120);
+            }, 100);
         }
     }
 
     panel.addEventListener('pointerup', handlePointerEnd);
     panel.addEventListener('pointercancel', handlePointerEnd);
 
-    // Adapt on window resize
+    // Adaptation continue sur redimensionnement d'écran
     window.addEventListener('resize', () => {
         if (panel.classList.contains('open')) {
             if (npPanelCustomPos) {
@@ -6579,7 +6898,7 @@ function initDraggableNpPanel() {
                 npPositionDefault();
             }
         }
-    });
+    }, { passive: true });
 }
 
 // Lancement de l'initialisation du widget
