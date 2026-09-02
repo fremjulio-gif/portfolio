@@ -18,8 +18,8 @@
     <link rel="preload" as="image" href="moi.png">
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Script CDN Officiel Anime.js V4 -->
-    <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.0-beta.95/dist/anime.min.js"></script>
+    <!-- Script CDN Officiel Anime.js V4 (Production UMD Bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
     <!-- Script Officiel SoundCloud Player API -->
     <script src="https://w.soundcloud.com/player/api.js"></script>
     
@@ -2921,6 +2921,16 @@ body.light-mode .apple-menu-item { color: #222222; }
 </nav>
 
     <script>
+        // --- 0. INITIALISATION & ALIAS GLOBAUX ANIME.JS V4 ---
+        if (typeof window.anime !== 'undefined') {
+            window.animate = window.anime.animate;
+            window.spring = window.anime.spring;
+            window.stagger = window.anime.stagger;
+            window.waapi = window.anime.waapi;
+            window.createTimeline = window.anime.createTimeline;
+            window.createSpring = window.anime.createSpring;
+        }
+
         // --- 1. UTILS & SYSTEM ---
         function setVh() { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh}px`); }
         window.addEventListener('resize', setVh); setVh();
@@ -4049,27 +4059,34 @@ body.light-mode .apple-menu-item { color: #222222; }
             // Afficher la modale avec transition Anime.js V4 ultra-smooth
             modal.classList.remove('pointer-events-none');
             
-            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
-            if (anim) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, container]);
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            const animFn = a && typeof a.animate === 'function' ? a.animate : (typeof a === 'function' ? (targets, p) => a({ targets, ...p }) : (typeof animate === 'function' ? animate : null));
+
+            if (a && typeof a.remove === 'function') {
+                a.remove(modal);
+                a.remove(container);
+            }
+
+            if (animFn) {
                 modal.style.opacity = '0';
                 container.style.opacity = '0';
                 container.style.transform = 'scale(0.95) translateY(12px)';
 
                 // Fondu doux et progressif de l'arrière-plan flouté
-                anim(modal, {
+                animFn(modal, {
                     opacity: [0, 1],
                     duration: 320,
                     ease: 'outQuad'
                 });
 
                 // Éclosion soyeuse et subtile de la fiche projet
-                anim(container, {
+                const springEase = a && typeof a.spring === 'function' ? a.spring({ bounce: 0.15, mass: 0.8 }) : 'outQuad';
+                animFn(container, {
                     scale: [0.95, 1],
                     translateY: [12, 0],
                     opacity: [0, 1],
-                    duration: 450,
-                    ease: typeof spring === 'function' ? spring({ bounce: 0.15, mass: 0.75 }) : 'outQuad'
+                    duration: 460,
+                    ease: springEase
                 });
             } else {
                 modal.style.opacity = '1';
@@ -4093,23 +4110,30 @@ body.light-mode .apple-menu-item { color: #222222; }
                 mediaFrame.innerHTML = ''; // Vide l'iframe YouTube
             }
 
-            const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
-            if (anim && container) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, container]);
-                anim(container, {
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            const animFn = a && typeof a.animate === 'function' ? a.animate : (typeof a === 'function' ? (targets, p) => a({ targets, ...p }) : (typeof animate === 'function' ? animate : null));
+
+            if (a && typeof a.remove === 'function') {
+                a.remove(modal);
+                a.remove(container);
+            }
+
+            if (animFn && container) {
+                animFn(container, {
                     scale: [1, 0.96],
                     translateY: [0, 8],
                     opacity: [1, 0],
-                    duration: 220,
+                    duration: 200,
                     ease: 'inQuad'
                 });
-                anim(modal, {
+                animFn(modal, {
                     opacity: [1, 0],
-                    duration: 240,
+                    duration: 220,
                     ease: 'inQuad',
                     onComplete: () => {
                         modal.classList.add('pointer-events-none');
                         modal.style.opacity = '0';
+                        container.style.transform = '';
                     }
                 });
             } else {
