@@ -16,6 +16,39 @@
     <link rel="icon" type="image/png" href="moi.png">
 
     <link rel="preload" as="image" href="moi.png">
+    <script>
+        // Force le retour immédiat tout en haut (Hero) lors de chaque rafraîchissement / reload
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        try {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        } catch(e) {
+            window.scrollTo(0, 0);
+        }
+        if (window.location.hash) {
+            try {
+                history.replaceState(null, null, window.location.pathname + window.location.search);
+            } catch(e) {}
+        }
+        window.addEventListener('beforeunload', function() {
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.scrollTo(0, 0);
+        });
+        window.addEventListener('pageshow', function() {
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.scrollTo(0, 0);
+        });
+        window.addEventListener('load', function() {
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.scrollTo(0, 0);
+            requestAnimationFrame(function() {
+                window.scrollTo(0, 0);
+                setTimeout(function() { window.scrollTo(0, 0); }, 30);
+                setTimeout(function() { window.scrollTo(0, 0); }, 100);
+            });
+        });
+    </script>
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Script CDN Officiel Anime.js V4 (Production UMD Bundle) -->
@@ -5416,6 +5449,17 @@ function filterProjects(tag, btnElement) {
 // =======================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Garantie de démarrage tout en haut (Hero)
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    try {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    } catch(e) {
+        window.scrollTo(0, 0);
+    }
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     
     // Empêcher le drag de l'île des thèmes sur mobile
     const themeIsland = document.getElementById('theme-widget');
