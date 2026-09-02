@@ -4046,23 +4046,35 @@ body.light-mode .apple-menu-item { color: #222222; }
             // Charger le player multimédia
             loadProjectPlayer(project);
 
-            // Afficher la modale
+            // Afficher la modale avec transition Anime.js V4 ultra-smooth
             modal.classList.remove('pointer-events-none');
-            modal.style.opacity = '1';
             
-            // Animation d'ouverture Anime.js V4 (Spring Physics Organique)
             const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
             if (anim) {
                 if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, container]);
-                container.style.transform = 'scale(0.86) translateY(22px)';
+                modal.style.opacity = '0';
                 container.style.opacity = '0';
-                anim(container, {
-                    scale: [0.86, 1],
-                    translateY: [22, 0],
+                container.style.transform = 'scale(0.95) translateY(12px)';
+
+                // Fondu doux et progressif de l'arrière-plan flouté
+                anim(modal, {
                     opacity: [0, 1],
-                    duration: 680,
-                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outElastic(1, .75)'
+                    duration: 320,
+                    ease: 'outQuad'
                 });
+
+                // Éclosion soyeuse et subtile de la fiche projet
+                anim(container, {
+                    scale: [0.95, 1],
+                    translateY: [12, 0],
+                    opacity: [0, 1],
+                    duration: 450,
+                    ease: typeof spring === 'function' ? spring({ bounce: 0.15, mass: 0.75 }) : 'outQuad'
+                });
+            } else {
+                modal.style.opacity = '1';
+                container.style.opacity = '1';
+                container.style.transform = 'none';
             }
         }
 
@@ -4085,14 +4097,15 @@ body.light-mode .apple-menu-item { color: #222222; }
             if (anim && container) {
                 if (typeof anime !== 'undefined' && anime.remove) anime.remove([modal, container]);
                 anim(container, {
-                    scale: [1, 0.85],
+                    scale: [1, 0.96],
+                    translateY: [0, 8],
                     opacity: [1, 0],
                     duration: 220,
                     ease: 'inQuad'
                 });
                 anim(modal, {
                     opacity: [1, 0],
-                    duration: 220,
+                    duration: 240,
                     ease: 'inQuad',
                     onComplete: () => {
                         modal.classList.add('pointer-events-none');
@@ -4483,7 +4496,7 @@ initTimelineAnimation();
 
 
 
-    // --- FILTRAGE DES PROJETS (ROUTING VUE) ---
+    // --- FILTRAGE DES PROJETS (ROUTING VUE ANIME.JS V4) ---
 function filterProjects(tag, btnElement) {
     // 1. Mise à jour de l'UI des boutons (Solo/Mute feeling)
     const buttons = document.querySelectorAll('.filter-btn');
@@ -4494,29 +4507,49 @@ function filterProjects(tag, btnElement) {
     btnElement.classList.remove('text-white/60');
     btnElement.classList.add('active', 'text-white');
 
-    // 2. Traitement des cartes (Fade out puis Display None)
-    const cards = document.querySelectorAll('.project-card');
-    cards.forEach(card => {
+    // 2. Traitement des cartes (Transition fluide et légère Anime.js V4)
+    const cards = Array.from(document.querySelectorAll('.project-card'));
+    const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+    
+    let visibleCount = 0;
+    cards.forEach((card) => {
         const tags = card.getAttribute('data-tags') || "";
         const tagArray = tags.split(',');
+        const isMatch = tag === 'all' || tagArray.includes(tag);
 
-        if (tag === 'all' || tagArray.includes(tag)) {
-            // Révéler
+        if (isMatch) {
             card.classList.remove('hidden');
-            // Force le navigateur à recalculer l'affichage pour jouer la transition d'opacité
-            void card.offsetWidth; 
-            card.style.opacity = '1';
-            card.style.transform = 'scale(1)';
+            if (anim) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                anim(card, {
+                    opacity: [0, 1],
+                    scale: [0.97, 1],
+                    translateY: [6, 0],
+                    delay: visibleCount * 35,
+                    duration: 350,
+                    ease: 'outQuad'
+                });
+                visibleCount++;
+            } else {
+                card.style.opacity = '1';
+                card.style.transform = 'none';
+            }
         } else {
-            // Cacher
-            card.style.opacity = '0';
-            card.style.transform = 'scale(0.95)';
-            // On attend la fin de l'animation CSS (0.3s) pour l'enlever du flux (Grid)
-            setTimeout(() => {
-                if (card.style.opacity === '0') {
-                    card.classList.add('hidden');
-                }
-            }, 300);
+            if (anim) {
+                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
+                anim(card, {
+                    opacity: [1, 0],
+                    scale: [1, 0.97],
+                    duration: 180,
+                    ease: 'inQuad',
+                    onComplete: () => {
+                        card.classList.add('hidden');
+                    }
+                });
+            } else {
+                card.style.opacity = '0';
+                card.classList.add('hidden');
+            }
         }
     });
 }
