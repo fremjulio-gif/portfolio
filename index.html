@@ -1130,29 +1130,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         #parcours .group { transition: background-color 0.6s var(--ease-apple), border-color 0.6s var(--ease-apple), box-shadow 0.6s var(--ease-apple) !important; }
 
         /* --- AUDIO EASTER EGGS : SYSTEM SECRETS --- */
-        /* Secret 2 : Surchauffe analogique & LED CLIP */
-        #clip-led.clipping-flash {
-            background-color: #ef4444 !important;
-            border-color: #f87171 !important;
-            box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444 !important;
-        }
-        body.analog-overdrive-active {
-            filter: contrast(1.04) saturate(1.12) brightness(1.02);
-            transition: filter 0.8s ease;
-        }
-        #analog-heat-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 99998;
-            opacity: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.04) 0%, rgba(245, 158, 11, 0.02) 60%, transparent 90%);
-            transition: opacity 0.8s ease;
-        }
-        #analog-heat-overlay.active {
-            opacity: 1;
-        }
-
         /* Secret 3 : DAW HUD Indicator (Touche Espace) */
         #daw-hud-indicator {
             transition: none !important;
@@ -3060,9 +3037,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         </div>
     </div>
 
-    <!-- SECRET 2 : OVERLAY SURCHAUFFE ANALOGIQUE -->
-    <div id="analog-heat-overlay"></div>
-
     <!-- SECRET 3 : HUD DAW PLAY / PAUSE (ESPACE) -->
     <div id="daw-hud-indicator" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[99999] pointer-events-none opacity-0 scale-90 flex flex-col items-center justify-center w-24 h-24 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
         <div id="daw-hud-icon" class="text-[var(--accent-color)] flex items-center justify-center">
@@ -3085,11 +3059,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         <div class="hidden xs:flex items-center gap-1.5 font-mono text-[9px] opacity-40">
             <span>48 kHz</span>
             <span class="text-[var(--accent-color)] animate-pulse">●</span>
-        </div>
-        <!-- Secret 2 : CLIP Indicator LED -->
-        <div id="clip-indicator-wrap" class="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition cursor-help select-none pl-2.5 border-l border-white/10" title="Indicateur de saturation analogique (CLIP)">
-            <span class="font-mono text-[8px] font-bold tracking-tight uppercase text-white/50">CLIP</span>
-            <span id="clip-led" class="w-2 h-2 rounded-full bg-red-950/90 border border-red-900/60 inline-block shadow-none transition-all duration-300"></span>
         </div>
     </div>
 </nav>
@@ -6229,75 +6198,6 @@ if (document.readyState === 'loading') {
         );
         return "🎛️ Merci pour votre curiosité ! Contact : jules.fremondiere@3is.fr";
     };
-})();
-
-// ── SECRET 2 : SURCHAUFFE ANALOGIQUE & LED CLIP ──
-(function initAnalogOverdriveSecret() {
-    let clickTimestamps = [];
-    let isClipping = false;
-    let clipResetTimeout = null;
-
-    document.addEventListener('click', () => {
-        const now = Date.now();
-        clickTimestamps.push(now);
-        clickTimestamps = clickTimestamps.filter(t => now - t <= 3000);
-
-        if (clickTimestamps.length >= 7 && !isClipping) {
-            triggerClip();
-        }
-    });
-
-    function triggerClip() {
-        isClipping = true;
-        const led = document.getElementById('clip-led');
-        const overlay = document.getElementById('analog-heat-overlay');
-        const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : null);
-
-        // Effet sonore de saturation analogique subtile
-        try {
-            if (typeof audioCtx !== 'undefined' && audioCtx) {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const now = audioCtx.currentTime;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(110, now);
-                osc.frequency.exponentialRampToValueAtTime(55, now + 0.35);
-                gain.gain.setValueAtTime(0.012, now);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(now);
-                osc.stop(now + 0.36);
-            }
-        } catch(e) {}
-
-        // 1. Allumage flash LED rouge
-        if (led) {
-            led.classList.add('clipping-flash');
-            if (anim) {
-                anim(led, {
-                    scale: [1, 1.4, 1],
-                    duration: 300,
-                    ease: 'outElastic(1, .5)'
-                });
-            }
-        }
-
-        // 2. Chaleur d'overdrive analogique sur l'écran
-        document.body.classList.add('analog-overdrive-active');
-        if (overlay) overlay.classList.add('active');
-
-        // 3. Extinction progressive au bout de 5 secondes
-        clearTimeout(clipResetTimeout);
-        clipResetTimeout = setTimeout(() => {
-            if (led) led.classList.remove('clipping-flash');
-            document.body.classList.remove('analog-overdrive-active');
-            if (overlay) overlay.classList.remove('active');
-            clickTimestamps = [];
-            isClipping = false;
-        }, 5000);
-    }
 })();
 
 // ── SECRET 3 : RACCOURCI CLAVIER ESPACE (DAW PLAY/PAUSE + HUD) ──
