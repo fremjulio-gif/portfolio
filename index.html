@@ -78,7 +78,7 @@
             justify-content: space-between !important;
             box-sizing: border-box !important;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05) !important;
-            transition: transform 0.5s var(--ease-apple), border-color 0.4s ease, background-color 0.4s ease, box-shadow 0.5s ease !important;
+            transition: border-color 0.4s ease, background-color 0.4s ease, box-shadow 0.5s ease !important;
             position: relative;
             isolation: isolate;
         }
@@ -95,7 +95,6 @@
         body[data-theme="ableton"] .stat-card:hover,
         body[data-theme="protools"] .stat-card:hover,
         body[data-theme="fl"] .stat-card:hover {
-            transform: translateY(-2px) !important;
             background: rgba(255, 255, 255, 0.025) !important;
             border-color: rgba(255, 255, 255, 0.14) !important;
             box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.1) !important;
@@ -5641,11 +5640,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- 2. LECTURE DES VIDÉOS & SURVOL SPRING PHYSICS (ANIME.JS V4 60FPS) ---
+    // --- 2. LECTURE DES VIDÉOS & SURVOL ULTRA-SMOOTH (ANIME.JS V4 SANS REBOND SACCADÉ) ---
     const projectCards = document.querySelectorAll('.project-card');
     const statCards = document.querySelectorAll('.stat-card');
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches || ('ontouchstart' in window);
-    const animWaapi = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
     
     // Mettre toutes les vidéos de projets en pause par défaut au chargement
     projectCards.forEach(card => {
@@ -5656,54 +5654,62 @@ document.addEventListener("DOMContentLoaded", () => {
             video.muted = true;
         }
 
-        // Effet Anime.js V4 Spring Physics au survol des cartes projets
+        // Effet Anime.js V4 ultra-fluide et amorti au survol des cartes projets
         card.addEventListener('mouseenter', () => {
-            if (animWaapi) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                animWaapi(card, {
-                    scale: 0.982,
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a) {
+                if (typeof a.remove === 'function') a.remove(card);
+                const animFn = typeof a.animate === 'function' ? a.animate : a;
+                animFn(card, {
+                    scale: 1.012,
                     translateY: -3,
-                    duration: 320,
-                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outQuad'
+                    duration: 260,
+                    ease: 'outCubic'
                 });
             }
         });
 
         card.addEventListener('mouseleave', () => {
-            if (animWaapi) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                animWaapi(card, {
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a) {
+                if (typeof a.remove === 'function') a.remove(card);
+                const animFn = typeof a.animate === 'function' ? a.animate : a;
+                animFn(card, {
                     scale: 1,
                     translateY: 0,
-                    duration: 500,
-                    ease: typeof spring === 'function' ? spring({ bounce: 0.35, mass: 0.8 }) : 'outElastic(1, .75)'
+                    duration: 340,
+                    ease: 'outCubic'
                 });
             }
         });
     });
 
-    // Effet Anime.js V4 Spring Physics au survol des cartes de statistiques
+    // Effet Anime.js V4 ultra-fluide au survol des cartes de statistiques
     statCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
-            if (animWaapi) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                animWaapi(card, {
-                    scale: 0.985,
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a) {
+                if (typeof a.remove === 'function') a.remove(card);
+                const animFn = typeof a.animate === 'function' ? a.animate : a;
+                animFn(card, {
+                    scale: 1.012,
                     translateY: -2,
-                    duration: 320,
-                    ease: typeof spring === 'function' ? spring({ bounce: 0.3, mass: 0.8 }) : 'outQuad'
+                    duration: 260,
+                    ease: 'outCubic'
                 });
             }
         });
 
         card.addEventListener('mouseleave', () => {
-            if (animWaapi) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                animWaapi(card, {
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a) {
+                if (typeof a.remove === 'function') a.remove(card);
+                const animFn = typeof a.animate === 'function' ? a.animate : a;
+                animFn(card, {
                     scale: 1,
                     translateY: 0,
-                    duration: 500,
-                    ease: typeof spring === 'function' ? spring({ bounce: 0.35, mass: 0.8 }) : 'outElastic(1, .75)'
+                    duration: 340,
+                    ease: 'outCubic'
                 });
             }
         });
@@ -5979,42 +5985,46 @@ function initSkillGaugeHaptics() {
         const gauge = item.querySelector('.skill-gauge');
         if (!gauge) return;
 
-        // Survol : le chart résiste et "recule" en perspective 3D comme un bouton de console physique qu'on enfonce
+        // Survol : le chart résiste et "recule" en perspective 3D
         item.addEventListener('mouseenter', () => {
-            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a && typeof a.remove === 'function') a.remove(gauge);
             anim(gauge, {
-                transform: ['perspective(600px) translateZ(0px) rotateX(0deg) scale(1)', 'perspective(600px) translateZ(-16px) rotateX(7deg) scale(0.93)'],
-                duration: 260,
-                ease: typeof spring === 'function' ? spring({ bounce: 0.2, mass: 0.6 }) : 'outQuad'
+                transform: ['perspective(600px) translateZ(0px) rotateX(0deg) scale(1)', 'perspective(600px) translateZ(-12px) rotateX(5deg) scale(0.95)'],
+                duration: 250,
+                ease: 'outCubic'
             });
         });
 
-        // Fin de survol : le chart revient avec un rebond élastique ressort très satisfaisant
+        // Fin de survol : retour ultra-fluide sans rebond saccadé
         item.addEventListener('mouseleave', () => {
-            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a && typeof a.remove === 'function') a.remove(gauge);
             anim(gauge, {
-                transform: ['perspective(600px) translateZ(-16px) rotateX(7deg) scale(0.93)', 'perspective(600px) translateZ(0px) rotateX(0deg) scale(1)'],
-                duration: 550,
-                ease: typeof spring === 'function' ? spring({ bounce: 0.45, mass: 0.8 }) : 'outElastic(1, .6)'
+                transform: ['perspective(600px) translateZ(-12px) rotateX(5deg) scale(0.95)', 'perspective(600px) translateZ(0px) rotateX(0deg) scale(1)'],
+                duration: 360,
+                ease: 'outCubic'
             });
         });
 
-        // Clic / Pointerdown : enfoncement mécanique console encore plus profond
+        // Clic / Pointerdown : enfoncement mécanique
         item.addEventListener('pointerdown', () => {
-            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a && typeof a.remove === 'function') a.remove(gauge);
             anim(gauge, {
-                transform: 'perspective(600px) translateZ(-24px) rotateX(12deg) scale(0.88)',
+                transform: 'perspective(600px) translateZ(-20px) rotateX(10deg) scale(0.90)',
                 duration: 120,
                 ease: 'outQuad'
             });
         });
 
         item.addEventListener('pointerup', () => {
-            if (typeof anime !== 'undefined' && anime.remove) anime.remove(gauge);
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a && typeof a.remove === 'function') a.remove(gauge);
             anim(gauge, {
-                transform: 'perspective(600px) translateZ(-16px) rotateX(7deg) scale(0.93)',
-                duration: 350,
-                ease: typeof spring === 'function' ? spring({ bounce: 0.35, mass: 0.8 }) : 'outElastic(1, .7)'
+                transform: 'perspective(600px) translateZ(-12px) rotateX(5deg) scale(0.95)',
+                duration: 280,
+                ease: 'outCubic'
             });
         });
     });
