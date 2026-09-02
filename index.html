@@ -880,6 +880,91 @@ body.light-mode .apple-menu-item { color: #222222; }
             background: rgba(0,0,0,0.7);
         }
 
+        /* Lab Filter Pills & Tag System */
+        .lab-filter-pill {
+            padding: 5px 13px;
+            font-size: 11px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+            transition: all 0.25s var(--ease-apple);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        @media (hover: hover) {
+            .lab-filter-pill:hover {
+                background: rgba(255, 255, 255, 0.08);
+                color: #fff;
+                border-color: rgba(255, 255, 255, 0.22);
+                transform: translateY(-1px);
+            }
+        }
+        .lab-filter-pill.active {
+            background: color-mix(in srgb, var(--accent-color) 18%, rgba(255, 255, 255, 0.06));
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            box-shadow: 0 0 16px -4px color-mix(in srgb, var(--accent-color) 40%, transparent);
+            font-weight: 700;
+        }
+
+        .lab-tag-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.2s var(--ease-apple);
+        }
+        @media (hover: hover) {
+            .lab-tag-badge:hover {
+                background: color-mix(in srgb, var(--accent-color) 25%, rgba(255, 255, 255, 0.1));
+                border-color: var(--accent-color);
+                color: var(--accent-color);
+                transform: scale(1.06);
+            }
+        }
+        .lab-tag-badge.active-filter {
+            background: var(--accent-color);
+            color: #000 !important;
+            border-color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .lab-search-input {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            padding: 6px 14px 6px 32px;
+            font-size: 11px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            color: #fff;
+            outline: none;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+            width: 100%;
+            max-width: 220px;
+        }
+        .lab-search-input:focus {
+            border-color: var(--accent-color);
+            background: rgba(0, 0, 0, 0.55);
+            box-shadow: 0 0 14px -3px color-mix(in srgb, var(--accent-color) 35%, transparent);
+        }
+        .lab-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
         .inspi-card-large { 
             position: relative; overflow: hidden; border-radius: 16px; border: 1px solid var(--glass-border); 
             transition: transform 0.9s var(--ease-elastic-smooth), border-color 1.2s var(--ease-smooth-slow), box-shadow 1.2s var(--ease-smooth-slow), filter 0.8s var(--ease-smooth-slow); aspect-ratio: 16/9; cursor: pointer; opacity: 0; animation: fadeInUp 0.8s forwards; 
@@ -2306,28 +2391,63 @@ body.light-mode .apple-menu-item { color: #222222; }
                 </div>
             </div>
             <div class="p-6 md:p-8 font-mono">
+                <!-- Header Status & Count -->
                 <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
                     <div class="flex items-center gap-3 text-[var(--accent-color)]">
                         <span class="animate-pulse">●</span>
                         <span class="text-xs sm:text-sm tracking-widest uppercase font-bold">Live Monitoring // Work In Progress</span>
                     </div>
-                    <div class="flex items-center gap-2 text-[10px] text-white/40 uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+                    <div class="flex items-center gap-2 text-[10px] text-white/40 uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full" id="lab-count-badge">
                         <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span>
-                        5 Pistes Studio
+                        <span id="lab-tracks-count">2 Pistes Studio</span>
+                    </div>
+                </div>
+
+                <!-- TAGS / GENRES / SEARCH FILTER BAR -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6 p-2.5 sm:p-3 rounded-2xl bg-black/40 border border-white/5 backdrop-blur-md">
+                    <!-- Genre & Tag Pills -->
+                    <div class="flex items-center gap-2 overflow-x-auto hide-scroll pb-1 sm:pb-0" id="lab-filter-pills">
+                        <button type="button" class="lab-filter-pill active" data-genre="all" onclick="setLabFilter('all', this)">
+                            <span>Tous</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full" id="lab-badge-all">2</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="ambient" onclick="setLabFilter('ambient', this)">
+                            <span>Ambient</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="trap" onclick="setLabFilter('trap', this)">
+                            <span>Trap</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="pop" onclick="setLabFilter('pop', this)">
+                            <span>Pop</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                        <button type="button" class="lab-filter-pill" data-genre="lo-fi" onclick="setLabFilter('lo-fi', this)">
+                            <span>Lo-fi</span>
+                            <span class="text-[9px] opacity-60 bg-white/10 px-1.5 py-0.5 rounded-full">1</span>
+                        </button>
+                    </div>
+
+                    <!-- Search / Keyword Input -->
+                    <div class="relative flex items-center shrink-0">
+                        <svg class="w-3.5 h-3.5 absolute left-3 text-white/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" id="lab-search-input" class="lab-search-input font-mono" placeholder="Rechercher genre, tag..." oninput="onLabSearchInput(this.value)" autocomplete="off">
                     </div>
                 </div>
                 
+                <!-- TRACKS LIST -->
                 <div class="space-y-3" id="lab-tracks-list">
                     <!-- 1. rover.mp3 -->
-                    <div class="lab-row group" id="lab-row-rover">
-                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
-                            <div class="flex items-center gap-4">
-                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('rover')" title="Écouter / Pause (rover.mp3)">
+                    <div class="lab-row group" id="lab-row-rover" data-genres="ambient trap" data-desc="Texture spatiale planante, nappes éthérées et sub-bass trap percutante." data-title="rover.mp3">
+                        <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <button type="button" class="lab-play-btn touch-manipulation mt-0.5 sm:mt-0" onclick="toggleWaveSurfer('rover')" title="Écouter / Pause (rover.mp3)">
                                     <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                     <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                 </button>
                                 <div>
-                                    <div class="flex items-center gap-2.5">
+                                    <div class="flex flex-wrap items-center gap-2.5">
                                         <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">rover.mp3</h4>
                                         <div class="lab-eq-container hidden" id="lab-eq-rover">
                                             <span class="lab-eq-bar bar-1"></span>
@@ -2335,11 +2455,15 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-eq-bar bar-3"></span>
                                             <span class="lab-eq-bar bar-4"></span>
                                         </div>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('ambient')" title="Filtrer par Ambient">#Ambient</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('trap')" title="Filtrer par Trap">#Trap</span>
+                                        </div>
                                     </div>
-                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Ambient · Trap</p>
+                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Texture spatiale planante, nappes éthérées et sub-bass trap percutante.</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
                                 <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-rover">00:00 / --:--</span>
                             </div>
                         </div>
@@ -2349,15 +2473,15 @@ body.light-mode .apple-menu-item { color: #222222; }
                     </div>
 
                     <!-- 2. wordsnight.mp3 -->
-                    <div class="lab-row group" id="lab-row-wordsnight">
-                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
-                            <div class="flex items-center gap-4">
-                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('wordsnight')" title="Écouter / Pause (wordsnight.mp3)">
+                    <div class="lab-row group" id="lab-row-wordsnight" data-genres="pop lo-fi" data-desc="Mélodie pop nocturne chaleureuse aux accords feutrés et drum kit lo-fi." data-title="wordsnight.mp3">
+                        <div class="lab-content-wrapper flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-20 relative">
+                            <div class="flex items-start sm:items-center gap-4">
+                                <button type="button" class="lab-play-btn touch-manipulation mt-0.5 sm:mt-0" onclick="toggleWaveSurfer('wordsnight')" title="Écouter / Pause (wordsnight.mp3)">
                                     <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                     <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                                 </button>
                                 <div>
-                                    <div class="flex items-center gap-2.5">
+                                    <div class="flex flex-wrap items-center gap-2.5">
                                         <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">wordsnight.mp3</h4>
                                         <div class="lab-eq-container hidden" id="lab-eq-wordsnight">
                                             <span class="lab-eq-bar bar-1"></span>
@@ -2365,11 +2489,15 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-eq-bar bar-3"></span>
                                             <span class="lab-eq-bar bar-4"></span>
                                         </div>
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('pop')" title="Filtrer par Pop">#Pop</span>
+                                            <span class="lab-tag-badge" onclick="filterLabByTag('lo-fi')" title="Filtrer par Lo-fi">#Lo-fi</span>
+                                        </div>
                                     </div>
-                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Pop · Lo-fi</p>
+                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Mélodie pop nocturne chaleureuse aux accords feutrés et drum kit lo-fi.</p>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
                                 <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-wordsnight">00:00 / --:--</span>
                             </div>
                         </div>
@@ -2378,94 +2506,10 @@ body.light-mode .apple-menu-item { color: #222222; }
                         </div>
                     </div>
 
-                    <!-- 3. shadow.mp3 -->
-                    <div class="lab-row group" id="lab-row-shadow">
-                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
-                            <div class="flex items-center gap-4">
-                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('shadow')" title="Écouter / Pause (shadow.mp3)">
-                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </button>
-                                <div>
-                                    <div class="flex items-center gap-2.5">
-                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">shadow.mp3</h4>
-                                        <div class="lab-eq-container hidden" id="lab-eq-shadow">
-                                            <span class="lab-eq-bar bar-1"></span>
-                                            <span class="lab-eq-bar bar-2"></span>
-                                            <span class="lab-eq-bar bar-3"></span>
-                                            <span class="lab-eq-bar bar-4"></span>
-                                        </div>
-                                    </div>
-                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Dark Synth · Bass</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-shadow">00:00 / --:--</span>
-                            </div>
-                        </div>
-                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
-                            <div id="waveform-shadow" class="w-full cursor-crosshair"></div>
-                        </div>
-                    </div>
-
-                    <!-- 4. perception.mp3 -->
-                    <div class="lab-row group" id="lab-row-perception">
-                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
-                            <div class="flex items-center gap-4">
-                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('perception')" title="Écouter / Pause (perception.mp3)">
-                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </button>
-                                <div>
-                                    <div class="flex items-center gap-2.5">
-                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">perception.mp3</h4>
-                                        <div class="lab-eq-container hidden" id="lab-eq-perception">
-                                            <span class="lab-eq-bar bar-1"></span>
-                                            <span class="lab-eq-bar bar-2"></span>
-                                            <span class="lab-eq-bar bar-3"></span>
-                                            <span class="lab-eq-bar bar-4"></span>
-                                        </div>
-                                    </div>
-                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Cinematic · War Music</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-perception">00:00 / --:--</span>
-                            </div>
-                        </div>
-                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
-                            <div id="waveform-perception" class="w-full cursor-crosshair"></div>
-                        </div>
-                    </div>
-
-                    <!-- 5. lightoff.mp3 -->
-                    <div class="lab-row group" id="lab-row-lightoff">
-                        <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
-                            <div class="flex items-center gap-4">
-                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('lightoff')" title="Écouter / Pause (lightoff.mp3)">
-                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </button>
-                                <div>
-                                    <div class="flex items-center gap-2.5">
-                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">lightoff.mp3</h4>
-                                        <div class="lab-eq-container hidden" id="lab-eq-lightoff">
-                                            <span class="lab-eq-bar bar-1"></span>
-                                            <span class="lab-eq-bar bar-2"></span>
-                                            <span class="lab-eq-bar bar-3"></span>
-                                            <span class="lab-eq-bar bar-4"></span>
-                                        </div>
-                                    </div>
-                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Ambient · Cinematic</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-lightoff">00:00 / --:--</span>
-                            </div>
-                        </div>
-                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
-                            <div id="waveform-lightoff" class="w-full cursor-crosshair"></div>
-                        </div>
+                    <!-- Empty state if search / filter has no match -->
+                    <div id="lab-empty-state" class="hidden text-center py-10 px-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                        <p class="text-sm text-white/60 mb-2">Aucune composition ne correspond à ce filtre.</p>
+                        <button type="button" onclick="setLabFilter('all')" class="text-xs text-[var(--accent-color)] hover:underline uppercase tracking-wider">Réinitialiser les filtres</button>
                     </div>
                 </div>
             </div>
@@ -3205,16 +3249,27 @@ body.light-mode .apple-menu-item { color: #222222; }
             }
         }
 
-        // --- 2. LAB RECORDER LOGIC (JUICY ANIME.JS V4 + WAVESURFER) ---
+        // --- 2. LAB RECORDER LOGIC (JUICY ANIME.JS V4 + TAGS / GENRES / SEARCH) ---
         const labTracks = [
-            { id: 'rover', url: 'rover.mp3' },
-            { id: 'wordsnight', url: 'wordsnight.mp3' },
-            { id: 'shadow', url: 'shadow.mp3' },
-            { id: 'perception', url: 'perception.mp3' },
-            { id: 'lightoff', url: 'lightoff.mp3' }
+            { 
+                id: 'rover', 
+                title: 'rover.mp3', 
+                url: 'rover.mp3', 
+                genres: ['ambient', 'trap'], 
+                desc: 'Texture spatiale planante, nappes éthérées et sub-bass trap percutante.' 
+            },
+            { 
+                id: 'wordsnight', 
+                title: 'wordsnight.mp3', 
+                url: 'wordsnight.mp3', 
+                genres: ['pop', 'lo-fi'], 
+                desc: 'Mélodie pop nocturne chaleureuse aux accords feutrés et drum kit lo-fi.' 
+            }
         ];
 
         const wavesurfers = {};
+        let currentLabFilter = 'all';
+        let currentLabSearch = '';
 
         function formatLabTime(sec) {
             if (isNaN(sec) || sec < 0) return "00:00";
@@ -3314,6 +3369,114 @@ body.light-mode .apple-menu-item { color: #222222; }
 
             initLabJuicyButtons();
             initLabWaveformHovers();
+        }
+
+        // --- FILTRES TAGS / GENRES / RECHERCHE ---
+        function setLabFilter(genre, btnEl) {
+            currentLabFilter = (genre || 'all').toLowerCase();
+            
+            // Mise à jour des boutons de filtres
+            document.querySelectorAll('#lab-filter-pills .lab-filter-pill').forEach(pill => {
+                const pGenre = (pill.getAttribute('data-genre') || '').toLowerCase();
+                if (pGenre === currentLabFilter) {
+                    pill.classList.add('active');
+                } else {
+                    pill.classList.remove('active');
+                }
+            });
+
+            applyLabFilters();
+        }
+
+        function filterLabByTag(tag) {
+            const cleanTag = (tag || '').toLowerCase();
+            const matchingPill = document.querySelector(`#lab-filter-pills .lab-filter-pill[data-genre="${cleanTag}"]`);
+            if (matchingPill) {
+                setLabFilter(cleanTag, matchingPill);
+            } else {
+                currentLabFilter = cleanTag;
+                applyLabFilters();
+            }
+        }
+
+        function onLabSearchInput(val) {
+            currentLabSearch = (val || '').trim().toLowerCase();
+            applyLabFilters();
+        }
+
+        function applyLabFilters() {
+            const rows = document.querySelectorAll('.lab-row');
+            let visibleCount = 0;
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+
+            rows.forEach(row => {
+                const rowGenres = (row.getAttribute('data-genres') || '').toLowerCase();
+                const rowTitle = (row.getAttribute('data-title') || '').toLowerCase();
+                const rowDesc = (row.getAttribute('data-desc') || '').toLowerCase();
+
+                // Vérification du genre
+                const matchesGenre = (currentLabFilter === 'all') || rowGenres.includes(currentLabFilter);
+                
+                // Vérification de la recherche
+                const matchesSearch = !currentLabSearch || 
+                    rowTitle.includes(currentLabSearch) || 
+                    rowGenres.includes(currentLabSearch) || 
+                    rowDesc.includes(currentLabSearch);
+
+                const isVisible = matchesGenre && matchesSearch;
+
+                // Mise en surbrillance des badges de tags
+                row.querySelectorAll('.lab-tag-badge').forEach(badge => {
+                    const badgeText = badge.textContent.replace('#', '').toLowerCase();
+                    if (currentLabFilter !== 'all' && badgeText.includes(currentLabFilter)) {
+                        badge.classList.add('active-filter');
+                    } else {
+                        badge.classList.remove('active-filter');
+                    }
+                });
+
+                if (isVisible) {
+                    visibleCount++;
+                    if (row.classList.contains('hidden')) {
+                        row.classList.remove('hidden');
+                        if (a && typeof a.animate === 'function') {
+                            a.remove(row);
+                            a.animate(row, {
+                                opacity: [0, 1],
+                                translateY: [-6, 0],
+                                scale: [0.97, 1],
+                                duration: 320,
+                                ease: a.spring ? a.spring({ bounce: 0.25, mass: 0.7 }) : 'outQuad'
+                            });
+                        }
+                    }
+                } else {
+                    if (!row.classList.contains('hidden')) {
+                        // Pause le son si la piste en cours de lecture est masquée
+                        const trackId = row.id.replace('lab-row-', '');
+                        if (wavesurfers[trackId] && wavesurfers[trackId].isPlaying()) {
+                            wavesurfers[trackId].pause();
+                        }
+                        row.classList.add('hidden');
+                    }
+                }
+            });
+
+            // Mise à jour du compteur
+            const countEl = document.getElementById('lab-tracks-count');
+            if (countEl) {
+                countEl.textContent = `${visibleCount} Piste${visibleCount > 1 ? 's' : ''} Studio`;
+            }
+
+            // Gestion de l'état vide
+            const emptyState = document.getElementById('lab-empty-state');
+            if (emptyState) {
+                if (visibleCount === 0) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    emptyState.classList.add('hidden');
+                }
+            }
         }
 
         function initLabWaveformHovers() {
