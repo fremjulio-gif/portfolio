@@ -764,20 +764,80 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
         @media (min-width: 768px) { .project-info-minimal { padding: 20px 24px; } }
 
-        /* --- LAB & INSPIRATIONS --- */
+        /* --- LAB RECORDER SH : JUICY & TACTILE DAW STRIP --- */
         .lab-row { 
-            display: flex; flex-direction: column; justify-content: center; padding: 16px; 
-            border-bottom: 1px solid var(--glass-border); transition: background-color 0.4s var(--ease-apple); position: relative; overflow: hidden; 
+            display: flex; flex-direction: column; justify-content: center; padding: 18px 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.015);
+            border-radius: 18px;
+            margin-bottom: 14px;
+            transition: background 0.35s var(--ease-apple), border-color 0.35s var(--ease-apple), box-shadow 0.35s var(--ease-apple); 
+            position: relative; overflow: hidden; 
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
         }
-        .lab-row:last-child { border-bottom: none; }
+        .lab-row:last-child { margin-bottom: 0; }
         @media (hover: hover) { 
-            .lab-row:hover { background: rgba(255,255,255,0.04); } 
+            .lab-row:hover { 
+                background: rgba(255, 255, 255, 0.04); 
+                border-color: rgba(255, 255, 255, 0.15);
+            } 
         }
-        .lab-row.playing .text-xs { opacity: 1; }
+        .lab-row.playing {
+            background: linear-gradient(90deg, color-mix(in srgb, var(--accent-color) 8%, rgba(255,255,255,0.02)) 0%, rgba(255,255,255,0.01) 100%) !important;
+            border-color: color-mix(in srgb, var(--accent-color) 40%, rgba(255,255,255,0.12)) !important;
+            box-shadow: inset 0 0 24px -6px color-mix(in srgb, var(--accent-color) 20%, transparent), 0 8px 25px -8px rgba(0,0,0,0.6) !important;
+        }
         
         .lab-content-wrapper { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 20; }
-        .lab-btn-area { cursor: pointer; padding: 8px; margin: -8px; border-radius: 50%; transition: background-color 0.3s var(--ease-apple), transform 0.3s var(--ease-apple); z-index: 30; }
-        .lab-btn-area:active { background: rgba(255,255,255,0.15); transform: scale(0.97); }
+        
+        .lab-play-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            user-select: none;
+            touch-action: manipulation;
+            transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+            flex-shrink: 0;
+        }
+        @media (hover: hover) {
+            .lab-play-btn:hover {
+                background: color-mix(in srgb, var(--accent-color) 20%, rgba(255,255,255,0.1));
+                border-color: var(--accent-color);
+                box-shadow: 0 0 18px color-mix(in srgb, var(--accent-color) 40%, transparent);
+            }
+        }
+        .lab-row.playing .lab-play-btn {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 22px color-mix(in srgb, var(--accent-color) 60%, transparent), inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+        .lab-row.playing .lab-play-btn svg {
+            color: #000 !important;
+        }
+
+        /* Mini EQ Bars Animation */
+        .lab-eq-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 12px;
+            width: 14px;
+        }
+        .lab-eq-bar {
+            width: 2px;
+            background: var(--accent-color);
+            border-radius: 1px;
+            height: 3px;
+        }
 
         .inspi-card-large { 
             position: relative; overflow: hidden; border-radius: 16px; border: 1px solid var(--glass-border); 
@@ -2199,94 +2259,195 @@ body.light-mode .apple-menu-item { color: #222222; }
         
         <section id="lab" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
              <div class="win-header">
-                <span class="win-title">Lab_Record.sh</span>
-                <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                <div class="flex items-center gap-2.5">
+                    <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                            <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                            <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                        </svg>
+                    </button>
+                    <span class="win-title">Lab_Record.sh</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="hidden sm:flex items-center gap-2 font-mono text-[9px] uppercase tracking-wider text-white/40 border border-white/10 px-2 py-0.5 rounded-md bg-black/40">
+                        <span>48 kHz</span>
+                        <span class="text-white/20">|</span>
+                        <span>24-bit PCM</span>
+                    </div>
+                    <div class="flex gap-2"><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div><div class="w-2.5 h-2.5 rounded-full bg-white/20"></div></div>
+                    <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
+                        <svg viewBox="0 0 24 24" width="13" height="13" class="pointer-events-none">
+                            <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                            <line x1="7" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="12" y1="7" x2="12" y2="17" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="2.5" fill="rgba(0,0,0,0.6)"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <div class="p-6 font-mono">
-                <div class="flex items-center gap-3 mb-6 text-[var(--accent-color)]">
-                    <span class="animate-pulse">●</span>
-                    <span class="text-sm tracking-widest uppercase">Live Monitoring // Work In Progress</span>
+            <div class="p-6 md:p-8 font-mono">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <div class="flex items-center gap-3 text-[var(--accent-color)]">
+                        <span class="animate-pulse">●</span>
+                        <span class="text-xs sm:text-sm tracking-widest uppercase font-bold">Live Monitoring // Work In Progress</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-[10px] text-white/40 uppercase tracking-widest bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)]"></span>
+                        5 Pistes Studio
+                    </div>
                 </div>
                 
-                <div class="space-y-4">
+                <div class="space-y-3" id="lab-tracks-list">
+                    <!-- 1. rover.mp3 -->
                     <div class="lab-row group" id="lab-row-rover">
                         <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('rover')">
-                                    <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </div>
+                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('rover')" title="Écouter / Pause (rover.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
                                 <div>
-                                    <h4 class="text-sm font-bold">rover.mp3</h4>
-                                    <p class="text-[10px] opacity-50">Ambient - Trap</p>
+                                    <div class="flex items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">rover.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-rover">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Ambient · Trap</p>
                                 </div>
                             </div>
+                            <div class="flex items-center gap-3">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-rover">00:00 / --:--</span>
+                            </div>
                         </div>
-                        <div id="waveform-rover" class="w-full mt-2 cursor-crosshair"></div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-rover" class="w-full cursor-crosshair"></div>
+                        </div>
                     </div>
 
+                    <!-- 2. wordsnight.mp3 -->
                     <div class="lab-row group" id="lab-row-wordsnight">
                         <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('wordsnight')">
-                                    <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </div>
+                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('wordsnight')" title="Écouter / Pause (wordsnight.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
                                 <div>
-                                    <h4 class="text-sm font-bold">wordsnight.mp3</h4>
-                                    <p class="text-[10px] opacity-50">Pop - Lo-fi</p>
+                                    <div class="flex items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">wordsnight.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-wordsnight">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Pop · Lo-fi</p>
                                 </div>
                             </div>
+                            <div class="flex items-center gap-3">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-wordsnight">00:00 / --:--</span>
+                            </div>
                         </div>
-                        <div id="waveform-wordsnight" class="w-full mt-2 cursor-crosshair"></div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-wordsnight" class="w-full cursor-crosshair"></div>
+                        </div>
                     </div>
 
+                    <!-- 3. shadow.mp3 -->
                     <div class="lab-row group" id="lab-row-shadow">
                         <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('shadow')">
-                                    <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </div>
+                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('shadow')" title="Écouter / Pause (shadow.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
                                 <div>
-                                    <h4 class="text-sm font-bold">shadow.mp3</h4>
-                                    <p class="text-[10px] opacity-50">Dark Synth - Bass</p>
+                                    <div class="flex items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">shadow.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-shadow">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Dark Synth · Bass</p>
                                 </div>
                             </div>
+                            <div class="flex items-center gap-3">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-shadow">00:00 / --:--</span>
+                            </div>
                         </div>
-                        <div id="waveform-shadow" class="w-full mt-2 cursor-crosshair"></div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-shadow" class="w-full cursor-crosshair"></div>
+                        </div>
                     </div>
 
+                    <!-- 4. perception.mp3 -->
                     <div class="lab-row group" id="lab-row-perception">
                         <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('perception')">
-                                    <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </div>
+                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('perception')" title="Écouter / Pause (perception.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
                                 <div>
-                                    <h4 class="text-sm font-bold">perception.mp3</h4>
-                                    <p class="text-[10px] opacity-50">Cinematic - War Music</p>
+                                    <div class="flex items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">perception.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-perception">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Cinematic · War Music</p>
                                 </div>
                             </div>
+                            <div class="flex items-center gap-3">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-perception">00:00 / --:--</span>
+                            </div>
                         </div>
-                        <div id="waveform-perception" class="w-full mt-2 cursor-crosshair"></div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-perception" class="w-full cursor-crosshair"></div>
+                        </div>
                     </div>
 
+                    <!-- 5. lightoff.mp3 -->
                     <div class="lab-row group" id="lab-row-lightoff">
                         <div class="lab-content-wrapper flex items-center justify-between z-20 relative">
                             <div class="flex items-center gap-4">
-                                <div class="lab-btn-area w-8 h-8 flex items-center justify-center border border-white/10 rounded hover:border-[var(--accent-color)] transition shrink-0" onclick="toggleWaveSurfer('lightoff')">
-                                    <svg class="w-3 h-3 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                    <svg class="w-3 h-3 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                                </div>
+                                <button type="button" class="lab-play-btn touch-manipulation" onclick="toggleWaveSurfer('lightoff')" title="Écouter / Pause (lightoff.mp3)">
+                                    <svg class="w-3.5 h-3.5 play-icon translate-x-0.5 text-white/90" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <svg class="w-3.5 h-3.5 pause-icon hidden text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                </button>
                                 <div>
-                                    <h4 class="text-sm font-bold">lightoff.mp3</h4>
-                                    <p class="text-[10px] opacity-50">Ambient - Cinematic</p>
+                                    <div class="flex items-center gap-2.5">
+                                        <h4 class="text-sm sm:text-base font-bold text-white group-hover:text-[var(--accent-color)] transition-colors">lightoff.mp3</h4>
+                                        <div class="lab-eq-container hidden" id="lab-eq-lightoff">
+                                            <span class="lab-eq-bar bar-1"></span>
+                                            <span class="lab-eq-bar bar-2"></span>
+                                            <span class="lab-eq-bar bar-3"></span>
+                                            <span class="lab-eq-bar bar-4"></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] sm:text-xs text-white/40 tracking-wider">Ambient · Cinematic</p>
                                 </div>
                             </div>
+                            <div class="flex items-center gap-3">
+                                <span class="lab-time-disp font-mono text-[10px] sm:text-[11px] text-white/50 bg-black/40 px-2.5 py-1 rounded-md border border-white/5 tabular-nums" id="lab-time-lightoff">00:00 / --:--</span>
+                            </div>
                         </div>
-                        <div id="waveform-lightoff" class="w-full mt-2 cursor-crosshair"></div>
+                        <div class="waveform-wrap relative w-full mt-3 rounded-xl overflow-hidden bg-black/30 border border-white/5 p-1 transition-all duration-300">
+                            <div id="waveform-lightoff" class="w-full cursor-crosshair"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3034,7 +3195,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             }
         }
 
-        // --- 2. LAB PLAYER LOGIC (WAVESURFER.JS) ---
+        // --- 2. LAB RECORDER LOGIC (JUICY ANIME.JS V4 + WAVESURFER) ---
         const labTracks = [
             { id: 'rover', url: 'rover.mp3' },
             { id: 'wordsnight', url: 'wordsnight.mp3' },
@@ -3045,38 +3206,131 @@ body.light-mode .apple-menu-item { color: #222222; }
 
         const wavesurfers = {};
 
-        try {
-            labTracks.forEach(track => {
-                if (wavesurfers[track.id]) wavesurfers[track.id].destroy();
-                const ws = WaveSurfer.create({
-                    container: `#waveform-${track.id}`,
-                    waveColor: 'rgba(255, 255, 255, 0.3)',
-                    progressColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#22c55e',
-                    cursorColor: '#ffffff',
-                    barWidth: 2, barGap: 2, barRadius: 2, height: 48,
-                    url: track.url, normalize: true
-                });
+        function formatLabTime(sec) {
+            if (isNaN(sec) || sec < 0) return "00:00";
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = Math.floor(sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
 
-                wavesurfers[track.id] = ws;
+        function initLabPlayer() {
+            try {
+                labTracks.forEach(track => {
+                    if (wavesurfers[track.id]) wavesurfers[track.id].destroy();
+                    
+                    const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#22c55e';
+                    const ws = WaveSurfer.create({
+                        container: `#waveform-${track.id}`,
+                        waveColor: 'rgba(255, 255, 255, 0.22)',
+                        progressColor: accentColor,
+                        cursorColor: '#ffffff',
+                        cursorWidth: 2,
+                        barWidth: 3,
+                        barGap: 3,
+                        barRadius: 3,
+                        height: 50,
+                        url: track.url,
+                        normalize: true
+                    });
 
-                ws.on('play', () => {
-                    Object.keys(wavesurfers).forEach(id => {
-                        if (id !== track.id && wavesurfers[id].isPlaying()) {
-                            wavesurfers[id].pause();
+                    wavesurfers[track.id] = ws;
+
+                    // Durée prête
+                    ws.on('ready', (duration) => {
+                        const timeDisp = document.getElementById(`lab-time-${track.id}`);
+                        if (timeDisp) {
+                            timeDisp.textContent = `00:00 / ${formatLabTime(duration)}`;
                         }
                     });
-                    updateLabUI(track.id, true);
+
+                    // Mise à jour continue du timecode
+                    ws.on('timeupdate', (currentTime) => {
+                        const timeDisp = document.getElementById(`lab-time-${track.id}`);
+                        if (timeDisp) {
+                            const dur = ws.getDuration() || 0;
+                            timeDisp.textContent = `${formatLabTime(currentTime)} / ${formatLabTime(dur)}`;
+                        }
+                    });
+
+                    // Événements de lecture
+                    ws.on('play', () => {
+                        // Arrêter les autres pistes si nécessaire
+                        Object.keys(wavesurfers).forEach(id => {
+                            if (id !== track.id && wavesurfers[id].isPlaying()) {
+                                wavesurfers[id].pause();
+                            }
+                        });
+                        updateLabUI(track.id, true);
+                    });
+
+                    ws.on('pause', () => updateLabUI(track.id, false));
+                    ws.on('finish', () => {
+                        updateLabUI(track.id, false);
+                        const timeDisp = document.getElementById(`lab-time-${track.id}`);
+                        if (timeDisp) {
+                            timeDisp.textContent = `00:00 / ${formatLabTime(ws.getDuration())}`;
+                        }
+                    });
+                });
+            } catch(e) {
+                console.error("WaveSurfer n'a pas pu se charger.", e);
+            }
+
+            initLabJuicyButtons();
+        }
+
+        function initLabJuicyButtons() {
+            const rows = document.querySelectorAll('.lab-row');
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (!a || typeof a.animate !== 'function') return;
+
+            rows.forEach(row => {
+                const btn = row.querySelector('.lab-play-btn');
+                if (!btn) return;
+
+                // Survol élastique ressort (Hover)
+                btn.addEventListener('mouseenter', () => {
+                    a.remove(btn);
+                    a.animate(btn, {
+                        scale: 1.12,
+                        duration: 300,
+                        ease: a.spring ? a.spring({ bounce: 0.4, mass: 0.6 }) : 'outQuad'
+                    });
                 });
 
-                ws.on('pause', () => updateLabUI(track.id, false));
-                ws.on('finish', () => updateLabUI(track.id, false));
+                // Fin de survol
+                btn.addEventListener('mouseleave', () => {
+                    a.remove(btn);
+                    a.animate(btn, {
+                        scale: 1,
+                        duration: 400,
+                        ease: a.spring ? a.spring({ bounce: 0.25, mass: 0.8 }) : 'outQuad'
+                    });
+                });
+
+                // Enfoncement tactile mécanique au clic (Active)
+                btn.addEventListener('pointerdown', () => {
+                    a.remove(btn);
+                    a.animate(btn, {
+                        scale: 0.88,
+                        duration: 120,
+                        ease: 'outQuad'
+                    });
+                });
+
+                btn.addEventListener('pointerup', () => {
+                    a.remove(btn);
+                    a.animate(btn, {
+                        scale: 1.12,
+                        duration: 250,
+                        ease: a.spring ? a.spring({ bounce: 0.45, mass: 0.7 }) : 'outQuad'
+                    });
+                });
             });
-        } catch(e) {
-            console.error("WaveSurfer n'a pas pu se charger.", e);
         }
 
         function toggleWaveSurfer(id) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             if (wavesurfers[id]) wavesurfers[id].playPause();
         }
 
@@ -3085,17 +3339,116 @@ body.light-mode .apple-menu-item { color: #222222; }
             if(!row) return;
             const playIcon = row.querySelector('.play-icon');
             const pauseIcon = row.querySelector('.pause-icon');
+            const eqContainer = document.getElementById(`lab-eq-${id}`);
+            const waveformWrap = row.querySelector('.waveform-wrap');
+            const btn = row.querySelector('.lab-play-btn');
+
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            const animFn = a && typeof a.animate === 'function' ? a.animate : null;
 
             if (isPlaying) {
                 row.classList.add('playing');
-                playIcon.classList.add('hidden');
-                pauseIcon.classList.remove('hidden');
+                if (playIcon) playIcon.classList.add('hidden');
+                if (pauseIcon) {
+                    pauseIcon.classList.remove('hidden');
+                    if (animFn) {
+                        animFn(pauseIcon, {
+                            scale: [0.4, 1],
+                            rotate: [-45, 0],
+                            opacity: [0, 1],
+                            duration: 260,
+                            ease: a.spring ? a.spring({ bounce: 0.35, mass: 0.7 }) : 'outQuad'
+                        });
+                    }
+                }
+
+                // Juicy micro-pulse sur le bouton
+                if (btn && animFn) {
+                    animFn(btn, {
+                        scale: [1, 1.16, 1.08],
+                        duration: 350,
+                        ease: a.spring ? a.spring({ bounce: 0.4, mass: 0.6 }) : 'outQuad'
+                    });
+                }
+
+                // Waveform bounce & glow
+                if (waveformWrap && animFn) {
+                    animFn(waveformWrap, {
+                        scaleY: [0.93, 1],
+                        opacity: [0.75, 1],
+                        duration: 400,
+                        ease: 'outQuad'
+                    });
+                }
+
+                // Démarrer l'animation EQ bars
+                if (eqContainer) {
+                    eqContainer.classList.remove('hidden');
+                    eqContainer.classList.add('flex');
+                    startLabEqAnim(id);
+                }
             } else {
                 row.classList.remove('playing');
-                playIcon.classList.remove('hidden');
-                pauseIcon.classList.add('hidden');
+                if (pauseIcon) pauseIcon.classList.add('hidden');
+                if (playIcon) {
+                    playIcon.classList.remove('hidden');
+                    if (animFn) {
+                        animFn(playIcon, {
+                            scale: [0.5, 1],
+                            opacity: [0, 1],
+                            duration: 200,
+                            ease: 'outQuad'
+                        });
+                    }
+                }
+                if (btn && animFn) {
+                    animFn(btn, {
+                        scale: 1,
+                        duration: 250,
+                        ease: 'outQuad'
+                    });
+                }
+                if (eqContainer) {
+                    eqContainer.classList.add('hidden');
+                    eqContainer.classList.remove('flex');
+                    stopLabEqAnim(id);
+                }
             }
         }
+
+        function startLabEqAnim(id) {
+            stopLabEqAnim(id);
+            const eqContainer = document.getElementById(`lab-eq-${id}`);
+            if (!eqContainer) return;
+            const bars = eqContainer.querySelectorAll('.lab-eq-bar');
+            if (!bars.length) return;
+
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (!a || typeof a.animate !== 'function') return;
+
+            bars.forEach((bar, idx) => {
+                a.animate(bar, {
+                    height: ['3px', '14px', '5px', '12px', '4px'],
+                    duration: 500 + idx * 120,
+                    loop: true,
+                    alternate: true,
+                    ease: 'inOutQuad',
+                    delay: idx * 80
+                });
+            });
+        }
+
+        function stopLabEqAnim(id) {
+            const eqContainer = document.getElementById(`lab-eq-${id}`);
+            if (!eqContainer) return;
+            const bars = eqContainer.querySelectorAll('.lab-eq-bar');
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (a && typeof a.remove === 'function') {
+                bars.forEach(bar => a.remove(bar));
+            }
+        }
+
+        initLabPlayer();
         
         // --- 3. SEQUENCER CORE ---
         const trackVols = { kick: 0.9, snare: 0.8, hat: 0.7, perc: 0.6, synth: 0.75 };
