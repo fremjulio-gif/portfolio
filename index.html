@@ -828,15 +828,56 @@ body.light-mode .apple-menu-item { color: #222222; }
         .lab-eq-container {
             display: flex;
             align-items: flex-end;
-            gap: 2px;
-            height: 12px;
-            width: 14px;
+            gap: 2.5px;
+            height: 14px;
+            width: 16px;
         }
         .lab-eq-bar {
-            width: 2px;
+            width: 2.5px;
             background: var(--accent-color);
-            border-radius: 1px;
+            border-radius: 2px;
             height: 3px;
+        }
+
+        /* Waveform Wrap (Aérée, Spacieuse & Juicy) */
+        .waveform-wrap {
+            position: relative;
+            width: 100%;
+            margin-top: 14px;
+            padding: 14px 18px;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.3);
+            transition: border-color 0.3s var(--ease-apple), background 0.3s var(--ease-apple), box-shadow 0.3s var(--ease-apple), transform 0.3s var(--ease-apple);
+            cursor: pointer;
+        }
+        @media (hover: hover) {
+            .waveform-wrap:hover {
+                background: rgba(0, 0, 0, 0.5);
+                border-color: rgba(255, 255, 255, 0.18);
+                box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 6px 22px -4px rgba(0,0,0,0.6), 0 0 20px -4px color-mix(in srgb, var(--accent-color) 25%, transparent);
+            }
+        }
+        .lab-row.playing .waveform-wrap {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: color-mix(in srgb, var(--accent-color) 45%, rgba(255,255,255,0.14));
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.7), 0 0 30px -6px color-mix(in srgb, var(--accent-color) 30%, transparent);
+        }
+
+        .lab-time-disp {
+            transition: transform 0.25s var(--ease-apple), border-color 0.25s var(--ease-apple), color 0.25s var(--ease-apple), background-color 0.25s var(--ease-apple);
+        }
+        .lab-row:hover .lab-time-disp {
+            border-color: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.85);
+        }
+        .lab-row.playing .lab-time-disp {
+            border-color: color-mix(in srgb, var(--accent-color) 40%, rgba(255,255,255,0.1));
+            color: var(--accent-color);
+            background: rgba(0,0,0,0.7);
         }
 
         .inspi-card-large { 
@@ -3221,16 +3262,17 @@ body.light-mode .apple-menu-item { color: #222222; }
                     const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim() || '#22c55e';
                     const ws = WaveSurfer.create({
                         container: `#waveform-${track.id}`,
-                        waveColor: 'rgba(255, 255, 255, 0.22)',
+                        waveColor: 'rgba(255, 255, 255, 0.16)',
                         progressColor: accentColor,
                         cursorColor: '#ffffff',
                         cursorWidth: 2,
-                        barWidth: 3,
-                        barGap: 3,
-                        barRadius: 3,
-                        height: 50,
+                        barWidth: 2,
+                        barGap: 5,
+                        barRadius: 4,
+                        height: 56,
                         url: track.url,
-                        normalize: true
+                        normalize: true,
+                        dragToSeek: true
                     });
 
                     wavesurfers[track.id] = ws;
@@ -3249,6 +3291,31 @@ body.light-mode .apple-menu-item { color: #222222; }
                         if (timeDisp) {
                             const dur = ws.getDuration() || 0;
                             timeDisp.textContent = `${formatLabTime(currentTime)} / ${formatLabTime(dur)}`;
+                        }
+                    });
+
+                    // Interaction tactile / scrubbing sur la waveform
+                    ws.on('seeking', (currentTime) => {
+                        const timeDisp = document.getElementById(`lab-time-${track.id}`);
+                        const row = document.getElementById(`lab-row-${track.id}`);
+                        const wrap = row ? row.querySelector('.waveform-wrap') : null;
+                        const a = typeof window.anime !== 'undefined' ? window.anime : null;
+
+                        if (timeDisp && a && typeof a.animate === 'function') {
+                            a.remove(timeDisp);
+                            a.animate(timeDisp, {
+                                scale: [1.14, 1],
+                                duration: 250,
+                                ease: 'outQuad'
+                            });
+                        }
+                        if (wrap && a && typeof a.animate === 'function') {
+                            a.remove(wrap);
+                            a.animate(wrap, {
+                                scaleY: [0.97, 1],
+                                duration: 220,
+                                ease: 'outQuad'
+                            });
                         }
                     });
 
@@ -3277,6 +3344,32 @@ body.light-mode .apple-menu-item { color: #222222; }
             }
 
             initLabJuicyButtons();
+            initLabWaveformHovers();
+        }
+
+        function initLabWaveformHovers() {
+            const wraps = document.querySelectorAll('.lab-row .waveform-wrap');
+            const a = typeof window.anime !== 'undefined' ? window.anime : null;
+            if (!a || typeof a.animate !== 'function') return;
+
+            wraps.forEach(wrap => {
+                wrap.addEventListener('mouseenter', () => {
+                    a.remove(wrap);
+                    a.animate(wrap, {
+                        scale: 1.012,
+                        duration: 280,
+                        ease: a.spring ? a.spring({ bounce: 0.35, mass: 0.6 }) : 'outQuad'
+                    });
+                });
+                wrap.addEventListener('mouseleave', () => {
+                    a.remove(wrap);
+                    a.animate(wrap, {
+                        scale: 1,
+                        duration: 350,
+                        ease: a.spring ? a.spring({ bounce: 0.25, mass: 0.8 }) : 'outQuad'
+                    });
+                });
+            });
         }
 
         function initLabJuicyButtons() {
@@ -3365,19 +3458,19 @@ body.light-mode .apple-menu-item { color: #222222; }
                 // Juicy micro-pulse sur le bouton
                 if (btn && animFn) {
                     animFn(btn, {
-                        scale: [1, 1.16, 1.08],
-                        duration: 350,
-                        ease: a.spring ? a.spring({ bounce: 0.4, mass: 0.6 }) : 'outQuad'
+                        scale: [1, 1.18, 1.08],
+                        duration: 380,
+                        ease: a.spring ? a.spring({ bounce: 0.45, mass: 0.6 }) : 'outQuad'
                     });
                 }
 
                 // Waveform bounce & glow
                 if (waveformWrap && animFn) {
                     animFn(waveformWrap, {
-                        scaleY: [0.93, 1],
-                        opacity: [0.75, 1],
-                        duration: 400,
-                        ease: 'outQuad'
+                        scaleY: [0.92, 1],
+                        opacity: [0.8, 1],
+                        duration: 420,
+                        ease: a.spring ? a.spring({ bounce: 0.3, mass: 0.7 }) : 'outQuad'
                     });
                 }
 
@@ -3428,12 +3521,12 @@ body.light-mode .apple-menu-item { color: #222222; }
 
             bars.forEach((bar, idx) => {
                 a.animate(bar, {
-                    height: ['3px', '14px', '5px', '12px', '4px'],
-                    duration: 500 + idx * 120,
+                    height: ['3px', '14px', '6px', '12px', '4px'],
+                    duration: 480 + idx * 110,
                     loop: true,
                     alternate: true,
                     ease: 'inOutQuad',
-                    delay: idx * 80
+                    delay: idx * 75
                 });
             });
         }
