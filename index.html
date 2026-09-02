@@ -1091,6 +1091,84 @@ body.light-mode .apple-menu-item { color: #222222; }
             box-shadow: 0 0 12px var(--accent-color);
         }
 
+        /* --- LATERAL MASTER VOLUME CONTROLLER --- */
+        #master-volume-dock {
+            position: fixed;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 9980;
+            transition: opacity 0.3s var(--ease-apple), transform 0.3s var(--ease-apple);
+        }
+        @media (max-width: 640px) {
+            #master-volume-dock {
+                right: 8px;
+                top: calc(50% + 20px);
+            }
+        }
+        #master-volume-wrapper {
+            background: rgba(10, 11, 15, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border-radius: 9999px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            padding: 10px 7px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.55;
+            transition: opacity 0.25s var(--ease-apple), border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        @media (hover: hover) {
+            #master-volume-wrapper:hover {
+                opacity: 1;
+                border-color: color-mix(in srgb, var(--accent-color) 50%, rgba(255, 255, 255, 0.2));
+                box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 20px -4px color-mix(in srgb, var(--accent-color) 35%, transparent);
+            }
+        }
+        #master-volume-wrapper:active, #master-volume-wrapper.is-interacting {
+            opacity: 1;
+            border-color: var(--accent-color);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 25px -2px color-mix(in srgb, var(--accent-color) 45%, transparent);
+        }
+        #master-vol-track {
+            width: 6px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 9999px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            touch-action: none;
+        }
+        @media (max-width: 640px) {
+            #master-vol-track {
+                height: 70px;
+                width: 5px;
+            }
+        }
+        #master-vol-fill {
+            width: 100%;
+            background: var(--accent-color);
+            border-radius: 9999px;
+            box-shadow: 0 0 8px var(--accent-color);
+            transition: height 0.08s ease-out;
+        }
+
+        /* --- MOBILE SILENT MODE PROMPT (TOP-LEFT ARROW) --- */
+        #mobile-mute-prompt {
+            animation: pulseMuteBorder 2.5s infinite ease-in-out;
+        }
+        @keyframes pulseMuteBorder {
+            0%, 100% { border-color: rgba(255, 255, 255, 0.2); }
+            50% { border-color: var(--accent-color); }
+        }
+
 
 
         /* --- ACCORDION PERFORMANCE MODE --- */
@@ -1489,7 +1567,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
 
 
-        /* --- FILTRES PROJETS (DAW ROUTING) --- */
+        /* --- FILTRES PROJETS (DAW ROUTING 100% RESPONSIVE) --- */
 .filter-btn {
     background: var(--glass-tint) !important;
     border: 1px solid var(--glass-border) !important;
@@ -1497,7 +1575,19 @@ body.light-mode .apple-menu-item { color: #222222; }
     -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
     border-radius: var(--radius-pill);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 var(--glass-highlight);
-    transition: transform 0.6s var(--ease-elastic-smooth), background-color 0.8s ease, border-color 1.2s var(--ease-smooth-slow), color 0.3s ease, box-shadow 1.2s var(--ease-smooth-slow);
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: 34px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.88);
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+    transition: transform 0.2s var(--ease-apple), background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 @media (hover: hover) {
     .filter-btn:hover {
@@ -1505,6 +1595,7 @@ body.light-mode .apple-menu-item { color: #222222; }
         background: var(--glass-tint-strong) !important;
         border-color: color-mix(in srgb, var(--accent-color) 50%, var(--glass-edge-top)) !important;
         box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 0 14px color-mix(in srgb, var(--accent-color) 25%, transparent);
+        color: #ffffff;
     }
 }
 .filter-btn:active {
@@ -1512,7 +1603,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 }
 .filter-btn.active {
     background: var(--accent-color) !important;
-    color: #000 !important;
+    color: #000000 !important;
     border-color: transparent !important;
     font-weight: 700;
     box-shadow: 0 0 20px color-mix(in srgb, var(--accent-color) 60%, transparent), inset 0 1px 0 rgba(255,255,255,0.4);
@@ -2324,13 +2415,13 @@ body.light-mode .apple-menu-item { color: #222222; }
             <div class="p-8 space-y-8">
                 <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight mb-4"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
 
-<div class="flex flex-wrap gap-2 mb-8" id="project-filters">
-    <button class="filter-btn active click-sound touch-manipulation px-4 py-1.5 text-xs font-mono border border-white/20 rounded-full bg-white/5 text-white hover:border-[var(--accent-color)] transition-all" onclick="filterProjects('all', this)">TOUTES LES PISTES</button>
-    <button class="filter-btn click-sound touch-manipulation px-4 py-1.5 text-xs font-mono border border-white/20 rounded-full bg-white/5 text-white/60 hover:text-white hover:border-[var(--accent-color)] transition-all" onclick="filterProjects('prise-de-son', this)">Prise de son</button>
-    <button class="filter-btn click-sound touch-manipulation px-4 py-1.5 text-xs font-mono border border-white/20 rounded-full bg-white/5 text-white/60 hover:text-white hover:border-[var(--accent-color)] transition-all" onclick="filterProjects('post-prod', this)">Post-Prod / Sound Design</button>
-    <button class="filter-btn click-sound touch-manipulation px-4 py-1.5 text-xs font-mono border border-white/20 rounded-full bg-white/5 text-white/60 hover:text-white hover:border-[var(--accent-color)] transition-all" onclick="filterProjects('mix-master', this)">Mix / Master</button>
-    <button class="filter-btn click-sound touch-manipulation px-4 py-1.5 text-xs font-mono border border-white/20 rounded-full bg-white/5 text-white/60 hover:text-white hover:border-[var(--accent-color)] transition-all" onclick="filterProjects('compo', this)">Composition</button>
-    <button class="filter-btn click-sound touch-manipulation px-4 py-1.5 text-xs font-mono border border-white/20 rounded-full bg-white/5 text-white/60 hover:text-white hover:border-[var(--accent-color)] transition-all" onclick="filterProjects('montage', this)">Montage Vidéo</button>
+<div class="flex items-center gap-2 overflow-x-auto hide-scroll pb-2 mb-6 sm:mb-8 flex-nowrap md:flex-wrap" id="project-filters">
+    <button class="filter-btn active click-sound touch-manipulation" onclick="filterProjects('all', this)">TOUTES LES PISTES</button>
+    <button class="filter-btn click-sound touch-manipulation" onclick="filterProjects('prise-de-son', this)">Prise de son</button>
+    <button class="filter-btn click-sound touch-manipulation" onclick="filterProjects('post-prod', this)">Post-Prod / Sound Design</button>
+    <button class="filter-btn click-sound touch-manipulation" onclick="filterProjects('mix-master', this)">Mix / Master</button>
+    <button class="filter-btn click-sound touch-manipulation" onclick="filterProjects('compo', this)">Composition</button>
+    <button class="filter-btn click-sound touch-manipulation" onclick="filterProjects('montage', this)">Montage Vidéo</button>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" id="projects-grid">
@@ -3517,10 +3608,44 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 </nav>
 
-<!-- iframe SoundCloud caché (Lecteur Audio Background) -->
-<iframe id="sc-widget" allow="autoplay"
-  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/el_jlo&auto_play=false&buying=false&sharing=false&download=false&show_artwork=false&show_playcount=false&show_user=false&hide_related=true&visual=false"
-  style="position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-9999px;"></iframe>
+<!-- LATERAL MASTER VOLUME CONTROLLER (DISCRET, SUBTIL, 50% PAR DÉFAUT) -->
+<div id="master-volume-dock" class="select-none" style="touch-action: manipulation;">
+    <div id="master-volume-wrapper" class="glass-panel" title="Contrôle Volume Général (50% par défaut)">
+        <!-- Percentage Badge -->
+        <span id="master-vol-percent" class="font-mono text-[9px] sm:text-[10px] text-[var(--accent-color)] font-bold tracking-tighter">50%</span>
+        
+        <!-- Vertical Slider Track -->
+        <div id="master-vol-track" onclick="onMasterVolTrackClick(event)" title="Ajuster le volume général">
+            <div id="master-vol-fill" style="height: 50%;"></div>
+        </div>
+        
+        <!-- Mute / Unmute Button -->
+        <button type="button" id="master-vol-btn" onclick="toggleMasterMute()" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white/80 hover:text-[var(--accent-color)] active:scale-90 transition cursor-pointer click-sound touch-manipulation" title="Couper / Rétablir le son">
+            <svg id="master-vol-icon-high" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <svg id="master-vol-icon-muted" class="w-3.5 h-3.5 hidden text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+        </button>
+    </div>
+</div>
+
+<!-- PROMPT MODE SILENCIEUX (MOBILE ONLY - ADAPTÉ HAUTEUR & MODÈLE DU TÉLÉPHONE) -->
+<div id="mobile-mute-prompt" class="md:hidden fixed top-[11vh] left-3 z-[99995] flex items-center gap-2.5 px-3 py-2 rounded-2xl bg-black/85 border border-[var(--accent-color)]/60 backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,0.85),0_0_20px_-3px_color-mix(in_srgb,var(--accent-color)_35%,transparent)] text-white pointer-events-auto opacity-0 transition-opacity duration-500 select-none max-w-[290px]">
+    <div class="flex items-center justify-center w-7 h-7 rounded-xl bg-[var(--accent-color)]/20 border border-[var(--accent-color)]/40 text-[var(--accent-color)] shrink-0 animate-bounce">
+        <!-- Flèche pointant vers le bouton mode silencieux sur le bord supérieur gauche du téléphone -->
+        <svg class="w-4 h-4 -translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+    </div>
+    <div class="flex flex-col pr-1 min-w-0">
+        <div class="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[var(--accent-color)] uppercase tracking-wider leading-tight">
+            <span>Bouton Silencieux</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-ping"></span>
+        </div>
+        <p class="font-sans text-[11px] text-white/95 leading-tight mt-0.5 font-medium">Désactivez le mode silencieux pour entendre les projets 🔊</p>
+    </div>
+    <button type="button" onclick="dismissMobileMutePrompt()" class="p-1 text-white/40 hover:text-white ml-0.5 click-sound touch-manipulation" aria-label="Fermer">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+</div>
 
 <nav class="dock-container">
     <a href="#hero" class="dock-icon click-sound touch-manipulation">
@@ -3745,6 +3870,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                     });
 
                     wavesurfers[track.id] = ws;
+                    try { ws.setVolume(typeof globalMasterVolume !== 'undefined' ? globalMasterVolume : 0.5); } catch(e) {}
 
                     // Durée prête
                     ws.on('ready', (duration) => {
@@ -5010,6 +5136,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                 
                 const vid = document.getElementById('pm-active-video');
                 if (vid) {
+                    try { vid.volume = typeof globalMasterVolume !== 'undefined' ? globalMasterVolume : 0.5; } catch(e) {}
                     vid.addEventListener('play', () => {
                         if (typeof setGlobalNowPlaying === 'function') {
                             setGlobalNowPlaying('explore', {
@@ -7217,17 +7344,222 @@ function initGitHubContributions() {
         });
 }
 
+/* ==========================================================================
+   🔊 LATERAL MASTER VOLUME CONTROLLER (50% DE BASE, DISCRET & RESPONSIVE)
+   ========================================================================== */
+let globalMasterVolume = 0.5; // 50% par défaut
+let isMasterMuted = false;
+let preMuteVolume = 0.5;
+
+function setMasterVolume(val) {
+    val = Math.max(0, Math.min(1, parseFloat(val)));
+    globalMasterVolume = val;
+    isMasterMuted = val === 0;
+
+    // 1. Mise à jour de tous les WaveSurfers de Lab_Record.sh
+    if (typeof wavesurfers !== 'undefined' && wavesurfers) {
+        Object.values(wavesurfers).forEach(ws => {
+            if (ws && typeof ws.setVolume === 'function') {
+                try { ws.setVolume(globalMasterVolume); } catch(e) {}
+            }
+        });
+    }
+
+    // 2. Mise à jour de tous les WaveSurfers de Session.ptx
+    if (typeof ptxWaveSurfers !== 'undefined' && ptxWaveSurfers) {
+        Object.values(ptxWaveSurfers).forEach(ws => {
+            if (ws && typeof ws.setVolume === 'function') {
+                try { ws.setVolume(globalMasterVolume); } catch(e) {}
+            }
+        });
+    }
+
+    // 3. Mise à jour du widget SoundCloud
+    if (typeof scWidget !== 'undefined' && scWidget && typeof scWidget.setVolume === 'function') {
+        try { scWidget.setVolume(globalMasterVolume * 100); } catch(e) {}
+    }
+
+    // 4. Mise à jour des balises audio et vidéo HTML5
+    document.querySelectorAll('video, audio').forEach(media => {
+        try {
+            media.volume = globalMasterVolume;
+        } catch(e) {}
+    });
+
+    // 5. Mise à jour de l'UI
+    updateMasterVolumeUI();
+}
+
+function updateMasterVolumeUI() {
+    const percentEl = document.getElementById('master-vol-percent');
+    const fillEl = document.getElementById('master-vol-fill');
+    const iconHigh = document.getElementById('master-vol-icon-high');
+    const iconMuted = document.getElementById('master-vol-icon-muted');
+
+    const pct = Math.round(globalMasterVolume * 100);
+    if (percentEl) percentEl.textContent = isMasterMuted ? 'MUTE' : `${pct}%`;
+    if (fillEl) fillEl.style.height = isMasterMuted ? '0%' : `${pct}%`;
+
+    if (iconHigh && iconMuted) {
+        if (isMasterMuted || globalMasterVolume === 0) {
+            iconHigh.classList.add('hidden');
+            iconMuted.classList.remove('hidden');
+        } else {
+            iconHigh.classList.remove('hidden');
+            iconMuted.classList.add('hidden');
+        }
+    }
+}
+
+function toggleMasterMute() {
+    if (isMasterMuted || globalMasterVolume === 0) {
+        setMasterVolume(preMuteVolume > 0 ? preMuteVolume : 0.5);
+    } else {
+        preMuteVolume = globalMasterVolume;
+        setMasterVolume(0);
+    }
+}
+
+function onMasterVolTrackClick(e) {
+    const track = document.getElementById('master-vol-track');
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const clickY = e.clientY;
+    const relativeY = rect.bottom - clickY;
+    const newVol = Math.max(0, Math.min(1, relativeY / rect.height));
+    preMuteVolume = newVol;
+    setMasterVolume(newVol);
+}
+
+function initMasterVolumeControl() {
+    const track = document.getElementById('master-vol-track');
+    const wrapper = document.getElementById('master-volume-wrapper');
+    if (!track) return;
+
+    let isAdjusting = false;
+
+    const updateFromPointer = (clientY) => {
+        const rect = track.getBoundingClientRect();
+        const relativeY = rect.bottom - clientY;
+        const newVol = Math.max(0, Math.min(1, relativeY / rect.height));
+        preMuteVolume = newVol;
+        setMasterVolume(newVol);
+    };
+
+    track.addEventListener('pointerdown', (e) => {
+        isAdjusting = true;
+        if (wrapper) wrapper.classList.add('is-interacting');
+        try { track.setPointerCapture(e.pointerId); } catch(err) {}
+        updateFromPointer(e.clientY);
+    });
+
+    track.addEventListener('pointermove', (e) => {
+        if (!isAdjusting) return;
+        updateFromPointer(e.clientY);
+    });
+
+    const handlePointerUp = (e) => {
+        if (!isAdjusting) return;
+        isAdjusting = false;
+        if (wrapper) wrapper.classList.remove('is-interacting');
+        try { track.releasePointerCapture(e.pointerId); } catch(err) {}
+    };
+
+    track.addEventListener('pointerup', handlePointerUp);
+    track.addEventListener('pointercancel', handlePointerUp);
+
+    // Initialisation au volume 50%
+    setMasterVolume(0.5);
+}
+
+// Exposer sur window
+window.setMasterVolume = setMasterVolume;
+window.toggleMasterMute = toggleMasterMute;
+window.onMasterVolTrackClick = onMasterVolTrackClick;
+
+/* ==========================================================================
+   📱 PROMPT MODE SILENCIEUX MOBILE (UNIQUEMENT SUR MOBILE AU LANCEMENT)
+   ========================================================================== */
+function dismissMobileMutePrompt() {
+    const prompt = document.getElementById('mobile-mute-prompt');
+    if (!prompt) return;
+    
+    const a = typeof window.anime !== 'undefined' ? window.anime : null;
+    if (a && typeof a.animate === 'function') {
+        a.animate(prompt, {
+            translateX: [0, -30],
+            opacity: [1, 0],
+            duration: 350,
+            ease: 'inQuad'
+        });
+        setTimeout(() => {
+            prompt.style.display = 'none';
+        }, 360);
+    } else {
+        prompt.style.opacity = '0';
+        setTimeout(() => {
+            prompt.style.display = 'none';
+        }, 300);
+    }
+}
+window.dismissMobileMutePrompt = dismissMobileMutePrompt;
+
+function initMobileSilentModePrompt() {
+    // Condition stricte : uniquement sur smartphone / mobile (< 768px)
+    if (window.innerWidth > 768) return;
+
+    const prompt = document.getElementById('mobile-mute-prompt');
+    if (!prompt) return;
+
+    // Délai subtil après l'apparition de la landing page
+    setTimeout(() => {
+        prompt.style.display = 'flex';
+        prompt.style.opacity = '0';
+
+        const a = typeof window.anime !== 'undefined' ? window.anime : null;
+        if (a && typeof a.animate === 'function') {
+            a.animate(prompt, {
+                translateX: [-35, 0],
+                opacity: [0, 1],
+                duration: 500,
+                ease: 'outBack'
+            });
+        } else {
+            prompt.style.opacity = '1';
+        }
+
+        // Auto-dismiss après 6.5 secondes
+        const autoDismissTimer = setTimeout(() => {
+            dismissMobileMutePrompt();
+        }, 6500);
+
+        // Fermeture dès que l'utilisateur commence à scroller
+        const onScrollDismiss = () => {
+            if (window.scrollY > 120) {
+                clearTimeout(autoDismissTimer);
+                dismissMobileMutePrompt();
+                window.removeEventListener('scroll', onScrollDismiss);
+            }
+        };
+        window.addEventListener('scroll', onScrollDismiss, { passive: true });
+    }, 1400);
+}
+
 // Lancement de l'initialisation du widget
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         npInitWidget();
         initDraggableNpPanel();
         initGitHubContributions();
+        initMasterVolumeControl();
+        initMobileSilentModePrompt();
     });
 } else {
     npInitWidget();
     initDraggableNpPanel();
     initGitHubContributions();
+    initMasterVolumeControl();
+    initMobileSilentModePrompt();
 }
 
 /* ==========================================================================
