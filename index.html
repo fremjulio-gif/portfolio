@@ -1618,8 +1618,23 @@ body.light-mode .apple-menu-item { color: #222222; }
             </div>
 
             <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
-            <div class="bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0 min-w-[76px]">
-                <div id="time-display" class="font-mono text-xs font-bold text-[var(--accent-color)] opacity-90 tabular-nums whitespace-nowrap text-center tracking-wider pointer-events-none" style="font-variant-numeric: tabular-nums;">00:00:00</div>
+            <div class="hud-clock-frame relative overflow-hidden bg-black/50 border border-white/10 rounded-md px-2.5 py-1.5 flex items-center justify-center shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] cursor-default shrink-0 min-w-[80px] h-[28px]">
+                <!-- Waveform SVG Ultra-Subtile & Minimaliste Réactive au Scroll -->
+                <svg id="hud-waveform-svg" class="absolute inset-0 w-full h-full pointer-events-none opacity-45" viewBox="0 0 100 28" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="hudWaveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0" />
+                            <stop offset="25%" stop-color="var(--accent-color)" stop-opacity="0.5" />
+                            <stop offset="50%" stop-color="var(--accent-color)" stop-opacity="0.9" />
+                            <stop offset="75%" stop-color="var(--accent-color)" stop-opacity="0.5" />
+                            <stop offset="100%" stop-color="var(--accent-color)" stop-opacity="0" />
+                        </linearGradient>
+                    </defs>
+                    <path id="hud-wave-glow" fill="none" stroke="var(--accent-color)" stroke-width="2.2" stroke-opacity="0.12" />
+                    <path id="hud-wave-path-1" fill="none" stroke="url(#hudWaveGrad)" stroke-width="0.9" stroke-linecap="round" />
+                    <path id="hud-wave-path-2" fill="none" stroke="var(--accent-color)" stroke-width="0.6" stroke-opacity="0.3" stroke-dasharray="2 3" stroke-linecap="round" />
+                </svg>
+                <div id="time-display" class="relative z-10 font-mono text-xs font-bold text-[var(--accent-color)] opacity-95 tabular-nums whitespace-nowrap text-center tracking-wider pointer-events-none" style="font-variant-numeric: tabular-nums; text-shadow: 0 0 6px rgba(0,0,0,0.9);">00:00:00</div>
             </div>
         </div>
     </div>
@@ -1648,43 +1663,15 @@ body.light-mode .apple-menu-item { color: #222222; }
     <main class="bento-grid">
         
         <section id="hero" class="col-span-12 glass-panel p-6 md:p-8 pt-8 md:pt-10 pb-12 md:pb-16 flex flex-col justify-center items-center text-center scroll-float relative group">
-            <div class="relative z-10 max-w-3xl mx-auto">
+            <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
                 <div class="mb-4 md:mb-5 flex justify-center">
                     <div class="relative w-14 h-14 md:w-16 md:h-16">
                         <img src="moi.png" alt="Jules" class="w-full h-full rounded-full object-cover object-top border border-white/10 shadow-2xl" style="filter: grayscale(20%);">
                         <div class="absolute inset-0 rounded-full" style="box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 40px -8px var(--accent-color);"></div>
                     </div>
                 </div>
-                <p class="text-xs md:text-sm font-mono uppercase tracking-[0.3em] opacity-40 mb-3 md:mb-4">Étudiant ingénieur du son</p>
-                <div class="hero-name-wrap relative inline-block my-1">
-                    <!-- Waveform SVG Animée Réactive au Scroll -->
-                    <div id="hero-waveform-container" class="absolute -inset-x-12 -inset-y-6 pointer-events-none z-0 flex items-center justify-center opacity-45 overflow-visible" aria-hidden="true">
-                        <svg id="hero-waveform-svg" class="w-full h-full min-w-[320px] max-w-[560px] h-[120px] overflow-visible" viewBox="0 0 500 120">
-                            <defs>
-                                <linearGradient id="heroWaveGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0" />
-                                    <stop offset="25%" stop-color="var(--accent-color)" stop-opacity="0.6" />
-                                    <stop offset="50%" stop-color="var(--accent-color)" stop-opacity="0.9" />
-                                    <stop offset="75%" stop-color="var(--accent-color)" stop-opacity="0.6" />
-                                    <stop offset="100%" stop-color="var(--accent-color)" stop-opacity="0" />
-                                </linearGradient>
-                                <linearGradient id="heroWaveGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
-                                    <stop offset="50%" stop-color="#ffffff" stop-opacity="0.3" />
-                                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
-                                </linearGradient>
-                                <filter id="waveGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                    <feGaussianBlur stdDeviation="3" result="blur" />
-                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                </filter>
-                            </defs>
-                            <path id="hero-wave-glow" fill="none" stroke="var(--accent-color)" stroke-width="6" stroke-opacity="0.15" filter="url(#waveGlow)" />
-                            <path id="hero-wave-path-1" fill="none" stroke="url(#heroWaveGrad1)" stroke-width="2.5" stroke-linecap="round" />
-                            <path id="hero-wave-path-2" fill="none" stroke="url(#heroWaveGrad2)" stroke-width="1.2" stroke-dasharray="4 6" stroke-linecap="round" />
-                        </svg>
-                    </div>
-                    <h1 class="relative z-10 text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-3 leading-[0.95]" style="background: linear-gradient(180deg, #ffffff 60%, rgba(255,255,255,0.4) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Jules<br>Frémondière</h1>
-                </div>
+                <p class="text-xs md:text-sm font-mono uppercase tracking-[0.3em] opacity-40 mb-2 md:mb-3">Étudiant ingénieur du son</p>
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-3 leading-[0.95]" style="background: linear-gradient(180deg, #ffffff 60%, rgba(255,255,255,0.4) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Jules<br>Frémondière</h1>
                 <div class="inline-flex items-center gap-2 border border-white/10 bg-white/5 text-white/60 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest mb-4 md:mb-6 backdrop-blur-md">
                     <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] inline-block"></span>
                     En recherche de stage · 2026
@@ -5046,8 +5033,8 @@ requestAnimationFrame(updateVUMeter);
     // --- 🎛️ 9. FADER HAPTIC : RÉSISTANCE PHYSIQUE & REBOND ÉLASTIQUE SUR LES SKILLS ---
     initSkillGaugeHaptics();
 
-    // --- 🔊 10. WAVEFORM RÉACTIVE AU SCROLL (LE HERO RESPIRE) ---
-    initHeroScrollWaveform();
+    // --- 🔊 10. MICRO-WAVEFORM SVG RÉACTIVE AU SCROLL (HUD ISLAND CLOCK) ---
+    initHudScrollWaveform();
 });
 
 // --- 🎛️ FADER HAPTIC : RÉSISTANCE PHYSIQUE & REBOND ÉLASTIQUE SUR LES SKILLS ---
@@ -5103,11 +5090,11 @@ function initSkillGaugeHaptics() {
     });
 }
 
-// --- 🔊 WAVEFORM RÉACTIVE AU SCROLL (LE HERO RESPIRE) ---
-function initHeroScrollWaveform() {
-    const path1 = document.getElementById('hero-wave-path-1');
-    const path2 = document.getElementById('hero-wave-path-2');
-    const glowPath = document.getElementById('hero-wave-glow');
+// --- 🔊 10. MICRO-WAVEFORM SVG RÉACTIVE AU SCROLL (INCRUSTÉE DANS L'ISLAND CLOCK) ---
+function initHudScrollWaveform() {
+    const path1 = document.getElementById('hud-wave-path-1');
+    const path2 = document.getElementById('hud-wave-path-2');
+    const glowPath = document.getElementById('hud-wave-glow');
     if (!path1 || !path2) return;
 
     let lastScrollY = window.pageYOffset;
@@ -5124,32 +5111,32 @@ function initHeroScrollWaveform() {
         const deltaY = Math.abs(currentScrollY - lastScrollY);
 
         // Vélocité normalisée proportionnelle à la vitesse de défilement
-        const instantVel = (deltaY / deltaT) * 16;
-        targetVelocity = Math.min(10, targetVelocity + instantVel);
+        const instantVel = (deltaY / deltaT) * 12;
+        targetVelocity = Math.min(8, targetVelocity + instantVel);
 
         lastScrollY = currentScrollY;
         lastScrollTime = now;
     }, { passive: true });
 
-    const width = 500;
-    const height = 120;
-    const centerY = height / 2;
-    const pointsCount = 44;
+    const width = 100;
+    const height = 28;
+    const centerY = height / 2; // 14px
+    const pointsCount = 32;
     const step = width / (pointsCount - 1);
 
     function renderWaveform(time) {
-        // Amorti progressif de la vélocité vers 0
-        scrollVelocity += (targetVelocity - scrollVelocity) * 0.12;
+        // Amorti fluide de la vélocité
+        scrollVelocity += (targetVelocity - scrollVelocity) * 0.1;
         targetVelocity *= 0.93;
-        if (targetVelocity < 0.008) targetVelocity = 0;
+        if (targetVelocity < 0.005) targetVelocity = 0;
 
-        // Respiration de repos (onde sinusoïdale studio douce) + excitation proportionnelle au scroll
-        const idleAmp = 6 + Math.sin(time * 0.0016) * 2.5;
-        const scrollAmp = scrollVelocity * 8.5;
-        const totalAmp = Math.min(46, idleAmp + scrollAmp);
+        // Respiration de repos ultra-subtile (micro-oscillation 1.5px - 2.5px) + agitation douce au scroll
+        const idleAmp = 1.6 + Math.sin(time * 0.0018) * 0.6;
+        const scrollAmp = scrollVelocity * 1.2;
+        const totalAmp = Math.min(7.5, idleAmp + scrollAmp);
 
-        const freq = 0.022 + scrollVelocity * 0.004;
-        const speed = 0.0026 + scrollVelocity * 0.0035;
+        const freq = 0.11 + scrollVelocity * 0.015;
+        const speed = 0.0035 + scrollVelocity * 0.004;
         phase += speed;
 
         let d1 = '';
@@ -5157,21 +5144,21 @@ function initHeroScrollWaveform() {
 
         for (let i = 0; i < pointsCount; i++) {
             const x = i * step;
-            // Enveloppe parabolique pour atténuer les bords gauche et droite
+            // Enveloppe parabolique pour atténuer sur les bords gauche/droite
             const normalizedX = (i / (pointsCount - 1)) * 2 - 1; // [-1 à 1]
             const envelope = Math.max(0, 1 - Math.pow(normalizedX, 2));
 
-            // Synthèse multi-harmonique audio réaliste
-            const h1 = Math.sin(x * freq + phase * 1.5);
-            const h2 = Math.sin(x * freq * 2.2 - phase * 2.1) * 0.45;
-            const h3 = Math.cos(x * freq * 3.6 + phase * 0.8) * 0.25;
-            const noise = (Math.sin(x * 0.1 + time * 0.004) * 0.15) * (scrollVelocity > 0.4 ? 1 : 0.2);
+            // Harmoniques fines et précises
+            const h1 = Math.sin(x * freq + phase * 1.6);
+            const h2 = Math.sin(x * freq * 2.3 - phase * 2.0) * 0.4;
+            const h3 = Math.cos(x * freq * 3.8 + phase * 0.9) * 0.2;
+            const noise = (Math.sin(x * 0.3 + time * 0.005) * 0.1) * (scrollVelocity > 0.3 ? 1 : 0.15);
 
             const yOffset1 = (h1 + h2 + h3 + noise) * totalAmp * envelope;
             const y1 = centerY + yOffset1;
 
-            // Seconde harmonique complémentaire
-            const yOffset2 = (Math.cos(x * freq * 1.5 - phase * 1.7) * 0.7 - h2 * 0.45) * (totalAmp * 0.7) * envelope;
+            // Trace d'harmonique secondaire
+            const yOffset2 = (Math.cos(x * freq * 1.7 - phase * 1.5) * 0.6 - h2 * 0.35) * (totalAmp * 0.65) * envelope;
             const y2 = centerY + yOffset2;
 
             if (i === 0) {
