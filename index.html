@@ -912,6 +912,19 @@ body.light-mode .apple-menu-item { color: #222222; }
             background: rgba(0,0,0,0.7);
         }
 
+        /* Description masquée au repos, affichée UNIQUEMENT lors de la lecture */
+        .lab-track-desc {
+            display: none;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .lab-row.playing .lab-track-desc {
+            display: block !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
         /* Lab Filter Pills & Tag System */
         .lab-filter-pill {
             padding: 5px 13px;
@@ -2562,7 +2575,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-tag-badge" onclick="filterLabByTag('guitare')" title="Filtrer par Guitare">#Guitare</span>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Sample de guitare organique sculpté sur des breaks drum and bass tranchants et dynamiques.</p>
+                                    <p class="lab-track-desc text-xs text-white/60 mt-1.5 font-sans leading-relaxed">Sample de guitare organique sculpté sur des breaks drum and bass tranchants et dynamiques.</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
@@ -2597,7 +2610,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-tag-badge" onclick="filterLabByTag('analogique')" title="Filtrer par Analogique">#Analogique</span>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Découpes vocales spatialisées, nappes de synthés planantes et traitement analogique chaleureux.</p>
+                                    <p class="lab-track-desc text-xs text-white/60 mt-1.5 font-sans leading-relaxed">Découpes vocales spatialisées, nappes de synthés planantes et traitement analogique chaleureux.</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
@@ -2633,7 +2646,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-tag-badge" onclick="filterLabByTag('trap')" title="Filtrer par Trap">#Trap</span>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Arpèges de guitare mélancoliques couplés à des synthés sombres et une rythmique trap percutante.</p>
+                                    <p class="lab-track-desc text-xs text-white/60 mt-1.5 font-sans leading-relaxed">Arpèges de guitare mélancoliques couplés à des synthés sombres et une rythmique trap percutante.</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
@@ -2668,7 +2681,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-tag-badge" onclick="filterLabByTag('jungle')" title="Filtrer par Jungle">#Jungle</span>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Remix électronique aux cadences jungle survitaminées, sub-basses rugueuses et cuts précis.</p>
+                                    <p class="lab-track-desc text-xs text-white/60 mt-1.5 font-sans leading-relaxed">Remix électronique aux cadences jungle survitaminées, sub-basses rugueuses et cuts précis.</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
@@ -2703,7 +2716,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-tag-badge" onclick="filterLabByTag('electronique')" title="Filtrer par Electronique">#Electronique</span>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Évolution d'arpèges électroniques modulaires, sound design aérien et textures synthétiques.</p>
+                                    <p class="lab-track-desc text-xs text-white/60 mt-1.5 font-sans leading-relaxed">Évolution d'arpèges électroniques modulaires, sound design aérien et textures synthétiques.</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
@@ -2737,7 +2750,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-tag-badge" onclick="filterLabByTag('trap')" title="Filtrer par Trap">#Trap</span>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Texture spatiale planante, nappes éthérées et sub-bass trap percutante.</p>
+                                    <p class="lab-track-desc text-xs text-white/60 mt-1.5 font-sans leading-relaxed">Texture spatiale planante, nappes éthérées et sub-bass trap percutante.</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
@@ -2771,7 +2784,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                                             <span class="lab-tag-badge" onclick="filterLabByTag('lo-fi')" title="Filtrer par Lo-fi">#Lo-fi</span>
                                         </div>
                                     </div>
-                                    <p class="text-xs text-white/50 mt-1.5 font-sans leading-relaxed">Mélodie pop nocturne chaleureuse aux accords feutrés et drum kit lo-fi.</p>
+                                    <p class="lab-track-desc text-xs text-white/60 mt-1.5 font-sans leading-relaxed">Mélodie pop nocturne chaleureuse aux accords feutrés et drum kit lo-fi.</p>
                                 </div>
                             </div>
                             <div class="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-center shrink-0">
@@ -3948,6 +3961,17 @@ body.light-mode .apple-menu-item { color: #222222; }
                     eqContainer.classList.add('flex');
                     startLabEqAnim(id);
                 }
+
+                // Animation fluide d'apparition de la description de la composition
+                const desc = row.querySelector('.lab-track-desc');
+                if (desc && animFn) {
+                    animFn(desc, {
+                        opacity: [0, 1],
+                        translateY: [-4, 0],
+                        duration: 300,
+                        ease: 'outCubic'
+                    });
+                }
             } else {
                 row.classList.remove('playing');
                 if (pauseIcon) pauseIcon.classList.add('hidden');
@@ -3973,6 +3997,16 @@ body.light-mode .apple-menu-item { color: #222222; }
                     eqContainer.classList.add('hidden');
                     eqContainer.classList.remove('flex');
                     stopLabEqAnim(id);
+                }
+
+                const desc = row.querySelector('.lab-track-desc');
+                if (desc && animFn) {
+                    animFn(desc, {
+                        opacity: [1, 0],
+                        translateY: [0, -4],
+                        duration: 160,
+                        ease: 'inQuad'
+                    });
                 }
             }
         }
@@ -6336,6 +6370,23 @@ function npFormatTime(seconds) {
     return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
+// Clamping within viewport edges with safe margins
+function npClampPosition(x, y) {
+    const panel = document.getElementById('np-panel');
+    if (!panel) return { x, y };
+    const rect = panel.getBoundingClientRect();
+    const pad = 12;
+    const minX = pad;
+    const maxX = Math.max(pad, window.innerWidth - (rect.width || 295) - pad);
+    const minY = pad;
+    const maxY = Math.max(pad, window.innerHeight - (rect.height || 260) - pad);
+
+    return {
+        x: Math.max(minX, Math.min(maxX, x)),
+        y: Math.max(minY, Math.min(maxY, y))
+    };
+}
+
 // Positionnement initial du panel
 function npPositionDefault() {
     const panel = document.getElementById('np-panel');
@@ -6347,57 +6398,88 @@ function npPositionDefault() {
     let left = trigRect.right - panelWidth;
     let top = trigRect.bottom + 14;
 
-    const pad = 12;
-    left = Math.max(pad, Math.min(window.innerWidth - panelWidth - pad, left));
-    top = Math.max(pad, Math.min(window.innerHeight - 220 - pad, top));
-
-    panel.style.left = `${left}px`;
-    panel.style.top = `${top}px`;
+    const clamped = npClampPosition(left, top);
+    panel.style.left = `${clamped.x}px`;
+    panel.style.top = `${clamped.y}px`;
     panel.style.right = 'auto';
     panel.style.bottom = 'auto';
 }
 
-function npTogglePanel() {
+function npOpenPanel() {
     const panel = document.getElementById('np-panel');
     if (!panel) return;
-    const isOpen = panel.classList.contains('open');
-    if (isOpen) {
-        npClosePanel();
+
+    if (!npPanelCustomPos) {
+        npPositionDefault();
     } else {
-        if (!npPanelCustomPos) {
-            npPositionDefault();
-        }
-        panel.classList.add('open');
-        const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
-        if (anim) {
-            anim(panel, {
-                scale: [0.92, 1],
-                opacity: [0, 1],
-                duration: 320,
-                ease: 'outCubic'
-            });
-        }
+        const clamped = npClampPosition(npPanelCustomPos.x, npPanelCustomPos.y);
+        panel.style.left = `${clamped.x}px`;
+        panel.style.top = `${clamped.y}px`;
+        panel.style.right = 'auto';
+        panel.style.bottom = 'auto';
+    }
+
+    panel.classList.add('open');
+    panel.style.display = 'block';
+    panel.style.pointerEvents = 'auto';
+
+    const a = typeof window.anime !== 'undefined' ? window.anime : null;
+    if (a && typeof a.remove === 'function') a.remove(panel);
+
+    if (a && typeof a.animate === 'function') {
+        a.animate(panel, {
+            scale: [0.92, 1],
+            opacity: [0, 1],
+            duration: 280,
+            ease: 'outCubic'
+        });
+    } else {
+        panel.style.opacity = '1';
+        panel.style.transform = 'scale(1)';
     }
 }
 
 function npClosePanel() {
     const panel = document.getElementById('np-panel');
-    if (!panel || !panel.classList.contains('open')) return;
-    const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
-    if (anim) {
-        anim(panel, {
+    if (!panel) return;
+    if (!panel.classList.contains('open') && panel.style.display === 'none') return;
+
+    const a = typeof window.anime !== 'undefined' ? window.anime : null;
+    if (a && typeof a.remove === 'function') a.remove(panel);
+
+    const cleanup = () => {
+        panel.classList.remove('open');
+        panel.style.display = 'none';
+        panel.style.opacity = '';
+        panel.style.transform = '';
+        panel.style.pointerEvents = 'none';
+    };
+
+    if (a && typeof a.animate === 'function') {
+        const animInstance = a.animate(panel, {
             scale: [1, 0.92],
             opacity: [1, 0],
-            duration: 180,
-            ease: 'inQuad',
-            onComplete: () => {
-                panel.classList.remove('open');
-                panel.style.opacity = '';
-                panel.style.transform = '';
-            }
+            duration: 170,
+            ease: 'inQuad'
         });
+        if (animInstance && animInstance.then) {
+            animInstance.then(cleanup);
+        } else {
+            setTimeout(cleanup, 175);
+        }
     } else {
-        panel.classList.remove('open');
+        cleanup();
+    }
+}
+
+function npTogglePanel() {
+    const panel = document.getElementById('np-panel');
+    if (!panel) return;
+    const isVisible = panel.classList.contains('open') && panel.style.display !== 'none' && panel.style.opacity !== '0';
+    if (isVisible) {
+        npClosePanel();
+    } else {
+        npOpenPanel();
     }
 }
 
@@ -6754,21 +6836,6 @@ function initDraggableNpPanel() {
     let startX = 0, startY = 0;
     let initialLeft = 0, initialTop = 0;
 
-    // Clamping within viewport edges with safe margins
-    function clampPosition(x, y) {
-        const rect = panel.getBoundingClientRect();
-        const pad = 12;
-        const minX = pad;
-        const maxX = Math.max(pad, window.innerWidth - rect.width - pad);
-        const minY = pad;
-        const maxY = Math.max(pad, window.innerHeight - rect.height - pad);
-
-        return {
-            x: Math.max(minX, Math.min(maxX, x)),
-            y: Math.max(minY, Math.min(maxY, y))
-        };
-    }
-
     // Magnetic snap to closest edge on release
     function snapToEdge(currX, currY) {
         const rect = panel.getBoundingClientRect();
@@ -6795,7 +6862,7 @@ function initDraggableNpPanel() {
             targetY = screenH - rect.height - pad;
         }
 
-        return clampPosition(targetX, targetY);
+        return npClampPosition(targetX, targetY);
     }
 
     panel.addEventListener('pointerdown', (e) => {
@@ -6837,7 +6904,7 @@ function initDraggableNpPanel() {
         if (isDragging) {
             const rawX = initialLeft + dx;
             const rawY = initialTop + dy;
-            const clamped = clampPosition(rawX, rawY);
+            const clamped = npClampPosition(rawX, rawY);
 
             panel.style.left = `${clamped.x}px`;
             panel.style.top = `${clamped.y}px`;
@@ -6891,7 +6958,7 @@ function initDraggableNpPanel() {
     window.addEventListener('resize', () => {
         if (panel.classList.contains('open')) {
             if (npPanelCustomPos) {
-                const clamped = clampPosition(npPanelCustomPos.x, npPanelCustomPos.y);
+                const clamped = npClampPosition(npPanelCustomPos.x, npPanelCustomPos.y);
                 panel.style.left = `${clamped.x}px`;
                 panel.style.top = `${clamped.y}px`;
             } else {
