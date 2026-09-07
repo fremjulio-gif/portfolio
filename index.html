@@ -572,11 +572,19 @@ body.light-mode .apple-menu-item { color: #222222; }
         body[data-theme="ableton"] .bg-red-500 { background-color: #FFFFFF !important; } /* Leds */
         body[data-theme="ableton"] .border-red-500 { border-color: #FFFFFF !important; }
 
-        /* Images & miniatures en noir et blanc en mode Épuré */
-        body[data-theme="ableton"] img,
+        /* Images & miniatures en noir et blanc en mode Épuré (sauf logos du theme island) */
+        body[data-theme="ableton"] img:not(.theme-pill img),
         body[data-theme="ableton"] video {
             filter: grayscale(100%) !important;
             transition: filter 0.5s var(--ease-apple) !important;
+        }
+
+        /* Les boutons du theme island UNIQUEMENT (choix themes -> logo fl, live, protools) restent en couleur */
+        body[data-theme="ableton"] .theme-island .theme-pill img,
+        body[data-theme="ableton"] #theme-widget .theme-pill img,
+        body[data-theme="ableton"] .theme-pill img {
+            filter: none !important;
+            -webkit-filter: none !important;
         }
         @media (hover: hover) {
             body[data-theme="ableton"] img:hover,
