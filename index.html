@@ -1964,13 +1964,13 @@ body.light-mode .apple-menu-item { color: #222222; }
         <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300">Pick your theme</span>
         <div class="flex gap-2 items-center">
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools">
-                <img src="logo_protools.png" alt="PT" class="w-full h-full object-contain p-1">
+                <img src="logo_protools.png" alt="PT" class="w-full h-full object-contain p-0.5" style="transform: scale(1.15); transform-origin: center;">
             </button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton">
-                <img src="logo_ableton.png" alt="Live" class="w-full h-full object-contain scale-140 md:scale-150 p-0.5" style="transform: scale(1.45); transform-origin: center;">
+                <img src="logo_ableton.png" alt="Live" class="w-full h-full object-contain p-0.5" style="transform: scale(1.45); transform-origin: center;">
             </button>
             <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio">
-                <img src="logo_flstudio.png" alt="FL" class="w-full h-full object-contain p-1">
+                <img src="logo_flstudio.png" alt="FL" class="w-full h-full object-contain p-0.5" style="transform: scale(1.15); transform-origin: center;">
             </button>
 
             <div class="w-[1px] h-[24px] bg-white/20 mx-1 shrink-0"></div>
@@ -6242,18 +6242,22 @@ requestAnimationFrame(updateVUMeter);
         abletonImg.style.setProperty('padding', '2px', 'important');
     }
 
-    // 2. Ajustement léger et équilibre sur FL et Pro Tools
+    // 2. Très léger zoom optique sur FL et Pro Tools pour homogénéiser les 3 boutons
     const flImg = document.querySelector('button[onclick="setTheme(\'fl\')"] img');
     const ptImg = document.querySelector('button[onclick="setTheme(\'protools\')"] img');
     
     if (flImg) {
+        flImg.style.setProperty('transform', 'scale(1.15)', 'important');
+        flImg.style.setProperty('transform-origin', 'center', 'important');
         flImg.style.setProperty('object-fit', 'contain', 'important');
-        flImg.style.setProperty('padding', '4px', 'important');
+        flImg.style.setProperty('padding', '2px', 'important');
     }
     
     if (ptImg) {
+        ptImg.style.setProperty('transform', 'scale(1.15)', 'important');
+        ptImg.style.setProperty('transform-origin', 'center', 'important');
         ptImg.style.setProperty('object-fit', 'contain', 'important');
-        ptImg.style.setProperty('padding', '4px', 'important');
+        ptImg.style.setProperty('padding', '2px', 'important');
     }
     
     // --- 🎛️ 9. FADER HAPTIC : RÉSISTANCE PHYSIQUE & REBOND ÉLASTIQUE SUR LES SKILLS ---
