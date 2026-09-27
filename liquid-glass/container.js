@@ -238,6 +238,21 @@ class Container {
         if (tag === 'IFRAME' || tag === 'VIDEO' || tag === 'AUDIO' || tag === 'CANVAS') return true
         if (element.classList && (element.classList.contains('liquid-glass-canvas') || element.classList.contains('pointer-events-none'))) return true
         return false
+      },
+      onclone: function (clonedDoc) {
+        if (!clonedDoc) return
+        try {
+          const styles = clonedDoc.querySelectorAll('style')
+          styles.forEach(s => {
+            if (s.textContent && s.textContent.includes('color-mix')) {
+              s.textContent = s.textContent.replace(/color-mix\([^)]+\)/g, 'rgba(139, 92, 246, 0.35)')
+            }
+          })
+          const inlineEls = clonedDoc.querySelectorAll('[style*="color-mix"]')
+          inlineEls.forEach(el => {
+            el.style.cssText = el.style.cssText.replace(/color-mix\([^)]+\)/g, 'rgba(139, 92, 246, 0.35)')
+          })
+        } catch (e) {}
       }
     })
       .then(snapshot => {
@@ -256,9 +271,30 @@ class Container {
         })
       })
       .catch(error => {
-        console.error('html2canvas error:', error)
+        console.warn('html2canvas warning, falling back to procedural ambient texture:', error.message)
         Container.isCapturing = false
+
+        // Procedural dark studio fallback canvas
+        const fallbackCanvas = document.createElement('canvas')
+        fallbackCanvas.width = 1024
+        fallbackCanvas.height = 768
+        const ctx = fallbackCanvas.getContext('2d')
+        const grad = ctx.createLinearGradient(0, 0, 0, 768)
+        grad.addColorStop(0, '#1c1c24')
+        grad.addColorStop(0.5, '#121217')
+        grad.addColorStop(1, '#090a0d')
+        ctx.fillStyle = grad
+        ctx.fillRect(0, 0, 1024, 768)
+
+        Container.pageSnapshot = fallbackCanvas
+
+        const waitingContainers = Container.waitingForSnapshot.slice()
         Container.waitingForSnapshot = []
+        waitingContainers.forEach(container => {
+          if (!container.webglInitialized) {
+            container.initWebGL()
+          }
+        })
       })
   }
 

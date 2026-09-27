@@ -197,15 +197,17 @@ function toggleButtonsVisibility() {
 
 // Create glass container for controls panel
 function initializeControlsContainer() {
+  const controlsWrapper = document.getElementById('glass-controls-container')
+  const controlsContent = document.getElementById('controls-content')
+  if (!controlsWrapper || !controlsContent) {
+    return
+  }
+
   window.controlsContainer = new Container({
     borderRadius: 12,
     type: 'rounded',
     tintOpacity: 0.7
   })
-
-  // Get the existing controls wrapper and move existing content behind the glass
-  const controlsWrapper = document.getElementById('glass-controls-container')
-  const controlsContent = document.getElementById('controls-content')
 
   // Remove controls content from wrapper temporarily
   controlsWrapper.removeChild(controlsContent)
