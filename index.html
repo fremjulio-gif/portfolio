@@ -55,8 +55,6 @@
     <script src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
     <!-- Script Officiel SoundCloud Player API -->
     <script src="https://w.soundcloud.com/player/api.js"></script>
-    <!-- Dépendance html2canvas pour la capture de réfraction Liquid Glass (dashersw/liquid-glass-js) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -412,39 +410,28 @@
 }
 
 
-        /* --- BARRE DE MENUS SUPÉRIEURE (APPLE LIQUID GLASS PILL STYLE) --- */
+        /* --- BARRE DE MENUS SUPÉRIEURE (APPLE STYLE FIXÉ) --- */
 .apple-menubar { 
-    position: fixed !important; 
-    top: 8px !important; 
-    left: 50% !important; 
-    transform: translateX(-50%) !important;
-    width: calc(100% - 32px) !important; 
-    max-width: 1240px !important;
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
+    position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; 
+    width: 100% !important; max-width: 100% !important;
+    display: flex; align-items: center; justify-content: space-between; 
     padding: 0 20px !important; 
-    background: rgba(18, 18, 24, 0.45) !important; 
-    backdrop-filter: blur(18px) saturate(180%) brightness(1.05) !important; 
-    -webkit-backdrop-filter: blur(18px) saturate(180%) brightness(1.05) !important; 
-    border: 1px solid rgba(255, 255, 255, 0.14) !important; 
-    border-radius: 9999px !important;
-    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.35), 0 0 20px -4px color-mix(in srgb, var(--accent-color) 20%, transparent) !important; 
-    z-index: 9999; 
-    height: 38px !important; 
+    background: rgba(15, 15, 15, 0.8) !important; 
+    backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate)) !important; 
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate)) !important; 
+    border-top: none !important;
+    border-bottom: 1px solid var(--glass-border) !important; 
+    border-radius: 0 !important;
+    z-index: 9999; height: 32px !important; 
+    transform: none !important;
     margin: 0 !important;
-    isolation: isolate;
 }
 @media (max-width: 768px) {
     .apple-menubar {
         display: none !important;
     }
 }
-body.light-mode .apple-menubar { 
-    background: rgba(255, 255, 255, 0.65) !important; 
-    border-color: rgba(0,0,0,0.12) !important; 
-    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.8) !important;
-}
+body.light-mode .apple-menubar { background: rgba(255, 255, 255, 0.6) !important; border-color: rgba(0,0,0,0.1) !important; }
 
 /* Styles du texte des menus (Aérés, aucun scale, aucun translate) */
 .apple-menu-item {
@@ -618,89 +605,12 @@ body.light-mode .apple-menu-item { color: #222222; }
 
 
         /* ========================================================
-           --- APPLE LIQUID GLASS OPTICAL ENGINE (DASHERSW/LIQUID-GLASS-JS SPEC) ---
+           --- LIQUID GLASS OPTICAL ENGINE (VISIONOS 26 SPEC) ---
            ======================================================== */
         @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-            .liquid-glass, .glass-panel, .glass-container, .apple-menubar, .dock-container, .theme-island, .seq-tabs-container, .mixer-panel, .filter-btn {
+            .liquid-glass, .glass-panel, .apple-menubar, .dock-container, .theme-island, .seq-tabs-container, .mixer-panel, .filter-btn {
                 background-color: rgba(18, 18, 20, 0.95) !important;
             }
-        }
-
-        /* Glass Container Styles (liquid-glass-js specification) */
-        .glass-container {
-            position: relative;
-            box-sizing: border-box;
-            isolation: isolate;
-        }
-
-        .glass-container-circle {
-            aspect-ratio: 1 / 1 !important;
-            border-radius: 50% !important;
-            flex-shrink: 0;
-            flex-grow: 0;
-        }
-
-        .glass-container-pill {
-            border-radius: 9999px !important;
-            flex-shrink: 0;
-            flex-grow: 0;
-        }
-
-        /* Glass Button Styles (liquid-glass-js specification) */
-        .glass-button {
-            position: relative;
-            box-sizing: border-box;
-            cursor: pointer;
-            pointer-events: auto;
-            flex-shrink: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            isolation: isolate;
-            transition: transform 0.25s var(--ease-apple), box-shadow 0.25s var(--ease-apple), border-color 0.25s var(--ease-apple);
-        }
-
-        .glass-button:hover {
-            transform: translateY(-1px) scale(1.015);
-        }
-
-        .glass-button:active {
-            transform: translateY(0) scale(0.97);
-        }
-
-        .glass-button-circle {
-            aspect-ratio: 1 / 1 !important;
-            border-radius: 50% !important;
-            flex-shrink: 0;
-            flex-grow: 0;
-        }
-
-        .glass-button-pill {
-            border-radius: 9999px !important;
-            flex-shrink: 0;
-            flex-grow: 0;
-        }
-
-        /* Canvas de réfraction WebGL Liquid Glass (Strictement non-bloquant) */
-        .liquid-glass-canvas {
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            border-radius: inherit !important;
-            pointer-events: none !important;
-            z-index: 0 !important;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-            will-change: transform;
-        }
-
-        /* Les éléments internes passent devant le calque WebGL */
-        .glass-container > *:not(.liquid-glass-canvas),
-        .glass-panel > *:not(.liquid-glass-canvas),
-        .glass-button > *:not(.liquid-glass-canvas) {
-            position: relative;
-            z-index: 1;
         }
 
         .liquid-glass,
@@ -709,20 +619,19 @@ body.light-mode .apple-menu-item { color: #222222; }
             background-color: var(--glass-tint);
             backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
             -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) brightness(var(--glass-brightness)) contrast(var(--glass-contrast, 104%));
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
+            border: 1px solid transparent;
+            border-radius: var(--radius-window);
             box-shadow: 
                 var(--glass-drop-shadow),
                 inset 0 1px 0 0 var(--glass-highlight),
-                inset 0 -1px 0 0 var(--glass-inner-shadow),
-                0 0 24px -6px color-mix(in srgb, var(--accent-color) 12%, transparent);
+                inset 0 -1px 0 0 var(--glass-inner-shadow);
             isolation: isolate;
             overflow: hidden;
             width: 100%;
-            transition: border-color 0.8s var(--ease-smooth-slow), box-shadow 0.8s var(--ease-smooth-slow), background-color 0.8s var(--ease-smooth-slow);
+            transition: border-color 1.5s var(--ease-smooth-slow), box-shadow 1.5s var(--ease-smooth-slow), background-color 1.5s var(--ease-smooth-slow), filter 1.5s var(--ease-smooth-slow);
         }
 
-        /* Bord lumineux & biseau optique 3D via ::before (Liquid Glass Bezel & Refraction Rim) */
+        /* Bord lumineux & biseau optique 3D via ::before (Liquid Glass Bezel & Refraction) */
         .liquid-glass::before,
         .glass-panel::before {
             content: "";
@@ -734,18 +643,17 @@ body.light-mode .apple-menu-item { color: #222222; }
                 160deg,
                 var(--glass-edge-top) 0%,
                 var(--glass-edge-bottom) 45%,
-                color-mix(in srgb, var(--accent-color) 25%, transparent) 75%,
-                transparent 100%
+                transparent 75%
             );
             -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             -webkit-mask-composite: xor;
             mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             mask-composite: exclude;
             pointer-events: none;
-            z-index: 2;
-            filter: blur(0.3px);
-            box-shadow: inset 0 1px 1px 0 rgba(255,255,255,0.45), inset 0 -1px 1px 0 rgba(0,0,0,0.25), 0 0 18px -2px color-mix(in srgb, var(--accent-color) 25%, var(--glass-edge-glow));
-            transition: border-color 0.8s var(--ease-smooth-slow), box-shadow 0.8s var(--ease-smooth-slow), opacity 0.8s var(--ease-smooth-slow);
+            z-index: 1;
+            filter: blur(0.4px);
+            box-shadow: inset 0 1px 1px 0 rgba(255,255,255,0.35), inset 0 -1px 1px 0 rgba(0,0,0,0.25), 0 0 14px -2px var(--glass-edge-glow);
+            transition: border-color 1.5s var(--ease-smooth-slow), box-shadow 1.5s var(--ease-smooth-slow), opacity 1.5s var(--ease-smooth-slow);
         }
 
         @media (hover: hover) {
@@ -2042,16 +1950,16 @@ body.light-mode .apple-menu-item { color: #222222; }
 </div><div id="theme-bg"></div>
     <div class="scanlines"></div>
 
-    <div class="theme-island glass-container glass-container-pill" id="theme-widget">
+    <div class="theme-island" id="theme-widget">
         <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300">Pick your theme</span>
         <div class="flex gap-2 items-center">
-            <button class="theme-pill glass-button glass-button-circle click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools">
+            <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('protools')" title="ProTools">
                 <img src="logo_protools.png" alt="PT" class="w-full h-full object-contain p-0.5" style="transform: scale(1.15); transform-origin: center;">
             </button>
-            <button class="theme-pill glass-button glass-button-circle click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton">
+            <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('ableton')" title="Ableton">
                 <img src="logo_ableton.png" alt="Live" class="w-full h-full object-contain p-0.5" style="transform: scale(1.45); transform-origin: center;">
             </button>
-            <button class="theme-pill glass-button glass-button-circle click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio">
+            <button class="theme-pill click-sound touch-manipulation" onclick="setTheme('fl')" title="FL Studio">
                 <img src="logo_flstudio.png" alt="FL" class="w-full h-full object-contain p-0.5" style="transform: scale(1.15); transform-origin: center;">
             </button>
 
@@ -2178,7 +2086,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <main class="bento-grid">
         
-        <section id="hero" class="col-span-12 glass-panel glass-container p-6 md:p-8 pt-8 md:pt-10 pb-12 md:pb-16 flex flex-col justify-center items-center text-center scroll-float relative group">
+        <section id="hero" class="col-span-12 glass-panel p-6 md:p-8 pt-8 md:pt-10 pb-12 md:pb-16 flex flex-col justify-center items-center text-center scroll-float relative group">
             <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
                 <div class="mb-4 md:mb-5 flex justify-center">
                     <div class="relative w-14 h-14 md:w-16 md:h-16">
@@ -2210,7 +2118,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             <!-- Colonne gauche : Stats & Skills + bouton Vision -->
             <div class="lg:col-span-5 flex flex-col gap-6">
 
-                <section id="skills" class="glass-panel glass-container scroll-float flex flex-col z-50 relative">
+                <section id="skills" class="glass-panel scroll-float flex flex-col z-50 relative">
                     <div class="win-header shrink-0">
                         <div class="flex items-center gap-2.5">
                             <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
@@ -2329,7 +2237,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             </div><!-- fin colonne gauche -->
 
             <!-- Colonne droite : Mon Parcours -->
-            <section id="parcours" class="lg:col-span-7 glass-panel glass-container scroll-float z-40 relative min-h-[60vh] md:min-h-0">
+            <section id="parcours" class="lg:col-span-7 glass-panel scroll-float z-40 relative min-h-[60vh] md:min-h-0">
                 <div class="win-header">
                     <div class="flex items-center gap-2.5">
                         <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
@@ -2364,7 +2272,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                         
                         <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-5">
                             <!-- Card 1 -->
-                            <div class="stat-card glass-container glass-button backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="1">
                                 <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">ANS</span></span>
                                 <div class="mt-2 sm:mt-3">
                                     <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Formation 3iS</h4>
@@ -2373,7 +2281,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                             </div>
 
                             <!-- Card 2 -->
-                            <div class="stat-card glass-container glass-button backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="2">
                                 <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">47<span class="text-xs sm:text-sm md:text-lg font-light text-white/40 tracking-normal">/50</span></span>
                                 <div class="mt-2 sm:mt-3">
                                     <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Certif. Avid</h4>
@@ -2382,7 +2290,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                             </div>
 
                             <!-- Card 3 -->
-                            <div class="stat-card glass-container glass-button backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="3">
                                 <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">3 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">DAWs</span></span>
                                 <div class="mt-2 sm:mt-3">
                                     <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Logiciels</h4>
@@ -2391,7 +2299,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                             </div>
 
                             <!-- Card 4 -->
-                            <div class="stat-card glass-container glass-button backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="4">
                                 <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">10+ <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">PROJS</span></span>
                                 <div class="mt-2 sm:mt-3">
                                     <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Livrables</h4>
@@ -2400,7 +2308,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                             </div>
 
                             <!-- Card 5 -->
-                            <div class="stat-card glass-container glass-button backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="5">
                                 <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">32 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">CH.</span></span>
                                 <div class="mt-2 sm:mt-3">
                                     <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Live Mix</h4>
@@ -2409,7 +2317,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                             </div>
 
                             <!-- Card 6 -->
-                            <div class="stat-card glass-container glass-button backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
+                            <div class="stat-card backdrop-blur-md bg-white/[0.01] hover:bg-white/[0.03] border border-white/5 hover:border-white/15 p-3 sm:p-4 md:p-5 rounded-xl flex flex-col justify-between transition-all duration-300 click-sound" data-stat="6">
                                 <span class="stat-number font-black font-mono text-[var(--accent-color)] leading-none">1 <span class="text-xs sm:text-sm md:text-base font-light text-white/40 tracking-normal">TOUR.</span></span>
                                 <div class="mt-2 sm:mt-3">
                                     <h4 class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white/90">Europe</h4>
@@ -2516,7 +2424,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
         </div><!-- fin rangée skills+parcours -->
 
-        <section id="projets" class="col-span-12 glass-panel glass-container p-0 scroll-float mt-8 relative">
+        <section id="projets" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative">
             <div class="win-header">
                 <div class="flex items-center gap-2.5">
                     <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
@@ -2557,7 +2465,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8" id="projects-grid">
     
     <!-- 1. Je suis la fumée... -->
-    <div role="button" tabindex="0" onclick="openProjectModal('fumee')" data-project-id="fumee" data-tags="prise-de-son,post-prod" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('fumee')" data-project-id="fumee" data-tags="prise-de-son,post-prod" class="project-card group click-sound touch-manipulation">
         <img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg" alt="Je suis la fumée..." loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_fumee.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2575,7 +2483,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 2. L'Étranger -->
-    <div role="button" tabindex="0" onclick="openProjectModal('etranger')" data-project-id="etranger" data-tags="compo" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('etranger')" data-project-id="etranger" data-tags="compo" class="project-card group click-sound touch-manipulation">
         <img src="etranger.png" alt="L'Étranger" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_etranger.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2593,7 +2501,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 3. Instable -->
-    <div role="button" tabindex="0" onclick="openProjectModal('instable')" data-project-id="instable" data-tags="post-prod,prise-de-son" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('instable')" data-project-id="instable" data-tags="post-prod,prise-de-son" class="project-card group click-sound touch-manipulation">
         <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_inst.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2611,7 +2519,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 4. Ouragan -->
-    <div role="button" tabindex="0" onclick="openProjectModal('ouragan')" data-project-id="ouragan" data-tags="mix-master,post-prod" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('ouragan')" data-project-id="ouragan" data-tags="mix-master,post-prod" class="project-card group click-sound touch-manipulation">
         <img src="console.jpg" alt="Ouragan" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_oura.mov" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2629,7 +2537,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 5. Srh - qutumeregardes -->
-    <div role="button" tabindex="0" onclick="openProjectModal('srh')" data-project-id="srh" data-tags="mix-master" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('srh')" data-project-id="srh" data-tags="mix-master" class="project-card group click-sound touch-manipulation">
         <img src="cover.jpg" alt="Srh - qutumeregardes" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover object-bottom z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none object-bottom-fix">
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2646,7 +2554,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 6. Capharnaüm -->
-    <div role="button" tabindex="0" onclick="openProjectModal('capharnaum')" data-project-id="capharnaum" data-tags="prise-de-son,mix-master,post-prod" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('capharnaum')" data-project-id="capharnaum" data-tags="prise-de-son,mix-master,post-prod" class="project-card group click-sound touch-manipulation">
         <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_capha.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2664,7 +2572,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 7. Désaccordés -->
-    <div role="button" tabindex="0" onclick="openProjectModal('desaccordes')" data-project-id="desaccordes" data-tags="mix-master,prise-de-son" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('desaccordes')" data-project-id="desaccordes" data-tags="mix-master,prise-de-son" class="project-card group click-sound touch-manipulation">
         <img src="https://img.youtube.com/vi/TiqWW0e6RSg/hqdefault.jpg" alt="Désaccordés" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_desac.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2682,7 +2590,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 8. Long Day -->
-    <div role="button" tabindex="0" onclick="openProjectModal('longday')" data-project-id="longday" data-tags="montage,compo" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('longday')" data-project-id="longday" data-tags="montage,compo" class="project-card group click-sound touch-manipulation">
         <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_longday.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2700,7 +2608,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     </div>
 
     <!-- 9. Sacré Graal -->
-    <div role="button" tabindex="0" onclick="openProjectModal('graal')" data-project-id="graal" data-tags="prise-de-son" class="project-card glass-container glass-button group click-sound touch-manipulation">
+    <div role="button" tabindex="0" onclick="openProjectModal('graal')" data-project-id="graal" data-tags="prise-de-son" class="project-card group click-sound touch-manipulation">
         <img src="https://img.youtube.com/vi/eZI3RtKjmTY/hqdefault.jpg" alt="Sacré Graal" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
         <video data-src="preview_graal.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
@@ -2721,7 +2629,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             </div>
         </section>
         
-        <section id="lab" class="col-span-12 glass-panel glass-container p-0 scroll-float mt-8 relative z-20">
+        <section id="lab" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
              <div class="win-header">
                 <div class="flex items-center gap-2.5">
                     <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
@@ -3092,7 +3000,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             </div>
         </section>
 
-        <section id="inspirations" class="col-span-12 glass-panel glass-container p-0 scroll-float mt-8 relative z-20">
+        <section id="inspirations" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20">
              <div class="win-header">
                 <div class="flex items-center gap-2.5">
                     <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
@@ -3203,7 +3111,7 @@ body.light-mode .apple-menu-item { color: #222222; }
         </section>
 
         <!-- SECTION SOUND DESIGN : TRAILER REWORK SESSIONS (PTX) -->
-        <section id="session" class="col-span-12 glass-panel glass-container p-0 scroll-float mt-8 relative z-20 pointer-events-auto">
+        <section id="session" class="col-span-12 glass-panel p-0 scroll-float mt-8 relative z-20 pointer-events-auto">
             <div class="win-header">
                 <div class="flex items-center gap-2.5">
                     <button type="button" class="studio-rack-screw click-sound" onclick="triggerRackScrew(this, event)" title="Vis de rack 19&quot;">
@@ -3247,7 +3155,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 md:p-6 items-center justify-items-center">
                     
                     <!-- Colonne 1 : TikTok 1 -->
-                    <div class="glass-panel glass-container w-full max-w-[360px] flex flex-col items-center p-4 sm:p-5 rounded-2xl border border-white/10 bg-black/40 shadow-xl backdrop-blur-md hover:border-[var(--accent-color)]/40 transition-all duration-300 relative z-10 pointer-events-auto">
+                    <div class="glass-panel w-full max-w-[360px] flex flex-col items-center p-4 sm:p-5 rounded-2xl border border-white/10 bg-black/40 shadow-xl backdrop-blur-md hover:border-[var(--accent-color)]/40 transition-all duration-300 relative z-10 pointer-events-auto">
                         <div class="relative w-full max-w-[340px] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40">
                           <iframe 
                             src="https://www.tiktok.com/player/v1/7585320034508049686" 
@@ -3263,7 +3171,7 @@ body.light-mode .apple-menu-item { color: #222222; }
                     </div>
 
                     <!-- Colonne 2 : TikTok 2 -->
-                    <div class="glass-panel glass-container w-full max-w-[360px] flex flex-col items-center p-4 sm:p-5 rounded-2xl border border-white/10 bg-black/40 shadow-xl backdrop-blur-md hover:border-[var(--accent-color)]/40 transition-all duration-300 relative z-10 pointer-events-auto">
+                    <div class="glass-panel w-full max-w-[360px] flex flex-col items-center p-4 sm:p-5 rounded-2xl border border-white/10 bg-black/40 shadow-xl backdrop-blur-md hover:border-[var(--accent-color)]/40 transition-all duration-300 relative z-10 pointer-events-auto">
                         <div class="relative w-full max-w-[340px] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-black/40">
                           <iframe 
                             src="https://www.tiktok.com/player/v1/7586015739568459030" 
@@ -3282,7 +3190,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             </div>
         </section>
         
-        <footer id="contact" class="col-span-12 glass-panel glass-container p-0 pb-16 md:pb-10 text-center flex flex-col items-center justify-center scroll-float mb-36 md:mb-32 overflow-hidden relative">
+        <footer id="contact" class="col-span-12 glass-panel p-0 pb-16 md:pb-10 text-center flex flex-col items-center justify-center scroll-float mb-36 md:mb-32 overflow-hidden relative">
             
             <div class="absolute inset-0 z-0 grid grid-cols-3 md:grid-cols-4 gap-2 p-2 opacity-30 blur-[2px] pointer-events-none grayscale">
                 <img src="1.png" loading="lazy" decoding="async" class="w-full h-full object-cover rounded-lg">
@@ -3404,7 +3312,7 @@ body.light-mode .apple-menu-item { color: #222222; }
          MODAL PROJECT DETAIL ("Project_Player.vst")
          ======================================================================= -->
     <div id="project-detail-modal" class="fixed inset-0 z-[99990] flex items-center justify-center p-3 sm:p-5 md:p-8 opacity-0 pointer-events-none" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);">
-        <div id="project-detail-container" class="glass-panel glass-container w-full max-w-4xl max-h-[90vh] flex flex-col rounded-3xl border border-white/15 bg-[#0d0e12]/95 shadow-[0_25px_70px_rgba(0,0,0,0.85),0_0_50px_-10px_color-mix(in_srgb,var(--accent-color)_30%,transparent)] overflow-hidden relative" style="transform-origin: center center;">
+        <div id="project-detail-container" class="glass-panel w-full max-w-4xl max-h-[90vh] flex flex-col rounded-3xl border border-white/15 bg-[#0d0e12]/95 shadow-[0_25px_70px_rgba(0,0,0,0.85),0_0_50px_-10px_color-mix(in_srgb,var(--accent-color)_30%,transparent)] overflow-hidden relative" style="transform-origin: center center;">
             
             <!-- Header façon macOS / DAW VST Plugin -->
             <div class="win-header shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-black/40">
@@ -3485,7 +3393,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     
     <div id="vision-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4">
         <div onclick="closeVision()" class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"></div>
-        <div class="relative glass-panel glass-container w-full max-w-2xl" id="vision-content">
+        <div class="relative glass-panel w-full max-w-2xl" id="vision-content">
              <div class="win-header">
                 <span class="win-title">vision.dmg</span>
                 <button type="button" onclick="closeVision();" class="text-white/60 hover:text-white text-lg font-bold transition-colors cursor-pointer px-2.5 py-1 rounded hover:bg-white/10 z-20 relative" title="Fermer la fenêtre">✕</button>
@@ -3502,7 +3410,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     <!-- EASTER EGG WIDGET : SYSTEM JULES F. (QR CODE SHARE) -->
     <div id="easter-egg-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4">
         <div onclick="closeEasterEggQR()" class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"></div>
-        <div class="relative glass-panel glass-container w-full max-w-sm overflow-hidden text-center p-0" id="easter-egg-content">
+        <div class="relative glass-panel w-full max-w-sm overflow-hidden text-center p-0" id="easter-egg-content">
             <div class="win-header">
                 <span class="win-title flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
@@ -3547,7 +3455,7 @@ body.light-mode .apple-menu-item { color: #222222; }
         <span id="daw-hud-text" class="font-mono text-[9px] uppercase tracking-widest text-white/80 mt-1">LECTURE</span>
     </div>
 
-   <nav class="apple-menubar glass-container glass-container-pill">
+   <nav class="apple-menubar">
     <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
         <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
         <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
@@ -3567,7 +3475,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
 <!-- LATERAL MASTER VOLUME CONTROLLER (DISCRET, SUBTIL, 50% PAR DÉFAUT) -->
 <div id="master-volume-dock" class="select-none" style="touch-action: manipulation;">
-    <div id="master-volume-wrapper" class="glass-panel glass-container" title="Contrôle Volume Général (50% par défaut)">
+    <div id="master-volume-wrapper" class="glass-panel" title="Contrôle Volume Général (50% par défaut)">
         <!-- Percentage Badge -->
         <span id="master-vol-percent" class="font-mono text-[9px] sm:text-[10px] text-[var(--accent-color)] font-bold tracking-tighter">50%</span>
         
@@ -4701,9 +4609,6 @@ body.light-mode .apple-menu-item { color: #222222; }
             
             // Modifier la variable thème de base
             document.documentElement.style.setProperty('--theme-accent', t.accent); 
-            if (window.LiquidGlass && typeof window.LiquidGlass.setThemeColor === 'function') {
-                window.LiquidGlass.setThemeColor(t.accent);
-            }
             
             const themeBg = document.getElementById('theme-bg');
             if (themeBg) {
@@ -7720,683 +7625,6 @@ window.triggerRackScrew = triggerRackScrew;
                 try { window.tiktokEmbeds.load(); } catch(e) {}
             }
         });
-    </script>
-
-    <!-- =======================================================================
-         APPLE LIQUID GLASS OPTICAL ENGINE (dashersw/liquid-glass-js spec)
-         High-fidelity WebGL refraction, dispersion, dynamic DAW rim lighting,
-         and nested multi-level glass materials.
-         ======================================================================= -->
-    <script>
-    (function() {
-        'use strict';
-
-        // Helper: parse CSS color strings (hex, rgb, rgba) to [r, g, b] in [0, 1] range
-        function parseColor(str) {
-            if (!str) return [0.65, 0.45, 1.0];
-            if (Array.isArray(str) && str.length >= 3) return str.slice(0, 3);
-            str = String(str).trim();
-            if (str.startsWith('#')) {
-                let hex = str.slice(1);
-                if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
-                if (hex.length >= 6) {
-                    const num = parseInt(hex.slice(0, 6), 16);
-                    return [((num >> 16) & 255) / 255, ((num >> 8) & 255) / 255, (num & 255) / 255];
-                }
-            }
-            if (str.startsWith('rgb')) {
-                const m = str.match(/[\d.]+/g);
-                if (m && m.length >= 3) {
-                    return [parseFloat(m[0]) / 255, parseFloat(m[1]) / 255, parseFloat(m[2]) / 255];
-                }
-            }
-            return [0.65, 0.45, 1.0];
-        }
-
-        // WebGL Shaders
-        const VS_SOURCE = `
-            attribute vec2 a_position;
-            varying vec2 v_uv;
-            void main() {
-                v_uv = (a_position + 1.0) * 0.5;
-                gl_Position = vec4(a_position, 0.0, 1.0);
-            }
-        `;
-
-        const FS_SOURCE = `
-            precision mediump float;
-            varying vec2 v_uv;
-
-            uniform vec2 u_resolution;
-            uniform float u_borderRadius;
-            uniform float u_blurRadius;
-            uniform float u_tintOpacity;
-            uniform vec3 u_tintColor;
-            uniform vec3 u_rimColor;
-            uniform float u_rimWidth;
-            uniform float u_refractionStrength;
-            uniform float u_dispersion;
-            uniform int u_shapeType; // 0: rect, 1: pill, 2: circle
-            uniform float u_isNested;
-            uniform sampler2D u_texture;
-            uniform float u_hasTexture;
-            uniform vec2 u_mousePos;
-            uniform float u_time;
-
-            // Signed Distance Function (SDF) for rounded rectangle
-            float sdRoundedBox(vec2 p, vec2 b, float r) {
-                vec2 q = abs(p) - b + r;
-                return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
-            }
-
-            void main() {
-                vec2 pixel = v_uv * u_resolution;
-                vec2 halfRes = u_resolution * 0.5;
-                vec2 p = pixel - halfRes;
-
-                float r = u_borderRadius;
-                if (u_shapeType == 1) { // Pill / capsule
-                    r = min(halfRes.x, halfRes.y);
-                } else if (u_shapeType == 2) { // Circle
-                    r = min(halfRes.x, halfRes.y);
-                }
-                r = clamp(r, 0.0, min(halfRes.x, halfRes.y));
-
-                vec2 b = halfRes;
-                if (u_shapeType == 2) {
-                    b = vec2(r, r);
-                }
-
-                float d = sdRoundedBox(p, b, r);
-
-                // Outside the rounded shape: discard fragment
-                if (d > 1.0) {
-                    discard;
-                }
-
-                // Normal approximation via SDF gradient
-                float eps = 1.5;
-                float dx = sdRoundedBox(p + vec2(eps, 0.0), b, r) - sdRoundedBox(p - vec2(eps, 0.0), b, r);
-                float dy = sdRoundedBox(p + vec2(0.0, eps), b, r) - sdRoundedBox(p - vec2(0.0, eps), b, r);
-                vec2 normal2D = normalize(vec2(dx, dy) + vec2(0.0001));
-
-                // Curvature falloff near boundary for realistic edge refraction
-                float edgeDist = clamp(-d / max(r * 0.75, 12.0), 0.0, 1.0);
-                float curvature = pow(1.0 - edgeDist, 2.2);
-                vec2 refrOffset = normal2D * curvature * (u_refractionStrength * 0.045);
-
-                // Multi-level nested glass distortion boost
-                if (u_isNested > 0.5) {
-                    refrOffset *= 1.4;
-                }
-
-                // Chromatic aberration (dispersion) on R, G, B channels
-                vec2 uvBase = v_uv;
-                vec2 uvR = clamp(uvBase + refrOffset * (1.0 + u_dispersion), 0.0, 1.0);
-                vec2 uvG = clamp(uvBase + refrOffset, 0.0, 1.0);
-                vec2 uvB = clamp(uvBase + refrOffset * (1.0 - u_dispersion), 0.0, 1.0);
-
-                vec4 bgSample;
-                if (u_hasTexture > 0.5) {
-                    // Multi-tap blur approximation (Gaussian-like 5-tap kernel)
-                    float blurStep = (u_blurRadius * 0.35) / max(u_resolution.x, u_resolution.y);
-                    vec4 col = vec4(0.0);
-                    col += texture2D(u_texture, uvG) * 0.4;
-                    col += texture2D(u_texture, uvG + vec2(blurStep, 0.0)) * 0.15;
-                    col += texture2D(u_texture, uvG - vec2(blurStep, 0.0)) * 0.15;
-                    col += texture2D(u_texture, uvG + vec2(0.0, blurStep)) * 0.15;
-                    col += texture2D(u_texture, uvG - vec2(0.0, blurStep)) * 0.15;
-
-                    float rCol = texture2D(u_texture, uvR).r * 0.5 + col.r * 0.5;
-                    float bCol = texture2D(u_texture, uvB).b * 0.5 + col.b * 0.5;
-                    bgSample = vec4(rCol, col.g, bCol, col.a);
-                } else {
-                    // Ambient procedural backdrop matching studio theme
-                    vec2 centerUV = v_uv - 0.5;
-                    float dist = length(centerUV);
-                    vec3 darkBase = vec3(0.05, 0.06, 0.08);
-                    vec3 glow = u_tintColor * 0.16;
-                    bgSample = vec4(mix(darkBase + glow, darkBase, dist * 1.4), 0.72);
-                }
-
-                // Light sheen & specular highlight (responsive to mouse position if available)
-                vec2 lightDir = normalize(u_mousePos - p + vec2(-100.0, -150.0));
-                float spec = max(0.0, dot(normal2D, lightDir));
-                spec = pow(spec, 3.5) * curvature * 0.7;
-
-                // Apple VisionOS-like Rim lighting along border SDF
-                float rimFactor = smoothstep(0.0, -u_rimWidth, d) * (1.0 - smoothstep(-u_rimWidth, -u_rimWidth * 3.5, d));
-                vec3 rimLight = mix(vec3(1.0), u_rimColor, 0.45) * rimFactor * 0.9;
-
-                // Final color compositing
-                vec3 finalColor = mix(bgSample.rgb, u_tintColor, u_tintOpacity);
-                finalColor += vec3(spec) + rimLight;
-
-                // Anti-aliased outer edge
-                float alpha = smoothstep(1.0, -0.5, d) * clamp(bgSample.a + 0.22, 0.0, 1.0);
-
-                gl_FragColor = vec4(finalColor, alpha * 0.85);
-            }
-        `;
-
-        // Shared WebGL Renderer Core
-        class WebGLCore {
-            constructor() {
-                this.canvas = document.createElement('canvas');
-                this.gl = this.canvas.getContext('webgl', { 
-                    alpha: true, 
-                    antialias: true, 
-                    premultipliedAlpha: false,
-                    preserveDrawingBuffer: true 
-                });
-                if (!this.gl) {
-                    console.warn('[LiquidGlass] WebGL not supported. Falling back to native CSS glass.');
-                    return;
-                }
-                this.initProgram();
-                this.initFallbackTexture();
-            }
-
-            initProgram() {
-                const gl = this.gl;
-                const vs = this.compileShader(gl.VERTEX_SHADER, VS_SOURCE);
-                const fs = this.compileShader(gl.FRAGMENT_SHADER, FS_SOURCE);
-                if (!vs || !fs) return;
-
-                const program = gl.createProgram();
-                gl.attachShader(program, vs);
-                gl.attachShader(program, fs);
-                gl.linkProgram(program);
-
-                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-                    console.error('[LiquidGlass] Program link error:', gl.getProgramInfoLog(program));
-                    return;
-                }
-                this.program = program;
-
-                // Fullscreen quad buffer
-                this.quadBuffer = gl.createBuffer();
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuffer);
-                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-                    -1, -1,
-                     1, -1,
-                    -1,  1,
-                    -1,  1,
-                     1, -1,
-                     1,  1
-                ]), gl.STATIC_DRAW);
-
-                // Locate uniforms & attributes
-                this.attribs = {
-                    position: gl.getAttribLocation(program, 'a_position')
-                };
-                this.uniforms = {
-                    resolution: gl.getUniformLocation(program, 'u_resolution'),
-                    borderRadius: gl.getUniformLocation(program, 'u_borderRadius'),
-                    blurRadius: gl.getUniformLocation(program, 'u_blurRadius'),
-                    tintOpacity: gl.getUniformLocation(program, 'u_tintOpacity'),
-                    tintColor: gl.getUniformLocation(program, 'u_tintColor'),
-                    rimColor: gl.getUniformLocation(program, 'u_rimColor'),
-                    rimWidth: gl.getUniformLocation(program, 'u_rimWidth'),
-                    refractionStrength: gl.getUniformLocation(program, 'u_refractionStrength'),
-                    dispersion: gl.getUniformLocation(program, 'u_dispersion'),
-                    shapeType: gl.getUniformLocation(program, 'u_shapeType'),
-                    isNested: gl.getUniformLocation(program, 'u_isNested'),
-                    texture: gl.getUniformLocation(program, 'u_texture'),
-                    hasTexture: gl.getUniformLocation(program, 'u_hasTexture'),
-                    mousePos: gl.getUniformLocation(program, 'u_mousePos'),
-                    time: gl.getUniformLocation(program, 'u_time')
-                };
-            }
-
-            compileShader(type, src) {
-                const gl = this.gl;
-                const shader = gl.createShader(type);
-                gl.shaderSource(shader, src);
-                gl.compileShader(shader);
-                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                    console.error('[LiquidGlass] Shader compile error:', gl.getShaderInfoLog(shader));
-                    gl.deleteShader(shader);
-                    return null;
-                }
-                return shader;
-            }
-
-            initFallbackTexture() {
-                const gl = this.gl;
-                const canvas2d = document.createElement('canvas');
-                canvas2d.width = 256;
-                canvas2d.height = 256;
-                const ctx = canvas2d.getContext('2d');
-                
-                // Subtle ambient dark gradient
-                const grad = ctx.createRadialGradient(128, 128, 10, 128, 128, 140);
-                grad.addColorStop(0, 'rgba(40, 42, 54, 0.9)');
-                grad.addColorStop(1, 'rgba(15, 16, 20, 0.95)');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, 256, 256);
-
-                this.texture = gl.createTexture();
-                gl.bindTexture(gl.TEXTURE_2D, this.texture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas2d);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-                this.hasTexture = 0.0;
-            }
-
-            updateTextureFromCanvas(sourceCanvas) {
-                if (!this.gl || !sourceCanvas) return;
-                const gl = this.gl;
-                gl.bindTexture(gl.TEXTURE_2D, this.texture);
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sourceCanvas);
-                this.hasTexture = 1.0;
-            }
-
-            render(opts, width, height, mouseX, mouseY) {
-                const gl = this.gl;
-                if (!gl || !this.program) return null;
-
-                if (this.canvas.width !== width || this.canvas.height !== height) {
-                    this.canvas.width = Math.max(1, width);
-                    this.canvas.height = Math.max(1, height);
-                }
-
-                gl.viewport(0, 0, width, height);
-                gl.clearColor(0, 0, 0, 0);
-                gl.clear(gl.COLOR_BUFFER_BIT);
-
-                gl.useProgram(this.program);
-
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuffer);
-                gl.enableVertexAttribArray(this.attribs.position);
-                gl.vertexAttribPointer(this.attribs.position, 2, gl.FLOAT, false, 0, 0);
-
-                // Uniforms
-                gl.uniform2f(this.uniforms.resolution, width, height);
-                gl.uniform1f(this.uniforms.borderRadius, opts.borderRadius);
-                gl.uniform1f(this.uniforms.blurRadius, opts.blurRadius);
-                gl.uniform1f(this.uniforms.tintOpacity, opts.tintOpacity);
-                gl.uniform3fv(this.uniforms.tintColor, opts.tintColor);
-                gl.uniform3fv(this.uniforms.rimColor, opts.rimColor);
-                gl.uniform1f(this.uniforms.rimWidth, opts.rimWidth);
-                gl.uniform1f(this.uniforms.refractionStrength, opts.refractionStrength);
-                gl.uniform1f(this.uniforms.dispersion, opts.dispersion);
-                
-                let shapeInt = 0;
-                if (opts.type === 'pill') shapeInt = 1;
-                else if (opts.type === 'circle') shapeInt = 2;
-                gl.uniform1i(this.uniforms.shapeType, shapeInt);
-
-                gl.uniform1f(this.uniforms.isNested, opts.isNested ? 1.0 : 0.0);
-                gl.uniform1f(this.uniforms.hasTexture, this.hasTexture);
-                gl.uniform2f(this.uniforms.mousePos, mouseX || 0, mouseY || 0);
-                gl.uniform1f(this.uniforms.time, (performance.now() * 0.001) % 1000.0);
-
-                gl.activeTexture(gl.TEXTURE0);
-                gl.bindTexture(gl.TEXTURE_2D, this.texture);
-                gl.uniform1i(this.uniforms.texture, 0);
-
-                gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-                return this.canvas;
-            }
-        }
-
-        // Lazy singleton renderer
-        let sharedCore = null;
-        function getCore() {
-            if (!sharedCore) {
-                sharedCore = new WebGLCore();
-            }
-            return sharedCore;
-        }
-
-        // Container class (liquid-glass-js specification)
-        class Container {
-            constructor(options = {}) {
-                this.options = Object.assign({
-                    borderRadius: 20,
-                    blurRadius: 8.0,
-                    tintOpacity: 0.18,
-                    tintColor: LiquidGlass.themeColor || [0.65, 0.45, 1.0],
-                    rimColor: LiquidGlass.themeColor || [0.65, 0.45, 1.0],
-                    rimWidth: 1.5,
-                    refractionStrength: 0.03,
-                    dispersion: 0.006,
-                    type: 'rect', // 'rect', 'pill', 'circle'
-                    isNested: false,
-                    element: null
-                }, options);
-
-                this.children = [];
-                this.element = this.options.element;
-                this.canvas = null;
-                this.ctx2d = null;
-                this.isVisible = true;
-                this.bounds = { width: 0, height: 0 };
-                this.mousePos = { x: 0, y: 0 };
-
-                if (this.element) {
-                    this.initDOM();
-                }
-            }
-
-            initDOM() {
-                if (!this.element) return;
-
-                // Detect pill / circle from class if not explicitly passed
-                if (this.element.classList.contains('glass-container-pill') || this.element.classList.contains('glass-button-pill') || this.element.classList.contains('apple-menubar')) {
-                    this.options.type = 'pill';
-                } else if (this.element.classList.contains('glass-container-circle') || this.element.classList.contains('glass-button-circle')) {
-                    this.options.type = 'circle';
-                }
-
-                // Create target 2D canvas layer for drawing the WebGL glass refraction
-                this.canvas = document.createElement('canvas');
-                this.canvas.className = 'liquid-glass-canvas pointer-events-none';
-                this.canvas.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; pointer-events:none !important; z-index:0; border-radius:inherit; overflow:hidden;';
-                this.ctx2d = this.canvas.getContext('2d');
-
-                // Insert as first child so underlying content sits above it (z-index: 1)
-                if (this.element.firstChild) {
-                    this.element.insertBefore(this.canvas, this.element.firstChild);
-                } else {
-                    this.element.appendChild(this.canvas);
-                }
-
-                // Track mousemove over element for interactive sheen
-                this.element.addEventListener('mousemove', (e) => {
-                    const rect = this.element.getBoundingClientRect();
-                    this.mousePos.x = e.clientX - rect.left;
-                    this.mousePos.y = e.clientY - rect.top;
-                    this.render();
-                }, { passive: true });
-
-                this.updateBounds();
-                LiquidGlass.register(this);
-            }
-
-            addChild(child) {
-                if (!child) return;
-                child.options.isNested = true;
-                this.children.push(child);
-                if (child.element && this.element && !this.element.contains(child.element)) {
-                    this.element.appendChild(child.element);
-                }
-                child.render();
-            }
-
-            setThemeColor(color) {
-                const rgb = parseColor(color);
-                this.options.tintColor = rgb;
-                this.options.rimColor = rgb;
-                this.render();
-                this.children.forEach(c => c.setThemeColor(color));
-            }
-
-            updateBounds() {
-                if (!this.element || !this.canvas) return;
-                const rect = this.element.getBoundingClientRect();
-                const w = Math.round(rect.width);
-                const h = Math.round(rect.height);
-                if (w <= 0 || h <= 0) return;
-
-                if (this.bounds.width !== w || this.bounds.height !== h) {
-                    this.bounds.width = w;
-                    this.bounds.height = h;
-                    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2 for performance
-                    this.canvas.width = Math.round(w * dpr);
-                    this.canvas.height = Math.round(h * dpr);
-                    this.render();
-                }
-            }
-
-            render() {
-                if (!this.element || !this.canvas || !this.isVisible || this.bounds.width <= 0) return;
-                const core = getCore();
-                if (!core || !core.gl) return;
-
-                const dpr = Math.min(window.devicePixelRatio || 1, 2);
-                const w = Math.round(this.bounds.width * dpr);
-                const h = Math.round(this.bounds.height * dpr);
-
-                const renderedGL = core.render(this.options, w, h, this.mousePos.x * dpr, this.mousePos.y * dpr);
-                if (renderedGL && this.ctx2d) {
-                    this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    this.ctx2d.drawImage(renderedGL, 0, 0, this.canvas.width, this.canvas.height);
-                }
-            }
-
-            destroy() {
-                if (this.canvas && this.canvas.parentNode) {
-                    this.canvas.parentNode.removeChild(this.canvas);
-                }
-                LiquidGlass.unregister(this);
-            }
-        }
-
-        // Button class (liquid-glass-js specification)
-        class Button extends Container {
-            constructor(options = {}) {
-                super(Object.assign({
-                    borderRadius: 14,
-                    blurRadius: 7.0,
-                    tintOpacity: 0.22,
-                    refractionStrength: 0.04,
-                    dispersion: 0.008,
-                    rimWidth: 1.8,
-                    type: options.type || 'rect',
-                    isNested: true
-                }, options));
-            }
-        }
-
-        // LiquidGlass Singleton Manager
-        const LiquidGlass = {
-            version: '1.2.0',
-            Container,
-            Button,
-            instances: [],
-            themeColor: [0.65, 0.45, 1.0],
-            observer: null,
-            isCapturing: false,
-
-            register(instance) {
-                if (!this.instances.includes(instance)) {
-                    this.instances.push(instance);
-                    if (this.observer && instance.element) {
-                        this.observer.observe(instance.element);
-                    }
-                }
-            },
-
-            unregister(instance) {
-                const idx = this.instances.indexOf(instance);
-                if (idx !== -1) {
-                    this.instances.splice(idx, 1);
-                    if (this.observer && instance.element) {
-                        this.observer.unobserve(instance.element);
-                    }
-                }
-            },
-
-            setThemeColor(color) {
-                const rgb = parseColor(color);
-                this.themeColor = rgb;
-                this.instances.forEach(inst => inst.setThemeColor(rgb));
-            },
-
-            // Capture page background using html2canvas safely with element filtering
-            capturePage() {
-                if (typeof window.html2canvas !== 'function' || this.isCapturing) return;
-                this.isCapturing = true;
-
-                const options = {
-                    logging: false,
-                    useCORS: true,
-                    allowTaint: false,
-                    scale: 0.5, // 50% scale for fast texture upload & optical blur
-                    ignoreElements: (el) => {
-                        if (!el) return false;
-                        const tag = el.tagName ? el.tagName.toUpperCase() : '';
-                        if (tag === 'IFRAME' || tag === 'VIDEO' || tag === 'CANVAS' || tag === 'AUDIO') return true;
-                        if (el.classList && (el.classList.contains('liquid-glass-canvas') || el.classList.contains('pointer-events-none'))) return true;
-                        return false;
-                    }
-                };
-
-                window.html2canvas(document.body, options).then((snapCanvas) => {
-                    const core = getCore();
-                    if (core) {
-                        core.updateTextureFromCanvas(snapCanvas);
-                        this.instances.forEach(inst => inst.render());
-                    }
-                    this.isCapturing = false;
-                }).catch(() => {
-                    this.isCapturing = false;
-                });
-            },
-
-            // Attach liquid glass to all marked containers, panels, and buttons
-            attachAll() {
-                const rootThemeColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#8b5cf6';
-                this.themeColor = parseColor(rootThemeColor);
-
-                // 1. Apple Menubar (pill, tintOpacity 0.16)
-                const menubar = document.querySelector('.apple-menubar');
-                if (menubar && !menubar.__liquidGlassAttached) {
-                    menubar.__liquidGlassAttached = true;
-                    new Container({
-                        element: menubar,
-                        type: 'pill',
-                        borderRadius: 9999,
-                        tintOpacity: 0.16,
-                        blurRadius: 8.0,
-                        refractionStrength: 0.025
-                    });
-                }
-
-                // 2. Main DAW Panels & Windows (.glass-panel)
-                const panels = document.querySelectorAll('.glass-panel');
-                panels.forEach(panel => {
-                    if (panel.__liquidGlassAttached || panel.classList.contains('apple-menubar')) return;
-                    panel.__liquidGlassAttached = true;
-
-                    let bRadius = 20;
-                    let shapeType = 'rect';
-                    if (panel.classList.contains('glass-container-pill') || panel.id === 'theme-widget') {
-                        shapeType = 'pill';
-                        bRadius = 9999;
-                    } else if (panel.classList.contains('glass-container-circle')) {
-                        shapeType = 'circle';
-                    }
-
-                    new Container({
-                        element: panel,
-                        type: shapeType,
-                        borderRadius: bRadius,
-                        blurRadius: 8.0,
-                        tintOpacity: 0.18,
-                        refractionStrength: 0.03
-                    });
-                });
-
-                // 3. Nested Glass Cards & Buttons (.glass-button, .stat-card, .project-card, .theme-pill)
-                const buttons = document.querySelectorAll('.glass-button, .theme-pill, .stat-card, .project-card');
-                buttons.forEach(btn => {
-                    if (btn.__liquidGlassAttached) return;
-                    btn.__liquidGlassAttached = true;
-
-                    let shapeType = 'rect';
-                    let bRadius = 14;
-                    if (btn.classList.contains('glass-button-pill') || btn.classList.contains('theme-pill')) {
-                        shapeType = 'pill';
-                        bRadius = 9999;
-                    } else if (btn.classList.contains('glass-button-circle')) {
-                        shapeType = 'circle';
-                    }
-
-                    // Check for parent container for nested glass hierarchy
-                    const parentEl = btn.closest('.glass-container, .glass-panel');
-                    const btnInstance = new Button({
-                        element: btn,
-                        type: shapeType,
-                        borderRadius: bRadius,
-                        blurRadius: 7.0,
-                        tintOpacity: 0.22,
-                        isNested: true
-                    });
-
-                    if (parentEl) {
-                        const parentInst = LiquidGlass.instances.find(inst => inst.element === parentEl);
-                        if (parentInst) {
-                            parentInst.addChild(btnInstance);
-                        }
-                    }
-                });
-
-                // Trigger initial render for all instances
-                this.instances.forEach(inst => {
-                    inst.updateBounds();
-                });
-
-                // Trigger background capture once page is settled
-                setTimeout(() => {
-                    this.capturePage();
-                }, 1200);
-            },
-
-            init() {
-                // Viewport IntersectionObserver to pause rendering of offscreen elements
-                if ('IntersectionObserver' in window) {
-                    this.observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            const inst = this.instances.find(i => i.element === entry.target);
-                            if (inst) {
-                                inst.isVisible = entry.isIntersecting;
-                                if (entry.isIntersecting) {
-                                    inst.render();
-                                }
-                            }
-                        });
-                    }, { threshold: 0.05 });
-                }
-
-                // Resize listener with requestAnimationFrame
-                let resizeRaf = null;
-                window.addEventListener('resize', () => {
-                    if (resizeRaf) cancelAnimationFrame(resizeRaf);
-                    resizeRaf = requestAnimationFrame(() => {
-                        this.instances.forEach(inst => inst.updateBounds());
-                    });
-                }, { passive: true });
-
-                // Scroll listener with requestAnimationFrame
-                let scrollRaf = null;
-                window.addEventListener('scroll', () => {
-                    if (scrollRaf) cancelAnimationFrame(scrollRaf);
-                    scrollRaf = requestAnimationFrame(() => {
-                        this.instances.forEach(inst => {
-                            if (inst.isVisible) inst.render();
-                        });
-                    });
-                }, { passive: true });
-
-                // Auto attach when DOM is ready
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', () => this.attachAll());
-                } else {
-                    this.attachAll();
-                }
-            }
-        };
-
-        window.LiquidGlass = LiquidGlass;
-        LiquidGlass.init();
-    })();
     </script>
 </body>
 </html>
