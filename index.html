@@ -871,71 +871,170 @@ body.light-mode .apple-menu-item { color: #222222; }
             box-shadow: 0 0 16px -2px color-mix(in srgb, var(--accent-color) 35%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
 
-        /* --- MODE 2 : LIQUID GLASS / FULL-BLEED --- */
+        /* ========================================================
+           MODE 2 : MOSAÏQUE BENTO BORDERLESS ANIMÉE LIQUID GLASS
+           (100% Responsive Desktop/Tablette/Mobile - 60/120 FPS)
+           ======================================================== */
+
+        /* Conteneur Mosaïque */
         #projects-grid.view-mode-liquid {
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-            gap: 28px;
-        }
-        @media (min-width: 768px) {
-            #projects-grid.view-mode-liquid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 32px;
-            }
-        }
-        @media (min-width: 1280px) {
-            #projects-grid.view-mode-liquid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 28px;
-            }
+            display: grid !important;
+            grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+            grid-auto-rows: 245px !important;
+            grid-auto-flow: dense !important;
+            gap: 14px !important;
+            padding: 2px !important;
+            perspective: 1200px;
         }
 
-        /* Carte de projet en mode Liquid Glass : Plein cadre sans bordures grises opaques */
+        /* --- STYLES DES CARTES DU BENTO LIQUID GLASS --- */
         #projects-grid.view-mode-liquid .project-card {
-            aspect-ratio: 16/11;
-            border-radius: 22px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-            background: rgba(12, 13, 18, 0.6);
-            overflow: hidden;
-            position: relative;
-            transform: translateZ(0);
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 240px !important;
+            aspect-ratio: auto !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            background: rgba(8, 10, 16, 0.65) !important;
+            box-shadow: 
+                inset 0 1.5px 0 0 rgba(255, 255, 255, 0.45),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+                0 20px 45px -10px rgba(0, 0, 0, 0.8) !important;
+            overflow: hidden !important;
+            position: relative !important;
+            transform: translate3d(0, 0, 0);
+            transform-style: preserve-3d;
             will-change: transform, box-shadow, border-color, filter;
-            transition: box-shadow 0.4s var(--ease-apple), border-color 0.4s var(--ease-apple), filter 0.4s var(--ease-apple);
+            transition: box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                        border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                        filter 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        #projects-grid.view-mode-liquid .project-card:hover {
-            border-color: color-mix(in srgb, var(--accent-color) 60%, rgba(255, 255, 255, 0.35));
-            box-shadow: 0 32px 75px -12px rgba(0, 0, 0, 0.9), 0 0 35px -4px color-mix(in srgb, var(--accent-color) 40%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.45);
-            filter: brightness(1.05);
+        /* Effet d'ondulation liquide / ambient wave floating */
+        @keyframes liquidMosaicWaveA {
+            0%, 100% { transform: translate3d(0, 0px, 0); }
+            50% { transform: translate3d(0, -6px, 0); }
+        }
+        @keyframes liquidMosaicWaveB {
+            0%, 100% { transform: translate3d(0, 0px, 0); }
+            50% { transform: translate3d(0, -8px, 0); }
+        }
+        @keyframes liquidMosaicWaveC {
+            0%, 100% { transform: translate3d(0, 0px, 0); }
+            50% { transform: translate3d(0, -5px, 0); }
         }
 
+        #projects-grid.view-mode-liquid .project-card:nth-child(3n+1) {
+            animation: liquidMosaicWaveA 7.5s ease-in-out infinite alternate;
+        }
+        #projects-grid.view-mode-liquid .project-card:nth-child(3n+2) {
+            animation: liquidMosaicWaveB 9s ease-in-out infinite alternate;
+            animation-delay: -3s;
+        }
+        #projects-grid.view-mode-liquid .project-card:nth-child(3n) {
+            animation: liquidMosaicWaveC 8s ease-in-out infinite alternate;
+            animation-delay: -5s;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            #projects-grid.view-mode-liquid .project-card:hover {
+                animation-play-state: paused !important;
+                border-color: color-mix(in srgb, var(--accent-color) 65%, rgba(255, 255, 255, 0.4)) !important;
+                box-shadow: 
+                    inset 0 1.5px 0 0 rgba(255, 255, 255, 0.65),
+                    inset 0 0 0 1px color-mix(in srgb, var(--accent-color) 40%, rgba(255, 255, 255, 0.2)),
+                    0 30px 65px -12px rgba(0, 0, 0, 0.92), 
+                    0 0 35px -6px color-mix(in srgb, var(--accent-color) 45%, transparent) !important;
+                filter: brightness(1.04);
+                z-index: 15;
+            }
+        }
+
+        /* Reflet caustique liquide dynamique (balayage & suivi de curseur) */
+        #projects-grid.view-mode-liquid .project-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 6;
+            background: radial-gradient(
+                circle 320px at var(--specular-x, 50%) var(--specular-y, 35%),
+                rgba(255, 255, 255, 0.26) 0%,
+                rgba(255, 255, 255, 0.08) 40%,
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            mix-blend-mode: screen;
+        }
+        #projects-grid.view-mode-liquid .project-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Médias plein cadre (Borderless) */
         #projects-grid.view-mode-liquid .project-card .project-poster,
         #projects-grid.view-mode-liquid .project-card .desktop-preview-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 22px;
-            transform: translateZ(0);
-            will-change: transform;
-            transition: opacity 0.4s ease;
+            position: absolute !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 20px !important;
+            transform: translateZ(0) scale(1.005);
+            will-change: transform, filter;
+            transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.65s ease, opacity 0.4s ease;
+        }
+        #projects-grid.view-mode-liquid .project-card:hover .project-poster,
+        #projects-grid.view-mode-liquid .project-card:hover .desktop-preview-video {
+            transform: translateZ(0) scale(1.055);
+            filter: contrast(1.06) brightness(1.04) saturate(1.08);
         }
 
-        /* Cartouche flottant en verre liquide dépoli */
+        /* Dégradé liquide protecteur pour lisibilité optimale */
+        #projects-grid.view-mode-liquid .project-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.15) 0%,
+                transparent 30%,
+                rgba(0, 0, 0, 0.35) 60%,
+                rgba(0, 0, 0, 0.85) 100%
+            );
+            pointer-events: none;
+            z-index: 2;
+            transition: opacity 0.4s ease;
+        }
+        #projects-grid.view-mode-liquid .project-card:hover::before {
+            opacity: 0.95;
+        }
+
+        /* Cartouche flottant en verre liquide dépoli (Liquid Glass Capsule) */
         #projects-grid.view-mode-liquid .project-card .project-info-minimal {
             position: absolute;
             inset: auto 14px 14px 14px;
             border-radius: 16px;
-            background: rgba(8, 9, 14, 0.42);
-            backdrop-filter: blur(24px) saturate(160%);
-            -webkit-backdrop-filter: blur(24px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            background: rgba(10, 12, 18, 0.48);
+            backdrop-filter: blur(28px) saturate(180%) brightness(112%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(112%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 
+                inset 0 1.5px 0 0 rgba(255, 255, 255, 0.4),
+                inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+                0 14px 35px -5px rgba(0, 0, 0, 0.75),
+                0 0 20px -5px color-mix(in srgb, var(--accent-color) 20%, transparent);
             padding: 12px 16px;
             pointer-events: none;
             z-index: 10;
-            transform: translateZ(0);
+            transform: translateZ(20px);
             will-change: transform, box-shadow, border-color, background;
-            transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+            transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease, transform 0.35s ease;
         }
 
         /* Reflet de biseau lumineux Liquid Glass sur le cartouche flottant */
@@ -945,7 +1044,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             inset: 0;
             border-radius: inherit;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.05) 50%, color-mix(in srgb, var(--accent-color) 40%, transparent) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.05) 50%, color-mix(in srgb, var(--accent-color) 45%, transparent) 100%);
             mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
             mask-composite: exclude;
             pointer-events: none;
@@ -953,9 +1052,143 @@ body.light-mode .apple-menu-item { color: #222222; }
         }
 
         #projects-grid.view-mode-liquid .project-card:hover .project-info-minimal {
-            border-color: color-mix(in srgb, var(--accent-color) 50%, rgba(255, 255, 255, 0.3));
-            box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.8), 0 0 25px -4px color-mix(in srgb, var(--accent-color) 35%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            background: color-mix(in srgb, var(--accent-color) 12%, rgba(10, 12, 16, 0.65));
+            border-color: color-mix(in srgb, var(--accent-color) 60%, rgba(255, 255, 255, 0.35));
+            box-shadow: 
+                inset 0 1.5px 0 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+                0 18px 45px -5px rgba(0, 0, 0, 0.88),
+                0 0 30px -4px color-mix(in srgb, var(--accent-color) 45%, transparent);
+            background: color-mix(in srgb, var(--accent-color) 14%, rgba(10, 12, 18, 0.68));
+            transform: translateZ(30px) translateY(-3px);
+        }
+
+        /* Animation interactive sur le bouton de lecture */
+        #projects-grid.view-mode-liquid .project-card:hover .project-info-minimal svg {
+            transform: translateX(2px) scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* --- SPANS DU BENTO MOSAÏQUE (DESKTOP >= 1024px) --- */
+        @media (min-width: 1024px) {
+            #projects-grid.view-mode-liquid {
+                grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+                grid-auto-rows: 245px !important;
+                grid-auto-flow: dense !important;
+                gap: 14px !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="fumee"] {
+                grid-column: span 7 !important;
+                grid-row: span 2 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="etranger"] {
+                grid-column: span 5 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="instable"] {
+                grid-column: span 5 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="ouragan"] {
+                grid-column: span 4 !important;
+                grid-row: span 2 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="srh"] {
+                grid-column: span 4 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="capharnaum"] {
+                grid-column: span 4 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="desaccordes"] {
+                grid-column: span 4 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="longday"] {
+                grid-column: span 4 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="graal"] {
+                grid-column: span 12 !important;
+                grid-row: span 1 !important;
+            }
+        }
+
+        /* --- SPANS DU BENTO MOSAÏQUE (TABLETTE 640px - 1023px) --- */
+        @media (min-width: 640px) and (max-width: 1023px) {
+            #projects-grid.view-mode-liquid {
+                grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+                grid-auto-rows: 230px !important;
+                grid-auto-flow: dense !important;
+                gap: 12px !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="fumee"] {
+                grid-column: span 6 !important;
+                grid-row: span 2 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="etranger"] {
+                grid-column: span 3 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="instable"] {
+                grid-column: span 3 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="ouragan"] {
+                grid-column: span 3 !important;
+                grid-row: span 2 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="srh"] {
+                grid-column: span 3 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="capharnaum"] {
+                grid-column: span 3 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="desaccordes"] {
+                grid-column: span 3 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="longday"] {
+                grid-column: span 3 !important;
+                grid-row: span 1 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="graal"] {
+                grid-column: span 6 !important;
+                grid-row: span 1 !important;
+            }
+        }
+
+        /* --- MOSAÏQUE BENTO FLUIDE (MOBILE < 640px) --- */
+        @media (max-width: 639px) {
+            #projects-grid.view-mode-liquid {
+                grid-template-columns: 1fr !important;
+                grid-auto-rows: auto !important;
+                gap: 12px !important;
+            }
+            #projects-grid.view-mode-liquid .project-card {
+                grid-column: span 1 !important;
+                grid-row: auto !important;
+                min-height: 220px !important;
+                aspect-ratio: 16/10 !important;
+                border-radius: 16px !important;
+            }
+            #projects-grid.view-mode-liquid .project-card[data-project-id="fumee"],
+            #projects-grid.view-mode-liquid .project-card[data-project-id="ouragan"],
+            #projects-grid.view-mode-liquid .project-card[data-project-id="graal"] {
+                min-height: 250px !important;
+                aspect-ratio: 16/11 !important;
+            }
+            #projects-grid.view-mode-liquid .project-card .project-poster,
+            #projects-grid.view-mode-liquid .project-card .desktop-preview-video {
+                border-radius: 16px !important;
+            }
+            #projects-grid.view-mode-liquid .project-card .project-info-minimal {
+                inset: auto 10px 10px 10px !important;
+                padding: 10px 14px !important;
+                border-radius: 14px !important;
+            }
         }
 
         /* --- LAB RECORDER SH : JUICY & TACTILE DAW STRIP --- */
@@ -5938,6 +6171,48 @@ initTimelineAnimation();
 // --- 1. SÉLECTEUR DE MODE DE VUE DES PROJETS (DAW GRILLE vs LIQUID GLASS) ---
 let currentViewMode = 'classic';
 
+// Tilt 3D interactif et reflets caustiques pour la mosaïque Liquid Glass (Desktop)
+function initLiquidMosaicTilt() {
+    const grid = document.getElementById('projects-grid');
+    if (!grid) return;
+
+    const isHoverable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!isHoverable) return;
+
+    grid.querySelectorAll('.project-card').forEach(card => {
+        let rafId = null;
+
+        card.addEventListener('pointerenter', () => {
+            if (!grid.classList.contains('view-mode-liquid')) return;
+            card.style.transition = 'transform 0.12s ease-out, box-shadow 0.3s ease, border-color 0.3s ease';
+        });
+
+        card.addEventListener('pointermove', (e) => {
+            if (!grid.classList.contains('view-mode-liquid')) return;
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                const rotX = (y - 0.5) * -12;
+                const rotY = (x - 0.5) * 12;
+                card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.025, 1.025, 1.025)`;
+                card.style.setProperty('--specular-x', `${(x * 100).toFixed(1)}%`);
+                card.style.setProperty('--specular-y', `${(y * 100).toFixed(1)}%`);
+            });
+        }, { passive: true });
+
+        card.addEventListener('pointerleave', () => {
+            if (rafId) cancelAnimationFrame(rafId);
+            card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease';
+            card.style.transform = '';
+            card.style.setProperty('--specular-x', '50%');
+            card.style.setProperty('--specular-y', '35%');
+        });
+    });
+}
+
 function setProjectViewMode(mode) {
     if (mode !== 'classic' && mode !== 'liquid') return;
     currentViewMode = mode;
@@ -5952,19 +6227,15 @@ function setProjectViewMode(mode) {
 
     if (classicBtn && liquidBtn) {
         if (mode === 'classic') {
-            classicBtn.classList.add('active');
+            classicBtn.classList.add('active', 'text-white');
             classicBtn.classList.remove('text-white/60');
-            classicBtn.classList.add('text-white');
-            liquidBtn.classList.remove('active');
+            liquidBtn.classList.remove('active', 'text-white');
             liquidBtn.classList.add('text-white/60');
-            liquidBtn.classList.remove('text-white');
         } else {
-            liquidBtn.classList.add('active');
+            liquidBtn.classList.add('active', 'text-white');
             liquidBtn.classList.remove('text-white/60');
-            liquidBtn.classList.add('text-white');
-            classicBtn.classList.remove('active');
+            classicBtn.classList.remove('active', 'text-white');
             classicBtn.classList.add('text-white/60');
-            classicBtn.classList.remove('text-white');
         }
     }
 
@@ -5975,28 +6246,36 @@ function setProjectViewMode(mode) {
 
         if (anim && cards.length) {
             anim(cards, {
-                opacity: [1, 0.3],
-                scale: [1, 0.98],
-                duration: 120,
+                opacity: [1, 0.25],
+                scale: [1, 0.96],
+                duration: 130,
                 ease: 'outQuad',
                 onComplete: () => {
                     if (mode === 'liquid') {
                         grid.classList.add('view-mode-liquid');
+                        initLiquidMosaicTilt();
                     } else {
                         grid.classList.remove('view-mode-liquid');
                     }
                     anim(cards, {
-                        opacity: [0.3, 1],
-                        scale: [0.98, 1],
+                        opacity: [0.25, 1],
+                        scale: [0.96, 1],
                         delay: stg ? stg(25) : 25,
-                        duration: 320,
-                        ease: 'outQuad'
+                        duration: 360,
+                        ease: 'outQuad',
+                        onComplete: () => {
+                            cards.forEach(c => {
+                                c.style.transform = '';
+                                c.style.opacity = '';
+                            });
+                        }
                     });
                 }
             });
         } else {
             if (mode === 'liquid') {
                 grid.classList.add('view-mode-liquid');
+                initLiquidMosaicTilt();
             } else {
                 grid.classList.remove('view-mode-liquid');
             }
@@ -6014,7 +6293,10 @@ try {
             const grid = document.getElementById('projects-grid');
             const classicBtn = document.getElementById('view-mode-classic-btn');
             const liquidBtn = document.getElementById('view-mode-liquid-btn');
-            if (grid) grid.classList.add('view-mode-liquid');
+            if (grid) {
+                grid.classList.add('view-mode-liquid');
+                initLiquidMosaicTilt();
+            }
             if (classicBtn && liquidBtn) {
                 classicBtn.classList.remove('active', 'text-white');
                 classicBtn.classList.add('text-white/60');
@@ -6025,63 +6307,92 @@ try {
     }
 } catch(e) {}
 
-    // --- FILTRAGE DES PROJETS (ROUTING VUE ANIME.JS V4) ---
+// Initialiser le tilt une fois le DOM chargé
+document.addEventListener('DOMContentLoaded', () => {
+    initLiquidMosaicTilt();
+});
+
+// --- FILTRAGE RÉACTIF DES PROJETS (SOLO/MUTE + ANIME.JS V4 REFLOW) ---
 function filterProjects(tag, btnElement) {
-    // 1. Mise à jour de l'UI des boutons (Solo/Mute feeling)
+    // 1. Mise à jour de l'UI des boutons
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => {
         btn.classList.remove('active', 'text-white');
         btn.classList.add('text-white/60');
     });
-    btnElement.classList.remove('text-white/60');
-    btnElement.classList.add('active', 'text-white');
+    if (btnElement) {
+        btnElement.classList.remove('text-white/60');
+        btnElement.classList.add('active', 'text-white');
+    }
 
-    // 2. Traitement des cartes (Transition fluide et légère Anime.js V4)
+    // 2. Traitement réactif des cartes
     const cards = Array.from(document.querySelectorAll('.project-card'));
     const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
-    
-    let visibleCount = 0;
+    const stg = typeof stagger !== 'undefined' ? stagger : (typeof anime !== 'undefined' && anime.stagger ? anime.stagger : null);
+
+    const matching = [];
+    const nonMatching = [];
+
     cards.forEach((card) => {
         const tags = card.getAttribute('data-tags') || "";
         const tagArray = tags.split(',');
         const isMatch = tag === 'all' || tagArray.includes(tag);
-
         if (isMatch) {
-            card.classList.remove('hidden');
-            if (anim) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                anim(card, {
-                    opacity: [0, 1],
-                    scale: [0.97, 1],
-                    translateY: [6, 0],
-                    delay: visibleCount * 35,
-                    duration: 350,
-                    ease: 'outQuad'
-                });
-                visibleCount++;
-            } else {
-                card.style.opacity = '1';
-                card.style.transform = 'none';
-            }
+            matching.push(card);
         } else {
-            if (anim) {
-                if (typeof anime !== 'undefined' && anime.remove) anime.remove(card);
-                anim(card, {
-                    opacity: [1, 0],
-                    scale: [1, 0.97],
-                    duration: 180,
-                    ease: 'inQuad',
-                    onComplete: () => {
-                        card.classList.add('hidden');
-                    }
-                });
-            } else {
-                card.style.opacity = '0';
-                card.classList.add('hidden');
-            }
+            nonMatching.push(card);
         }
     });
+
+    if (anim) {
+        if (nonMatching.length) {
+            anim(nonMatching, {
+                opacity: [1, 0],
+                scale: [1, 0.94],
+                duration: 150,
+                ease: 'inQuad',
+                onComplete: () => {
+                    nonMatching.forEach(c => {
+                        c.classList.add('hidden');
+                        c.style.transform = '';
+                        c.style.opacity = '0';
+                    });
+                }
+            });
+        }
+
+        matching.forEach(c => {
+            c.classList.remove('hidden');
+        });
+
+        if (matching.length) {
+            anim(matching, {
+                opacity: [0, 1],
+                scale: [0.94, 1],
+                delay: stg ? stg(30) : 30,
+                duration: 360,
+                ease: 'outQuad',
+                onComplete: () => {
+                    matching.forEach(c => {
+                        c.style.transform = '';
+                        c.style.opacity = '';
+                    });
+                }
+            });
+        }
+    } else {
+        nonMatching.forEach(c => {
+            c.classList.add('hidden');
+            c.style.opacity = '0';
+        });
+        matching.forEach(c => {
+            c.classList.remove('hidden');
+            c.style.opacity = '1';
+            c.style.transform = '';
+        });
+    }
 }
+window.filterProjects = filterProjects;
 
 
        
