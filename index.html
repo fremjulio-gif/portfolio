@@ -419,19 +419,29 @@
     width: 100% !important; max-width: 100% !important;
     display: flex; align-items: center; justify-content: space-between; 
     padding: 0 20px !important; 
-    background: rgba(15, 15, 15, 0.8) !important; 
+    background: rgba(15, 15, 15, 0.85) !important; 
     backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate)) !important; 
     -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate)) !important; 
     border-top: none !important;
     border-bottom: 1px solid var(--glass-border) !important; 
     border-radius: 0 !important;
-    z-index: 9999; height: 32px !important; 
+    z-index: 99990 !important; height: 32px !important; 
     transform: none !important;
     margin: 0 !important;
+    pointer-events: auto !important;
+}
+.apple-menubar * {
+    position: relative;
+    z-index: 2;
 }
 @media (max-width: 768px) {
     .apple-menubar {
-        display: none !important;
+        padding: 0 10px !important;
+        overflow-x: auto;
+    }
+    .apple-menu-item {
+        font-size: 11px !important;
+        padding: 2px 8px !important;
     }
 }
 body.light-mode .apple-menubar { background: rgba(255, 255, 255, 0.6) !important; border-color: rgba(0,0,0,0.1) !important; }
@@ -2065,9 +2075,28 @@ body.light-mode .apple-menu-item { color: #222222; }
   </div>
 
 </div>
+</div>
 
-</div><div id="theme-bg"></div>
-    <div class="scanlines"></div>
+<div id="theme-bg"></div>
+<div class="scanlines"></div>
+
+    <nav class="apple-menubar">
+        <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
+            <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
+            <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
+            <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
+            <a href="#lab" class="apple-menu-item click-sound touch-manipulation">Labo</a>
+            <a href="#session" class="apple-menu-item click-sound touch-manipulation">Session</a>
+            <a href="#contact" class="apple-menu-item click-sound touch-manipulation">Aide</a>
+        </div>
+
+        <div class="flex items-center gap-3 shrink-0">
+            <div class="hidden xs:flex items-center gap-1.5 font-mono text-[9px] opacity-40">
+                <span>48 kHz</span>
+                <span class="text-[var(--accent-color)] animate-pulse">●</span>
+            </div>
+        </div>
+    </nav>
 
     <div class="theme-island" id="theme-widget">
         <span id="theme-label" class="text-[10px] font-mono uppercase tracking-widest opacity-90 hidden md:block pt-1 drop-shadow-sm transition-colors duration-300">Pick your theme</span>
@@ -3681,23 +3710,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         <span id="daw-hud-text" class="font-mono text-[9px] uppercase tracking-widest text-white/80 mt-1">LECTURE</span>
     </div>
 
-   <nav class="apple-menubar">
-    <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll max-w-[80%] pb-1 pt-1">
-        <a href="#hero" class="apple-menu-item font-bold tracking-wide click-sound touch-manipulation mr-2">DAW</a>
-        <a href="#skills" class="apple-menu-item click-sound touch-manipulation">Skills</a>
-        <a href="#projets" class="apple-menu-item click-sound touch-manipulation">Projets</a>
-        <a href="#lab" class="apple-menu-item click-sound touch-manipulation">Labo</a>
-        <a href="#session" class="apple-menu-item click-sound touch-manipulation">Session</a>
-        <a href="#contact" class="apple-menu-item click-sound touch-manipulation">Aide</a>
-    </div>
-
-    <div class="flex items-center gap-3 shrink-0">
-        <div class="hidden xs:flex items-center gap-1.5 font-mono text-[9px] opacity-40">
-            <span>48 kHz</span>
-            <span class="text-[var(--accent-color)] animate-pulse">●</span>
-        </div>
-    </div>
-</nav>
 
 <!-- LATERAL MASTER VOLUME CONTROLLER (DISCRET, SUBTIL, 50% PAR DÉFAUT) -->
 <div id="master-volume-dock" class="select-none" style="touch-action: manipulation;">
@@ -3803,12 +3815,17 @@ body.light-mode .apple-menu-item { color: #222222; }
         function setVh() { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh}px`); }
         window.addEventListener('resize', setVh); setVh();
 
-        // Parallax Effect
+        // Parallax Effect (rAF throttled & passive)
+        let parallaxRaf = null;
         window.addEventListener('scroll', () => { 
-            const scrolled = window.pageYOffset; 
-            const bg = document.getElementById('theme-bg');
-            if(bg) bg.style.transform = 'translateY(' + -(scrolled * 0.02) + 'px)';
-        });
+            if (parallaxRaf) return;
+            parallaxRaf = requestAnimationFrame(() => {
+                parallaxRaf = null;
+                const scrolled = window.pageYOffset; 
+                const bg = document.getElementById('theme-bg');
+                if(bg) bg.style.transform = 'translateY(' + -(scrolled * 0.02) + 'px)';
+            });
+        }, { passive: true });
 
         // Audio Context Setup (Lazy init to prevent pop on load)
         let audioCtx = null;
@@ -5754,7 +5771,9 @@ if (window.innerWidth >= 1024) {
           animateVisionBars();
         }, 160);
       }
+      window.removeEventListener('scroll', onScrollReveal);
     };
+
     const syncObserver = new MutationObserver(() => {
       if (parcoursEl.classList.contains('visible')) {
         revealLeft();
@@ -5763,23 +5782,19 @@ if (window.innerWidth >= 1024) {
     });
     syncObserver.observe(parcoursEl, { attributes: true, attributeFilter: ['class'] });
 
-    window.addEventListener('scroll', () => {
+    const onScrollReveal = () => {
       if (window.scrollY >= 25) {
         if (skillsEl && !skillsEl.classList.contains('visible')) {
-          const rect = skillsEl.getBoundingClientRect();
-          if (rect.top < window.innerHeight - 40) {
-            skillsEl.classList.add('visible');
-          }
+          skillsEl.classList.add('visible');
         }
         if (visionEl && !visionEl.classList.contains('visible')) {
-          const rect = visionEl.getBoundingClientRect();
-          if (rect.top < window.innerHeight - 40) {
-            visionEl.classList.add('visible');
-            animateVisionBars();
-          }
+          visionEl.classList.add('visible');
+          animateVisionBars();
         }
+        window.removeEventListener('scroll', onScrollReveal);
       }
-    }, { passive: true });
+    };
+    window.addEventListener('scroll', onScrollReveal, { passive: true });
   }
 }
 
@@ -8063,7 +8078,6 @@ window.triggerRackScrew = triggerRackScrew;
             if (typeof Container === 'undefined') return;
 
             const targets = [
-                { sel: '.apple-menubar', type: 'pill', br: 9999, tint: 0.15 },
                 { sel: '#theme-widget', type: 'pill', br: 9999, tint: 0.2 },
                 { sel: '#parcours', type: 'rounded', br: 20, tint: 0.18 },
                 { sel: '#skills', type: 'rounded', br: 20, tint: 0.18 },
