@@ -834,6 +834,120 @@ body.light-mode .apple-menu-item { color: #222222; }
             } 
         }
 
+        /* --- COMMUTATEUR DE MODE DE VUE PROJETS (DAW GRILLE vs LIQUID GLASS) --- */
+        .view-mode-switcher {
+            background: rgba(10, 11, 15, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .view-toggle-btn {
+            color: rgba(255, 255, 255, 0.5);
+            background: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .view-toggle-btn:hover {
+            color: #ffffff;
+        }
+        .view-toggle-btn.active {
+            color: #ffffff;
+            background: color-mix(in srgb, var(--accent-color) 25%, rgba(255, 255, 255, 0.1));
+            border-color: color-mix(in srgb, var(--accent-color) 45%, rgba(255, 255, 255, 0.2));
+            box-shadow: 0 0 16px -2px color-mix(in srgb, var(--accent-color) 35%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        /* --- MODE 2 : LIQUID GLASS / FULL-BLEED --- */
+        #projects-grid.view-mode-liquid {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 28px;
+        }
+        @media (min-width: 768px) {
+            #projects-grid.view-mode-liquid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 32px;
+            }
+        }
+        @media (min-width: 1280px) {
+            #projects-grid.view-mode-liquid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 28px;
+            }
+        }
+
+        /* Carte de projet en mode Liquid Glass : Plein cadre sans bordures grises opaques */
+        #projects-grid.view-mode-liquid .project-card {
+            aspect-ratio: 16/11;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+            background: rgba(12, 13, 18, 0.6);
+            overflow: hidden;
+            position: relative;
+            transform: translateZ(0);
+            will-change: transform, box-shadow, border-color, filter;
+            transition: box-shadow 0.4s var(--ease-apple), border-color 0.4s var(--ease-apple), filter 0.4s var(--ease-apple);
+        }
+
+        #projects-grid.view-mode-liquid .project-card:hover {
+            border-color: color-mix(in srgb, var(--accent-color) 60%, rgba(255, 255, 255, 0.35));
+            box-shadow: 0 32px 75px -12px rgba(0, 0, 0, 0.9), 0 0 35px -4px color-mix(in srgb, var(--accent-color) 40%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+            filter: brightness(1.05);
+        }
+
+        #projects-grid.view-mode-liquid .project-card .project-poster,
+        #projects-grid.view-mode-liquid .project-card .desktop-preview-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 22px;
+            transform: translateZ(0);
+            will-change: transform;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Cartouche flottant en verre liquide dépoli */
+        #projects-grid.view-mode-liquid .project-card .project-info-minimal {
+            position: absolute;
+            inset: auto 14px 14px 14px;
+            border-radius: 16px;
+            background: rgba(8, 9, 14, 0.42);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            padding: 12px 16px;
+            pointer-events: none;
+            z-index: 10;
+            transform: translateZ(0);
+            will-change: transform, box-shadow, border-color, background;
+            transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+        }
+
+        /* Reflet de biseau lumineux Liquid Glass sur le cartouche flottant */
+        #projects-grid.view-mode-liquid .project-card .project-info-minimal::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.05) 50%, color-mix(in srgb, var(--accent-color) 40%, transparent) 100%);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #projects-grid.view-mode-liquid .project-card:hover .project-info-minimal {
+            border-color: color-mix(in srgb, var(--accent-color) 50%, rgba(255, 255, 255, 0.3));
+            box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.8), 0 0 25px -4px color-mix(in srgb, var(--accent-color) 35%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            background: color-mix(in srgb, var(--accent-color) 12%, rgba(10, 12, 16, 0.65));
+        }
+
         /* --- LAB RECORDER SH : JUICY & TACTILE DAW STRIP --- */
         .lab-row { 
             display: flex; flex-direction: column; justify-content: center; padding: 18px 20px; 
@@ -2454,7 +2568,19 @@ body.light-mode .apple-menu-item { color: #222222; }
             </div>
             
             <div class="p-8 space-y-8">
-                <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight mb-4"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <h2 class="text-3xl md:text-4xl font-black flex items-center gap-4 tracking-tight"><span class="text-[var(--accent-color)]">///</span> Projets et Collaborations</h2>
+                    
+                    <!-- View Mode Toggle : Grille vs Liquid Glass -->
+                    <div class="view-mode-switcher inline-flex items-center p-1 bg-black/50 border border-white/10 rounded-full backdrop-blur-md shrink-0 shadow-lg self-start sm:self-auto" id="project-view-switcher" role="group" aria-label="Mode d'affichage des projets">
+                        <button type="button" id="view-mode-classic-btn" onclick="setProjectViewMode('classic')" class="view-toggle-btn active click-sound px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-300 flex items-center gap-1.5" title="Vue Grille Classique DAW">
+                            <span>🎛️</span> Grille
+                        </button>
+                        <button type="button" id="view-mode-liquid-btn" onclick="setProjectViewMode('liquid')" class="view-toggle-btn click-sound px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all duration-300 flex items-center gap-1.5 text-white/60" title="Vue Plein Cadre & Verre Liquide">
+                            <span>🫧</span> Liquid Glass
+                        </button>
+                    </div>
+                </div>
 
 <div class="flex items-center gap-2 overflow-x-auto hide-scroll pb-2 mb-6 sm:mb-8 flex-nowrap md:flex-wrap" id="project-filters">
     <button class="filter-btn active click-sound touch-manipulation" onclick="filterProjects('all', this)">TOUTES LES PISTES</button>
@@ -5731,6 +5857,96 @@ initTimelineAnimation();
 
 
 
+// --- 1. SÉLECTEUR DE MODE DE VUE DES PROJETS (DAW GRILLE vs LIQUID GLASS) ---
+let currentViewMode = 'classic';
+
+function setProjectViewMode(mode) {
+    if (mode !== 'classic' && mode !== 'liquid') return;
+    currentViewMode = mode;
+
+    try {
+        localStorage.setItem('project_view_mode', mode);
+    } catch(e) {}
+
+    const grid = document.getElementById('projects-grid');
+    const classicBtn = document.getElementById('view-mode-classic-btn');
+    const liquidBtn = document.getElementById('view-mode-liquid-btn');
+
+    if (classicBtn && liquidBtn) {
+        if (mode === 'classic') {
+            classicBtn.classList.add('active');
+            classicBtn.classList.remove('text-white/60');
+            classicBtn.classList.add('text-white');
+            liquidBtn.classList.remove('active');
+            liquidBtn.classList.add('text-white/60');
+            liquidBtn.classList.remove('text-white');
+        } else {
+            liquidBtn.classList.add('active');
+            liquidBtn.classList.remove('text-white/60');
+            liquidBtn.classList.add('text-white');
+            classicBtn.classList.remove('active');
+            classicBtn.classList.add('text-white/60');
+            classicBtn.classList.remove('text-white');
+        }
+    }
+
+    if (grid) {
+        const anim = typeof waapi !== 'undefined' ? waapi.animate : (typeof animate !== 'undefined' ? animate : (typeof anime !== 'undefined' ? (anime.animate || anime) : null));
+        const cards = Array.from(grid.querySelectorAll('.project-card:not(.hidden)'));
+        const stg = typeof stagger !== 'undefined' ? stagger : (typeof anime !== 'undefined' && anime.stagger ? anime.stagger : null);
+
+        if (anim && cards.length) {
+            anim(cards, {
+                opacity: [1, 0.3],
+                scale: [1, 0.98],
+                duration: 120,
+                ease: 'outQuad',
+                onComplete: () => {
+                    if (mode === 'liquid') {
+                        grid.classList.add('view-mode-liquid');
+                    } else {
+                        grid.classList.remove('view-mode-liquid');
+                    }
+                    anim(cards, {
+                        opacity: [0.3, 1],
+                        scale: [0.98, 1],
+                        delay: stg ? stg(25) : 25,
+                        duration: 320,
+                        ease: 'outQuad'
+                    });
+                }
+            });
+        } else {
+            if (mode === 'liquid') {
+                grid.classList.add('view-mode-liquid');
+            } else {
+                grid.classList.remove('view-mode-liquid');
+            }
+        }
+    }
+}
+window.setProjectViewMode = setProjectViewMode;
+
+// Restauration du mode de vue au démarrage
+try {
+    const savedViewMode = localStorage.getItem('project_view_mode');
+    if (savedViewMode === 'liquid') {
+        currentViewMode = 'liquid';
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('projects-grid');
+            const classicBtn = document.getElementById('view-mode-classic-btn');
+            const liquidBtn = document.getElementById('view-mode-liquid-btn');
+            if (grid) grid.classList.add('view-mode-liquid');
+            if (classicBtn && liquidBtn) {
+                classicBtn.classList.remove('active', 'text-white');
+                classicBtn.classList.add('text-white/60');
+                liquidBtn.classList.add('active', 'text-white');
+                liquidBtn.classList.remove('text-white/60');
+            }
+        });
+    }
+} catch(e) {}
+
     // --- FILTRAGE DES PROJETS (ROUTING VUE ANIME.JS V4) ---
 function filterProjects(tag, btnElement) {
     // 1. Mise à jour de l'UI des boutons (Solo/Mute feeling)
@@ -6004,12 +6220,48 @@ document.addEventListener("DOMContentLoaded", () => {
             video.muted = true;
         }
 
-        // Effet Anime.js V4 ultra-fluide et amorti au survol des cartes projets
+        // Effet Anime.js V4 ultra-fluide et amorti au survol des cartes projets (Spring en Mode Liquid Glass)
         card.addEventListener('mouseenter', () => {
             const a = typeof window.anime !== 'undefined' ? window.anime : null;
-            if (a) {
+            if (!a) return;
+            const animFn = typeof window.animate === 'function' ? window.animate : (a.animate || a);
+            const springFn = typeof window.spring === 'function' ? window.spring : (a.spring || null);
+
+            if (currentViewMode === 'liquid') {
+                const capsule = card.querySelector('.project-info-minimal');
+                const poster = card.querySelector('.project-poster');
+                const springEase = springFn ? springFn({ bounce: 0.35 }) : 'outElastic(1, .75)';
+
+                if (typeof a.remove === 'function') {
+                    a.remove(card);
+                    if (capsule) a.remove(capsule);
+                    if (poster) a.remove(poster);
+                }
+
+                // Micro-zoom vignette et élévation cartouche avec physique ressort Anime.js V4
+                animFn(card, {
+                    scale: 1.018,
+                    translateY: -5,
+                    duration: 450,
+                    ease: springEase
+                });
+                if (capsule) {
+                    animFn(capsule, {
+                        translateY: -6,
+                        scale: 1.02,
+                        duration: 480,
+                        ease: springEase
+                    });
+                }
+                if (poster) {
+                    animFn(poster, {
+                        scale: 1.05,
+                        duration: 500,
+                        ease: 'outCubic'
+                    });
+                }
+            } else {
                 if (typeof a.remove === 'function') a.remove(card);
-                const animFn = typeof a.animate === 'function' ? a.animate : a;
                 animFn(card, {
                     scale: 1.012,
                     translateY: -3,
@@ -6021,9 +6273,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
         card.addEventListener('mouseleave', () => {
             const a = typeof window.anime !== 'undefined' ? window.anime : null;
-            if (a) {
+            if (!a) return;
+            const animFn = typeof window.animate === 'function' ? window.animate : (a.animate || a);
+
+            if (currentViewMode === 'liquid') {
+                const capsule = card.querySelector('.project-info-minimal');
+                const poster = card.querySelector('.project-poster');
+
+                if (typeof a.remove === 'function') {
+                    a.remove(card);
+                    if (capsule) a.remove(capsule);
+                    if (poster) a.remove(poster);
+                }
+
+                animFn(card, {
+                    scale: 1,
+                    translateY: 0,
+                    duration: 350,
+                    ease: 'outCubic'
+                });
+                if (capsule) {
+                    animFn(capsule, {
+                        translateY: 0,
+                        scale: 1,
+                        duration: 350,
+                        ease: 'outCubic'
+                    });
+                }
+                if (poster) {
+                    animFn(poster, {
+                        scale: 1,
+                        duration: 350,
+                        ease: 'outCubic'
+                    });
+                }
+            } else {
                 if (typeof a.remove === 'function') a.remove(card);
-                const animFn = typeof a.animate === 'function' ? a.animate : a;
                 animFn(card, {
                     scale: 1,
                     translateY: 0,
