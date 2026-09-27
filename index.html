@@ -55,6 +55,9 @@
     <script src="https://cdn.jsdelivr.net/npm/animejs@4.5.0/dist/bundles/anime.umd.min.js"></script>
     <!-- Script Officiel SoundCloud Player API -->
     <script src="https://w.soundcloud.com/player/api.js"></script>
+    <!-- Liquid Glass JS Dependencies (dashersw/liquid-glass-js) -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="liquid-glass/glass.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -7625,6 +7628,54 @@ window.triggerRackScrew = triggerRackScrew;
                 try { window.tiktokEmbeds.load(); } catch(e) {}
             }
         });
+    </script>
+
+    <!-- =======================================================================
+         LIQUID GLASS JS ENGINE (from /Users/fffamily/Documents/DEV/liquid-glass-js-main)
+         Apple-inspired WebGL glass refraction engine attached non-destructively
+         to portfolio panels while preserving 100% of original visual DA and layouts.
+         ======================================================================= -->
+    <script src="liquid-glass/container.js"></script>
+    <script src="liquid-glass/button.js"></script>
+    <script src="liquid-glass/controls.js"></script>
+    <script>
+    (function() {
+        function initLiquidGlassPortfolio() {
+            if (typeof Container === 'undefined') return;
+
+            const targets = [
+                { sel: '.apple-menubar', type: 'pill', br: 9999, tint: 0.15 },
+                { sel: '#theme-widget', type: 'pill', br: 9999, tint: 0.2 },
+                { sel: '#timeline-window', type: 'rounded', br: 20, tint: 0.18 },
+                { sel: '#skills', type: 'rounded', br: 20, tint: 0.18 },
+                { sel: '#projets', type: 'rounded', br: 20, tint: 0.18 },
+                { sel: '#lab', type: 'rounded', br: 20, tint: 0.18 },
+                { sel: '#session', type: 'rounded', br: 20, tint: 0.18 },
+                { sel: '#contact', type: 'rounded', br: 20, tint: 0.18 },
+                { sel: '#project-detail-container', type: 'rounded', br: 24, tint: 0.2 },
+                { sel: '#master-volume-wrapper', type: 'rounded', br: 16, tint: 0.2 }
+            ];
+
+            targets.forEach(({ sel, type, br, tint }) => {
+                const el = document.querySelector(sel);
+                if (el && !el.__liquidGlassInitialized) {
+                    el.__liquidGlassInitialized = true;
+                    new Container({
+                        element: el,
+                        type: type,
+                        borderRadius: br,
+                        tintOpacity: tint
+                    });
+                }
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLiquidGlassPortfolio);
+        } else {
+            initLiquidGlassPortfolio();
+        }
+    })();
     </script>
 </body>
 </html>
