@@ -819,7 +819,26 @@ body.light-mode .apple-menu-item { color: #222222; }
             object-fit: cover; 
             transition: transform 0.5s var(--ease-apple), opacity 0.4s ease; 
             filter: brightness(0.88); 
-            transform: translateZ(0);
+            transform: scale(1.5) translateZ(0); 
+            transform-origin: center center;
+        }
+        .project-card[data-project-id="fumee"] img, .project-card[data-project-id="fumee"] video {
+            transform: scale(1.55) translateZ(0);
+        }
+        .project-card[data-project-id="capharnaum"] img, .project-card[data-project-id="capharnaum"] video {
+            transform: scale(1.65) translateZ(0);
+            transform-origin: center 35%;
+        }
+        @media (hover: hover) {
+            .project-card:hover img, .project-card:hover video { 
+                transform: scale(1.58) translateZ(0); 
+            }
+            .project-card[data-project-id="fumee"]:hover img, .project-card[data-project-id="fumee"]:hover video {
+                transform: scale(1.63) translateZ(0);
+            }
+            .project-card[data-project-id="capharnaum"]:hover img, .project-card[data-project-id="capharnaum"]:hover video {
+                transform: scale(1.73) translateZ(0);
+            }
         }
         body.light-mode .project-card img, body.light-mode .project-card video { filter: brightness(0.95); }
         .project-info-minimal { 
@@ -916,7 +935,7 @@ body.light-mode .apple-menu-item { color: #222222; }
             transition: box-shadow 0.35s ease, z-index 0.1s;
         }
 
-        /* Médias plein cadre : assombrissement & contraste ajusté */
+        /* Médias plein cadre : zoom d'au moins 50% sur toutes les cartes */
         #projects-grid.view-mode-liquid .project-card .project-poster,
         #projects-grid.view-mode-liquid .project-card .desktop-preview-video {
             position: absolute !important;
@@ -926,16 +945,40 @@ body.light-mode .apple-menu-item { color: #222222; }
             object-fit: cover !important;
             border-radius: 0 !important;
             filter: brightness(0.85) contrast(1.05);
-            transform: scale(1.002);
+            transform: scale(1.5) !important;
+            transform-origin: center center;
             will-change: transform, filter;
             transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease, opacity 0.4s ease;
         }
 
-        /* Survol média : éclaircissement & micro-zoom */
+        /* Cadrage et zoom sur-mesure (surtout Fumée et Capharnaüm) */
+        #projects-grid.view-mode-liquid .project-card[data-project-id="fumee"] .project-poster,
+        #projects-grid.view-mode-liquid .project-card[data-project-id="fumee"] .desktop-preview-video {
+            transform: scale(1.55) !important;
+            transform-origin: center center;
+        }
+
+        #projects-grid.view-mode-liquid .project-card[data-project-id="capharnaum"] .project-poster,
+        #projects-grid.view-mode-liquid .project-card[data-project-id="capharnaum"] .desktop-preview-video {
+            transform: scale(1.65) !important;
+            transform-origin: center 35%;
+        }
+
+        /* Survol média : éclaircissement & micro-zoom additionnel */
         #projects-grid.view-mode-liquid .project-card:hover .project-poster,
         #projects-grid.view-mode-liquid .project-card:hover .desktop-preview-video {
-            transform: scale(1.03);
+            transform: scale(1.58) !important;
             filter: brightness(1.05) contrast(1.08) saturate(1.12);
+        }
+
+        #projects-grid.view-mode-liquid .project-card[data-project-id="fumee"]:hover .project-poster,
+        #projects-grid.view-mode-liquid .project-card[data-project-id="fumee"]:hover .desktop-preview-video {
+            transform: scale(1.63) !important;
+        }
+
+        #projects-grid.view-mode-liquid .project-card[data-project-id="capharnaum"]:hover .project-poster,
+        #projects-grid.view-mode-liquid .project-card[data-project-id="capharnaum"]:hover .desktop-preview-video {
+            transform: scale(1.73) !important;
         }
 
         /* Balayage spéculaire lumineux fin à 45° sur ::after */
@@ -2829,7 +2872,7 @@ body.light-mode .apple-menu-item { color: #222222; }
     
     <!-- 1. Je suis la fumée... -->
     <div role="button" tabindex="0" onclick="openProjectModal('fumee')" data-project-id="fumee" data-tags="prise-de-son,post-prod" class="project-card group click-sound touch-manipulation">
-        <img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg" alt="Je suis la fumée..." loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="https://img.youtube.com/vi/9UOw2Qhdke0/hqdefault.jpg" alt="Je suis la fumée..." loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_fumee.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2847,7 +2890,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 2. L'Étranger -->
     <div role="button" tabindex="0" onclick="openProjectModal('etranger')" data-project-id="etranger" data-tags="compo" class="project-card group click-sound touch-manipulation">
-        <img src="etranger.png" alt="L'Étranger" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="etranger.png" alt="L'Étranger" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_etranger.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2865,7 +2908,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 3. Instable -->
     <div role="button" tabindex="0" onclick="openProjectModal('instable')" data-project-id="instable" data-tags="post-prod,prise-de-son" class="project-card group click-sound touch-manipulation">
-        <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="https://img.youtube.com/vi/U3lwDA_INOQ/hqdefault.jpg" alt="Instable" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_inst.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2883,7 +2926,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 4. Ouragan -->
     <div role="button" tabindex="0" onclick="openProjectModal('ouragan')" data-project-id="ouragan" data-tags="mix-master,post-prod" class="project-card group click-sound touch-manipulation">
-        <img src="console.jpg" alt="Ouragan" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="console.jpg" alt="Ouragan" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_oura.mov" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2901,7 +2944,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 5. Srh - qutumeregardes -->
     <div role="button" tabindex="0" onclick="openProjectModal('srh')" data-project-id="srh" data-tags="mix-master" class="project-card group click-sound touch-manipulation">
-        <img src="cover.jpg" alt="Srh - qutumeregardes" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover object-bottom z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none object-bottom-fix">
+        <img src="cover.jpg" alt="Srh - qutumeregardes" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover object-bottom z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none object-bottom-fix">
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
@@ -2918,7 +2961,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 6. Capharnaüm -->
     <div role="button" tabindex="0" onclick="openProjectModal('capharnaum')" data-project-id="capharnaum" data-tags="prise-de-son,mix-master,post-prod" class="project-card group click-sound touch-manipulation">
-        <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="https://img.youtube.com/vi/D-x6BQSPRuA/hqdefault.jpg" alt="Capharnaüm" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_capha.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2936,7 +2979,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 7. Désaccordés -->
     <div role="button" tabindex="0" onclick="openProjectModal('desaccordes')" data-project-id="desaccordes" data-tags="mix-master,prise-de-son" class="project-card group click-sound touch-manipulation">
-        <img src="https://img.youtube.com/vi/TiqWW0e6RSg/hqdefault.jpg" alt="Désaccordés" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="https://img.youtube.com/vi/TiqWW0e6RSg/hqdefault.jpg" alt="Désaccordés" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_desac.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2954,7 +2997,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 8. Long Day -->
     <div role="button" tabindex="0" onclick="openProjectModal('longday')" data-project-id="longday" data-tags="montage,compo" class="project-card group click-sound touch-manipulation">
-        <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="https://img.youtube.com/vi/w_9xYrwzKNs/hqdefault.jpg" alt="Long Day" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_longday.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
@@ -2972,7 +3015,7 @@ body.light-mode .apple-menu-item { color: #222222; }
 
     <!-- 9. Sacré Graal -->
     <div role="button" tabindex="0" onclick="openProjectModal('graal')" data-project-id="graal" data-tags="prise-de-son" class="project-card group click-sound touch-manipulation">
-        <img src="https://img.youtube.com/vi/eZI3RtKjmTY/hqdefault.jpg" alt="Sacré Graal" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 group-hover:scale-105 transition duration-500 pointer-events-none">
+        <img src="https://img.youtube.com/vi/eZI3RtKjmTY/hqdefault.jpg" alt="Sacré Graal" loading="lazy" decoding="async" class="project-poster absolute inset-0 w-full h-full object-cover z-0 opacity-85 group-hover:opacity-100 transition duration-500 pointer-events-none">
         <video data-src="preview_graal.mp4" loop muted playsinline preload="none" class="desktop-preview-video hidden md:block absolute inset-0 w-full h-full object-cover z-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></video>
         <div class="project-info-minimal">
             <div class="flex items-center gap-2 mb-1">
