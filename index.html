@@ -2320,26 +2320,6 @@ body.light-mode .apple-menu-item { color: #222222; }
         </div>
     </div>
 
-<!-- VU-mètre décoratif lié au scroll -->
-<div id="vu-meter-container" class="fixed right-3 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-center p-1.5 bg-black/80 backdrop-blur-md border border-white/10 rounded shadow-2xl transition-all duration-500 w-5 h-28 border-t border-t-[var(--accent-color)]" style="opacity: 1; transform: translateY(-50%) translateX(8px);">
-    <!-- VU Meter tracks -->
-    <div class="flex-1 flex justify-center gap-1 w-full">
-        <!-- L Track -->
-        <div class="w-1 bg-black/60 rounded-sm relative h-full border border-white/5">
-            <!-- Remplissage L (Dégradé DAW/Hardware) -->
-            <div id="vu-fill-l" class="absolute bottom-0 left-0 right-0 w-full rounded-sm will-change-[height]" style="height: 0%; background: linear-gradient(to top, #16a34a 0%, #22c55e 60%, #eab308 82%, #ef4444 100%);"></div>
-            <!-- Peak Indicator L (mobile physiquement) -->
-            <div id="vu-peak-led-l" class="absolute left-[-2px] right-[-2px] h-[3px] bg-red-500 shadow-[0_0_6px_#ef4444] rounded-sm will-change-[bottom] z-10" style="bottom: 0%;"></div>
-        </div>
-        <!-- R Track -->
-        <div class="w-1 bg-black/60 rounded-sm relative h-full border border-white/5">
-            <!-- Remplissage R (Dégradé DAW/Hardware) -->
-            <div id="vu-fill-r" class="absolute bottom-0 left-0 right-0 w-full rounded-sm will-change-[height]" style="height: 0%; background: linear-gradient(to top, #16a34a 0%, #22c55e 60%, #eab308 82%, #ef4444 100%);"></div>
-            <!-- Peak Indicator R (mobile physiquement) -->
-            <div id="vu-peak-led-r" class="absolute left-[-2px] right-[-2px] h-[3px] bg-red-500 shadow-[0_0_6px_#ef4444] rounded-sm will-change-[bottom] z-10" style="bottom: 0%;"></div>
-        </div>
-    </div>
-</div>
 
     <main class="bento-grid">
         
@@ -6692,78 +6672,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sections.forEach(s => spyObserver.observe(s));
 
-    // --- 8. DECORATIVE SCROLL VU-METER LOGIC ---
-    let targetVU_L = 105;
-    let targetVU_R = 105;
-    let currentVU_L = 105;
-    let currentVU_R = 105;
-    
-    // Variables pour le "Peaking" physique
-    let targetScrollPercent = 0;
-    let currentScrollPercent = 0;
 
-    function calcTargetVU() {
-        const maxScroll = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-        const currentScroll = window.scrollY || document.documentElement.scrollTop;
-        const scrollPercent = maxScroll > 0 ? (currentScroll / maxScroll) : 0;
-        
-        // Stockage strict du pourcentage (0 à 100) pour le Peak physique
-        targetScrollPercent = scrollPercent * 100;
-        
-        // Logique "Audio" pour le remplissage de fond
-        const baseTarget = Math.max(105 - (scrollPercent * 105), 0);
-        const varL = 0.95 + Math.random() * 0.1;
-        const varR = 0.95 + Math.random() * 0.1;
-        
-        targetVU_L = baseTarget * varL;
-        targetVU_R = baseTarget * varR;
-    }
-
-    // Calcul initial immédiat au chargement
-    calcTargetVU();
-
-    // Attachement de l'événement scroll
-    window.addEventListener('scroll', calcTargetVU, { passive: true });
-
-    function updateVUMeter() {
-    // Ballistiques pour un mouvement fluide
-    currentVU_L += (targetVU_L - currentVU_L) * 0.15;
-    currentVU_R += (targetVU_R - currentVU_R) * 0.15;
-    currentScrollPercent += (targetScrollPercent - currentScrollPercent) * 0.15;
-
-    // Mise à jour de l'affichage HTML du fond (VU Fill)
-    // Utilisation de 'height' au lieu de 'scaleY' pour révéler le dégradé matériel
-    const vuFillL = document.getElementById('vu-fill-l');
-    const vuFillR = document.getElementById('vu-fill-r');
-    if (vuFillL) vuFillL.style.height = `${Math.max(0, Math.min(currentVU_L, 100))}%`;
-    if (vuFillR) vuFillR.style.height = `${Math.max(0, Math.min(currentVU_R, 100))}%`;
-
-    // Mise à jour de l'affichage HTML du Peak physique (qui glisse le long de la jauge)
-    const peakLedL = document.getElementById('vu-peak-led-l');
-    const peakLedR = document.getElementById('vu-peak-led-r');
-    
-    if (peakLedL) {
-        // Contrainte visuelle entre 0 et 95% pour ne pas déborder du track
-        peakLedL.style.bottom = `${Math.min(Math.max(currentScrollPercent, 0), 95)}%`;
-        peakLedL.style.backgroundColor = '#ef4444'; // Toujours allumé pour rester visible
-    }
-    if (peakLedR) {
-        peakLedR.style.bottom = `${Math.min(Math.max(currentScrollPercent, 0), 95)}%`;
-        peakLedR.style.backgroundColor = '#ef4444'; // Toujours allumé pour rester visible
-    }
-
-    // Le VU-mètre reste fixe et visible en permanence
-    const vuContainer = document.getElementById('vu-meter-container');
-    if (vuContainer) {
-        vuContainer.style.opacity = '0.9';
-        vuContainer.style.transform = 'translateY(-50%) translateX(0)';
-    }
-
-    requestAnimationFrame(updateVUMeter);
-}
-
-// Lancement de la boucle
-requestAnimationFrame(updateVUMeter);
 
     // =======================================================================
     // --- AJUSTEMENT CHIRURGICAL DES LOGOS DAW (Correction Zoom/Taille)
