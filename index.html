@@ -2139,7 +2139,6 @@ body.light-mode .apple-menu-item { color: #222222; }
             transition: none !important;
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 35px var(--np-active-color, var(--accent-color)) !important;
             z-index: 99999 !important;
-            transform: scale(1.015);
         }
 
         @media (max-width: 640px) {
@@ -2279,64 +2278,6 @@ body.light-mode .apple-menu-item { color: #222222; }
                         <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 10px;"></span>
                         <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 14px;"></span>
                         <span class="np-bar w-[2px] rounded-t-sm bg-[var(--accent-color)]" style="height: 5px;"></span>
-                    </div>
-                </div>
-
-                <div id="np-panel" title="Glisser pour déplacer le lecteur sur l'écran">
-                    <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3 cursor-grab select-none">
-                        <div class="flex items-center gap-2 pointer-events-none">
-                            <span class="np-dot w-2 h-2 rounded-full bg-[var(--accent-color)] shadow-[0_0_8px_var(--accent-color)]"></span>
-                            <span id="np-source-badge" class="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-white/15 bg-white/5 text-white/90 font-bold transition-all duration-300">SOUNDCLOUD</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-[9px] text-white/30 font-mono tracking-widest select-none pointer-events-none">DRAG ⋮⋮</span>
-                            <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="np-body flex items-center gap-3 mb-3">
-                        <!-- CARRÉ DE COULEUR / FOND / COVER DU LECTEUR GLOBAL -->
-                        <div id="np-art" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner transition-all duration-300 relative">
-                            <span id="np-art-glyph" class="font-mono text-lg text-[var(--accent-color)]">♪</span>
-                        </div>
-                        <div id="np-info" class="flex-1 min-w-0">
-                            <div id="np-title" class="font-bold text-xs truncate text-white" title="—">—</div>
-                            <div id="np-sub" class="text-[10px] text-white/50 truncate font-light mt-0.5">SoundCloud · shuffle</div>
-                        </div>
-                    </div>
-
-                    <div id="np-progress-wrap" class="w-full h-1.5 bg-white/10 hover:bg-white/20 rounded-full cursor-pointer relative overflow-hidden mb-1 transition-colors" onclick="npSeek(event)">
-                        <div id="np-progress" class="h-full bg-[var(--accent-color)] rounded-full transition-all duration-100" style="width: 0%;"></div>
-                    </div>
-
-                    <div id="np-times" class="flex justify-between font-mono text-[9px] text-white/40 mb-3 tabular-nums">
-                        <span id="np-time-cur">0:00</span>
-                        <span id="np-time-tot">0:00</span>
-                    </div>
-
-                    <div id="np-controls" class="flex items-center justify-center gap-4">
-                        <div id="np-prev" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(true)" title="Précédent">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-                            </svg>
-                        </div>
-                        <button id="np-play" class="w-11 h-11 rounded-full bg-[var(--accent-color)] text-black flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(var(--accent-color),0.4)] hover:scale-105 active:scale-95 transition" onclick="npTogglePlay()" title="Lecture / Pause">
-                            <svg id="np-play-icon" class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                            <svg id="np-pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                            </svg>
-                        </button>
-                        <div id="np-next" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(false)" title="Suivant">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-                            </svg>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -3714,6 +3655,71 @@ body.light-mode .apple-menu-item { color: #222222; }
         </footer>
 
     </main>
+
+    <!-- =======================================================================
+         SOUNDCLOUD SHUFFLE PLAYER WIDGET (#np-panel) & AUDIO ENGINE
+         ======================================================================= -->
+    <iframe id="sc-widget" allow="autoplay"
+      src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/el_jlo/popular-tracks&auto_play=false&buying=false&sharing=false&download=false&show_artwork=false&show_playcount=false&show_user=false&hide_related=true&visual=false"
+      style="position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-9999px;"></iframe>
+
+    <div id="np-panel" title="Glisser pour déplacer le lecteur sur l'écran">
+        <div class="np-head flex items-center justify-between pb-2.5 border-b border-white/10 mb-3 cursor-grab select-none">
+            <div class="flex items-center gap-2 pointer-events-none">
+                <span class="np-dot w-2 h-2 rounded-full bg-[var(--accent-color)] shadow-[0_0_8px_var(--accent-color)]"></span>
+                <span id="np-source-badge" class="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-white/15 bg-white/5 text-white/90 font-bold transition-all duration-300">SOUNDCLOUD</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-[9px] text-white/30 font-mono tracking-widest select-none pointer-events-none">DRAG ⋮⋮</span>
+                <div class="np-head-close cursor-pointer text-white/40 hover:text-white transition-colors p-1" onclick="npClosePanel()" title="Fermer">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="np-body flex items-center gap-3 mb-3">
+            <!-- CARRÉ DE COULEUR / FOND / COVER DU LECTEUR GLOBAL -->
+            <div id="np-art" class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-inner transition-all duration-300 relative">
+                <span id="np-art-glyph" class="font-mono text-lg text-[var(--accent-color)]">♪</span>
+            </div>
+            <div id="np-info" class="flex-1 min-w-0">
+                <div id="np-title" class="font-bold text-xs truncate text-white" title="—">—</div>
+                <div id="np-sub" class="text-[10px] text-white/50 truncate font-light mt-0.5">SoundCloud · shuffle</div>
+            </div>
+        </div>
+
+        <div id="np-progress-wrap" class="w-full h-1.5 bg-white/10 hover:bg-white/20 rounded-full cursor-pointer relative overflow-hidden mb-1 transition-colors" onclick="npSeek(event)">
+            <div id="np-progress" class="h-full bg-[var(--accent-color)] rounded-full transition-all duration-100" style="width: 0%;"></div>
+        </div>
+
+        <div id="np-times" class="flex justify-between font-mono text-[9px] text-white/40 mb-3 tabular-nums">
+            <span id="np-time-cur">0:00</span>
+            <span id="np-time-tot">0:00</span>
+        </div>
+
+        <div id="np-controls" class="flex items-center justify-center gap-4">
+            <div id="np-prev" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(true)" title="Précédent (Aléatoire)">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                </svg>
+            </div>
+            <button id="np-play" class="w-11 h-11 rounded-full bg-[var(--accent-color)] text-black flex items-center justify-center cursor-pointer shadow-[0_0_15px_rgba(var(--accent-color),0.4)] hover:scale-105 active:scale-95 transition" onclick="npTogglePlay()" title="Lecture / Pause">
+                <svg id="np-play-icon" class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <svg id="np-pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+            </button>
+            <div id="np-next" class="w-8 h-8 flex items-center justify-center cursor-pointer text-white/60 hover:text-white hover:scale-110 active:scale-95 transition" onclick="npNext(false)" title="Suivant (Aléatoire)">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
 
     <!-- =======================================================================
          MODAL PROJECT DETAIL ("Project_Player.vst")
@@ -6962,10 +6968,21 @@ const AUDIO_SOURCES_CONFIG = {
 };
 
 const NP_TRACKS = [
-    { url: 'https://soundcloud.com/el_jlo/apocalypse', title: 'Apocalypse', genre: 'Remix — Ambient — Synth' },
+    { url: 'https://soundcloud.com/el_jlo/remix-party-again-amne-sanderscore-feat-irko', title: 'Party Again (Amné Sanderscore Remix)', genre: 'Remix — Electronic' },
     { url: 'https://soundcloud.com/el_jlo/ocarina-theme-with-drums', title: 'OCARINA THEME WITH DRUMS', genre: 'Trap — OST — Remix' },
+    { url: 'https://soundcloud.com/el_jlo/paranoia-6', title: 'Paranoïa', genre: 'Electronic — Ambient' },
+    { url: 'https://soundcloud.com/el_jlo/apocalypse', title: 'Apocalypse', genre: 'Remix — Ambient — Synth' },
+    { url: 'https://soundcloud.com/el_jlo/flamed', title: 'Flamed', genre: 'Bass — Electronic' },
+    { url: 'https://soundcloud.com/el_jlo/look-metronomy-4', title: 'Look (Metronomy Remix)', genre: 'Remix — Drum & Bass' },
+    { url: 'https://soundcloud.com/el_jlo/eglise-de-qlqchose-1', title: 'Église de quelque chose', genre: 'Ambient — Experimental' },
+    { url: 'https://soundcloud.com/el_jlo/tout-recommencera-7', title: 'Tout recommencera', genre: 'Electronic — Synth' },
+    { url: 'https://soundcloud.com/el_jlo/still-1', title: 'Still', genre: 'Ambient — Wave' },
     { url: 'https://soundcloud.com/el_jlo/oiszteaumania-3', title: 'Oiszteaumania', genre: 'Remix — Drum & Bass' },
-    { url: 'https://soundcloud.com/el_jlo/look-metronomy-4', title: 'Look', genre: 'Remix — Drum & Bass' },
+    { url: 'https://soundcloud.com/el_jlo/after-3', title: 'After', genre: 'Electronic — Minimal' },
+    { url: 'https://soundcloud.com/el_jlo/here-2', title: 'Here', genre: 'Ambient — Sound Design' },
+    { url: 'https://soundcloud.com/el_jlo/jtepardonne-5', title: 'Je te pardonne', genre: 'Electronic — Downtempo' },
+    { url: 'https://soundcloud.com/el_jlo/malkhut-ptite-soeur-2', title: 'Malkhut (P\'tite Sœur)', genre: 'Electronic — Ambient' },
+    { url: 'https://soundcloud.com/el_jlo/23h15', title: '23h15', genre: 'Electronic — Downtempo' },
     { url: 'https://soundcloud.com/el_jlo/long-day-jlo', title: 'Long Day', genre: 'Ambient — Electro — Dnb' }
 ];
 
@@ -6976,13 +6993,17 @@ let globalActiveWs = null;
 let globalActiveMedia = null;
 let globalDurationSec = 0;
 
+let scPlaylistSounds = [];
 let npCurrentTrackIndex = Math.floor(Math.random() * NP_TRACKS.length);
 let npDurationMs = 0;
+let npIsPlaying = false;
+let npFirstPlay = true;
 let npAnimFrame = null;
 let scWidget = null;
 let npSpectrumPhase = 0;
 let npPanelCustomPos = null;
 let npPanelIsOpen = false;
+let isDraggingNpPanel = false;
 
 function npFormatTime(seconds) {
     if (isNaN(seconds) || seconds < 0) return "0:00";
@@ -6994,13 +7015,13 @@ function npFormatTime(seconds) {
 // Clamping within viewport edges with safe margins
 function npClampPosition(x, y) {
     const panel = document.getElementById('np-panel');
-    if (!panel) return { x, y };
-    const rect = panel.getBoundingClientRect();
     const pad = 12;
+    const w = panel ? (panel.offsetWidth || 295) : 295;
+    const h = panel ? (panel.offsetHeight || 260) : 260;
     const minX = pad;
-    const maxX = Math.max(pad, window.innerWidth - (rect.width || 295) - pad);
+    const maxX = Math.max(pad, window.innerWidth - w - pad);
     const minY = pad;
-    const maxY = Math.max(pad, window.innerHeight - (rect.height || 260) - pad);
+    const maxY = Math.max(pad, window.innerHeight - h - pad);
 
     return {
         x: Math.max(minX, Math.min(maxX, x)),
@@ -7008,7 +7029,7 @@ function npClampPosition(x, y) {
     };
 }
 
-// Positionnement initial du panel
+// Positionnement initial du panel sous le déclencheur
 function npPositionDefault() {
     const panel = document.getElementById('np-panel');
     const trigger = document.getElementById('np-trigger');
@@ -7017,7 +7038,7 @@ function npPositionDefault() {
     const panelWidth = Math.min(295, window.innerWidth - 24);
     
     let left = trigRect.right - panelWidth;
-    let top = trigRect.bottom + 14;
+    let top = trigRect.bottom + 12;
 
     const clamped = npClampPosition(left, top);
     panel.style.left = `${clamped.x}px`;
@@ -7041,17 +7062,6 @@ function npOpenPanel() {
     }
 
     npPanelIsOpen = true;
-
-    if (!npPanelCustomPos) {
-        npPositionDefault();
-    } else {
-        const clamped = npClampPosition(npPanelCustomPos.x, npPanelCustomPos.y);
-        panel.style.left = `${clamped.x}px`;
-        panel.style.top = `${clamped.y}px`;
-        panel.style.right = 'auto';
-        panel.style.bottom = 'auto';
-    }
-
     panel.classList.add('open');
     panel.style.display = 'block';
     panel.style.pointerEvents = 'auto';
@@ -7061,9 +7071,9 @@ function npOpenPanel() {
 
     if (a && typeof a.animate === 'function') {
         a.animate(panel, {
-            scale: [0.92, 1],
+            scale: [0.94, 1],
             opacity: [0, 1],
-            duration: 250,
+            duration: 220,
             ease: 'outCubic'
         });
     } else {
@@ -7264,6 +7274,21 @@ function npStopSpectrum() {
     bars.forEach(bar => { bar.style.height = '3px'; });
 }
 
+function pauseOtherAudioSources(except) {
+    if (except !== 'lab' && typeof globalActiveWs !== 'undefined' && globalActiveWs && typeof globalActiveWs.isPlaying === 'function' && globalActiveWs.isPlaying()) {
+        try { globalActiveWs.pause(); } catch(e) {}
+    }
+    if (except !== 'explore' && typeof globalActiveMedia !== 'undefined' && globalActiveMedia && !globalActiveMedia.paused) {
+        try { globalActiveMedia.pause(); } catch(e) {}
+    }
+    if (except !== 'session' && typeof ptxIsPlaying !== 'undefined' && ptxIsPlaying) {
+        try { if (typeof stopPtxAudio === 'function') stopPtxAudio(); } catch(e) {}
+    }
+    if (except !== 'sequencer' && typeof isPlaying !== 'undefined' && isPlaying) {
+        try { if (typeof togglePlay === 'function') togglePlay('large'); } catch(e) {}
+    }
+}
+
 function npTogglePlay() {
     if (globalCurrentSource === 'lab') {
         if (globalActiveWs) {
@@ -7288,8 +7313,18 @@ function npTogglePlay() {
             togglePlay('large');
         }
     } else {
-        if (scWidget) {
-            scWidget.toggle();
+        if (!scWidget) return;
+        pauseOtherAudioSources('soundcloud');
+
+        if (npIsPlaying) {
+            try { scWidget.pause(); } catch(e) {}
+        } else {
+            if (npFirstPlay) {
+                npFirstPlay = false;
+                npPlayRandomTrack(true);
+            } else {
+                try { scWidget.play(); } catch(e) {}
+            }
         }
     }
 }
@@ -7304,15 +7339,47 @@ function npNext(isPrev = false, autoPlay = true) {
             toggleWaveSurfer(labTracks[nextIdx].id);
         }
     } else {
+        // En mode SoundCloud : tirage aléatoire systématique parmi tous les titres
+        npPlayRandomTrack(autoPlay);
+    }
+}
+
+function npPlayRandomTrack(autoPlay = true) {
+    if (!scWidget) return;
+    pauseOtherAudioSources('soundcloud');
+
+    if (scPlaylistSounds && scPlaylistSounds.length > 1) {
         let nextIdx;
-        if (NP_TRACKS.length > 1) {
-            do {
-                nextIdx = Math.floor(Math.random() * NP_TRACKS.length);
-            } while (nextIdx === npCurrentTrackIndex);
-        } else {
-            nextIdx = 0;
+        do {
+            nextIdx = Math.floor(Math.random() * scPlaylistSounds.length);
+        } while (nextIdx === npCurrentTrackIndex && scPlaylistSounds.length > 1);
+        npCurrentTrackIndex = nextIdx;
+
+        const sound = scPlaylistSounds[npCurrentTrackIndex];
+        setGlobalNowPlaying('soundcloud', {
+            title: sound.title || 'SoundCloud Stream',
+            sub: (sound.genre ? `${sound.genre} · ` : '') + 'SoundCloud · Shuffle',
+            artUrl: sound.artwork_url ? sound.artwork_url.replace('-large', '-t300x300') : null,
+            duration: sound.duration ? sound.duration / 1000 : 0
+        });
+
+        try {
+            scWidget.skip(npCurrentTrackIndex);
+            if (autoPlay) scWidget.play();
+        } catch(e) {
+            console.warn("SC skip error:", e);
         }
+    } else if (NP_TRACKS && NP_TRACKS.length > 0) {
+        let nextIdx;
+        do {
+            nextIdx = Math.floor(Math.random() * NP_TRACKS.length);
+        } while (nextIdx === npCurrentTrackIndex && NP_TRACKS.length > 1);
         npLoadTrack(nextIdx, autoPlay);
+    } else {
+        try {
+            scWidget.next();
+            if (autoPlay) scWidget.play();
+        } catch(e) {}
     }
 }
 
@@ -7335,10 +7402,17 @@ function npSeek(event) {
             stopPtxAudio();
             playPtxAudio();
         }
-    } else if (scWidget && npDurationMs) {
-        try {
-            scWidget.seekTo(ratio * npDurationMs);
-        } catch(e) {}
+    } else if (scWidget) {
+        if (npDurationMs) {
+            try { scWidget.seekTo(ratio * npDurationMs); } catch(e) {}
+        } else {
+            scWidget.getDuration((dur) => {
+                if (dur) {
+                    npDurationMs = dur;
+                    try { scWidget.seekTo(ratio * dur); } catch(e) {}
+                }
+            });
+        }
     }
 }
 
@@ -7391,7 +7465,7 @@ function npLoadTrack(index, autoPlay = true) {
 function npInitWidget() {
     const iframe = document.getElementById('sc-widget');
     if (!iframe || typeof SC === 'undefined' || !SC.Widget) {
-        setTimeout(npInitWidget, 300);
+        setTimeout(npInitWidget, 250);
         return;
     }
 
@@ -7399,12 +7473,37 @@ function npInitWidget() {
         scWidget = SC.Widget(iframe);
 
         scWidget.bind(SC.Widget.Events.READY, () => {
-            console.log("🎵 [Now Playing] SoundCloud Widget initialisé avec succès");
-            npLoadTrack(npCurrentTrackIndex, false);
+            console.log("🎵 [Now Playing] SoundCloud Widget initialisé (popular-tracks)");
+            
+            // Récupérer la liste complète des morceaux de popular-tracks
+            scWidget.getSounds((sounds) => {
+                if (sounds && sounds.length > 0) {
+                    scPlaylistSounds = sounds;
+                    // Sélectionner un morceau aléatoire au lancement
+                    npCurrentTrackIndex = Math.floor(Math.random() * sounds.length);
+                    const initialTrack = sounds[npCurrentTrackIndex];
+                    setGlobalNowPlaying('soundcloud', {
+                        title: initialTrack.title || 'SoundCloud Stream',
+                        sub: (initialTrack.genre ? `${initialTrack.genre} · ` : '') + 'SoundCloud · Shuffle',
+                        artUrl: initialTrack.artwork_url ? initialTrack.artwork_url.replace('-large', '-t300x300') : null,
+                        duration: initialTrack.duration ? initialTrack.duration / 1000 : 0
+                    });
+                    try {
+                        scWidget.skip(npCurrentTrackIndex);
+                    } catch(e) {}
+                } else {
+                    const fallbackTrack = NP_TRACKS[npCurrentTrackIndex];
+                    setGlobalNowPlaying('soundcloud', {
+                        title: fallbackTrack.title,
+                        sub: `${fallbackTrack.genre} · SoundCloud`
+                    });
+                }
+            });
         });
 
         scWidget.bind(SC.Widget.Events.PLAY, () => {
             npIsPlaying = true;
+            pauseOtherAudioSources('soundcloud');
             npFetchCurrentInfo();
         });
 
@@ -7422,7 +7521,8 @@ function npInitWidget() {
         });
 
         scWidget.bind(SC.Widget.Events.FINISH, () => {
-            npNext(false, true);
+            // Titre suivant aléatoire automatique
+            npPlayRandomTrack(true);
         });
 
         scWidget.bind(SC.Widget.Events.ERROR, (err) => {
@@ -7445,6 +7545,7 @@ window.npSeek = npSeek;
 
 // Fermeture au clic extérieur et touche Échap
 document.addEventListener('click', (e) => {
+    if (isDraggingNpPanel) return;
     const panel = document.getElementById('np-panel');
     const trigger = document.getElementById('np-trigger');
     if (panel && npPanelIsOpen) {
@@ -7475,47 +7576,38 @@ function initDraggableNpPanel() {
     if (!panel) return;
 
     let isPointerDown = false;
-    let isDragging = false;
     let startX = 0, startY = 0;
     let initialLeft = 0, initialTop = 0;
 
-    // Magnetic snap to closest edge on release
-    function snapToEdge(currX, currY) {
-        const rect = panel.getBoundingClientRect();
-        const pad = 14;
-        const screenW = window.innerWidth;
-        const screenH = window.innerHeight;
-
-        let targetX = currX;
-        let targetY = currY;
-
-        const snapThreshold = 80;
-
-        // Snap horizontally
-        if (currX < snapThreshold) {
-            targetX = pad;
-        } else if (currX + rect.width > screenW - snapThreshold) {
-            targetX = screenW - rect.width - pad;
-        }
-
-        // Snap vertically
-        if (currY < snapThreshold) {
-            targetY = pad;
-        } else if (currY + rect.height > screenH - snapThreshold) {
-            targetY = screenH - rect.height - pad;
-        }
-
-        return npClampPosition(targetX, targetY);
+    function getClampedPos(x, y) {
+        const pad = 12;
+        const w = panel.offsetWidth || 295;
+        const h = panel.offsetHeight || 260;
+        const minX = pad;
+        const maxX = Math.max(pad, window.innerWidth - w - pad);
+        const minY = pad;
+        const maxY = Math.max(pad, window.innerHeight - h - pad);
+        return {
+            x: Math.max(minX, Math.min(maxX, x)),
+            y: Math.max(minY, Math.min(maxY, y))
+        };
     }
 
     panel.addEventListener('pointerdown', (e) => {
-        // Ignorer le drag si le clic est sur un bouton de contrôle ou une barre de progression
-        if (e.target.closest('button') || e.target.closest('#np-progress-wrap') || e.target.closest('.np-head-close') || e.target.closest('#np-prev') || e.target.closest('#np-next') || e.target.closest('#np-play')) {
+        // Ignorer les clics sur les boutons de contrôle ou la barre de progression
+        if (e.target.closest('button') || 
+            e.target.closest('#np-progress-wrap') || 
+            e.target.closest('.np-head-close') || 
+            e.target.closest('#np-prev') || 
+            e.target.closest('#np-next') || 
+            e.target.closest('#np-play') || 
+            e.target.closest('a') || 
+            (e.button !== undefined && e.button !== 0)) {
             return;
         }
 
         isPointerDown = true;
-        isDragging = false;
+        isDraggingNpPanel = false;
         startX = e.clientX;
         startY = e.clientY;
 
@@ -7523,6 +7615,7 @@ function initDraggableNpPanel() {
         initialLeft = rect.left;
         initialTop = rect.top;
 
+        panel.style.transition = 'none';
         try {
             panel.setPointerCapture(e.pointerId);
         } catch(err) {}
@@ -7534,74 +7627,58 @@ function initDraggableNpPanel() {
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
 
-        // Activation threshold (> 4px)
-        if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
-            isDragging = true;
+        if (!isDraggingNpPanel && Math.hypot(dx, dy) > 3) {
+            isDraggingNpPanel = true;
             panel.classList.add('is-dragging');
-            panel.style.transform = 'none';
-            panel.style.bottom = 'auto';
-            panel.style.right = 'auto';
+            panel.style.transition = 'none';
             panel.style.margin = '0';
+            panel.style.right = 'auto';
+            panel.style.bottom = 'auto';
         }
 
-        if (isDragging) {
-            const rawX = initialLeft + dx;
-            const rawY = initialTop + dy;
-            const clamped = npClampPosition(rawX, rawY);
-
-            panel.style.left = `${clamped.x}px`;
-            panel.style.top = `${clamped.y}px`;
-            npPanelCustomPos = { x: clamped.x, y: clamped.y };
+        if (isDraggingNpPanel) {
+            const pos = getClampedPos(initialLeft + dx, initialTop + dy);
+            panel.style.left = `${pos.x}px`;
+            panel.style.top = `${pos.y}px`;
+            npPanelCustomPos = pos;
         }
     });
 
-    function handlePointerEnd(e) {
+    function onPointerEnd(e) {
         if (!isPointerDown) return;
         isPointerDown = false;
 
         try {
-            panel.releasePointerCapture(e.pointerId);
+            if (panel.hasPointerCapture(e.pointerId)) {
+                panel.releasePointerCapture(e.pointerId);
+            }
         } catch(err) {}
 
-        if (isDragging) {
+        if (isDraggingNpPanel) {
             panel.classList.remove('is-dragging');
+            const curLeft = parseFloat(panel.style.left) || initialLeft;
+            const curTop = parseFloat(panel.style.top) || initialTop;
+            const pos = getClampedPos(curLeft, curTop);
 
-            const currentLeft = parseFloat(panel.style.left) || panel.getBoundingClientRect().left;
-            const currentTop = parseFloat(panel.style.top) || panel.getBoundingClientRect().top;
-            const snapped = snapToEdge(currentLeft, currentTop);
-
-            npPanelCustomPos = { x: snapped.x, y: snapped.y };
-
-            const a = typeof window.anime !== 'undefined' ? window.anime : null;
-            if (a && typeof a.animate === 'function') {
-                if (typeof a.remove === 'function') a.remove(panel);
-                panel.style.transition = 'none';
-                a.animate(panel, {
-                    left: `${snapped.x}px`,
-                    top: `${snapped.y}px`,
-                    duration: 320,
-                    ease: 'outCubic'
-                });
-            } else {
-                panel.style.transition = 'left 0.25s ease, top 0.25s ease';
-                panel.style.left = `${snapped.x}px`;
-                panel.style.top = `${snapped.y}px`;
-            }
+            panel.style.transition = 'left 0.18s cubic-bezier(0.16, 1, 0.3, 1), top 0.18s cubic-bezier(0.16, 1, 0.3, 1)';
+            panel.style.left = `${pos.x}px`;
+            panel.style.top = `${pos.y}px`;
+            npPanelCustomPos = pos;
 
             setTimeout(() => {
-                isDragging = false;
-            }, 100);
+                isDraggingNpPanel = false;
+                panel.style.transition = '';
+            }, 200);
         }
     }
 
-    panel.addEventListener('pointerup', handlePointerEnd);
-    panel.addEventListener('pointercancel', handlePointerEnd);
+    panel.addEventListener('pointerup', onPointerEnd);
+    panel.addEventListener('pointercancel', onPointerEnd);
 
-    // Adaptation continue sur redimensionnement d'écran
     window.addEventListener('resize', () => {
         if (panel.classList.contains('open')) {
             if (npPanelCustomPos) {
-                const clamped = npClampPosition(npPanelCustomPos.x, npPanelCustomPos.y);
+                const clamped = getClampedPos(npPanelCustomPos.x, npPanelCustomPos.y);
                 panel.style.left = `${clamped.x}px`;
                 panel.style.top = `${clamped.y}px`;
             } else {
